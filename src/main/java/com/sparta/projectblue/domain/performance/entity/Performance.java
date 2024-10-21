@@ -2,9 +2,7 @@ package com.sparta.projectblue.domain.performance.entity;
 
 import com.sparta.projectblue.domain.common.entity.BaseEntity;
 import com.sparta.projectblue.domain.common.enums.Category;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,6 +29,7 @@ public class Performance extends BaseEntity {
     @Column(nullable = false)
     private int price;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Category category;
 

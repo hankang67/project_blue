@@ -2,9 +2,7 @@ package com.sparta.projectblue.domain.round.entity;
 
 import com.sparta.projectblue.domain.common.entity.BaseEntity;
 import com.sparta.projectblue.domain.common.enums.PerformanceStatus;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,6 +20,7 @@ public class Round extends BaseEntity {
     @Column(nullable = false)
     private LocalDateTime date;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PerformanceStatus status;
 
