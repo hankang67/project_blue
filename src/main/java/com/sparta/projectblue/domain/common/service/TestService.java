@@ -95,7 +95,7 @@ public class TestService {
         // 예매
         IntStream.range(0, 10).forEach(i -> {
             ReservationStatus status = ReservationStatus.values()[i % ReservationStatus.values().length]; // 순환해서 상태 선택
-            Reservation reservation = new Reservation(1L, 1L, 1L, status, 5000 + i * 100, i);  // 생성자에 맞게 수정
+            Reservation reservation = new Reservation(1L, 1L, 1L, status, 5000 + i * 100);  // 생성자에 맞게 수정
             reservationRepository.save(reservation);
         });
 

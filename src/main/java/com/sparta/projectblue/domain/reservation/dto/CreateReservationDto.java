@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class CreateReservationDto {
 
@@ -18,7 +19,7 @@ public class CreateReservationDto {
         private Long roundId;
 
         @NotNull
-        private int seatNumber;
+        private List<Integer> seats;
     }
 
     @Getter
@@ -26,15 +27,15 @@ public class CreateReservationDto {
         private final Long id;
         private final String performanceTitle;
         private final LocalDateTime roundDate;
-        private final int seatNumber;
+        private final List<Integer> seats;
         private final int price;
         private final ReservationStatus status;
 
-        public Response(Long id, String performanceTitle, LocalDateTime roundDate, int seatNumber, int price, ReservationStatus status) {
+        public Response(Long id, String performanceTitle, LocalDateTime roundDate, List<Integer> seats, int price, ReservationStatus status) {
             this.id = id;
             this.performanceTitle = performanceTitle;
             this.roundDate = roundDate;
-            this.seatNumber = seatNumber;
+            this.seats = seats;
             this.price = price;
             this.status = status;
         }

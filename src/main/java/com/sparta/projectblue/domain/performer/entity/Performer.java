@@ -16,7 +16,7 @@ public class Performer extends BaseEntity {
     @Column(nullable = false, length = 50)
     private String name;
 
-    @Column(length = 8)
+    @Column(length = 10)
     private String birth;
 
     @Column(length = 50)

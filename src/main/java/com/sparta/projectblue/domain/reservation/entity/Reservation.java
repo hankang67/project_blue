@@ -30,16 +30,12 @@ public class Reservation extends BaseEntity {
     @Column(nullable = false)
     private int price;
 
-    @Column(nullable = false)
-    private int seatNumber;
-
-    public Reservation(Long userId, Long performanceId, Long roundId, ReservationStatus status, int price, int seatNumber) {
+    public Reservation(Long userId, Long performanceId, Long roundId, ReservationStatus status, int price) {
         this.userId = userId;
         this.performanceId = performanceId;
         this.roundId = roundId;
         this.status = status;
         this.price = price;
-        this.seatNumber = seatNumber;
     }
 
     public void addPaymentId(Long paymentId) {

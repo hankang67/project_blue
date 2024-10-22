@@ -10,17 +10,21 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name = "seats")
-public class Seat extends BaseEntity {
+@Table(name = "reserved_seats")
+public class ReservedSeat extends BaseEntity {
 
     @Column(nullable = false)
     private Long reservationId;
 
     @Column(nullable = false)
-    private Long seatNumber;
+    private Long roundId;
 
-    public Seat(Long reservationId, Long seatNumber) {
+    @Column(nullable = false)
+    private int seatNumber;
+
+    public ReservedSeat(Long reservationId, Long roundId, int seatNumber) {
         this.reservationId = reservationId;
+        this.roundId = roundId;
         this.seatNumber = seatNumber;
     }
 }

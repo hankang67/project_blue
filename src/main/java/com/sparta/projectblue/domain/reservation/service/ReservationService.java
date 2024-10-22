@@ -12,9 +12,10 @@ import com.sparta.projectblue.domain.reservation.entity.Reservation;
 import com.sparta.projectblue.domain.reservation.repository.ReservationRepository;
 import com.sparta.projectblue.domain.round.entity.Round;
 import com.sparta.projectblue.domain.round.repository.RoundRepository;
+import com.sparta.projectblue.domain.seat.entity.ReservedSeat;
+import com.sparta.projectblue.domain.seat.repository.ReservedSeatRepository;
 import com.sparta.projectblue.domain.user.entity.User;
 import com.sparta.projectblue.domain.user.repository.UserRepository;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,7 @@ public class ReservationService {
     private final RoundRepository roundRepository;
     private final HallRepository hallRepository;
     private final UserRepository userRepository;
+    private final ReservedSeatRepository reservedSeatRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -61,25 +63,26 @@ public class ReservationService {
         Hall hall = hallRepository.findById(performance.getHallId()).orElseThrow(()->
                 new IllegalArgumentException("hallo not found"));
 
-        // 좌석수 허용 범위 확인
-        if(request.getSeatNumber() > hall.getSeats()) {
-            throw new IllegalArgumentException("Invalid seat number");
+        // 예매 가능 티켓 매수 제한
+        if(request.getSeats().size() > 4) {
+            throw new IllegalArgumentException("Maximum seats 4");
         }
 
-        // 존재하는 예약 전부 가져옴
-        List<Reservation> reservations = reservationRepository.findAllByPerformanceIdAndRoundIdAndSeatNumber(
-                round.getPerformanceId(), request.getRoundId(), request.getSeatNumber());
+        // 좌석 검증
+        for(Integer i : request.getSeats()) {
+            // 유효한 좌석번호인지 확인
+            if(i > hall.getSeats()) {
+                throw new IllegalArgumentException("Invalid seat number");
+            }
 
-        // 전부 취소인지 확인 (하나라도 취소가 아니면 결제대기 or 결제완료라서 예약 불가능)
-        boolean reservationCheck = reservations.stream()
-                .anyMatch(reservation -> !reservation.getStatus().equals(ReservationStatus.CANCELED));
-
-        if (reservationCheck) {
-            throw new IllegalArgumentException("Reservation already exists.");
+            // reservedSeats 에 좌석이 있으면 예매 불가
+            if (reservedSeatRepository.findByRoundIdAndSeatNumber(request.getRoundId(), i).isPresent()) {
+                throw new IllegalArgumentException("ReservedSeat already reserved");
+            }
         }
 
         // 가격정보 가져옴
-        int price = performance.getPrice();
+        int price = performance.getPrice() * request.getSeats().size();
 
         // 예약 생성
         Reservation newReservation = new Reservation(
@@ -87,17 +90,20 @@ public class ReservationService {
                 round.getPerformanceId(),
                 request.getRoundId(),
                 ReservationStatus.PENDING,
-                price,
-                request.getSeatNumber()
+                price
         );
 
         reservationRepository.save(newReservation);
+
+        for(Integer i : request.getSeats()) {
+            reservedSeatRepository.save(new ReservedSeat(newReservation.getId(), newReservation.getRoundId(), i));
+        }
 
         return new CreateReservationDto.Response(
                 newReservation.getId(),
                 performance.getTitle(),
                 round.getDate(),
-                newReservation.getSeatNumber(),
+                request.getSeats(),
                 newReservation.getPrice(),
                 ReservationStatus.PENDING
         );
@@ -123,6 +129,14 @@ public class ReservationService {
         if (reservation.getStatus().equals(ReservationStatus.CANCELED)) {
             throw new IllegalArgumentException("Reservation already cancelled.");
         }
+
+        List<ReservedSeat> reservedSeats = reservedSeatRepository.findByReservationId(reservation.getId());
+
+        if(reservedSeats.isEmpty()) {
+            throw new IllegalArgumentException("ReservedSeat does not exist");
+        }
+
+        reservedSeatRepository.deleteAll(reservedSeats);
 
         reservation.resCanceled();
     }
