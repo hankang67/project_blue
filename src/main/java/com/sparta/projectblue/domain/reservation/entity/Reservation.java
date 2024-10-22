@@ -1,20 +1,24 @@
 package com.sparta.projectblue.domain.reservation.entity;
 
 import com.sparta.projectblue.domain.common.entity.BaseEntity;
+import com.sparta.projectblue.domain.payment.entity.Payment;
+import com.sparta.projectblue.domain.performance.entity.Performance;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "reservations")
 public class Reservation extends BaseEntity {
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "user_id")
     private Long userId;
 
-    @Column(nullable = true)
+    @Column(nullable = true, name = "payment_id")
     private Long paymentId;
 
     @Column(nullable = false)
