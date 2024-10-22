@@ -16,7 +16,7 @@ public interface PerformerRepository extends JpaRepository<Performer, Long> {
         QPerformer qPerformer = QPerformer.performer;
         QPerformerPerformance qPerformerPerformance = QPerformerPerformance.performerPerformance;
 
-        return queryFactory
+        List<PerformerDetailDto> performers =  queryFactory
                 .select(qPerformer.name, qPerformer.birth, qPerformer.nation)
                 .from(qPerformerPerformance)
                 .join(qPerformer).on(qPerformerPerformance.performerId.eq(qPerformer.id))
@@ -29,5 +29,10 @@ public interface PerformerRepository extends JpaRepository<Performer, Long> {
                         tuple.get(qPerformer.nation)
                 ))
                 .collect(Collectors.toList());
+        if (performers.isEmpty()) {
+            throw new IllegalArgumentException("해당 공연에 대한 출연자 정보를 찾을 수 없습니다.");
+        }
+
+        return performers;
     }
 }

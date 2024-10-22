@@ -8,6 +8,7 @@ import com.sparta.projectblue.domain.performance.entity.Performance;
 import com.sparta.projectblue.domain.performance.entity.QPerformance;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+
 public interface PerformanceRepository extends JpaRepository<Performance, Long> {
 
     // 특정 공연의 세부 정보를 조회
@@ -15,7 +16,7 @@ public interface PerformanceRepository extends JpaRepository<Performance, Long> 
         QPerformance qPerformance = QPerformance.performance;
         QHall qHall = QHall.hall;
 
-        return queryFactory
+        PerformanceDetailDto PerformanceDetailDto =  queryFactory
                 .select(Projections.constructor(
                         PerformanceDetailDto.class,
                         qPerformance.title,
@@ -25,11 +26,16 @@ public interface PerformanceRepository extends JpaRepository<Performance, Long> 
                         qPerformance.category.stringValue(),
                         qPerformance.description,
                         qPerformance.duration,
-                        qHall.name))
+                        qHall.name )
+                )
                         .from(qPerformance)
                         .leftJoin(qHall).on(qPerformance.hallId.eq(qHall.id))
                         .where(qPerformance.id.eq(id))
                         .fetchOne();
+        if (PerformanceDetailDto == null){
+            throw new IllegalArgumentException("해당 공연 정보를 찾을 수 없습니다.");
+        }
+        return PerformanceDetailDto;
     }
 }
 
