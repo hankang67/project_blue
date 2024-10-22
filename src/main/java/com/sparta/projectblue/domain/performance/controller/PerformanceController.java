@@ -1,9 +1,10 @@
 package com.sparta.projectblue.domain.performance.controller;
 
+import com.sparta.projectblue.domain.performance.dto.PerformanceDetailDto;
 import com.sparta.projectblue.domain.performance.service.PerformanceService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/performances")
@@ -11,4 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class PerformanceController {
 
     private final PerformanceService performanceService;
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PerformanceDetailDto> getPerformanceById(
+            @PathVariable Long id) {
+        PerformanceDetailDto dto = performanceService.getPerformanceById(id);
+        return ResponseEntity.ok(dto);
+    }
+
 }
