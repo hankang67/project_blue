@@ -21,7 +21,7 @@ public class Round extends BaseEntity {
     private LocalDateTime date;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private PerformanceStatus status;
 
     public Round(Long performanceId, LocalDateTime date, PerformanceStatus status) {
