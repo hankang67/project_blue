@@ -19,6 +19,7 @@ public class PerformanceDetailDto {
     private int duration;
     private String hallName;
 
+    @QueryProjection
     public PerformanceDetailDto(String title, LocalDateTime startDate, LocalDateTime endDate, int price, String category, String description, int duration, String hallName) {
         this.title = title;
         this.startDate = startDate;
