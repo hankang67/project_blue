@@ -45,4 +45,12 @@ public class Reservation extends BaseEntity {
     public void addPaymentId(Long paymentId) {
         this.paymentId = paymentId;
     }
+
+    public void resCanceled(){
+        this.status = ReservationStatus.CANCELED;
+    }
+
+    public void resCompleted() {
+        this.status = ReservationStatus.COMPLETED;
+    }
 }

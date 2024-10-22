@@ -7,11 +7,16 @@ import com.sparta.projectblue.domain.hall.repository.HallRepository;
 import com.sparta.projectblue.domain.performance.entity.Performance;
 import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
 import com.sparta.projectblue.domain.reservation.dto.CreateReservationDto;
+import com.sparta.projectblue.domain.reservation.dto.DeleteReservationDto;
 import com.sparta.projectblue.domain.reservation.entity.Reservation;
 import com.sparta.projectblue.domain.reservation.repository.ReservationRepository;
 import com.sparta.projectblue.domain.round.entity.Round;
 import com.sparta.projectblue.domain.round.repository.RoundRepository;
+import com.sparta.projectblue.domain.user.entity.User;
+import com.sparta.projectblue.domain.user.repository.UserRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +32,9 @@ public class ReservationService {
     private final PerformanceRepository performanceRepository;
     private final RoundRepository roundRepository;
     private final HallRepository hallRepository;
+    private final UserRepository userRepository;
+
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public CreateReservationDto.Response create(Long id, CreateReservationDto.Request request) {
@@ -93,5 +101,29 @@ public class ReservationService {
                 newReservation.getPrice(),
                 ReservationStatus.PENDING
         );
+    }
+
+    @Transactional
+    public void delete(Long id, DeleteReservationDto.Request request) {
+        // 사용자 가져옴
+        User user =
+                userRepository.findById(id).orElseThrow(() ->
+                        new IllegalArgumentException("User not found"));
+
+        // 계정 비밀번호 확인
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("Incorrect password");
+        }
+
+        // 예매내역이 있는지 확인
+        Reservation reservation = reservationRepository.findById(request.getReservationId()).orElseThrow(()->
+                new IllegalArgumentException("reservation not found"));
+
+        // 이미 취소 되었는지 확인
+        if (reservation.getStatus().equals(ReservationStatus.CANCELED)) {
+            throw new IllegalArgumentException("Reservation already cancelled.");
+        }
+
+        reservation.resCanceled();
     }
 }
