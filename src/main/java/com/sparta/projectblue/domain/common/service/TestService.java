@@ -2,6 +2,7 @@ package com.sparta.projectblue.domain.common.service;
 
 import com.sparta.projectblue.domain.common.enums.Category;
 import com.sparta.projectblue.domain.common.enums.PerformanceStatus;
+import com.sparta.projectblue.domain.common.enums.UserRole;
 import com.sparta.projectblue.domain.hall.entity.Hall;
 import com.sparta.projectblue.domain.hall.repository.HallRepository;
 import com.sparta.projectblue.domain.payment.entity.Payment;
@@ -43,7 +44,7 @@ public class TestService {
     public void test() {
         // 사용자
         IntStream.range(0, 10).forEach(i -> {
-            User user = new User("User" + i, "user" + i + "@example.com", "abc123?!", null);
+            User user = new User("User" + i, "user" + i + "@example.com", "abc123?!", UserRole.ROLE_USER);
             userRepository.save(user);
         });
 
