@@ -2,6 +2,7 @@ package com.sparta.projectblue.domain.common.service;
 
 import com.sparta.projectblue.domain.common.enums.Category;
 import com.sparta.projectblue.domain.common.enums.PerformanceStatus;
+import com.sparta.projectblue.domain.common.enums.UserRole;
 import com.sparta.projectblue.domain.hall.entity.Hall;
 import com.sparta.projectblue.domain.hall.repository.HallRepository;
 import com.sparta.projectblue.domain.payment.entity.Payment;
@@ -21,6 +22,7 @@ import com.sparta.projectblue.domain.round.repository.RoundRepository;
 import com.sparta.projectblue.domain.user.entity.User;
 import com.sparta.projectblue.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -39,11 +41,12 @@ public class TestService {
     private final RoundRepository roundRepository;
     private final ReservationRepository reservationRepository;
     private final PaymentRepository paymentRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public void test() {
         // 사용자
         IntStream.range(0, 10).forEach(i -> {
-            User user = new User("User" + i, "user" + i + "@example.com", "abc123?!", null);
+            User user = new User( "user" + i + "@example.com","User" + i, passwordEncoder.encode("abc123?!"), UserRole.ROLE_USER);
             userRepository.save(user);
         });
 
