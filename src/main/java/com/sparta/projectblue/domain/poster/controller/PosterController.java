@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "포스터", description = "포스터 CRUD")
+@Tag(name = "Poster", description = "포스터 CRUD API")
 public class PosterController {
 
     private final PosterService posterService;
