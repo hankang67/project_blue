@@ -37,7 +37,7 @@ public class Review extends BaseEntity {
     }
 
     public void updateReview(ReviewRate reviewRate, String content) {
-        this.content = content;
         this.reviewRate = reviewRate;
+        this.content = content;
     }
 }
