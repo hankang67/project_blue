@@ -13,19 +13,19 @@ import java.time.LocalDateTime;
 @Table(name = "payments")
 public class Payment extends BaseEntity {
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 20, name = "payment_type")
     private String paymentType;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 50, name = "transaction_id")
     private String transactionId;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 20, name = "payment_method")
     private String paymentMethod;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "payment_price")
     private int paymentPrice;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "payment_time")
     private LocalDateTime paymentTime;
 
     public Payment(String paymentType, String transactionId, String paymentMethod, int paymentPrice, LocalDateTime paymentTime) {

@@ -13,10 +13,10 @@ import lombok.NoArgsConstructor;
 @Table(name = "performer_performance")
 public class PerformerPerformance extends BaseEntity {
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "performer_id")
     private Long performerId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "performance_id")
     private Long performanceId;
 
     public PerformerPerformance(Long performerId, Long performanceId) {

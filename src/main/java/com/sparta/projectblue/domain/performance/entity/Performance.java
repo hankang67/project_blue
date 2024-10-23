@@ -14,16 +14,16 @@ import java.time.LocalDateTime;
 @Table(name = "performances")
 public class Performance extends BaseEntity {
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "hall_id")
     private Long hallId;
 
     @Column(nullable = false, length = 100)
     private String title;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "start_date")
     private LocalDateTime startDate;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "end_date")
     private LocalDateTime endDate;
 
     @Column(nullable = false)

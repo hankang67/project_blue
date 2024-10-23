@@ -22,9 +22,10 @@ public class User extends BaseEntity {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 20, name = "user_role")
     private UserRole userRole;
 
+    @Column(name = "is_deleted")
     private boolean isDeleted;
 
     public User(String email, String name, String password, UserRole userRole) {

@@ -13,13 +13,13 @@ import lombok.NoArgsConstructor;
 @Table(name = "posters")
 public class Poster extends BaseEntity {
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "performance_id")
     private Long performanceId;
 
     @Column(nullable = false, length = 50)
     private String name;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false, length = 255, name = "image_url")
     private String imageUrl;
 
     public Poster(Long performanceId, String name, String imageUrl) {

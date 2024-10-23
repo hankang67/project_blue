@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Table(name = "rounds")
 public class Round extends BaseEntity {
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "performance_id")
     private Long performanceId;
 
     @Column(nullable = false)

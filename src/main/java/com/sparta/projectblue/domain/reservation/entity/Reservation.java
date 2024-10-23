@@ -22,13 +22,13 @@ public class Reservation extends BaseEntity {
     @Column(nullable = false, name = "user_id")
     private Long userId;
 
-    @Column(nullable = true, name = "payment_id")
+    @Column(name = "payment_id")
     private Long paymentId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "performance_id")
     private Long performanceId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "round_id")
     private Long roundId;
 
     @Enumerated(EnumType.STRING)
