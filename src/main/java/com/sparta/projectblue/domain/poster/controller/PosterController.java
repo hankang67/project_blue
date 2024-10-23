@@ -23,11 +23,11 @@ public class PosterController {
     private final PosterService posterService;
 
     @Operation(summary = "포스터 수정", description = "특정 공연의 포스터 이름과 url 수정")
-    @PutMapping("/admin/posters/{posterId}")
+    @PutMapping("/admin/posters/{id}")
     public ResponseEntity<ApiResponse<String>> update(
             @AuthenticationPrincipal AuthUser authUser,
-            @PathVariable Long posterId,
+            @PathVariable Long id,
             @Valid @RequestBody PosterUpdateRequestDto requestDto) {
-        return ResponseEntity.ok(ApiResponse.success(posterService.update(authUser, posterId, requestDto)));
+        return ResponseEntity.ok(ApiResponse.success(posterService.update(authUser, id, requestDto)));
     }
 }
