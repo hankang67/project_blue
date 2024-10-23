@@ -32,4 +32,10 @@ spring:
 
 springdoc.swagger-ui.path: /api-test
 
-jwt.secret.key: ${secret_key}
+jwt:
+  secret:
+    key: ${secret_key}
+
+slack:
+  webhook:
+    url: ${SLACK_WEBHOOK_URL}

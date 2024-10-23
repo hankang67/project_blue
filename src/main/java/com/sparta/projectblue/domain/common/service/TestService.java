@@ -46,8 +46,6 @@ public class TestService {
     private final PaymentRepository paymentRepository;
     private final PasswordEncoder passwordEncoder;
 
-    private final PasswordEncoder passwordEncoder;
-
     public void test() {
         // 사용자
         IntStream.range(0, 10).forEach(i -> {

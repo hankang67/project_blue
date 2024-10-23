@@ -1,9 +1,11 @@
 package com.sparta.projectblue.aop;
 
+import com.sparta.projectblue.domain.common.enums.ReservationStatus;
 import com.sparta.projectblue.domain.hall.entity.Hall;
 import com.sparta.projectblue.domain.hall.repository.HallRepository;
 import com.sparta.projectblue.domain.performance.entity.Performance;
 import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
+import com.sparta.projectblue.domain.reservation.dto.CreateReservationDto;
 import com.sparta.projectblue.domain.reservation.entity.Reservation;
 import com.sparta.projectblue.domain.reservation.repository.ReservationRepository;
 import com.sparta.projectblue.domain.user.entity.User;
@@ -25,11 +27,11 @@ public class SlackNotificationAspect {
     private final HallRepository hallRepository;
     private final ReservationRepository reservationRepository;
 
-    @Pointcut("execution(* com.sparta.projectblue.domain.reservation.service.create(..))")
+    @Pointcut("execution(* com.sparta.projectblue.domain.reservation.service.ReservationService.create(..))")
     public void sendMessagePointcut() {}
 
     @AfterReturning(pointcut = "sendMessagePointcut()", returning = "result")
-    public void sendMessage(CreateReservationDto.Reservation result) {
+    public void sendMessage(CreateReservationDto.Response result) {
 
         // 예약 정보를 가져오기 위해 ID를 사용
         Long reservationId = result.getId();
@@ -43,7 +45,7 @@ public class SlackNotificationAspect {
                 .orElseThrow(() -> new IllegalArgumentException("Performance not found"));
 
         // 공연장소 정보 조회
-        Hall hall = hallRepository.findById(Math.toIntExact(performance.getHallId()))
+        Hall hall = hallRepository.findById(performance.getHallId())
                 .orElseThrow(() ->  new IllegalArgumentException("Hall not found"));
 
 
