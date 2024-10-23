@@ -1,12 +1,7 @@
 package com.sparta.projectblue.domain.reservation.entity;
 
 import com.sparta.projectblue.domain.common.entity.BaseEntity;
-
-import com.sparta.projectblue.domain.payment.entity.Payment;
-import com.sparta.projectblue.domain.performance.entity.Performance;
-
 import com.sparta.projectblue.domain.common.enums.ReservationStatus;
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -50,7 +45,7 @@ public class Reservation extends BaseEntity {
         this.paymentId = paymentId;
     }
 
-    public void resCanceled(){
+    public void resCanceled() {
         this.status = ReservationStatus.CANCELED;
     }
 

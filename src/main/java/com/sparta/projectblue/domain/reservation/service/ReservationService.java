@@ -10,10 +10,10 @@ import com.sparta.projectblue.domain.reservation.dto.CreateReservationDto;
 import com.sparta.projectblue.domain.reservation.dto.DeleteReservationDto;
 import com.sparta.projectblue.domain.reservation.entity.Reservation;
 import com.sparta.projectblue.domain.reservation.repository.ReservationRepository;
-import com.sparta.projectblue.domain.round.entity.Round;
-import com.sparta.projectblue.domain.round.repository.RoundRepository;
 import com.sparta.projectblue.domain.reservedSeat.entity.ReservedSeat;
 import com.sparta.projectblue.domain.reservedSeat.repository.ReservedSeatRepository;
+import com.sparta.projectblue.domain.round.entity.Round;
+import com.sparta.projectblue.domain.round.repository.RoundRepository;
 import com.sparta.projectblue.domain.user.entity.User;
 import com.sparta.projectblue.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -60,18 +60,18 @@ public class ReservationService {
         }
 
         // 공연장 가져옴 (좌석수 확인용)
-        Hall hall = hallRepository.findById(performance.getHallId()).orElseThrow(()->
+        Hall hall = hallRepository.findById(performance.getHallId()).orElseThrow(() ->
                 new IllegalArgumentException("hallo not found"));
 
         // 예매 가능 티켓 매수 제한
-        if(request.getSeats().size() > 4) {
+        if (request.getSeats().size() > 4) {
             throw new IllegalArgumentException("Maximum seats 4");
         }
 
         // 좌석 검증
-        for(Integer i : request.getSeats()) {
+        for (Integer i : request.getSeats()) {
             // 유효한 좌석번호인지 확인
-            if(i > hall.getSeats()) {
+            if (i > hall.getSeats()) {
                 throw new IllegalArgumentException("Invalid seat number");
             }
 
@@ -95,7 +95,7 @@ public class ReservationService {
 
         reservationRepository.save(newReservation);
 
-        for(Integer i : request.getSeats()) {
+        for (Integer i : request.getSeats()) {
             reservedSeatRepository.save(new ReservedSeat(newReservation.getId(), newReservation.getRoundId(), i));
         }
 
@@ -122,7 +122,7 @@ public class ReservationService {
         }
 
         // 예매내역이 있는지 확인
-        Reservation reservation = reservationRepository.findById(request.getReservationId()).orElseThrow(()->
+        Reservation reservation = reservationRepository.findById(request.getReservationId()).orElseThrow(() ->
                 new IllegalArgumentException("reservation not found"));
 
         // 이미 취소 되었는지 확인
@@ -132,7 +132,7 @@ public class ReservationService {
 
         List<ReservedSeat> reservedSeats = reservedSeatRepository.findByReservationId(reservation.getId());
 
-        if(reservedSeats.isEmpty()) {
+        if (reservedSeats.isEmpty()) {
             throw new IllegalArgumentException("ReservedSeat does not exist");
         }
 

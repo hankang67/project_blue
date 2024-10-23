@@ -8,8 +8,6 @@ import com.sparta.projectblue.domain.performance.repository.PerformanceRepositor
 import com.sparta.projectblue.domain.reservation.dto.CreateReservationDto;
 import com.sparta.projectblue.domain.reservation.entity.Reservation;
 import com.sparta.projectblue.domain.reservation.repository.ReservationRepository;
-import com.sparta.projectblue.domain.user.entity.User;
-import com.sparta.projectblue.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -23,12 +21,14 @@ import org.springframework.stereotype.Component;
 public class SlackNotificationAspect {
 
     private final SlackNotifier slackNotifier;
-    private final PerformanceRepository performanceRepository;
+
     private final HallRepository hallRepository;
+    private final PerformanceRepository performanceRepository;
     private final ReservationRepository reservationRepository;
 
     @Pointcut("execution(* com.sparta.projectblue.domain.reservation.service.ReservationService.create(..))")
-    public void sendMessagePointcut() {}
+    public void sendMessagePointcut() {
+    }
 
     @AfterReturning(pointcut = "sendMessagePointcut()", returning = "result")
     public void sendMessage(CreateReservationDto.Response result) {
@@ -46,10 +46,10 @@ public class SlackNotificationAspect {
 
         // 공연장소 정보 조회
         Hall hall = hallRepository.findById(performance.getHallId())
-                .orElseThrow(() ->  new IllegalArgumentException("Hall not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Hall not found"));
 
 
-        if (result.getStatus().equals(ReservationStatus.PENDING)){
+        if (result.getStatus().equals(ReservationStatus.PENDING)) {
             String title = "티켓_예매완료";
             String message = String.format("고객님, '%s' 공연이 '%s' 공연장으로 예약되었습니다.",
                     performance.getTitle(), hall.getName());

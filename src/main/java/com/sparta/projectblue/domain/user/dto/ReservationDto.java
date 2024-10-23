@@ -2,7 +2,6 @@ package com.sparta.projectblue.domain.user.dto;
 
 import com.sparta.projectblue.domain.common.enums.Category;
 import com.sparta.projectblue.domain.common.enums.ReservationStatus;
-import com.sparta.projectblue.domain.payment.entity.Payment;
 import com.sparta.projectblue.domain.performance.entity.Performance;
 import lombok.Getter;
 import lombok.Setter;
@@ -45,5 +44,4 @@ public class ReservationDto {
             this.duration = performance.getDuration();
         }
     }
-
 }

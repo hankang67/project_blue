@@ -11,18 +11,29 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PerformanceRequestDto {
 
-    @NotNull private String title;
-    @NotNull private String startDate;
-    @NotNull private String endDate;
-    @NotNull private int price;
+    @NotNull
+    private String title;
+    @NotNull
+    private String startDate;
+    @NotNull
+    private String endDate;
+    @NotNull
+    private int price;
     @Enumerated(EnumType.STRING)
-    @NotNull private Category category;
-    @NotNull private String description;
-    @NotNull private Long hallId;
-    @NotNull private int duration;
-    @NotNull private int seats;
-    @NotNull private String posterName;
-    @NotNull private String posterUrl;
+    @NotNull
+    private Category category;
+    @NotNull
+    private String description;
+    @NotNull
+    private Long hallId;
+    @NotNull
+    private int duration;
+    @NotNull
+    private int seats;
+    @NotNull
+    private String posterName;
+    @NotNull
+    private String posterUrl;
     private Long[] performers;
 
 }

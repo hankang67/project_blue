@@ -2,7 +2,6 @@ package com.sparta.projectblue.domain.search.controller;
 
 import com.sparta.projectblue.config.ApiResponse;
 import com.sparta.projectblue.domain.performance.dto.PerformanceResponseDto;
-import com.sparta.projectblue.domain.performance.service.PerformanceService;
 import com.sparta.projectblue.domain.search.service.SearchService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

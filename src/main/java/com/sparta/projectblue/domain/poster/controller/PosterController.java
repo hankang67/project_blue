@@ -30,5 +30,4 @@ public class PosterController {
             @Valid @RequestBody PosterUpdateRequestDto requestDto) {
         return ResponseEntity.ok(ApiResponse.success(posterService.update(authUser, posterId, requestDto)));
     }
-
 }

@@ -12,10 +12,15 @@ public class SignUpDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Request {
-        @NotBlank @Email private String email;
-        @NotBlank private String password;
-        @NotBlank private String name;
-        @NotBlank private String userRole;
+        @NotBlank
+        @Email
+        private String email;
+        @NotBlank
+        private String password;
+        @NotBlank
+        private String name;
+        @NotBlank
+        private String userRole;
     }
 
     @Getter

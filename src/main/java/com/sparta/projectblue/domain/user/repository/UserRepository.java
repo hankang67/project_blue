@@ -1,10 +1,8 @@
 package com.sparta.projectblue.domain.user.repository;
 
-import com.sparta.projectblue.domain.reservation.entity.Reservation;
 import com.sparta.projectblue.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -13,6 +11,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByEmail(String email);
 
     boolean existsByEmailAndIsDeletedTrue(String email);
-
-
 }

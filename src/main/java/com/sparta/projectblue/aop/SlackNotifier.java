@@ -3,6 +3,7 @@ package com.sparta.projectblue.aop;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,7 +25,7 @@ public class SlackNotifier {
 
         try {
             restTemplate.postForObject(slackWebhookUrl, payload, String.class);
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println("오류");
         }
     }

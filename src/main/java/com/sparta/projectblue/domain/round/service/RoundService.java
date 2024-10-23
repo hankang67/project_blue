@@ -5,11 +5,11 @@ import com.sparta.projectblue.domain.hall.entity.Hall;
 import com.sparta.projectblue.domain.hall.repository.HallRepository;
 import com.sparta.projectblue.domain.performance.entity.Performance;
 import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
+import com.sparta.projectblue.domain.reservedSeat.entity.ReservedSeat;
+import com.sparta.projectblue.domain.reservedSeat.repository.ReservedSeatRepository;
 import com.sparta.projectblue.domain.round.dto.GetAvailableSeatsDto;
 import com.sparta.projectblue.domain.round.entity.Round;
 import com.sparta.projectblue.domain.round.repository.RoundRepository;
-import com.sparta.projectblue.domain.reservedSeat.entity.ReservedSeat;
-import com.sparta.projectblue.domain.reservedSeat.repository.ReservedSeatRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,7 +50,7 @@ public class RoundService {
                 new IllegalArgumentException("performance not found"));
 
         // 공연장 가져옴
-        Hall hall = hallRepository.findById(performance.getHallId()).orElseThrow(()->
+        Hall hall = hallRepository.findById(performance.getHallId()).orElseThrow(() ->
                 new IllegalArgumentException("hallo not found"));
 
 

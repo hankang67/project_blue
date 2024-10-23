@@ -6,11 +6,12 @@ import com.sparta.projectblue.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-
-//swageer
 
 @RestController
 @RequestMapping("/api/test")
@@ -30,7 +31,7 @@ public class MyPageController {
     // 예매 상세 조회
     @GetMapping("/{userId}/reservations/{reservationId}")
     public ResponseEntity<ReservationDetailDto.Response> getReservationDetail(@PathVariable Long userId, @PathVariable Long reservationId) {
-        ReservationDetailDto.Response reservation = userService.getReservationDetail(userId,reservationId);
+        ReservationDetailDto.Response reservation = userService.getReservationDetail(userId, reservationId);
         return ResponseEntity.ok(reservation);
     }
 

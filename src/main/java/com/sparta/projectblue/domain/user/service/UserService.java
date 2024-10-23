@@ -76,7 +76,6 @@ public class UserService {
             ReservationDto.PerformanceDto perDto = new ReservationDto.PerformanceDto(performance);
 
 
-
             // Create the response DTO for the current reservation
             ReservationDto.Response responseDto = new ReservationDto.Response(
                     reservation.getId(),
@@ -117,7 +116,7 @@ public class UserService {
 
         List<ReservedSeat> reservedSeats = reservedSeatRepository.findByReservationId(reservation.getId());
 
-        if(reservedSeats.isEmpty()) {
+        if (reservedSeats.isEmpty()) {
             throw new IllegalArgumentException("ReservedSeat does not exist");
         }
 

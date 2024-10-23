@@ -12,7 +12,7 @@ public class TestController {
     private final TestService testService;
 
     @GetMapping
-    public void test(){
+    public void test() {
         testService.test();
     }
 }

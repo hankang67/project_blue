@@ -103,7 +103,7 @@ public class PerformanceQueryRepositoryImpl implements PerformanceQueryRepositor
                         qPerformance.category.stringValue(),
                         qPerformance.description,
                         qPerformance.duration,
-                        qHall.name )
+                        qHall.name)
                 )
                 .from(qPerformance)
                 .leftJoin(qHall).on(qPerformance.hallId.eq(qHall.id))

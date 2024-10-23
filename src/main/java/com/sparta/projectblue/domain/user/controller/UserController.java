@@ -21,8 +21,6 @@ public class UserController {
 
     private final UserService userService;
 
-
-
     // 예매 전체 조회
     @GetMapping("/{userId}/reservations")
     public ResponseEntity<List<ReservationDto.Response>> getReservations(@PathVariable Long userId) {
@@ -33,7 +31,7 @@ public class UserController {
     // 예매 상세 조회
     @GetMapping("/{userId}/reservations/{reservationId}")
     public ResponseEntity<ReservationDetailDto.Response> getReservationDetail(@PathVariable Long userId, @PathVariable Long reservationId) {
-        ReservationDetailDto.Response reservation = userService.getReservationDetail(userId,reservationId);
+        ReservationDetailDto.Response reservation = userService.getReservationDetail(userId, reservationId);
         return ResponseEntity.ok(reservation);
     }
 
