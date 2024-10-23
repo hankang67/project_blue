@@ -30,10 +30,10 @@ public class Performance extends BaseEntity {
     private int price;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 10)
     private Category category;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     private String description;
 
     @Column(nullable = false)

@@ -19,7 +19,7 @@ public class Poster extends BaseEntity {
     @Column(nullable = false, length = 50)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     private String imageUrl;
 
     public Poster(Long performanceId, String name, String imageUrl) {
