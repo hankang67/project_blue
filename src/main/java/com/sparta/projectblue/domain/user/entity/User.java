@@ -35,7 +35,7 @@ public class User extends BaseEntity {
         this.userRole = userRole;
     }
 
-    public void changeIsDeleted() {
+    public void userDeleted() {
         this.isDeleted = true; // 탈퇴 처리
     }
 }
