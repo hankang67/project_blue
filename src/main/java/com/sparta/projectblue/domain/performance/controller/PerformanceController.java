@@ -54,4 +54,13 @@ public class PerformanceController {
     public ResponseEntity<ApiResponse<?>> getRounds(@PathVariable Long id) {
         return ResponseEntity.ok(ApiResponse.success(performanceService.getRounds(id)));
     }
+
+    @PostMapping("/{id}/performers")
+    @Operation(summary = "배우 공연 등록", description = "공연에 배우를 등록합니다.")
+    public ResponseEntity<ApiResponse<String>> addPerformer(
+            @PathVariable Long id,
+            @RequestParam Long performerId) {
+        performanceService.addPerformer(id, performerId);
+        return ResponseEntity.ok(ApiResponse.success("배우가 공연에 성공적으로 등록되었습니다."));
+    }
 }
