@@ -19,6 +19,7 @@ import static com.sparta.projectblue.domain.performance.entity.QPerformance.perf
 import static com.sparta.projectblue.domain.performer.entity.QPerformer.performer;
 import static com.sparta.projectblue.domain.performerPerformance.entity.QPerformerPerformance.performerPerformance;
 
+
 @Repository
 @RequiredArgsConstructor
 public class PerformanceQueryRepositoryImpl implements PerformanceQueryRepository {
