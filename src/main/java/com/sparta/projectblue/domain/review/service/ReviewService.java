@@ -22,7 +22,7 @@ public class ReviewService {
 
     // 리뷰 생성
     @Transactional
-    public CreateReviewDto.Response createReview(Long userId, CreateReviewDto.Request request) {
+    public CreateReviewDto.Response create(Long userId, CreateReviewDto.Request request) {
         Reservation reservation = reservationRepository.findById(request.getReservationId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 예매를 찾을 수 없습니다."));
 
@@ -38,7 +38,7 @@ public class ReviewService {
     }
 
     @Transactional
-    public UpdateReviewDto.Response updateReview(Long userId, Long id, UpdateReviewDto.Request request) {
+    public UpdateReviewDto.Response update(Long userId, Long id, UpdateReviewDto.Request request) {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 리뷰를 찾을 수 없습니다."));
 
@@ -55,7 +55,7 @@ public class ReviewService {
     }
 
     @Transactional
-    public void deleteReview(Long userId, Long id) {
+    public void delete(Long userId, Long id) {
         Review review = reviewRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 리뷰를 찾을 수 없습니다."));
 
@@ -66,6 +66,6 @@ public class ReviewService {
             throw new IllegalArgumentException("리뷰 작성자가 아닙니다");
         }
 
-        reviewRepository.deleteById(id);
+        reviewRepository.delete(review);
     }
 }
