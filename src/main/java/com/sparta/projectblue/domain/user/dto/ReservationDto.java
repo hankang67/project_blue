@@ -1,6 +1,7 @@
 package com.sparta.projectblue.domain.user.dto;
 
 import com.sparta.projectblue.domain.common.enums.Category;
+import com.sparta.projectblue.domain.common.enums.ReservationStatus;
 import com.sparta.projectblue.domain.payment.entity.Payment;
 import com.sparta.projectblue.domain.performance.entity.Performance;
 import lombok.Getter;
@@ -15,13 +16,11 @@ public class ReservationDto {
     public static class Response {
         private final Long reservationId;
         private final PerformanceDto performance;
-        private final int seatNumber;
-        private final String status;
+        private final ReservationStatus status;
 
-        public Response(Long reservationId, PerformanceDto performance, int seatNumber, String status) {
+        public Response(Long reservationId, PerformanceDto performance, ReservationStatus status) {
             this.reservationId = reservationId;
             this.performance = performance;
-            this.seatNumber = seatNumber;
             this.status = status;
         }
     }

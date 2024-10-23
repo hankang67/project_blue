@@ -7,6 +7,8 @@ import com.sparta.projectblue.domain.performance.entity.Performance;
 import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
 import com.sparta.projectblue.domain.reservation.entity.Reservation;
 import com.sparta.projectblue.domain.reservation.repository.ReservationRepository;
+import com.sparta.projectblue.domain.seat.entity.ReservedSeat;
+import com.sparta.projectblue.domain.seat.repository.ReservedSeatRepository;
 import com.sparta.projectblue.domain.user.dto.DeleteUserDto;
 import com.sparta.projectblue.domain.user.dto.ReservationDetailDto;
 import com.sparta.projectblue.domain.user.dto.ReservationDto;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,9 +29,12 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+
     private final ReservationRepository reservationRepository;
     private final PaymentRepository paymentRepository;
     private final PerformanceRepository performanceRepository;
+    private final ReservedSeatRepository reservedSeatRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -69,11 +75,12 @@ public class UserService {
             // Create performance DTO
             ReservationDto.PerformanceDto perDto = new ReservationDto.PerformanceDto(performance);
 
+
+
             // Create the response DTO for the current reservation
             ReservationDto.Response responseDto = new ReservationDto.Response(
                     reservation.getId(),
                     perDto,
-                    reservation.getSeatNumber(),
                     reservation.getStatus()
             );
 
@@ -108,12 +115,22 @@ public class UserService {
         // Create DTOs
         ReservationDetailDto.PerformanceDto perDto = new ReservationDetailDto.PerformanceDto(performance);
 
+        List<ReservedSeat> reservedSeats = reservedSeatRepository.findByReservationId(reservation.getId());
+
+        if(reservedSeats.isEmpty()) {
+            throw new IllegalArgumentException("ReservedSeat does not exist");
+        }
+
+        List<Integer> seats = reservedSeats.stream()
+                .map(ReservedSeat::getSeatNumber)
+                .collect(Collectors.toList());
+
         // Return the response DTO
         return new ReservationDetailDto.Response(
                 reservation.getId(),
                 perDto,
                 payDto,  // Could be null if no payment exists
-                reservation.getSeatNumber(),
+                seats,
                 reservation.getStatus()
         );
     }
