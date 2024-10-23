@@ -5,6 +5,8 @@ import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.reservation.dto.CreateReservationDto;
 import com.sparta.projectblue.domain.reservation.dto.DeleteReservationDto;
 import com.sparta.projectblue.domain.reservation.service.ReservationService;
+import com.sparta.projectblue.domain.user.dto.ReservationDetailDto;
+import com.sparta.projectblue.domain.user.dto.ReservationDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -12,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/reservations")
@@ -39,5 +43,19 @@ public class ReservationController {
         reservationService.delete(authUser.getId(), request);
 
         return ResponseEntity.ok(ApiResponse.successWithNoContent());
+    }
+
+    // 예매 전체 조회
+    @GetMapping
+    public ResponseEntity<List<ReservationDto.Response>> getReservations(@AuthenticationPrincipal AuthUser authUser) {
+        List<ReservationDto.Response> reservations = reservationService.getReservations(authUser.getId());
+        return ResponseEntity.ok(reservations);
+    }
+
+    // 예매 상세 조회
+    @GetMapping("/{id}")
+    public ResponseEntity<ReservationDetailDto.Response> getReservation(@AuthenticationPrincipal AuthUser authUser, @PathVariable Long id) {
+        ReservationDetailDto.Response reservation = reservationService.getReservation(authUser.getId(), id);
+        return ResponseEntity.ok(reservation);
     }
 }
