@@ -1,16 +1,15 @@
 package com.sparta.projectblue.domain.user.dto;
 
 import com.sparta.projectblue.domain.common.enums.Category;
+import com.sparta.projectblue.domain.common.enums.ReservationStatus;
 import com.sparta.projectblue.domain.payment.entity.Payment;
 import com.sparta.projectblue.domain.performance.entity.Performance;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
-
+import java.util.List;
 
 @Getter
-@Setter
 public class ReservationDetailDto {
 
     @Getter
@@ -18,14 +17,14 @@ public class ReservationDetailDto {
         private final Long reservationId;
         private final PerformanceDto performance;
         private PaymentDto payment;
-        private final int seatNumber;
-        private final String status;
+        private final List<Integer> seats;
+        private final ReservationStatus status;
 
-        public Response(Long reservationId, PerformanceDto performance, PaymentDto payment, int seatNumber, String status) {
+        public Response(Long reservationId, PerformanceDto performance, PaymentDto payment, List<Integer> seats, ReservationStatus status) {
             this.reservationId = reservationId;
             this.performance = performance;
             this.payment = payment;
-            this.seatNumber = seatNumber;
+            this.seats = seats;
             this.status = status;
         }
     }

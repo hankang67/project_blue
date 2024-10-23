@@ -1,13 +1,12 @@
 package com.sparta.projectblue.domain.common.dto;
 
-import java.util.Collection;
-import java.util.List;
-
 import com.sparta.projectblue.domain.common.enums.UserRole;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import lombok.Getter;
+import java.util.Collection;
+import java.util.List;
 
 @Getter
 public class AuthUser {
@@ -22,5 +21,14 @@ public class AuthUser {
         this.email = email;
         this.name = name;
         this.authorities = List.of(new SimpleGrantedAuthority(userRole.name()));
+    }
+
+    public boolean hasRole(UserRole userRole) {
+        for (GrantedAuthority authority : authorities) {
+            if (authority.getAuthority().equals(userRole.name())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

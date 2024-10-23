@@ -13,5 +13,4 @@ public class PerformerDetailDto {
         this.birth = birth;
         this.nation = nation;
     }
-
 }

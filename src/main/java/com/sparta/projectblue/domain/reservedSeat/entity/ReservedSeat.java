@@ -1,4 +1,4 @@
-package com.sparta.projectblue.domain.seat.entity;
+package com.sparta.projectblue.domain.reservedSeat.entity;
 
 import com.sparta.projectblue.domain.common.entity.BaseEntity;
 import jakarta.persistence.Column;
@@ -13,13 +13,13 @@ import lombok.NoArgsConstructor;
 @Table(name = "reserved_seats")
 public class ReservedSeat extends BaseEntity {
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "reservation_id")
     private Long reservationId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "round_id")
     private Long roundId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "seat_number")
     private int seatNumber;
 
     public ReservedSeat(Long reservationId, Long roundId, int seatNumber) {

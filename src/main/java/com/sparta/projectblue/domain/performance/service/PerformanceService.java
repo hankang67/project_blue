@@ -1,22 +1,24 @@
 package com.sparta.projectblue.domain.performance.service;
 
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.sparta.projectblue.domain.hall.entity.QHall;
 import com.sparta.projectblue.domain.performance.dto.PerformanceDetailDto;
-import com.sparta.projectblue.domain.performance.entity.QPerformance;
+import com.sparta.projectblue.domain.performance.dto.PerformanceResponseDto;
 import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
-
-import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
+import com.sparta.projectblue.domain.performer.dto.PerformerDetailDto;
+import com.sparta.projectblue.domain.performer.repository.PerformerRepository;
 import com.sparta.projectblue.domain.round.dto.GetRoundsDto;
 import com.sparta.projectblue.domain.round.entity.Round;
 import com.sparta.projectblue.domain.round.repository.RoundRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -24,16 +26,23 @@ import java.util.stream.Collectors;
 public class PerformanceService {
 
     private final PerformanceRepository performanceRepository;
-      private final RoundRepository roundRepository;
 
-    private final JPAQueryFactory queryFactory;
+    private final PerformerRepository performerRepository;
+    private final RoundRepository roundRepository;
+
+    // 진행중인 전체 공연 리스트 출력
+    public Page<PerformanceResponseDto> getPerformances(int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        LocalDateTime performanceDay = LocalDateTime.now();
+
+        return performanceRepository.findByCondition(pageable, null, performanceDay, null);
+    }
 
     //공연 상세 정보 조회
-    public PerformanceDetailDto getPerformanceById(Long id){
-        return performanceRepository.findPerformanceDetailById(id, queryFactory);
-
-
-
+    public PerformanceDetailDto getPerformance(Long id) {
+        return performanceRepository.findPerformanceDetailById(id);
+    }
 
     public GetRoundsDto.Response getRounds(Long id) {
 
@@ -53,4 +62,9 @@ public class PerformanceService {
         return new GetRoundsDto.Response(roundInfos);
 
     }
+
+    public List<PerformerDetailDto> getPerformers(Long id) {
+        return performerRepository.findPerformersByPerformanceId(id);
+    }
+
 }

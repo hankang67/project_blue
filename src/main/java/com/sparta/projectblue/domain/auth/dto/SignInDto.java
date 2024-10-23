@@ -12,8 +12,11 @@ public class SignInDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Request {
-        @NotBlank @Email private String email;
-        @NotBlank private String password;
+        @NotBlank
+        @Email
+        private String email;
+        @NotBlank
+        private String password;
     }
 
     @Getter

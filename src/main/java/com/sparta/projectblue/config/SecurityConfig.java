@@ -1,5 +1,6 @@
 package com.sparta.projectblue.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -11,10 +12,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter;
-
-import com.sparta.projectblue.domain.common.enums.UserRole.Authority;
-
-import lombok.RequiredArgsConstructor;
 
 @Configuration
 @RequiredArgsConstructor
@@ -49,8 +46,8 @@ public class SecurityConfig {
                                 auth.anyRequest().permitAll())
 //                                auth.requestMatchers("/auth/signin", "/auth/signup")
 //                                        .permitAll()
-//                                        .requestMatchers("/test")
-//                                        .hasAuthority(Authority.ADMIN)
+//                                        .requestMatchers("/test").hasAuthority(Authority.ADMIN)
+//                                        .requestMatchers("/admin/**").hasAuthority(Authority.ADMIN)
 //                                        .anyRequest()
 //                                        .authenticated())
                 .build();

@@ -1,5 +1,8 @@
 package com.sparta.projectblue.domain.common.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum ReservationStatus {
     PENDING("결제대기"),
     COMPLETED("예매완료"),
@@ -11,7 +14,4 @@ public enum ReservationStatus {
         this.status = status;
     }
 
-    public String getStatus() {
-        return status;
-    }
 }

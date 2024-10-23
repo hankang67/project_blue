@@ -13,8 +13,8 @@ import com.sparta.projectblue.domain.performance.entity.Performance;
 import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
 import com.sparta.projectblue.domain.performer.entity.Performer;
 import com.sparta.projectblue.domain.performer.repository.PerformerRepository;
-import com.sparta.projectblue.domain.performerperformance.entity.PerformerPerformance;
-import com.sparta.projectblue.domain.performerperformance.repository.PerformerPerformanceRepository;
+import com.sparta.projectblue.domain.performerPerformance.entity.PerformerPerformance;
+import com.sparta.projectblue.domain.performerPerformance.repository.PerformerPerformanceRepository;
 import com.sparta.projectblue.domain.poster.entity.Poster;
 import com.sparta.projectblue.domain.poster.repository.PosterRepository;
 import com.sparta.projectblue.domain.reservation.entity.Reservation;
@@ -34,15 +34,16 @@ import java.util.stream.IntStream;
 @RequiredArgsConstructor
 public class TestService {
 
-    private final UserRepository userRepository;
     private final HallRepository hallRepository;
+    private final PaymentRepository paymentRepository;
     private final PerformanceRepository performanceRepository;
-    private final PosterRepository posterRepository;
     private final PerformerRepository performerRepository;
     private final PerformerPerformanceRepository performerPerformanceRepository;
-    private final RoundRepository roundRepository;
+    private final PosterRepository posterRepository;
     private final ReservationRepository reservationRepository;
-    private final PaymentRepository paymentRepository;
+    private final RoundRepository roundRepository;
+    private final UserRepository userRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     public void test() {

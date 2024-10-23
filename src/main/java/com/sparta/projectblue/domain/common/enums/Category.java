@@ -1,5 +1,8 @@
 package com.sparta.projectblue.domain.common.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum Category {
     CONCERT("콘서트"),
     MUSICAL("뮤지컬"),
@@ -11,7 +14,4 @@ public enum Category {
         this.value = value;
     }
 
-    public String getValue() {
-        return value;
-    }
 }

@@ -1,5 +1,8 @@
 package com.sparta.projectblue.domain.common.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum PerformanceStatus {
     BEFORE_OPEN("예매오픈전"),
     AVAILABLE("예매가능"),
@@ -11,7 +14,4 @@ public enum PerformanceStatus {
         this.status = status;
     }
 
-    public String getStatus() {
-        return status;
-    }
 }
