@@ -7,6 +7,7 @@ import com.sparta.projectblue.domain.performance.entity.Performance;
 import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
 import com.sparta.projectblue.domain.reservedSeat.entity.ReservedSeat;
 import com.sparta.projectblue.domain.reservedSeat.repository.ReservedSeatRepository;
+import com.sparta.projectblue.domain.round.dto.CreateRoundsDto;
 import com.sparta.projectblue.domain.round.dto.GetAvailableSeatsDto;
 import com.sparta.projectblue.domain.round.entity.Round;
 import com.sparta.projectblue.domain.round.repository.RoundRepository;
@@ -73,4 +74,24 @@ public class RoundService {
 
         return new GetAvailableSeatsDto.Response(performance.getTitle(), round.getDate(), availableSeats);
     }
+
+    public CreateRoundsDto.Response createRounds(Long id) {
+        Round round = roundRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("해당 회차가 없습니다."));
+
+        // 해당 공연 존재 여부 확인
+        Performance performance = performanceRepository.findById(round.getPerformanceId()).orElseThrow(() ->
+                new IllegalArgumentException("performance not found"));
+
+        // 각 회차를 생성 및 저장
+        List<Round> newRounds = request.getRounds().stream()
+                .map(roundInfo -> new Round(performanceId, roundInfo.getDate(), roundInfo.getStatus()))
+                .collect(Collectors.toList());
+
+        roundRepository.saveAll(newRounds);
+
+        return new CreateRoundsDto.Response("Rounds registered successfully.");
+    }
+
+
 }
