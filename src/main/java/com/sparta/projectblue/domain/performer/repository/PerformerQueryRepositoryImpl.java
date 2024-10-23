@@ -3,7 +3,7 @@ package com.sparta.projectblue.domain.performer.repository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.projectblue.domain.performer.dto.PerformerDetailDto;
 import com.sparta.projectblue.domain.performer.entity.QPerformer;
-import com.sparta.projectblue.domain.performerperformance.entity.QPerformerPerformance;
+import com.sparta.projectblue.domain.performerPerformance.entity.QPerformerPerformance;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

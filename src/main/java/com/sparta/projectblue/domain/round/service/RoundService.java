@@ -8,8 +8,8 @@ import com.sparta.projectblue.domain.performance.repository.PerformanceRepositor
 import com.sparta.projectblue.domain.round.dto.GetAvailableSeatsDto;
 import com.sparta.projectblue.domain.round.entity.Round;
 import com.sparta.projectblue.domain.round.repository.RoundRepository;
-import com.sparta.projectblue.domain.seat.entity.ReservedSeat;
-import com.sparta.projectblue.domain.seat.repository.ReservedSeatRepository;
+import com.sparta.projectblue.domain.reservedSeat.entity.ReservedSeat;
+import com.sparta.projectblue.domain.reservedSeat.repository.ReservedSeatRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

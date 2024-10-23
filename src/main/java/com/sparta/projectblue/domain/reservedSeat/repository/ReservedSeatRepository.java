@@ -1,6 +1,6 @@
-package com.sparta.projectblue.domain.seat.repository;
+package com.sparta.projectblue.domain.reservedSeat.repository;
 
-import com.sparta.projectblue.domain.seat.entity.ReservedSeat;
+import com.sparta.projectblue.domain.reservedSeat.entity.ReservedSeat;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
