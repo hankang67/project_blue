@@ -3,3 +3,4 @@ spring:
     name: standard
   profiles:
     active: local
+

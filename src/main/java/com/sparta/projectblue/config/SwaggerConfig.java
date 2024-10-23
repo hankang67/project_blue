@@ -41,4 +41,5 @@ public class SwaggerConfig {
                 .description("Let's practice Swagger UI") // API에 대한 설명을 추가
                 .version("1.0.0"); // API의 버전을 1.0.0으로 설정
     }
+
 }

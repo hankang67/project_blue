@@ -8,8 +8,11 @@ import com.sparta.projectblue.domain.performance.entity.Performance;
 import com.sparta.projectblue.domain.performance.entity.QPerformance;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 
-public interface PerformanceRepository extends JpaRepository<Performance, Long> {
+public interface PerformanceRepository extends JpaRepository<Performance, Long>, PerformanceRepositoryCustom {
+    List<Performance> findAllById(Long performanceId);
+
 
     // 특정 공연의 세부 정보를 조회
     default PerformanceDetailDto findPerformanceDetailById(Long id, JPAQueryFactory queryFactory) {
@@ -38,4 +41,3 @@ public interface PerformanceRepository extends JpaRepository<Performance, Long> 
         return PerformanceDetailDto;
     }
 }
-
