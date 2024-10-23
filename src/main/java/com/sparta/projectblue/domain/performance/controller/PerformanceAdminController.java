@@ -3,6 +3,7 @@ package com.sparta.projectblue.domain.performance.controller;
 import com.sparta.projectblue.config.ApiResponse;
 import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.performance.dto.PerformanceRequestDto;
+import com.sparta.projectblue.domain.performance.dto.PerformanceUpdateRequestDto;
 import com.sparta.projectblue.domain.performance.service.PerformanceAdminService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,7 +34,7 @@ public class PerformanceAdminController {
     public ResponseEntity<ApiResponse<String>> update(
             @AuthenticationPrincipal AuthUser authUser,
             @PathVariable Long id,
-            @Valid @RequestBody PerformanceRequestDto requestDto) {
+            @Valid @RequestBody PerformanceUpdateRequestDto requestDto) {
         return ResponseEntity.ok(ApiResponse.success(performanceAdminService.update(authUser, id, requestDto)));
     }
 
