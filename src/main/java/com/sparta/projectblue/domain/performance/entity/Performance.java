@@ -17,7 +17,7 @@ public class Performance extends BaseEntity {
     @Column(nullable = false)
     private Long hallId;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 100)
     private String title;
 
     @Column(nullable = false)
