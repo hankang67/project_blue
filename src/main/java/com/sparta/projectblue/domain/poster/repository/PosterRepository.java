@@ -7,6 +7,4 @@ import java.util.Optional;
 
 public interface PosterRepository extends JpaRepository<Poster, Long> {
     Optional<Poster> findByPerformanceId(Long performanceId);
-
-    boolean existsByPerformanceId(Long performanceId);
 }
