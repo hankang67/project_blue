@@ -33,19 +33,6 @@ public class PerformanceController {
         return ResponseEntity.ok(ApiResponse.success(performanceService.getPerformances(page, size)));
     }
 
-    // 필터링해서 검색
-    @GetMapping("/filter")
-    @Operation(summary = "공연리스트 필터 조회", description = "현재 진행중인 공연 리스트 조건에 따라 출력")
-    public ResponseEntity<ApiResponse<Page<PerformanceResponseDto>>> getFilterPerformances(
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String performanceNm,
-            @RequestParam(required = false) String userSelectDay,
-            @RequestParam(required = false) String performer
-    ) {
-        return ResponseEntity.ok(ApiResponse.success(performanceService.getFilterPerformances(page, size, performanceNm, userSelectDay, performer)));
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<PerformanceDetailDto> getPerformance(
             @PathVariable Long id) {
