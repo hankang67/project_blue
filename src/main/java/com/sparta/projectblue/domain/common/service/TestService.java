@@ -2,6 +2,8 @@ package com.sparta.projectblue.domain.common.service;
 
 import com.sparta.projectblue.domain.common.enums.Category;
 import com.sparta.projectblue.domain.common.enums.PerformanceStatus;
+import com.sparta.projectblue.domain.common.enums.ReservationStatus;
+import com.sparta.projectblue.domain.common.enums.UserRole;
 import com.sparta.projectblue.domain.hall.entity.Hall;
 import com.sparta.projectblue.domain.hall.repository.HallRepository;
 import com.sparta.projectblue.domain.payment.entity.Payment;
@@ -21,6 +23,7 @@ import com.sparta.projectblue.domain.round.repository.RoundRepository;
 import com.sparta.projectblue.domain.user.entity.User;
 import com.sparta.projectblue.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -40,10 +43,12 @@ public class TestService {
     private final ReservationRepository reservationRepository;
     private final PaymentRepository paymentRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     public void test() {
         // 사용자
         IntStream.range(0, 10).forEach(i -> {
-            User user = new User("User" + i, "user" + i + "@example.com", "abc123?!", null);
+            User user = new User( "user" + i + "@example.com","User" + i, passwordEncoder.encode("abc123?!"), UserRole.ROLE_USER);
             userRepository.save(user);
         });
 
@@ -89,9 +94,11 @@ public class TestService {
 
         // 예매
         IntStream.range(0, 10).forEach(i -> {
-            Reservation reservation = new Reservation(1L, (long) i, 1L, 1L, "Reserved", 5000 + i * 100, i);
+            ReservationStatus status = ReservationStatus.values()[i % ReservationStatus.values().length]; // 순환해서 상태 선택
+            Reservation reservation = new Reservation(1L, 1L, 1L, status, 5000 + i * 100);  // 생성자에 맞게 수정
             reservationRepository.save(reservation);
         });
+
 
         // 결제
         IntStream.range(0, 10).forEach(i -> {

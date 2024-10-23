@@ -13,10 +13,10 @@ import lombok.NoArgsConstructor;
 @Table(name = "halls")
 public class Hall extends BaseEntity {
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 50)
     private String name;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 255)
     private String address;
 
     @Column(nullable = false)
