@@ -9,6 +9,6 @@ public class HallResponseDto {
 
     private final Long id;
     private final String name;
-    private final String adress;
+    private final String address;
     private final Integer seats;
 }

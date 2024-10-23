@@ -5,6 +5,7 @@ import com.sparta.projectblue.domain.hall.dto.HallResponseDto;
 import com.sparta.projectblue.domain.hall.dto.HallsResponseDto;
 import com.sparta.projectblue.domain.hall.service.HallService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,13 +18,14 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/halls")
+@Tag(name = "Hall", description = "공연장 API")
 public class HallController {
 
     private final HallService hallService;
 
     @GetMapping
     @Operation(summary = "공연장 다건 조회")
-    public ResponseEntity<ApiResponse<List<HallsResponseDto>>> getHalls() {
+    public ResponseEntity<ApiResponse<?>> getHalls() {
 
         List<HallsResponseDto> hallsResponseDto = hallService.getHalls();
 
@@ -32,7 +34,7 @@ public class HallController {
 
     @GetMapping("/{id}")
     @Operation(summary = "공연장 단건 조회")
-    public ResponseEntity<ApiResponse<HallResponseDto>> getHall(@PathVariable("id") Long id) {
+    public ResponseEntity<ApiResponse<?>> getHall(@PathVariable("id") Long id) {
 
         HallResponseDto hallResponseDto = hallService.getHall(id);
 

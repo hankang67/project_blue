@@ -11,5 +11,4 @@ public interface HallRepository extends JpaRepository<Hall, Long> {
         return findById(id).orElseThrow(() ->
                 new IllegalArgumentException("공연장을 찾을 수 없습니다."));
     }
-
 }
