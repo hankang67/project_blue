@@ -4,6 +4,7 @@ import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.common.enums.UserRole;
 import com.sparta.projectblue.domain.hall.repository.HallRepository;
 import com.sparta.projectblue.domain.performance.dto.PerformanceRequestDto;
+import com.sparta.projectblue.domain.performance.dto.PerformanceUpdateRequestDto;
 import com.sparta.projectblue.domain.performance.entity.Performance;
 import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
 import com.sparta.projectblue.domain.performer.repository.PerformerRepository;
@@ -11,7 +12,6 @@ import com.sparta.projectblue.domain.performerPerformance.entity.PerformerPerfor
 import com.sparta.projectblue.domain.performerPerformance.repository.PerformerPerformanceRepository;
 import com.sparta.projectblue.domain.poster.entity.Poster;
 import com.sparta.projectblue.domain.poster.repository.PosterRepository;
-import com.sparta.projectblue.domain.poster.service.PosterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +32,6 @@ public class PerformanceAdminService {
     private final PerformerRepository performerRepository;
     private final PerformerPerformanceRepository performerPerformanceRepository;
     private final PosterRepository posterRepository;
-    private final PosterService posterService;
 
     @Transactional
     public String create(AuthUser authUser, PerformanceRequestDto requestDto) {
@@ -81,7 +80,7 @@ public class PerformanceAdminService {
 
     // 공연 수정
     @Transactional
-    public String update(AuthUser authUser, Long performanceId, PerformanceRequestDto requestDto) {
+    public String update(AuthUser authUser, Long performanceId, PerformanceUpdateRequestDto requestDto) {
         hasRole(authUser);
 
         Performance performance = performanceRepository.findById(performanceId).orElseThrow(() ->
@@ -89,12 +88,6 @@ public class PerformanceAdminService {
 
         // 공연 정보 수정
         performance.update(requestDto);
-
-        // 공연 포스터 수정
-        Poster poster = posterRepository.findByPerformanceId(performanceId).orElseThrow(() ->
-                new IllegalArgumentException("해당 공연에 대한 포스터가 존재하지 않습니다."));
-
-        poster.update(requestDto.getPosterName(), requestDto.getPosterUrl());
 
         // 출연자 리스트 수정
         // 출연자 리스트 전체 삭제 후 다시 추가
