@@ -26,4 +26,11 @@ public class PerformerController {
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
+    @GetMapping("/{id}")
+    @Operation(summary = "출연자 조회", description = "출연자 정보를 조회합니다.")
+    public ResponseEntity<ApiResponse<PerformerDetailDto.Response>> getPerformer(@PathVariable Long id) {
+        PerformerDetailDto.Response response = performerService.getPerformer(id);
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
 }
