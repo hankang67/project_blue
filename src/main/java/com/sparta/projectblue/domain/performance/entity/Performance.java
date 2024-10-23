@@ -17,7 +17,7 @@ public class Performance extends BaseEntity {
     @Column(nullable = false)
     private Long hallId;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 100)
     private String title;
 
     @Column(nullable = false)
@@ -30,10 +30,10 @@ public class Performance extends BaseEntity {
     private int price;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 10)
     private Category category;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     private String description;
 
     @Column(nullable = false)
