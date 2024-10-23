@@ -6,7 +6,6 @@ import com.sparta.projectblue.domain.performance.dto.PerformanceDetailDto;
 import com.sparta.projectblue.domain.performance.dto.PerformanceResponseDto;
 import com.sparta.projectblue.domain.performance.service.PerformanceService;
 import com.sparta.projectblue.domain.performer.dto.PerformerDetailDto;
-import com.sparta.projectblue.domain.performer.service.PerformerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +22,6 @@ import java.util.List;
 public class PerformanceController {
 
     private final PerformanceService performanceService;
-    private final PerformerService performerService;
-
 
     // 전체 조회
     @GetMapping
@@ -50,20 +47,19 @@ public class PerformanceController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PerformanceDetailDto> getPerformanceById(
+    public ResponseEntity<PerformanceDetailDto> getPerformance(
             @PathVariable Long id) {
-        PerformanceDetailDto dto = performanceService.getPerformanceById(id);
+        PerformanceDetailDto dto = performanceService.getPerformance(id);
         return ResponseEntity.ok(dto);
     }
 
     // 공연에 대한 출연자 목록 조회
     @GetMapping("/{id}/performers")
-    public ResponseEntity<List<PerformerDetailDto>> getPerformersByPerformanceId(
+    public ResponseEntity<List<PerformerDetailDto>> getPerformers(
             @PathVariable Long id) {
-        List<PerformerDetailDto> performers = performerService.getPerformersByPerformanceId(id);
+        List<PerformerDetailDto> performers = performanceService.getPerformers(id);
         return ResponseEntity.ok(performers);
     }
-
 
     @GetMapping("/{id}/rounds")
     @Operation(summary = "공연 회차 조회", description = "공연에 해당하는 전체 회차와 예매 가능 상태를 조회함")

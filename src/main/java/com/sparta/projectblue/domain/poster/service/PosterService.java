@@ -1,6 +1,7 @@
 package com.sparta.projectblue.domain.poster.service;
 
 import com.sparta.projectblue.domain.common.dto.AuthUser;
+import com.sparta.projectblue.domain.performance.service.PerformanceAdminService;
 import com.sparta.projectblue.domain.performance.service.PerformanceService;
 import com.sparta.projectblue.domain.poster.dto.PosterUpdateRequestDto;
 import com.sparta.projectblue.domain.poster.entity.Poster;
@@ -15,12 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class PosterService {
 
     private final PosterRepository posterRepository;
-    private final PerformanceService performanceService;
+    private final PerformanceAdminService performanceAdminService;
 
     @Transactional
     public String update(AuthUser authUser, Long posterId, PosterUpdateRequestDto requestDto) {
         // Admin권한 확인, security에서 검증하면 없어져도됨.
-        performanceService.hasRole(authUser);
+        performanceAdminService.hasRole(authUser);
 
         Poster poster = getPoster(posterId);
 

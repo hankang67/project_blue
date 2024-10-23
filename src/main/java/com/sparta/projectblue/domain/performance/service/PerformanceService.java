@@ -3,6 +3,9 @@ package com.sparta.projectblue.domain.performance.service;
 import com.sparta.projectblue.domain.performance.dto.PerformanceDetailDto;
 import com.sparta.projectblue.domain.performance.dto.PerformanceResponseDto;
 import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
+import com.sparta.projectblue.domain.performer.dto.PerformerDetailDto;
+import com.sparta.projectblue.domain.performer.repository.PerformerRepository;
+import com.sparta.projectblue.domain.performer.service.PerformerService;
 import com.sparta.projectblue.domain.round.dto.GetRoundsDto;
 import com.sparta.projectblue.domain.round.entity.Round;
 import com.sparta.projectblue.domain.round.repository.RoundRepository;
@@ -29,6 +32,7 @@ public class PerformanceService {
     private final PerformanceRepository performanceRepository;
 
     private final RoundRepository roundRepository;
+    private final PerformerRepository performerRepository;
 
     // 진행중인 전체 공연 리스트 출력
     public Page<PerformanceResponseDto> getPerformances(int page, int size) {
@@ -59,7 +63,7 @@ public class PerformanceService {
 
 
     //공연 상세 정보 조회
-    public PerformanceDetailDto getPerformanceById(Long id) {
+    public PerformanceDetailDto getPerformance(Long id) {
         return performanceRepository.findPerformanceDetailById(id);
     }
 
@@ -80,6 +84,10 @@ public class PerformanceService {
 
         return new GetRoundsDto.Response(roundInfos);
 
+    }
+
+    public List<PerformerDetailDto> getPerformers(Long id) {
+        return performerRepository.findPerformersByPerformanceId(id);
     }
 
 }
