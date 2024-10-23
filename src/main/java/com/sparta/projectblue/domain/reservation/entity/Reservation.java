@@ -2,6 +2,8 @@ package com.sparta.projectblue.domain.reservation.entity;
 
 import com.sparta.projectblue.domain.common.entity.BaseEntity;
 import com.sparta.projectblue.domain.common.enums.ReservationStatus;
+import com.sparta.projectblue.domain.payment.entity.Payment;
+import com.sparta.projectblue.domain.performance.entity.Performance;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +19,7 @@ public class Reservation extends BaseEntity {
     @Column(nullable = false, name = "user_id")
     private Long userId;
 
-    @Column(name = "payment_id")
+    @Column(nullable = true, name = "payment_id")
     private Long paymentId;
 
     @Column(nullable = false, name = "performance_id")
@@ -52,5 +54,4 @@ public class Reservation extends BaseEntity {
     public void resCompleted() {
         this.status = ReservationStatus.COMPLETED;
     }
-
 }

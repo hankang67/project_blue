@@ -4,6 +4,7 @@ import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.common.enums.UserRole;
 import com.sparta.projectblue.domain.hall.repository.HallRepository;
 import com.sparta.projectblue.domain.performance.dto.PerformanceRequestDto;
+import com.sparta.projectblue.domain.performance.dto.PerformanceUpdateRequestDto;
 import com.sparta.projectblue.domain.performance.entity.Performance;
 import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
 import com.sparta.projectblue.domain.performer.repository.PerformerRepository;
@@ -74,7 +75,34 @@ public class PerformanceAdminService {
         Poster poster = new Poster(savedPerformance.getId(), requestDto.getPosterName(), requestDto.getPosterUrl());
         posterRepository.save(poster);
 
-        return savedPerformance.getTitle();
+        return "공연 ID : " + savedPerformance.getId() + ", 공연 이름 : " + savedPerformance.getTitle();
+    }
+
+    // 공연 수정
+    @Transactional
+    public String update(AuthUser authUser, Long performanceId, PerformanceUpdateRequestDto requestDto) {
+        hasRole(authUser);
+
+        Performance performance = performanceRepository.findById(performanceId).orElseThrow(() ->
+                new IllegalArgumentException("존재하지 않는 공연입니다."));
+
+        // 공연 정보 수정
+        performance.update(requestDto);
+
+        // 출연자 리스트 수정
+        // 출연자 리스트 전체 삭제 후 다시 추가
+        deletePerformerPerformance(performanceId);
+
+        for (Long performerId : requestDto.getPerformers()) {
+            if (!performerRepository.existsById(performerId)) {
+                throw new IllegalArgumentException("존재하지 않는 출연자입니다.");
+            }
+
+            PerformerPerformance per = new PerformerPerformance(performerId, performanceId);
+            performerPerformanceRepository.save(per);
+        }
+
+        return "공연 ID : " + performance.getId() + ", 공연 이름 : " + performance.getTitle() + " 수정 완료.";
     }
 
     // 공연 삭제
@@ -93,13 +121,7 @@ public class PerformanceAdminService {
         performanceRepository.deleteAll(performances);
 
         // 공연, 출연자 테이블 연관데이터 삭제
-        List<PerformerPerformance> performerPerformances = performerPerformanceRepository.findAllByPerformanceId(performanceId);
-
-        if (performerPerformances.isEmpty()) {
-            throw new IllegalArgumentException("출연자가 존재하지 않습니다.");
-        }
-
-        performerPerformanceRepository.deleteAll(performerPerformances);
+        deletePerformerPerformance(performanceId);
 
         // 포스터 테이블 삭제
         Poster poster = posterRepository.findByPerformanceId(performanceId).orElseThrow(() ->
@@ -115,5 +137,15 @@ public class PerformanceAdminService {
         if (!authUser.hasRole(UserRole.ROLE_ADMIN)) {
             throw new IllegalArgumentException("관리자만 접근할 수 있습니다.");
         }
+    }
+
+    private void deletePerformerPerformance(Long performanceId) {
+        List<PerformerPerformance> performerPerformances = performerPerformanceRepository.findAllByPerformanceId(performanceId);
+
+        if (performerPerformances.isEmpty()) {
+            throw new IllegalArgumentException("출연자가 존재하지 않습니다.");
+        }
+
+        performerPerformanceRepository.deleteAll(performerPerformances);
     }
 }

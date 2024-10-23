@@ -44,4 +44,5 @@ public class ReservationDto {
             this.duration = performance.getDuration();
         }
     }
+
 }
