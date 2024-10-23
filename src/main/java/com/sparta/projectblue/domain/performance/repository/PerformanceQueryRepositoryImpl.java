@@ -3,10 +3,8 @@ package com.sparta.projectblue.domain.performance.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.sparta.projectblue.domain.hall.entity.QHall;
 import com.sparta.projectblue.domain.performance.dto.PerformanceDetailDto;
 import com.sparta.projectblue.domain.performance.dto.PerformanceResponseDto;
-import com.sparta.projectblue.domain.performance.entity.QPerformance;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -90,24 +88,22 @@ public class PerformanceQueryRepositoryImpl implements PerformanceQueryRepositor
 
     @Override
     public PerformanceDetailDto findPerformanceDetailById(Long id) {
-        QPerformance qPerformance = QPerformance.performance;
-        QHall qHall = QHall.hall;
 
         PerformanceDetailDto performanceDetailDto = jpaQueryFactory
                 .select(Projections.constructor(
                         PerformanceDetailDto.class,
-                        qPerformance.title,
-                        qPerformance.startDate,
-                        qPerformance.endDate,
-                        qPerformance.price,
-                        qPerformance.category.stringValue(),
-                        qPerformance.description,
-                        qPerformance.duration,
-                        qHall.name)
+                        performance.title,
+                        performance.startDate,
+                        performance.endDate,
+                        performance.price,
+                        performance.category.stringValue(),
+                        performance.description,
+                        performance.duration,
+                        hall.name)
                 )
-                .from(qPerformance)
-                .leftJoin(qHall).on(qPerformance.hallId.eq(qHall.id))
-                .where(qPerformance.id.eq(id))
+                .from(performance)
+                .leftJoin(hall).on(performance.hallId.eq(hall.id))
+                .where(performance.id.eq(id))
                 .fetchOne();
 
         if (performanceDetailDto == null) {

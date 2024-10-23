@@ -26,6 +26,15 @@ public class PerformanceAdminController {
         return ResponseEntity.ok(ApiResponse.success(performanceAdminService.create(authUser, requestDto)));
     }
 
+    @PutMapping("/{id}")
+    @Operation(summary = "공연 수정")
+    public ResponseEntity<ApiResponse<String>> update(
+            @AuthenticationPrincipal AuthUser authUser,
+            @PathVariable Long id,
+            @Valid @RequestBody PerformanceRequestDto requestDto) {
+        return ResponseEntity.ok(ApiResponse.success(performanceAdminService.update(authUser, id, requestDto)));
+    }
+
     @DeleteMapping("/{id}")
     @Operation(summary = "공연 삭제")
     public ResponseEntity<ApiResponse<String>> delete(
