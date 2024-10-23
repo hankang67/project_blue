@@ -3,7 +3,10 @@ package com.sparta.projectblue.domain.performance.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.sparta.projectblue.domain.hall.entity.QHall;
+import com.sparta.projectblue.domain.performance.dto.PerformanceDetailDto;
 import com.sparta.projectblue.domain.performance.dto.PerformanceResponseDto;
+import com.sparta.projectblue.domain.performance.entity.QPerformance;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -20,7 +23,7 @@ import static com.sparta.projectblue.domain.performerperformance.entity.QPerform
 
 @Repository
 @RequiredArgsConstructor
-public class PerformanceRepositoryImpl implements PerformanceRepositoryCustom{
+public class PerformanceQueryRepositoryImpl implements PerformanceQueryRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
@@ -63,7 +66,7 @@ public class PerformanceRepositoryImpl implements PerformanceRepositoryCustom{
                 )
                 .fetchOne();
 
-        if(total == null) total = 0L;
+        if (total == null) total = 0L;
 
         return new PageImpl<>(query, pageable, total);
     }
@@ -83,5 +86,34 @@ public class PerformanceRepositoryImpl implements PerformanceRepositoryCustom{
         BooleanExpression beforeEnd = performance.endDate.goe(performanceDay);
 
         return afterStart.and(beforeEnd);
+    }
+
+    @Override
+    public PerformanceDetailDto findPerformanceDetailById(Long id) {
+        QPerformance qPerformance = QPerformance.performance;
+        QHall qHall = QHall.hall;
+
+        PerformanceDetailDto performanceDetailDto = jpaQueryFactory
+                .select(Projections.constructor(
+                        PerformanceDetailDto.class,
+                        qPerformance.title,
+                        qPerformance.startDate,
+                        qPerformance.endDate,
+                        qPerformance.price,
+                        qPerformance.category.stringValue(),
+                        qPerformance.description,
+                        qPerformance.duration,
+                        qHall.name )
+                )
+                .from(qPerformance)
+                .leftJoin(qHall).on(qPerformance.hallId.eq(qHall.id))
+                .where(qPerformance.id.eq(id))
+                .fetchOne();
+
+        if (performanceDetailDto == null) {
+            throw new IllegalArgumentException("해당 공연 정보를 찾을 수 없습니다.");
+        }
+
+        return performanceDetailDto;
     }
 }

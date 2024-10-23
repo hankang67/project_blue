@@ -6,7 +6,6 @@ import com.sparta.projectblue.domain.hall.repository.HallRepository;
 import com.sparta.projectblue.domain.performance.dto.PerformanceRequestDto;
 import com.sparta.projectblue.domain.performance.dto.PerformanceResponseDto;
 import com.sparta.projectblue.domain.performance.entity.Performance;
-import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
 import com.sparta.projectblue.domain.performer.repository.PerformerRepository;
 import com.sparta.projectblue.domain.performerperformance.entity.PerformerPerformance;
 import com.sparta.projectblue.domain.performerperformance.repository.PerformerPerformanceRepository;
@@ -14,10 +13,7 @@ import com.sparta.projectblue.domain.poster.entity.Poster;
 import com.sparta.projectblue.domain.poster.repository.PosterRepository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.sparta.projectblue.domain.hall.entity.QHall;
 import com.sparta.projectblue.domain.performance.dto.PerformanceDetailDto;
-import com.sparta.projectblue.domain.performance.entity.QPerformance;
-import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
 
 import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
 import com.sparta.projectblue.domain.round.dto.GetRoundsDto;
@@ -36,7 +32,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -53,13 +48,11 @@ public class PerformanceService {
     private final PerformerRepository performerRepository;
     private final RoundRepository roundRepository;
 
-    private final JPAQueryFactory queryFactory;
-
     @Transactional
     public String create(AuthUser authUser, PerformanceRequestDto requestDto) {
         hasRole(authUser);
 
-        if(!hallRepository.existsById(requestDto.getHallId())) {
+        if (!hallRepository.existsById(requestDto.getHallId())) {
             throw new IllegalArgumentException("존재하지 않는 공연장입니다.");
         }
 
@@ -84,8 +77,8 @@ public class PerformanceService {
         Performance savedPerformance = performanceRepository.save(performance);
 
         // 출연자 등록
-        for(Long performerId : requestDto.getPerformers()) {
-            if(!performerRepository.existsById(performerId)) {
+        for (Long performerId : requestDto.getPerformers()) {
+            if (!performerRepository.existsById(performerId)) {
                 throw new IllegalArgumentException("존재하지 않는 출연자입니다.");
             }
 
@@ -109,7 +102,7 @@ public class PerformanceService {
 
         System.out.println("List size : " + performances.size());
 
-        if(performances.isEmpty()) {
+        if (performances.isEmpty()) {
             throw new IllegalArgumentException("해당 공연이 존재하지 않습니다.");
         }
 
@@ -118,7 +111,7 @@ public class PerformanceService {
         // 공연, 출연자 테이블 연관데이터 삭제
         List<PerformerPerformance> performerPerformances = performerPerformanceRepository.findAllByPerformanceId(performanceId);
 
-        if(performerPerformances.isEmpty()) {
+        if (performerPerformances.isEmpty()) {
             throw new IllegalArgumentException("출연자가 존재하지 않습니다.");
         }
 
@@ -135,14 +128,14 @@ public class PerformanceService {
 
     // 권한 확인
     public void hasRole(AuthUser authUser) {
-        if(!authUser.hasRole(UserRole.ROLE_ADMIN)) {
+        if (!authUser.hasRole(UserRole.ROLE_ADMIN)) {
             throw new IllegalArgumentException("관리자만 접근할 수 있습니다.");
         }
     }
 
     // 진행중인 전체 공연 리스트 출력
     public Page<PerformanceResponseDto> getPerformances(int page, int size) {
-        Pageable pageable = PageRequest.of(page - 1 , size);
+        Pageable pageable = PageRequest.of(page - 1, size);
 
         LocalDateTime performanceDay = LocalDateTime.now();
 
@@ -151,14 +144,15 @@ public class PerformanceService {
 
     /**
      * 공연 리스트 출력
+     *
      * @param page
-     * @param size : 한 페이지에 나타날 공연 갯수
+     * @param size          : 한 페이지에 나타날 공연 갯수
      * @param performanceNm : 검색할 공연의 이름
      * @param userSelectDay : 검색할 공연의 날짜
      * @return : 공연 정보(공연 이름, 공연장, 시작 날짜, 끝 날짜)
      */
     public Page<PerformanceResponseDto> getFilterPerformances(int page, int size, String performanceNm, String userSelectDay, String performer) {
-        Pageable pageable = PageRequest.of(page - 1 , size);
+        Pageable pageable = PageRequest.of(page - 1, size);
 
         LocalDateTime performanceDay
                 = (userSelectDay != null) ? LocalDate.parse(userSelectDay).atTime(LocalTime.NOON) : LocalDateTime.now();
@@ -167,13 +161,9 @@ public class PerformanceService {
     }
 
 
-
-
     //공연 상세 정보 조회
     public PerformanceDetailDto getPerformanceById(Long id) {
-        return performanceRepository.findPerformanceDetailById(id, queryFactory);
-
-
+        return performanceRepository.findPerformanceDetailById(id);
     }
 
     public GetRoundsDto.Response getRounds(Long id) {
