@@ -1,27 +1,24 @@
-package com.sparta.projectblue.domain.user.controller;
+package com.sparta.projectblue.domain.common.controller;
 
-import com.sparta.projectblue.config.ApiResponse;
-import com.sparta.projectblue.domain.common.dto.AuthUser;
-import com.sparta.projectblue.domain.user.dto.DeleteUserDto;
 import com.sparta.projectblue.domain.user.dto.ReservationDetailDto;
 import com.sparta.projectblue.domain.user.dto.ReservationDto;
 import com.sparta.projectblue.domain.user.service.UserService;
-import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+//swageer
+
 @RestController
+@RequestMapping("/api/test")
 @RequiredArgsConstructor
-@RequestMapping("/users")
-public class UserController {
+@Tag(name = "Mypage", description = "마이페이지 API")
+public class MyPageController {
 
     private final UserService userService;
-
-
 
     // 예매 전체 조회
     @GetMapping("/{userId}/reservations")
@@ -37,13 +34,4 @@ public class UserController {
         return ResponseEntity.ok(reservation);
     }
 
-    @DeleteMapping
-    public ResponseEntity<ApiResponse<?>> deleteUser(
-            @AuthenticationPrincipal AuthUser authUser,
-            @Valid @RequestBody DeleteUserDto.Request deleteUserRequest) {
-
-        userService.deleteUser(authUser, deleteUserRequest);
-
-        return ResponseEntity.ok(ApiResponse.successWithNoContent());
-    }
 }

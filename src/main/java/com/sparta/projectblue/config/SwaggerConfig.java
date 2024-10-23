@@ -38,8 +38,7 @@ public class SwaggerConfig {
     private Info apiInfo() {
         return new Info()
                 .title("API Test") // API의 제목을 "API Test"로 설정
-                .description("Let's practice Swagger UI") // API에 대한 설명을 추가
+                .description("프로젝트 블루 테스트") // API에 대한 설명을 추가
                 .version("1.0.0"); // API의 버전을 1.0.0으로 설정
     }
-
 }
