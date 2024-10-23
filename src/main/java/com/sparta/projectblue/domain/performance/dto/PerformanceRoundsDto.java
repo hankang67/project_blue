@@ -1,4 +1,4 @@
-package com.sparta.projectblue.domain.round.dto;
+package com.sparta.projectblue.domain.performance.dto;
 
 import com.sparta.projectblue.domain.common.enums.PerformanceStatus;
 import lombok.Getter;
@@ -6,7 +6,7 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class GetRoundsDto {
+public class PerformanceRoundsDto {
 
     @Getter
     public static class Response {

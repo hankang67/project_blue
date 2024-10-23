@@ -54,6 +54,11 @@ public class PerformanceController {
     public ResponseEntity<ApiResponse<?>> getRounds(@PathVariable Long id) {
         return ResponseEntity.ok(ApiResponse.success(performanceService.getRounds(id)));
     }
+  
+    @GetMapping("/{id}/reviews")
+    @Operation(summary = "관람평 조회", description = "공연에 등록된 관람평 전체 조회")
+    public ResponseEntity<ApiResponse<?>> getReviews(@PathVariable Long id) {
+        return ResponseEntity.ok(ApiResponse.success(performanceService.getReviews(id)));
 
     @PostMapping("/{id}/performers")
     @Operation(summary = "배우 공연 등록", description = "공연에 배우를 등록합니다.")

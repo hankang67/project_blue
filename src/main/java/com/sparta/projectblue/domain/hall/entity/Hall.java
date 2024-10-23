@@ -27,4 +27,10 @@ public class Hall extends BaseEntity {
         this.address = address;
         this.seats = seats;
     }
+
+    public void update(String name, String address, int seats) {
+        this.name = name;
+        this.address = address;
+        this.seats = seats;
+    }
 }
