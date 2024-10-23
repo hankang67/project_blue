@@ -54,5 +54,11 @@ public class RoundController {
         return ResponseEntity.ok(ApiResponse.success(responseDto));
     }
 
+    @DeleteMapping("/{id}")
+    @Operation(summary = "회차 삭제", description = "특정 회차를 삭제합니다.")
+    public ResponseEntity<ApiResponse<?>> deleteRound(@PathVariable Long id) {
+        roundService.deleteRound(id);
+        return ResponseEntity.ok(ApiResponse.successWithNoContent());
+    }
 
 }

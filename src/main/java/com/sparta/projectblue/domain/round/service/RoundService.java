@@ -9,7 +9,6 @@ import com.sparta.projectblue.domain.reservedSeat.entity.ReservedSeat;
 import com.sparta.projectblue.domain.reservedSeat.repository.ReservedSeatRepository;
 import com.sparta.projectblue.domain.round.dto.CreateRoundsDto;
 import com.sparta.projectblue.domain.round.dto.GetAvailableSeatsDto;
-import com.sparta.projectblue.domain.round.dto.UpdateRoundDto;
 import com.sparta.projectblue.domain.round.entity.Round;
 import com.sparta.projectblue.domain.round.repository.RoundRepository;
 import lombok.RequiredArgsConstructor;
@@ -120,6 +119,13 @@ public class RoundService {
         return new CreateRoundsDto.Response(round.getId(), round.getPerformanceId(), round.getDate(), round.getStatus());
     }
 
+    @Transactional
+    public void deleteRound(Long id) {
+        Round round = roundRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("round not found"));
+
+        roundRepository.delete(round);
+    }
 
 
 
