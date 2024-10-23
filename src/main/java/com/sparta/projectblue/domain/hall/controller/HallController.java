@@ -6,9 +6,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/halls")
 @RequiredArgsConstructor
+@RequestMapping("/halls")
 public class HallController {
-
     private final HallService hallService;
+
+
 }
+
+
+
+
+
