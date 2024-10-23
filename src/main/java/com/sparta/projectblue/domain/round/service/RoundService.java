@@ -9,12 +9,14 @@ import com.sparta.projectblue.domain.reservedSeat.entity.ReservedSeat;
 import com.sparta.projectblue.domain.reservedSeat.repository.ReservedSeatRepository;
 import com.sparta.projectblue.domain.round.dto.CreateRoundsDto;
 import com.sparta.projectblue.domain.round.dto.GetAvailableSeatsDto;
+import com.sparta.projectblue.domain.round.dto.UpdateRoundDto;
 import com.sparta.projectblue.domain.round.entity.Round;
 import com.sparta.projectblue.domain.round.repository.RoundRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -81,7 +83,14 @@ public class RoundService {
         Performance performance = performanceRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("공연을 찾을 수 없습니다."));
 
+        LocalDateTime now = LocalDateTime.now();
+
         List<Round> newRounds = request.getDates().stream()
+                .peek(date -> {
+                    if (date.isBefore(now)) {
+                        throw new IllegalArgumentException("과거의 날짜로 회차를 생성할 수 없습니다.");
+                    }
+                })
                 .map(date -> new Round(id, date, PerformanceStatus.BEFORE_OPEN))
                 .collect(Collectors.toList());
 
@@ -91,6 +100,27 @@ public class RoundService {
                 .map(round -> new CreateRoundsDto.Response(round.getId(), round.getPerformanceId(), round.getDate(), round.getStatus()))
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public CreateRoundsDto.Response updateRound(Long id, CreateRoundsDto.UpdateRequest updateRequest) {
+        // 회차 가져옴
+        Round round = roundRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("round not found"));
+
+        LocalDateTime now = LocalDateTime.now();
+
+        if (updateRequest.getDate().isBefore(now)) {
+            throw new IllegalArgumentException("과거의 날짜로 회차를 수정할 수 없습니다.");
+        }
+
+        round.updateDate(updateRequest.getDate());
+        round.updateStatus(updateRequest.getStatus());
+        roundRepository.save(round);
+
+        return new CreateRoundsDto.Response(round.getId(), round.getPerformanceId(), round.getDate(), round.getStatus());
+    }
+
+
 
 
 

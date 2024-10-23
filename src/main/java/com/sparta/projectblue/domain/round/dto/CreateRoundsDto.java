@@ -33,5 +33,16 @@ public class CreateRoundsDto {
             this.status = status;
         }
     }
+    @Getter
+    @NoArgsConstructor
+    public static class UpdateRequest {
+        private LocalDateTime date;
+        private PerformanceStatus status;
+
+        public UpdateRequest(LocalDateTime date, PerformanceStatus status) {
+            this.date = date;
+            this.status = status;
+        }
+    }
 
 }

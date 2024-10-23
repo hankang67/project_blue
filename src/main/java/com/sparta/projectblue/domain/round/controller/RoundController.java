@@ -35,11 +35,24 @@ public class RoundController {
             @PathVariable Long id,
             @RequestParam List<LocalDateTime> dates) {
         // 2024-10-25T16:00:00
-
         CreateRoundsDto.Request requestDto = new CreateRoundsDto.Request(dates);
         List<CreateRoundsDto.Response> responseDto = roundService.createRounds(id, requestDto);
 
         return ResponseEntity.ok(ApiResponse.success(responseDto));
     }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "회차 수정", description = "특정 회차의 정보를 수정합니다.")
+    public ResponseEntity<ApiResponse<?>> updateRound(
+            @PathVariable Long id,
+            @RequestParam LocalDateTime date,
+            @RequestParam PerformanceStatus status) {
+
+        CreateRoundsDto.UpdateRequest updateRequest = new CreateRoundsDto.UpdateRequest(date, status);
+        CreateRoundsDto.Response responseDto = roundService.updateRound(id, updateRequest);
+
+        return ResponseEntity.ok(ApiResponse.success(responseDto));
+    }
+
 
 }

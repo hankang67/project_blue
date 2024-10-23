@@ -29,4 +29,11 @@ public class Round extends BaseEntity {
         this.date = date;
         this.status = status;
     }
+    public void updateDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public void updateStatus(PerformanceStatus status) {
+        this.status = status;
+    }
 }
