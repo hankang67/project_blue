@@ -34,6 +34,7 @@ public class PerformanceController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "공연 단건 조회", description = "공연 상세정보 조회")
     public ResponseEntity<PerformanceDetailDto> getPerformance(
             @PathVariable Long id) {
         PerformanceDetailDto dto = performanceService.getPerformance(id);
@@ -41,6 +42,7 @@ public class PerformanceController {
     }
 
     // 공연에 대한 출연자 목록 조회
+    @Operation(summary = "공연 출연자 조회", description = "공연 출연자 다건 조회")
     @GetMapping("/{id}/performers")
     public ResponseEntity<List<PerformerDetailDto>> getPerformers(
             @PathVariable Long id) {

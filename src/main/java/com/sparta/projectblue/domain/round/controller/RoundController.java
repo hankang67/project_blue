@@ -3,6 +3,7 @@ package com.sparta.projectblue.domain.round.controller;
 import com.sparta.projectblue.config.ApiResponse;
 import com.sparta.projectblue.domain.round.service.RoundService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/rounds")
 @RequiredArgsConstructor
+@Tag(name = "Round", description = "회차 관련 API")
 public class RoundController {
 
     private final RoundService roundService;

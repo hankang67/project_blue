@@ -20,13 +20,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/reservations")
 @RequiredArgsConstructor
-@Tag(name = "Reservation", description = "공연 예매 API")
+@Tag(name = "Reservation", description = "공연 예매 관련 API")
 public class ReservationController {
 
     private final ReservationService reservationService;
 
     @PostMapping
-    @Operation(summary = "예매", description = "공연 예매에 사용하는 API")
+    @Operation(summary = "공연 예매")
     public ResponseEntity<ApiResponse<?>> create(
             @AuthenticationPrincipal AuthUser authUser,
             @Valid @RequestBody CreateReservationDto.Request request) {
@@ -35,7 +35,7 @@ public class ReservationController {
     }
 
     @DeleteMapping
-    @Operation(summary = "예매취소", description = "예매취소 api")
+    @Operation(summary = "예매 취소", description = "예매 취소 api, 비밀번호 입력 필수")
     public ResponseEntity<ApiResponse<?>> delete(
             @AuthenticationPrincipal AuthUser authUser,
             @Valid @RequestBody DeleteReservationDto.Request request) {
@@ -47,6 +47,7 @@ public class ReservationController {
 
     // 예매 전체 조회
     @GetMapping
+    @Operation(summary = "예매 다건 조회", description = "authUser가 예매한 내역 다건")
     public ResponseEntity<List<ReservationDto.Response>> getReservations(@AuthenticationPrincipal AuthUser authUser) {
         List<ReservationDto.Response> reservations = reservationService.getReservations(authUser.getId());
         return ResponseEntity.ok(reservations);
@@ -54,6 +55,7 @@ public class ReservationController {
 
     // 예매 상세 조회
     @GetMapping("/{id}")
+    @Operation(summary = "예매 단건 조회", description = "authUser가 예매한 내역 단건")
     public ResponseEntity<ReservationDetailDto.Response> getReservation(@AuthenticationPrincipal AuthUser authUser, @PathVariable Long id) {
         ReservationDetailDto.Response reservation = reservationService.getReservation(authUser.getId(), id);
         return ResponseEntity.ok(reservation);
