@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PosterService {
 
     private final PosterRepository posterRepository;
+
     private final PerformanceAdminService performanceAdminService;
 
     @Transactional

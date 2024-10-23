@@ -26,8 +26,8 @@ public class RoundService {
 
     private final RoundRepository roundRepository;
 
-    private final PerformanceRepository performanceRepository;
     private final HallRepository hallRepository;
+    private final PerformanceRepository performanceRepository;
     private final ReservedSeatRepository reservedSeatRepository;
 
     public GetAvailableSeatsDto.Response getAvailableSeats(Long id) {

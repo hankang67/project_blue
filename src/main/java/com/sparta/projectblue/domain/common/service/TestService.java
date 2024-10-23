@@ -36,15 +36,16 @@ import java.util.stream.IntStream;
 @RequiredArgsConstructor
 public class TestService {
 
-    private final UserRepository userRepository;
     private final HallRepository hallRepository;
+    private final PaymentRepository paymentRepository;
     private final PerformanceRepository performanceRepository;
-    private final PosterRepository posterRepository;
     private final PerformerRepository performerRepository;
     private final PerformerPerformanceRepository performerPerformanceRepository;
-    private final RoundRepository roundRepository;
+    private final PosterRepository posterRepository;
     private final ReservationRepository reservationRepository;
-    private final PaymentRepository paymentRepository;
+    private final RoundRepository roundRepository;
+    private final UserRepository userRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     public void test() {

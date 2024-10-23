@@ -30,11 +30,11 @@ public class ReservationService {
 
     private final ReservationRepository reservationRepository;
 
-    private final PerformanceRepository performanceRepository;
-    private final RoundRepository roundRepository;
     private final HallRepository hallRepository;
-    private final UserRepository userRepository;
+    private final PerformanceRepository performanceRepository;
     private final ReservedSeatRepository reservedSeatRepository;
+    private final RoundRepository roundRepository;
+    private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
 

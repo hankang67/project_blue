@@ -27,8 +27,8 @@ public class PerformanceService {
 
     private final PerformanceRepository performanceRepository;
 
-    private final RoundRepository roundRepository;
     private final PerformerRepository performerRepository;
+    private final RoundRepository roundRepository;
 
     // 진행중인 전체 공연 리스트 출력
     public Page<PerformanceResponseDto> getPerformances(int page, int size) {

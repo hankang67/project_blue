@@ -30,9 +30,9 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    private final ReservationRepository reservationRepository;
     private final PaymentRepository paymentRepository;
     private final PerformanceRepository performanceRepository;
+    private final ReservationRepository reservationRepository;
     private final ReservedSeatRepository reservedSeatRepository;
 
     private final PasswordEncoder passwordEncoder;
