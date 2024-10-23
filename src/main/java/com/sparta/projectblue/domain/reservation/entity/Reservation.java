@@ -49,4 +49,5 @@ public class Reservation extends BaseEntity {
     public void resCompleted() {
         this.status = ReservationStatus.COMPLETED;
     }
+
 }

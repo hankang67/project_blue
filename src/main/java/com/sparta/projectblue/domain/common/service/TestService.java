@@ -4,6 +4,7 @@ import com.sparta.projectblue.domain.common.enums.Category;
 import com.sparta.projectblue.domain.common.enums.PerformanceStatus;
 
 import com.sparta.projectblue.domain.common.enums.ReservationStatus;
+
 import com.sparta.projectblue.domain.common.enums.UserRole;
 import com.sparta.projectblue.domain.hall.entity.Hall;
 import com.sparta.projectblue.domain.hall.repository.HallRepository;
@@ -43,6 +44,7 @@ public class TestService {
     private final RoundRepository roundRepository;
     private final ReservationRepository reservationRepository;
     private final PaymentRepository paymentRepository;
+    private final PasswordEncoder passwordEncoder;
 
     private final PasswordEncoder passwordEncoder;
 
