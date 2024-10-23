@@ -24,16 +24,16 @@ import java.util.stream.Collectors;
 public class PerformanceService {
 
     private final PerformanceRepository performanceRepository;
-      private final RoundRepository roundRepository;
+    private final RoundRepository roundRepository;
 
     private final JPAQueryFactory queryFactory;
 
     //공연 상세 정보 조회
-    public PerformanceDetailDto getPerformanceById(Long id){
+    public PerformanceDetailDto getPerformanceById(Long id) {
         return performanceRepository.findPerformanceDetailById(id, queryFactory);
 
 
-
+    }
 
     public GetRoundsDto.Response getRounds(Long id) {
 
