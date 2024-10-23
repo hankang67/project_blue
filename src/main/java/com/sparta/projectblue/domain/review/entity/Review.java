@@ -1,7 +1,6 @@
 package com.sparta.projectblue.domain.review.entity;
 
 import com.sparta.projectblue.domain.common.entity.BaseEntity;
-import com.sparta.projectblue.domain.common.enums.Category;
 import com.sparta.projectblue.domain.common.enums.ReviewRate;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,9 +22,8 @@ public class Review extends BaseEntity {
     @Column(nullable = false, name = "reservation_id")
     private Long reservationId;
 
-
     @Enumerated(value = EnumType.STRING)
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false, length = 5, name = "review_rate")
     private ReviewRate reviewRate;
 
     @Column(nullable = false, length = 255)
@@ -37,7 +35,6 @@ public class Review extends BaseEntity {
         this.reviewRate = reviewRate;
         this.content = content;
     }
-
 
     public void updateReview(ReviewRate reviewRate, String content) {
         this.content = content;
