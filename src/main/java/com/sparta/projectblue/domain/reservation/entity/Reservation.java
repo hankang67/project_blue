@@ -17,7 +17,7 @@ public class Reservation extends BaseEntity {
     @Column(nullable = false, name = "user_id")
     private Long userId;
 
-    @Column(name = "payment_id")
+    @Column(nullable = true, name = "payment_id")
     private Long paymentId;
 
     @Column(nullable = false, name = "performance_id")
@@ -52,5 +52,4 @@ public class Reservation extends BaseEntity {
     public void resCompleted() {
         this.status = ReservationStatus.COMPLETED;
     }
-
 }
