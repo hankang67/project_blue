@@ -1,11 +1,11 @@
 package com.sparta.projectblue.domain.common.enums;
 
 public enum ReservationStatus {
-    FINISHED("예매완료"),
-    CANCLED("예매취소");
+    PENDING("결제대기"),
+    COMPLETED("예매완료"),
+    CANCELED("예매취소");
 
     private final String status;
-
 
     ReservationStatus(String status) {
         this.status = status;
@@ -15,4 +15,3 @@ public enum ReservationStatus {
         return status;
     }
 }
-

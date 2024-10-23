@@ -16,14 +16,19 @@ public class Poster extends BaseEntity {
     @Column(nullable = false)
     private Long performanceId;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 50)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     private String imageUrl;
 
     public Poster(Long performanceId, String name, String imageUrl) {
         this.performanceId = performanceId;
+        this.name = name;
+        this.imageUrl = imageUrl;
+    }
+
+    public void update(String name, String imageUrl) {
         this.name = name;
         this.imageUrl = imageUrl;
     }
