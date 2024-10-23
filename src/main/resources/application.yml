@@ -31,3 +31,9 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
 
 jwt.secret.key: ${secret_key}
+
+springdoc.swagger-ui.path: /api-test
+
+slack:
+  webhook:
+    url: ${SLACK_WEBHOOK_URL}

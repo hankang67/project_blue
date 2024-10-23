@@ -41,4 +41,5 @@ public class Reservation extends BaseEntity {
         this.price = price;
         this.seatNumber = seatNumber;
     }
+
 }
