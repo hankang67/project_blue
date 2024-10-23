@@ -45,8 +45,8 @@ public class PerformanceController {
     @GetMapping("/{id}/performers")
     public ResponseEntity<ApiResponse<List<PerformerDetailDto>>> getPerformers(
             @PathVariable Long id) {
-        ApiResponse<List<PerformerDetailDto>> performers = performanceService.getPerformers(id);
-        return ResponseEntity.ok(performers);
+        List<PerformerDetailDto> performers = performanceService.getPerformers(id);
+        return ResponseEntity.ok(ApiResponse.success(performers));
     }
 
     @GetMapping("/{id}/rounds")

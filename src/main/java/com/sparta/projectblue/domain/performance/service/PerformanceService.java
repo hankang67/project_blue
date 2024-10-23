@@ -1,6 +1,5 @@
 package com.sparta.projectblue.domain.performance.service;
 
-import com.sparta.projectblue.config.ApiResponse;
 import com.sparta.projectblue.domain.performance.dto.PerformanceDetailDto;
 import com.sparta.projectblue.domain.performance.dto.PerformanceResponseDto;
 import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
@@ -45,13 +44,13 @@ public class PerformanceService {
         return performanceRepository.findPerformanceDetailById(id);
     }
 
-    public ApiResponse<GetRoundsDto.Response> getRounds(Long id) {
+    public GetRoundsDto.Response getRounds(Long id) {
 
         if (performanceRepository.findById(id).isEmpty()) {
             throw new IllegalArgumentException("공연을 찾을 수 없습니다.");
         }
         if (performerRepository.findById(id).isEmpty()) {
-            throw new IllegalArgumentException("공연에 대한 출연자 정보를 찾을 수 없습니다.");
+            throw new IllegalArgumentException("해당 공연에 출연한 배우가 없습니다.");
         }
         // 회차 전체 조회
         List<Round> rounds = roundRepository.findByPerformanceId(id).stream().toList();
@@ -60,17 +59,12 @@ public class PerformanceService {
                 .map(round -> new GetRoundsDto.RoundInfo(round.getDate(), round.getStatus()))
                 .collect(Collectors.toList());
 
-        GetRoundsDto.Response response = new GetRoundsDto.Response(roundInfos);
-        return ApiResponse.success(response);
+        return new GetRoundsDto.Response(roundInfos);
 
     }
 
-    public ApiResponse<List<PerformerDetailDto>> getPerformers(Long id) {
-        if (performerRepository.findById(id).isEmpty()) {
-            throw new IllegalArgumentException("공연에 대한 출연자 정보를 찾을 수 없습니다.");
-        }
-        List<PerformerDetailDto> performers = performerRepository.findPerformersByPerformanceId(id);
-        return ApiResponse.success(performers);
+    public List<PerformerDetailDto> getPerformers(Long id) {
+        return performerRepository.findPerformersByPerformanceId(id);
     }
 
 }
