@@ -57,6 +57,7 @@ public class PerformanceService {
         if (performerRepository.findById(id).isEmpty()) {
             throw new IllegalArgumentException("해당 공연에 출연한 배우가 없습니다.");
         }
+
         // 회차 전체 조회
         List<Round> rounds = roundRepository.findByPerformanceId(id).stream().toList();
         // 회차 날짜정보, 예매 상태만 분리
@@ -87,6 +88,20 @@ public class PerformanceService {
         PerformerPerformance performerPerformance = new PerformerPerformance(performerId, performanceId);
         performerPerformanceRepository.save(performerPerformance);
 
+    }
+
+    @Transactional
+    public void removePerformer(Long performanceId, Long performerId) {
+        Performance performance = performanceRepository.findById(performanceId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 공연을 찾을 수 없습니다."));
+        Performer performer = performerRepository.findById(performerId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 배우를 찾을 수 없습니다."));
+
+        PerformerPerformance performerPerformance = performerPerformanceRepository
+                .findByPerformanceIdAndPerformerId(performanceId, performerId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 배우는 이 공연에 등록되어 있지 않습니다."));
+
+        performerPerformanceRepository.delete(performerPerformance);
     }
 
 }

@@ -63,4 +63,13 @@ public class PerformanceController {
         performanceService.addPerformer(id, performerId);
         return ResponseEntity.ok(ApiResponse.success("배우가 공연에 성공적으로 등록되었습니다."));
     }
+
+    @DeleteMapping("{id}/performers/{performerId}")
+    @Operation(summary = "배우 공연 삭제", description = "공연에 등록된 배우를 삭제합니다.")
+    public ResponseEntity<ApiResponse<String>> removePerformerFromPerformance(
+            @PathVariable Long id,
+            @PathVariable Long performerId) {
+        performanceService.removePerformer(id, performerId);
+        return ResponseEntity.ok(ApiResponse.success("배우가 공연에서 성공적으로 삭제되었습니다."));
+    }
 }
