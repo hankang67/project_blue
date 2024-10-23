@@ -42,6 +42,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class PerformanceService {
 
     private final PerformanceRepository performanceRepository;
