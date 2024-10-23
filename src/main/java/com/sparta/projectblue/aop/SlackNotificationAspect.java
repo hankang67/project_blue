@@ -38,15 +38,15 @@ public class SlackNotificationAspect {
 
         // 예약 정보 조회
         Reservation reservation = reservationRepository.findById(reservationId)
-                .orElseThrow(() -> new IllegalArgumentException("Reservation not found"));
+                .orElseThrow(() -> new IllegalArgumentException("예약정보를 찾을 수 없습니다."));
 
         // 공연 정보 조회
         Performance performance = performanceRepository.findById(reservation.getPerformanceId())
-                .orElseThrow(() -> new IllegalArgumentException("Performance not found"));
+                .orElseThrow(() -> new IllegalArgumentException("공연을 찾을 수 없습니다."));
 
         // 공연장소 정보 조회
         Hall hall = hallRepository.findById(performance.getHallId())
-                .orElseThrow(() -> new IllegalArgumentException("Hall not found"));
+                .orElseThrow(() -> new IllegalArgumentException("공연장을 찾을 수 없습니다."));
 
 
         if (result.getStatus().equals(ReservationStatus.PENDING)) {
