@@ -8,31 +8,30 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class CreateRoundsDto {
+
     @Getter
     @NoArgsConstructor
     public static class Request {
-        private Long performanceId;
-        private List<RoundInfo> rounds;
+        private List<LocalDateTime> dates;
 
-        @Getter
-        @NoArgsConstructor
-        public static class RoundInfo {
-            private LocalDateTime date;
-            private PerformanceStatus status;
-
-            public RoundInfo(LocalDateTime date, PerformanceStatus status) {
-                this.date = date;
-                this.status = status;
-            }
+        public Request(List<LocalDateTime> dates) {
+            this.dates = dates;
         }
     }
 
     @Getter
     public static class Response {
-        private final String message;
+        private Long id;
+        private Long performanceId;
+        private LocalDateTime date;
+        private PerformanceStatus status;
 
-        public Response(String message) {
-            this.message = message;
+        public Response(Long id, Long performanceId, LocalDateTime date, PerformanceStatus status) {
+            this.id = id;
+            this.performanceId = performanceId;
+            this.date = date;
+            this.status = status;
         }
     }
+
 }

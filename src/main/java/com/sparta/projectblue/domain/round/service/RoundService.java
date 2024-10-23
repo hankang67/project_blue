@@ -75,23 +75,23 @@ public class RoundService {
         return new GetAvailableSeatsDto.Response(performance.getTitle(), round.getDate(), availableSeats);
     }
 
-    public CreateRoundsDto.Response createRounds(Long id) {
-        Round round = roundRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("해당 회차가 없습니다."));
+    @Transactional
+    public List<CreateRoundsDto.Response> createRounds(Long id, CreateRoundsDto.Request request) {
+        // 공연 존재 여부 확인
+        Performance performance = performanceRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("공연을 찾을 수 없습니다."));
 
-        // 해당 공연 존재 여부 확인
-        Performance performance = performanceRepository.findById(round.getPerformanceId()).orElseThrow(() ->
-                new IllegalArgumentException("performance not found"));
-
-        // 각 회차를 생성 및 저장
-        List<Round> newRounds = request.getRounds().stream()
-                .map(roundInfo -> new Round(performanceId, roundInfo.getDate(), roundInfo.getStatus()))
+        List<Round> newRounds = request.getDates().stream()
+                .map(date -> new Round(id, date, PerformanceStatus.BEFORE_OPEN))
                 .collect(Collectors.toList());
 
-        roundRepository.saveAll(newRounds);
+        List<Round> savedRounds = roundRepository.saveAll(newRounds);
 
-        return new CreateRoundsDto.Response("Rounds registered successfully.");
+        return savedRounds.stream()
+                .map(round -> new CreateRoundsDto.Response(round.getId(), round.getPerformanceId(), round.getDate(), round.getStatus()))
+                .collect(Collectors.toList());
     }
+
 
 
 }
