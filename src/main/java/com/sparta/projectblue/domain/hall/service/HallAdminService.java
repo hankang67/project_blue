@@ -11,5 +11,5 @@ import org.springframework.transaction.annotation.Transactional;
 public class HallAdminService {
 
     private final HallRepository hallRepository;
-
+    
 }
