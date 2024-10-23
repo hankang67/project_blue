@@ -48,10 +48,10 @@ public class PerformanceService {
     public ApiResponse<GetRoundsDto.Response> getRounds(Long id) {
 
         if (performanceRepository.findById(id).isEmpty()) {
-            throw new IllegalArgumentException("해당 공연을 찾을 수 없습니다.");
+            throw new IllegalArgumentException("공연을 찾을 수 없습니다.");
         }
         if (performerRepository.findById(id).isEmpty()) {
-            throw new IllegalArgumentException("해당 공연에 대한 출연자 정보를 찾을 수 없습니다.");
+            throw new IllegalArgumentException("공연에 대한 출연자 정보를 찾을 수 없습니다.");
         }
         // 회차 전체 조회
         List<Round> rounds = roundRepository.findByPerformanceId(id).stream().toList();
@@ -67,7 +67,7 @@ public class PerformanceService {
 
     public ApiResponse<List<PerformerDetailDto>> getPerformers(Long id) {
         if (performerRepository.findById(id).isEmpty()) {
-            throw new IllegalArgumentException("해당 공연에 대한 출연자 정보를 찾을 수 없습니다.");
+            throw new IllegalArgumentException("공연에 대한 출연자 정보를 찾을 수 없습니다.");
         }
         List<PerformerDetailDto> performers = performerRepository.findPerformersByPerformanceId(id);
         return ApiResponse.success(performers);

@@ -1,10 +1,14 @@
 package com.sparta.projectblue.domain.performer.controller;
 
+import com.sparta.projectblue.config.ApiResponse;
+import com.sparta.projectblue.domain.performer.dto.PerformerDetailDto;
 import com.sparta.projectblue.domain.performer.service.PerformerService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/performers")
@@ -13,4 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class PerformerController {
 
     private final PerformerService performerService;
+
+    @PostMapping
+    @Operation(summary = "출연자 등록", description = "새로운 출연자를 등록합니다.")
+    public ResponseEntity<ApiResponse<PerformerDetailDto.Response>> createPerformer(
+            @Valid @RequestBody PerformerDetailDto requestDto) {
+        PerformerDetailDto.Response response = performerService.createPerformer(requestDto);
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
 }

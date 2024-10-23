@@ -35,25 +35,25 @@ public class RoundService {
     public GetAvailableSeatsDto.Response getAvailableSeats(Long id) {
         // 회차 가져옴
         Round round = roundRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("round not found"));
+                new IllegalArgumentException("회차를 찾을 수 없습니다."));
 
         // 오픈전
         if (round.getStatus().equals(PerformanceStatus.BEFORE_OPEN)) {
-            throw new IllegalArgumentException("Reservation not yet open.");
+            throw new IllegalArgumentException("예약이 아직 시작되지 않았습니다.");
         }
 
         // 매진
         if (round.getStatus().equals(PerformanceStatus.SOLD_OUT)) {
-            throw new IllegalArgumentException("Sold out");
+            throw new IllegalArgumentException("이미 매진되었습니다.");
         }
 
         // 공연 가져옴
         Performance performance = performanceRepository.findById(round.getPerformanceId()).orElseThrow(() ->
-                new IllegalArgumentException("performance not found"));
+                new IllegalArgumentException("출연자를 찾을 수 없습니다."));
 
         // 공연장 가져옴
         Hall hall = hallRepository.findById(performance.getHallId()).orElseThrow(() ->
-                new IllegalArgumentException("hallo not found"));
+                new IllegalArgumentException("공연장을 찾을 수 없습니다."));
 
 
         // 예약된 좌석 가져옴
@@ -104,7 +104,7 @@ public class RoundService {
     public CreateRoundsDto.Response updateRound(Long id, CreateRoundsDto.UpdateRequest updateRequest) {
         // 회차 가져옴
         Round round = roundRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("round not found"));
+                new IllegalArgumentException("회차를 찾을 수 없습니다."));
 
         LocalDateTime now = LocalDateTime.now();
 
@@ -122,7 +122,7 @@ public class RoundService {
     @Transactional
     public void deleteRound(Long id) {
         Round round = roundRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("round not found"));
+                new IllegalArgumentException("회차를 찾을 수 없습니다."));
 
         roundRepository.delete(round);
     }
