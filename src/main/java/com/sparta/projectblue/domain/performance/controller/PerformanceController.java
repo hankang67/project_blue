@@ -35,18 +35,17 @@ public class PerformanceController {
 
     @GetMapping("/{id}")
     @Operation(summary = "공연 단건 조회", description = "공연 상세정보 조회")
-    public ResponseEntity<PerformanceDetailDto> getPerformance(
+    public ResponseEntity<ApiResponse<PerformanceDetailDto>> getPerformance(
             @PathVariable Long id) {
         PerformanceDetailDto dto = performanceService.getPerformance(id);
-        return ResponseEntity.ok(dto);
+        return ResponseEntity.ok(ApiResponse.success(dto));
     }
 
-    // 공연에 대한 출연자 목록 조회
     @Operation(summary = "공연 출연자 조회", description = "공연 출연자 다건 조회")
     @GetMapping("/{id}/performers")
-    public ResponseEntity<List<PerformerDetailDto>> getPerformers(
+    public ResponseEntity<ApiResponse<List<PerformerDetailDto>>> getPerformers(
             @PathVariable Long id) {
-        List<PerformerDetailDto> performers = performanceService.getPerformers(id);
+        ApiResponse<List<PerformerDetailDto>> performers = performanceService.getPerformers(id);
         return ResponseEntity.ok(performers);
     }
 

@@ -1,5 +1,6 @@
 package com.sparta.projectblue.domain.performance.service;
 
+import com.sparta.projectblue.config.ApiResponse;
 import com.sparta.projectblue.domain.performance.dto.PerformanceDetailDto;
 import com.sparta.projectblue.domain.performance.dto.PerformanceResponseDto;
 import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
@@ -44,27 +45,32 @@ public class PerformanceService {
         return performanceRepository.findPerformanceDetailById(id);
     }
 
-    public GetRoundsDto.Response getRounds(Long id) {
+    public ApiResponse<GetRoundsDto.Response> getRounds(Long id) {
 
-        // 공연 id값 검증
         if (performanceRepository.findById(id).isEmpty()) {
-            throw new IllegalArgumentException("performance not found");
+            throw new IllegalArgumentException("해당 공연을 찾을 수 없습니다.");
         }
-
+        if (performerRepository.findById(id).isEmpty()) {
+            throw new IllegalArgumentException("해당 공연에 대한 출연자 정보를 찾을 수 없습니다.");
+        }
         // 회차 전체 조회
         List<Round> rounds = roundRepository.findByPerformanceId(id).stream().toList();
-
         // 회차 날짜정보, 예매 상태만 분리
         List<GetRoundsDto.RoundInfo> roundInfos = rounds.stream()
                 .map(round -> new GetRoundsDto.RoundInfo(round.getDate(), round.getStatus()))
                 .collect(Collectors.toList());
 
-        return new GetRoundsDto.Response(roundInfos);
+        GetRoundsDto.Response response = new GetRoundsDto.Response(roundInfos);
+        return ApiResponse.success(response);
 
     }
 
-    public List<PerformerDetailDto> getPerformers(Long id) {
-        return performerRepository.findPerformersByPerformanceId(id);
+    public ApiResponse<List<PerformerDetailDto>> getPerformers(Long id) {
+        if (performerRepository.findById(id).isEmpty()) {
+            throw new IllegalArgumentException("해당 공연에 대한 출연자 정보를 찾을 수 없습니다.");
+        }
+        List<PerformerDetailDto> performers = performerRepository.findPerformersByPerformanceId(id);
+        return ApiResponse.success(performers);
     }
 
 }
