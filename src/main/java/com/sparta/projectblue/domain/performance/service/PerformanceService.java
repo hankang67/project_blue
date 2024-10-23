@@ -57,26 +57,6 @@ public class PerformanceService {
         return performanceRepository.findPerformanceDetailById(id);
     }
 
-    public GetRoundsDto.Response getRounds(Long id) {
-
-        if (performanceRepository.findById(id).isEmpty()) {
-            throw new IllegalArgumentException("해당 공연을 찾을 수 없습니다.");
-        }
-        if (performerRepository.findById(id).isEmpty()) {
-            throw new IllegalArgumentException("해당 공연에 출연한 배우가 없습니다.");
-        }
-
-        // 회차 전체 조회
-        List<Round> rounds = roundRepository.findByPerformanceId(id).stream().toList();
-        // 회차 날짜정보, 예매 상태만 분리
-        List<GetRoundsDto.RoundInfo> roundInfos = rounds.stream()
-                .map(round -> new GetRoundsDto.RoundInfo(round.getDate(), round.getStatus()))
-                .collect(Collectors.toList());
-
-        return new GetRoundsDto.Response(roundInfos);
-
-    }
-
     public PerformanceRoundsDto.Response getRounds(Long id) {
         // 공연 id값 검증
         if (performanceRepository.findById(id).isEmpty()) {
@@ -111,7 +91,7 @@ public class PerformanceService {
     }
 
     @Transactional
-    public void addPerformer (Long performanceId, Long performerId){
+    public void addPerformer(Long performanceId, Long performerId) {
         Performance performance = performanceRepository.findById(performanceId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 공연을 찾을 수 없습니다."));
         Performer performer = performerRepository.findById(performerId)
