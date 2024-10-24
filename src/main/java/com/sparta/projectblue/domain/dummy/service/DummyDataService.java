@@ -56,41 +56,41 @@ public class DummyDataService {
                 .collect(Collectors.toList());
         userRepository.saveAll(users);
 
-        // 더미 공연장 생성 및 저장
-        List<Hall> halls = IntStream.range(0, 100)
-                .mapToObj(i -> DummyHallGenerator.generate())
-                .collect(Collectors.toList());
-        hallRepository.saveAll(halls);
-
-        // 더미 공연자 생성 및 저장
-        List<Performer> performers = IntStream.range(0, 500)
-                .mapToObj(i -> DummyPerformerGenerator.generate())
-                .collect(Collectors.toList());
-        performerRepository.saveAll(performers);
-
-        // 더미 공연 회차 생성 및 저장
-        List<Round> rounds = IntStream.range(0, 2000)
-                .mapToObj(i -> DummyRoundGenerator.generate(halls, users))
-                .collect(Collectors.toList());
-        roundRepository.saveAll(rounds);
-
-        // 더미 포스터 생성 및 저장
-        List<Poster> posters = IntStream.range(0, 200)
-                .mapToObj(i -> DummyPosterGenerator.generate(rounds))
-                .collect(Collectors.toList());
-        posterRepository.saveAll(posters);
-
-        // 더미 예약 생성 및 저장
-        List<Reservation> reservations = IntStream.range(0, 5000)
-                .mapToObj(i -> DummyReservationGenerator.generate(users, rounds))
-                .collect(Collectors.toList());
-        reservationRepository.saveAll(reservations);
-
-        // 더미 리뷰 생성 및 저장
-        List<Review> reviews = IntStream.range(0, 3000)
-                .mapToObj(i -> DummyReviewGenerator.generate(reservations, rounds))
-                .collect(Collectors.toList());
-        reviewRepository.saveAll(reviews);
-    }
+//        // 더미 공연장 생성 및 저장
+//        List<Hall> halls = IntStream.range(0, 100)
+//                .mapToObj(i -> DummyHallGenerator.generate())
+//                .collect(Collectors.toList());
+//        hallRepository.saveAll(halls);
+//
+//        // 더미 공연자 생성 및 저장
+//        List<Performer> performers = IntStream.range(0, 500)
+//                .mapToObj(i -> DummyPerformerGenerator.generate())
+//                .collect(Collectors.toList());
+//        performerRepository.saveAll(performers);
+//
+//        // 더미 공연 회차 생성 및 저장
+//        List<Round> rounds = IntStream.range(0, 2000)
+//                .mapToObj(i -> DummyRoundGenerator.generate(halls, users))
+//                .collect(Collectors.toList());
+//        roundRepository.saveAll(rounds);
+//
+//        // 더미 포스터 생성 및 저장
+//        List<Poster> posters = IntStream.range(0, 200)
+//                .mapToObj(i -> DummyPosterGenerator.generate(rounds))
+//                .collect(Collectors.toList());
+//        posterRepository.saveAll(posters);
+//
+//        // 더미 예약 생성 및 저장
+//        List<Reservation> reservations = IntStream.range(0, 5000)
+//                .mapToObj(i -> DummyReservationGenerator.generate(users, rounds))
+//                .collect(Collectors.toList());
+//        reservationRepository.saveAll(reservations);
+//
+//        // 더미 리뷰 생성 및 저장
+//        List<Review> reviews = IntStream.range(0, 3000)
+//                .mapToObj(i -> DummyReviewGenerator.generate(reservations, rounds))
+//                .collect(Collectors.toList());
+//        reviewRepository.saveAll(reviews);
+//    }
 }
 }
