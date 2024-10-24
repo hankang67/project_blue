@@ -15,14 +15,8 @@ import java.time.LocalDateTime;
 @Table(name = "payments")
 public class Payment extends BaseEntity {
 
-    @Column(nullable = false, length = 20, name = "pay_type")
-    private String payType; // 결제 종류 : NORMAL, BILLING, BRANDPAY
-
-    @Column(nullable = false, length = 20, name = "pay_method")
-    private String payMethod; // 결제 수단 : 칻, 가상계좌, 간편결제, 휴대폰, 계좌이체, 문화상품권, 도서상품권, 게임문화상품권
-
-    @Column(nullable = false, length = 20, name = "payment_key")
-    private String paymentKey;
+    @Column(nullable = false, name = "user_id")
+    private Long userId;
 
     @Column(nullable = false, name = "reservation_id")
     private Long reservationId;
@@ -30,24 +24,49 @@ public class Payment extends BaseEntity {
     @Column(nullable = false, name = "performance_id")
     private Long performanceId;
 
-    @Column(nullable = false, name = "total_amount")
-    private Long totalAmount; // suppliedAmount + vat
+    @Column(length = 255, name = "payment_key")
+    private String paymentKey;
 
-    @Column(nullable = false, name = "supplied_amount")
-    private Long suppliedAmount; // 결제 수수료의 공급 가액
+    @Column(length = 20)
+    private String type; // 결제 종류 : NORMAL, BILLING, BRANDPAY
 
-    @Column(nullable = false)
-    private Long vat; // 수수료
+    @Column(length = 20)
+    private String method; // 결제 수단 : 칻, 가상계좌, 간편결제, 휴대폰, 계좌이체, 문화상품권, 도서상품권, 게임문화상품권
 
-    @Column(nullable = false, name = "user_id")
-    private Long userId;
+    @Column(name = "amount_supplied")
+    private Long amountSupplied; // 결제 수수료의 공급 가액
 
-    @Column(nullable = false, name = "approved_at")
-    private LocalDateTime approvedAt;
+    @Column(name = "amount_vat")
+    private Long amountVat; // 수수료
+
+    @Column(nullable = false, name = "amount_total")
+    private Long amountTotal; // suppliedAmount + vat
 
     @Column(nullable = false, length = 10)
     @Enumerated(EnumType.STRING)
     private PaymentStatus status;
 
+    @Column(name = "approved_at")
+    private LocalDateTime approvedAt;
 
+    @Column(nullable = false, length = 30, name = "order_id")
+    private String orderId;
+
+    public Payment(Long userId, Long reservationId, Long performanceId, String paymentKey, String type, String method, Long amountSupplied, Long amountVat, Long amountTotal, PaymentStatus status, LocalDateTime approvedAt) {
+        this.userId = userId;
+        this.reservationId = reservationId;
+        this.performanceId = performanceId;
+        this.paymentKey = paymentKey;
+        this.type = type;
+        this.method = method;
+        this.amountSupplied = amountSupplied;
+        this.amountVat = amountVat;
+        this.amountTotal = amountTotal;
+        this.status = status;
+        this.approvedAt = approvedAt;
+    }
+
+    public void canceled() {
+        this.status = PaymentStatus.CANCELED;
+    }
 }

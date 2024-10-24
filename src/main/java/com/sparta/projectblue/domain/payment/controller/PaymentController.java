@@ -11,22 +11,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-
 @RequiredArgsConstructor
 public class PaymentController {
 
     private final PaymentService paymentService;
 
-    @RequestMapping(value = "/confirm")
+    @PostMapping("/confirm")
     public ResponseEntity<JSONObject> confirmPayment(@RequestBody String jsonBody) throws Exception {
         return ResponseEntity.ok(paymentService.confirmPayment(jsonBody));
     }
 
     @GetMapping("/payments/{reservationId}")
-    public String payments(
-            HttpServletRequest request,
-            Model model,
-            @PathVariable Long reservationId) {
+    public String payments(Model model, @PathVariable Long reservationId) {
         PaymentResponseDto responseDto = paymentService.setValue(reservationId);
         model.addAttribute("paymentResponse", responseDto);
         return "/checkout";
@@ -41,7 +37,6 @@ public class PaymentController {
      */
     @GetMapping("/payments/success")
     public String paymentRequest(HttpServletRequest request, Model model) throws Exception {
-
         return "/success";
     }
 

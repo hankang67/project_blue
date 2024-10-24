@@ -59,8 +59,8 @@ public class ReservationDetailDto {
         private final LocalDateTime paymentTime;
 
         public PaymentDto(Payment payment) {
-            this.paymentType = payment.getPayType();
-            this.paymentPrice = payment.getTotalAmount();
+            this.paymentType = payment.getType();
+            this.paymentPrice = payment.getAmountTotal();
             this.paymentTime = payment.getApprovedAt();
         }
     }

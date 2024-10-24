@@ -1,6 +1,8 @@
 package com.sparta.projectblue.domain.payment.service;
 
+import com.sparta.projectblue.domain.common.exception.PaymentException;
 import com.sparta.projectblue.domain.payment.dto.PaymentResponseDto;
+import com.sparta.projectblue.domain.payment.entity.Payment;
 import com.sparta.projectblue.domain.payment.repository.PaymentRepository;
 import com.sparta.projectblue.domain.performance.entity.Performance;
 import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
@@ -14,7 +16,6 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -23,7 +24,10 @@ import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -52,6 +56,11 @@ public class PaymentService {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         };
+
+        if(!verifyPayment(orderId, Long.parseLong(amount))) {
+            throw new PaymentException("주문ID에 대한 가격이 상이합니다.");
+        }
+
         JSONObject obj = new JSONObject();
         obj.put("orderId", orderId);
         obj.put("amount", amount);
@@ -69,7 +78,6 @@ public class PaymentService {
         connection.setRequestMethod("POST");
         connection.setDoOutput(true);
 
-
         OutputStream outputStream = connection.getOutputStream();
         outputStream.write(obj.toString().getBytes("UTF-8"));
 
@@ -83,6 +91,12 @@ public class PaymentService {
         JSONObject jsonObject = (JSONObject) parser.parse(reader);
         responseStream.close();
 
+        if(!verifyPayment(orderId, Long.parseLong(amount))) {
+            // 결제 취소 부탁드립니다 //
+            
+            throw new PaymentException("주문ID에 대한 가격이 상이합니다.");
+        }
+        
         return jsonObject;
     }
 
@@ -97,19 +111,16 @@ public class PaymentService {
         User user = userRepository.findById(reservation.getUserId()).orElseThrow(() ->
                 new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
 
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+        String orderId = "blueRes_" + timestamp + "_" + reservationId;
+
         return PaymentResponseDto.builder()
-                .payType("CARD")
-                .orderId("BlueRes" + reservationId)
+                .orderId(orderId)
                 .orderName(performance.getTitle())
                 .amount(reservation.getPrice())
                 .customerEmail(user.getEmail())
                 .customerName(user.getName())
                 .build();
-
-//        model.addAttribute("amount", reservation.getPrice());
-//        model.addAttribute("orderName", performance.getTitle());
-//        model.addAttribute("customerName", user.getName());
-//        model.addAttribute("customerEmail", user.getEmail());
     }
 
     public String cancelPayment(String paymentKey, String cancelReason) throws Exception {
@@ -137,5 +148,12 @@ public class PaymentService {
         Base64.Encoder encoder = Base64.getEncoder();
         byte[] encodedBytes = encoder.encode((WIDGET_SECRET_KEY + ":").getBytes(StandardCharsets.UTF_8));
         return "Basic " + new String(encodedBytes);
+    }
+
+    private boolean verifyPayment(String orderId, Long amount) {
+        Payment payment = paymentRepository.findByOrderId(orderId).orElseThrow(() ->
+                new IllegalArgumentException("결제 내역이 존재하지 않습니다."));
+
+        return Objects.equals(amount, payment.getAmountTotal());
     }
 }
