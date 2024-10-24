@@ -67,7 +67,7 @@ public class PerformanceService {
         if (performanceDetailDto.getHallName().isEmpty()) {
             throw new IllegalArgumentException("공연장의 정보가 없습니다.");
         }
-        if (performanceDetailDto.getPosterUrl().isEmpty()) {
+        if (performanceDetailDto.getImageUrl() == null || performanceDetailDto.getImageUrl().isEmpty()) {
             throw new IllegalArgumentException("포스터 정보가 없습니다.");
         }
 

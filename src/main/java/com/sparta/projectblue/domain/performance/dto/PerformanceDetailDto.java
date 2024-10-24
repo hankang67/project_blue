@@ -19,10 +19,10 @@ public class PerformanceDetailDto {
     private int duration;
     private String hallName;
     private String posterName;
-    private String posterUrl;
+    private String imageUrl;
 
     // 지우지 마세요. 쿼리에서 써요.
-    public PerformanceDetailDto(String title, LocalDateTime startDate, LocalDateTime endDate, int price, String category, String description, int duration, String hallName,String posterName, String posterUrl) {
+    public PerformanceDetailDto(String title, LocalDateTime startDate, LocalDateTime endDate, int price, String category, String description, int duration, String hallName,String posterName, String imageUrl) {
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -32,7 +32,7 @@ public class PerformanceDetailDto {
         this.duration = duration;
         this.hallName = hallName;
         this.posterName = posterName;
-        this.posterUrl = posterUrl;
+        this.imageUrl = imageUrl;
     }
 }
 
