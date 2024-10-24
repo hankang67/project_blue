@@ -1,9 +1,9 @@
 package com.sparta.projectblue.domain.payment.entity;
 
 import com.sparta.projectblue.domain.common.entity.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import com.sparta.projectblue.domain.common.enums.PaymentStatus;
+import com.sparta.projectblue.domain.payment.dto.PaymentResponseDto;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,26 +15,39 @@ import java.time.LocalDateTime;
 @Table(name = "payments")
 public class Payment extends BaseEntity {
 
-    @Column(nullable = false, length = 20, name = "payment_type")
-    private String paymentType;
+    @Column(nullable = false, length = 20, name = "pay_type")
+    private String payType; // 결제 종류 : NORMAL, BILLING, BRANDPAY
 
-    @Column(nullable = false, length = 50, name = "transaction_id")
-    private String transactionId;
+    @Column(nullable = false, length = 20, name = "pay_method")
+    private String payMethod; // 결제 수단 : 칻, 가상계좌, 간편결제, 휴대폰, 계좌이체, 문화상품권, 도서상품권, 게임문화상품권
 
-    @Column(nullable = false, length = 20, name = "payment_method")
-    private String paymentMethod;
+    @Column(nullable = false, length = 20, name = "payment_key")
+    private String paymentKey;
 
-    @Column(nullable = false, name = "payment_price")
-    private int paymentPrice;
+    @Column(nullable = false, name = "reservation_id")
+    private Long reservationId;
 
-    @Column(nullable = false, name = "payment_time")
-    private LocalDateTime paymentTime;
+    @Column(nullable = false, name = "performance_id")
+    private Long performanceId;
 
-    public Payment(String paymentType, String transactionId, String paymentMethod, int paymentPrice, LocalDateTime paymentTime) {
-        this.paymentType = paymentType;
-        this.transactionId = transactionId;
-        this.paymentMethod = paymentMethod;
-        this.paymentPrice = paymentPrice;
-        this.paymentTime = paymentTime;
-    }
+    @Column(nullable = false, name = "total_amount")
+    private Long totalAmount; // suppliedAmount + vat
+
+    @Column(nullable = false, name = "supplied_amount")
+    private Long suppliedAmount; // 결제 수수료의 공급 가액
+
+    @Column(nullable = false)
+    private Long vat; // 수수료
+
+    @Column(nullable = false, name = "user_id")
+    private Long userId;
+
+    @Column(nullable = false, name = "approved_at")
+    private LocalDateTime approvedAt;
+
+    @Column(nullable = false, length = 10)
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus status;
+
+
 }

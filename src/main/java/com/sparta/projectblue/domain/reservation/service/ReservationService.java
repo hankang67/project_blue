@@ -89,7 +89,7 @@ public class ReservationService {
         }
 
         // 가격정보 가져옴
-        int price = performance.getPrice() * request.getSeats().size();
+        Long price = performance.getPrice() * request.getSeats().size();
 
         // 예약 생성
         Reservation newReservation = new Reservation(

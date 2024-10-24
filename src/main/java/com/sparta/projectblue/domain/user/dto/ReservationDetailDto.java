@@ -36,7 +36,7 @@ public class ReservationDetailDto {
         private final String title;
         private final Long hallId;
         private final LocalDateTime startDate;
-        private final int price;
+        private final Long price;
         private final Category category;
         private final String description;
         private final int duration; // duration in minutes
@@ -54,14 +54,14 @@ public class ReservationDetailDto {
 
     @Getter
     public static class PaymentDto {
-        private final String paymentMethod;
-        private final int paymentPrice;
+        private final String paymentType;
+        private final Long paymentPrice;
         private final LocalDateTime paymentTime;
 
         public PaymentDto(Payment payment) {
-            this.paymentMethod = payment.getPaymentMethod();
-            this.paymentPrice = payment.getPaymentPrice();
-            this.paymentTime = payment.getPaymentTime();
+            this.paymentType = payment.getPayType();
+            this.paymentPrice = payment.getTotalAmount();
+            this.paymentTime = payment.getApprovedAt();
         }
     }
 }

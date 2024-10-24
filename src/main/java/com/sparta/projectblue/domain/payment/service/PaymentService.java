@@ -1,14 +1,141 @@
 package com.sparta.projectblue.domain.payment.service;
 
+import com.sparta.projectblue.domain.payment.dto.PaymentResponseDto;
 import com.sparta.projectblue.domain.payment.repository.PaymentRepository;
+import com.sparta.projectblue.domain.performance.entity.Performance;
+import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
+import com.sparta.projectblue.domain.reservation.entity.Reservation;
+import com.sparta.projectblue.domain.reservation.repository.ReservationRepository;
+import com.sparta.projectblue.domain.user.entity.User;
+import com.sparta.projectblue.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
+
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class PaymentService {
 
-    PaymentRepository paymentRepository;
+    private final PaymentRepository paymentRepository;
+    private final ReservationRepository reservationRepository;
+    private final PerformanceRepository performanceRepository;
+    private final UserRepository userRepository;
+
+    private static final String TOSS_BASIC_URL = "https://api.tosspayments.com/v1/payments/";
+    private static final String WIDGET_SECRET_KEY = "test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6";
+
+    public JSONObject confirmPayment(String jsonBody) throws Exception {
+        JSONParser parser = new JSONParser();
+        String orderId;
+        String amount;
+        String paymentKey;
+        try {
+            // 클라이언트에서 받은 JSON 요청 바디입니다.
+            JSONObject requestData = (JSONObject) parser.parse(jsonBody);
+            paymentKey = (String) requestData.get("paymentKey");
+            orderId = (String) requestData.get("orderId");
+            amount = (String) requestData.get("amount");
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        };
+        JSONObject obj = new JSONObject();
+        obj.put("orderId", orderId);
+        obj.put("amount", amount);
+        obj.put("paymentKey", paymentKey);
+
+        String authorizations = secretKeyEncoder();
+
+        // 결제 승인 API를 호출하세요.
+        // 결제를 승인하면 결제수단에서 금액이 차감돼요.
+        // @docs https://docs.tosspayments.com/guides/v2/payment-widget/integration#3-결제-승인하기
+        URL url = new URL(TOSS_BASIC_URL + "confirm");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestProperty("Authorization", authorizations);
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setRequestMethod("POST");
+        connection.setDoOutput(true);
+
+
+        OutputStream outputStream = connection.getOutputStream();
+        outputStream.write(obj.toString().getBytes("UTF-8"));
+
+        int code = connection.getResponseCode();
+        boolean isSuccess = code == 200;
+
+        InputStream responseStream = isSuccess ? connection.getInputStream() : connection.getErrorStream();
+
+        // TODO: 결제 성공 및 실패 비즈니스 로직을 구현하세요.
+        Reader reader = new InputStreamReader(responseStream, StandardCharsets.UTF_8);
+        JSONObject jsonObject = (JSONObject) parser.parse(reader);
+        responseStream.close();
+
+        return jsonObject;
+    }
+
+    @Transactional
+    public PaymentResponseDto setValue(Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(() ->
+                new IllegalArgumentException("예약 내역이 없습니다."));
+
+        Performance performance = performanceRepository.findById(reservation.getPerformanceId()).orElseThrow(() ->
+                new IllegalArgumentException("해당 공연이 존재하지 않습니다."));
+
+        User user = userRepository.findById(reservation.getUserId()).orElseThrow(() ->
+                new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
+
+        return PaymentResponseDto.builder()
+                .payType("CARD")
+                .orderId("BlueRes" + reservationId)
+                .orderName(performance.getTitle())
+                .amount(reservation.getPrice())
+                .customerEmail(user.getEmail())
+                .customerName(user.getName())
+                .build();
+
+//        model.addAttribute("amount", reservation.getPrice());
+//        model.addAttribute("orderName", performance.getTitle());
+//        model.addAttribute("customerName", user.getName());
+//        model.addAttribute("customerEmail", user.getEmail());
+    }
+
+    public String cancelPayment(String paymentKey, String cancelReason) throws Exception {
+
+        URL url = new URL(TOSS_BASIC_URL + paymentKey + "/cancel");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestProperty("Authorization", secretKeyEncoder());
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setRequestMethod("POST");
+        connection.setDoOutput(true);
+
+        JSONObject obj = new JSONObject();
+        obj.put("cancelReason", cancelReason);
+
+        OutputStream outputStream = connection.getOutputStream();
+        outputStream.write(obj.toString().getBytes("UTF-8"));
+
+        return String.valueOf(obj);
+    }
+
+    public String secretKeyEncoder() {
+        // 토스페이먼츠 API는 시크릿 키를 사용자 ID로 사용하고, 비밀번호는 사용하지 않습니다.
+        // 비밀번호가 없다는 것을 알리기 위해 시크릿 키 뒤에 콜론을 추가합니다.
+        // @docs https://docs.tosspayments.com/reference/using-api/authorization#%EC%9D%B8%EC%A6%9D
+        Base64.Encoder encoder = Base64.getEncoder();
+        byte[] encodedBytes = encoder.encode((WIDGET_SECRET_KEY + ":").getBytes(StandardCharsets.UTF_8));
+        return "Basic " + new String(encodedBytes);
+    }
 }

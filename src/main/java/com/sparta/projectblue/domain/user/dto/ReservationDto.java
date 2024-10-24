@@ -29,7 +29,7 @@ public class ReservationDto {
         private final String title;
         private final Long hallId;
         private final LocalDateTime startDate;
-        private final int price;
+        private final Long price;
         private final Category category;
         private final String description;
         private final int duration; // duration in minutes
