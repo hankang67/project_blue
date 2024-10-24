@@ -13,8 +13,8 @@ public class QPerformanceDetailDto extends ConstructorExpression<PerformanceDeta
 
     private static final long serialVersionUID = -11154924L;
 
-    public QPerformanceDetailDto(com.querydsl.core.types.Expression<String> title, com.querydsl.core.types.Expression<java.time.LocalDateTime> startDate, com.querydsl.core.types.Expression<java.time.LocalDateTime> endDate, com.querydsl.core.types.Expression<Integer> price, com.querydsl.core.types.Expression<String> category, com.querydsl.core.types.Expression<String> description, com.querydsl.core.types.Expression<Integer> duration, com.querydsl.core.types.Expression<String> hallName) {
-        super(PerformanceDetailDto.class, new Class<?>[]{String.class, java.time.LocalDateTime.class, java.time.LocalDateTime.class, int.class, String.class, String.class, int.class, String.class}, title, startDate, endDate, price, category, description, duration, hallName);
+    public QPerformanceDetailDto(com.querydsl.core.types.Expression<String> title, com.querydsl.core.types.Expression<java.time.LocalDateTime> startDate, com.querydsl.core.types.Expression<java.time.LocalDateTime> endDate, com.querydsl.core.types.Expression<Integer> price, com.querydsl.core.types.Expression<String> category, com.querydsl.core.types.Expression<String> description, com.querydsl.core.types.Expression<Integer> duration, com.querydsl.core.types.Expression<String> hallName, com.querydsl.core.types.Expression<String> posterName, com.querydsl.core.types.Expression<String> posterUrl) {
+        super(PerformanceDetailDto.class, new Class<?>[]{String.class, java.time.LocalDateTime.class, java.time.LocalDateTime.class, int.class, String.class, String.class, int.class, String.class, String.class, String.class}, title, startDate, endDate, price, category, description, duration, hallName, posterName, posterUrl);
     }
 
 }
