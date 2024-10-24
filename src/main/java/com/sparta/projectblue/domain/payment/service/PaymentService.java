@@ -1,5 +1,6 @@
 package com.sparta.projectblue.domain.payment.service;
 
+import com.sparta.projectblue.domain.common.enums.PaymentStatus;
 import com.sparta.projectblue.domain.common.exception.PaymentException;
 import com.sparta.projectblue.domain.payment.dto.PaymentResponseDto;
 import com.sparta.projectblue.domain.payment.entity.Payment;
@@ -96,6 +97,11 @@ public class PaymentService {
             
             throw new PaymentException("주문ID에 대한 가격이 상이합니다.");
         }
+
+        if (isSuccess) {
+            // 결제 승인 후 처리
+
+        }
         
         return jsonObject;
     }
@@ -123,8 +129,9 @@ public class PaymentService {
                 .build();
     }
 
+    @Transactional
     public String cancelPayment(String paymentKey, String cancelReason) throws Exception {
-
+        // 취소 API 호출 URL
         URL url = new URL(TOSS_BASIC_URL + paymentKey + "/cancel");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestProperty("Authorization", secretKeyEncoder());
@@ -132,13 +139,42 @@ public class PaymentService {
         connection.setRequestMethod("POST");
         connection.setDoOutput(true);
 
+        // 취소 요청 데이터 설정
         JSONObject obj = new JSONObject();
         obj.put("cancelReason", cancelReason);
 
         OutputStream outputStream = connection.getOutputStream();
         outputStream.write(obj.toString().getBytes("UTF-8"));
 
+        int code = connection.getResponseCode();
+        boolean isSuccess = code == 200;
+
+        InputStream responseStream = isSuccess ? connection.getInputStream() : connection.getErrorStream();
+        Reader reader = new InputStreamReader(responseStream, StandardCharsets.UTF_8);
+        JSONParser parser = new JSONParser();
+        JSONObject jsonObject = (JSONObject) parser.parse(reader);
+
+        if (isSuccess) {
+            // 결제 취소 승인 후 처리
+            updatePaymentStatus(paymentKey);
+        }
+
         return String.valueOf(obj);
+    }
+
+    @Transactional
+    public void updatePaymentStatus(String paymentKey) {
+        // payment 상태 취소 변경
+        Payment payment = paymentRepository.findByPaymentKey(paymentKey)
+                .orElseThrow(() -> new IllegalArgumentException("결제 정보를 찾을 수 없습니다."));
+
+        payment.canceled();
+
+        // 결제에 연결된 예매 정보 업데이트 (취소된 결제는 예매 ID와 결제 ID를 null 처리 또는 별도 로직에 맞게 처리)
+        Reservation reservation = reservationRepository.findById(payment.getReservationId())
+                .orElseThrow(() -> new IllegalArgumentException("예매 정보를 찾을 수 없습니다."));
+
+        reservation.resCanceled();
     }
 
     public String secretKeyEncoder() {

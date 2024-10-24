@@ -59,9 +59,10 @@ public class PaymentController {
     }
 
     @PostMapping("/cancel")
-    public String cancelPayment (
+    public ResponseEntity<String> cancelPayment(
             @RequestParam String paymentKey,
             @RequestParam String cancelReason) throws Exception {
-        return paymentService.cancelPayment(paymentKey, cancelReason);
+        String response = paymentService.cancelPayment(paymentKey, cancelReason);
+        return ResponseEntity.ok(response);
     }
 }
