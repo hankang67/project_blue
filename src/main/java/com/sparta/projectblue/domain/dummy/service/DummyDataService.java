@@ -1,6 +1,6 @@
 package com.sparta.projectblue.domain.dummy.service;
 
-import com.sparta.projectblue.domain.dummy.generator.DummyUserGenerator;
+import com.sparta.projectblue.domain.dummy.generator.*;
 import com.sparta.projectblue.domain.hall.entity.Hall;
 import com.sparta.projectblue.domain.hall.repository.HallRepository;
 import com.sparta.projectblue.domain.performer.entity.Performer;
@@ -50,47 +50,78 @@ public class DummyDataService {
     @PostConstruct
     public void init() {
 
-        // 더미 사용자 생성 및 저장
-        List<User> users = IntStream.range(0, 10000)
-                .mapToObj(i -> DummyUserGenerator.generate())
-                .collect(Collectors.toList());
-        userRepository.saveAll(users);
-
-//        // 더미 공연장 생성 및 저장
-//        List<Hall> halls = IntStream.range(0, 100)
-//                .mapToObj(i -> DummyHallGenerator.generate())
+//        // 더미 유저 생성 및 저장
+//        List<User> users = IntStream.range(0, 10000)
+//                .mapToObj(i -> DummyUserGenerator.generate())
 //                .collect(Collectors.toList());
-//        hallRepository.saveAll(halls);
-//
-//        // 더미 공연자 생성 및 저장
+//        userRepository.saveAll(users);
+
+//        // 더미 배우 생성 및 저장
 //        List<Performer> performers = IntStream.range(0, 500)
 //                .mapToObj(i -> DummyPerformerGenerator.generate())
 //                .collect(Collectors.toList());
 //        performerRepository.saveAll(performers);
-//
+
+        // 더미 홀 생성 및 저장
+        List<Hall> halls = IntStream.range(0, 100000)
+                .mapToObj(i -> DummyHallGenerator.generate())
+                .collect(Collectors.toList());
+        hallRepository.saveAll(halls);
+
+//        // 공연장 ID 목록 생성
+//        List<Long> hallIds = halls.stream()
+//                .map(Hall::getId)
+//                .collect(Collectors.toList());
+
 //        // 더미 공연 회차 생성 및 저장
 //        List<Round> rounds = IntStream.range(0, 2000)
-//                .mapToObj(i -> DummyRoundGenerator.generate(halls, users))
+//                .mapToObj(i -> DummyRoundGenerator.generate(hallIds))
 //                .collect(Collectors.toList());
 //        roundRepository.saveAll(rounds);
-//
+
+//        // 공연 ID 목록 생성
+//        List<Long> performanceIds = rounds.stream()
+//                .map(Round::getPerformanceId)
+//                .distinct()
+//                .collect(Collectors.toList());
+
 //        // 더미 포스터 생성 및 저장
 //        List<Poster> posters = IntStream.range(0, 200)
-//                .mapToObj(i -> DummyPosterGenerator.generate(rounds))
+//                .mapToObj(i -> DummyPosterGenerator.generate(performanceIds))
 //                .collect(Collectors.toList());
 //        posterRepository.saveAll(posters);
-//
+
+//        // 유저 ID 목록 생성
+//        List<Long> userIds = users.stream()
+//                .map(User::getId)
+//                .collect(Collectors.toList());
+
+//        // 회차 ID 목록 생성
+//        List<Long> roundIds = rounds.stream()
+//                .map(Round::getId)
+//                .collect(Collectors.toList());
+
 //        // 더미 예약 생성 및 저장
 //        List<Reservation> reservations = IntStream.range(0, 5000)
-//                .mapToObj(i -> DummyReservationGenerator.generate(users, rounds))
+//                .mapToObj(i -> DummyReservationGenerator.generate(userIds, performanceIds, roundIds))
 //                .collect(Collectors.toList());
 //        reservationRepository.saveAll(reservations);
-//
+
 //        // 더미 리뷰 생성 및 저장
+//        List<Long> reservationIds = reservations.stream()
+//                .map(Reservation::getId)
+//                .collect(Collectors.toList());
+
+//        List<Long> performanceIdsFromRounds = rounds.stream()
+//                .map(Round::getPerformanceId)
+//                .distinct() // 중복 제거 (필요에 따라)
+//                .collect(Collectors.toList());
+
 //        List<Review> reviews = IntStream.range(0, 3000)
-//                .mapToObj(i -> DummyReviewGenerator.generate(reservations, rounds))
+//                .mapToObj(i -> DummyReviewGenerator.generate(reservationIds, performanceIdsFromRounds))
 //                .collect(Collectors.toList());
 //        reviewRepository.saveAll(reviews);
-//    }
+
+    }
 }
-}
+
