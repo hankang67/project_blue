@@ -26,7 +26,7 @@ public class SlackNotifier {
         try {
             restTemplate.postForObject(slackWebhookUrl, payload, String.class);
         } catch (Exception e) {
-            System.out.println("오류");
+            System.out.println("slack 알림 전송 오류");
         }
     }
 }
