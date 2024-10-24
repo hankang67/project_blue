@@ -48,12 +48,29 @@ public class PerformanceService {
         return performanceRepository.findByCondition(pageable, null, performanceDay, null);
     }
 
+    //공연 출연자 정보 조회
     public List<PerformerDetailDto> getPerformers(Long id) {
+        PerformanceDetailDto performanceDetailDto = performanceRepository.findPerformanceDetailById(id);
+        if (performanceDetailDto == null) {
+            throw new IllegalArgumentException("해당 공연 정보를 찾을 수 없습니다.");
+        }
         return performerRepository.findPerformersByPerformanceId(id);
     }
 
     //공연 상세 정보 조회
     public PerformanceDetailDto getPerformance(Long id) {
+        PerformanceDetailDto performanceDetailDto = performanceRepository.findPerformanceDetailById(id);
+
+        if (performanceDetailDto == null) {
+            throw new IllegalArgumentException("해당 공연 정보를 찾을 수 없습니다.");
+        }
+        if (performanceDetailDto.getHallName().isEmpty()) {
+            throw new IllegalArgumentException("공연장의 정보가 없습니다.");
+        }
+        if (performanceDetailDto.getPosterUrl().isEmpty()) {
+            throw new IllegalArgumentException("포스터 정보가 없습니다.");
+        }
+
         return performanceRepository.findPerformanceDetailById(id);
     }
 

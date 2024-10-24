@@ -21,7 +21,7 @@ public class PerformanceDetailDto {
     private String posterName;
     private String posterUrl;
 
-    @QueryProjection
+    // 지우지 마세요. 쿼리에서 써요.
     public PerformanceDetailDto(String title, LocalDateTime startDate, LocalDateTime endDate, int price, String category, String description, int duration, String hallName,String posterName, String posterUrl) {
         this.title = title;
         this.startDate = startDate;
