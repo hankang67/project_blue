@@ -27,4 +27,9 @@ public class Performer extends BaseEntity {
         this.birth = birth;
         this.nation = nation;
     }
+    public void updateInfo(String name, String birth, String nation) {
+        this.name = name;
+        this.birth = birth;
+        this.nation = nation;
+    }
 }

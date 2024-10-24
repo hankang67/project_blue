@@ -1,9 +1,6 @@
 package com.sparta.projectblue.domain.common.service;
 
-import com.sparta.projectblue.domain.common.enums.Category;
-import com.sparta.projectblue.domain.common.enums.PerformanceStatus;
-import com.sparta.projectblue.domain.common.enums.ReservationStatus;
-import com.sparta.projectblue.domain.common.enums.UserRole;
+import com.sparta.projectblue.domain.common.enums.*;
 import com.sparta.projectblue.domain.hall.entity.Hall;
 import com.sparta.projectblue.domain.hall.repository.HallRepository;
 import com.sparta.projectblue.domain.payment.entity.Payment;
@@ -18,6 +15,10 @@ import com.sparta.projectblue.domain.poster.entity.Poster;
 import com.sparta.projectblue.domain.poster.repository.PosterRepository;
 import com.sparta.projectblue.domain.reservation.entity.Reservation;
 import com.sparta.projectblue.domain.reservation.repository.ReservationRepository;
+import com.sparta.projectblue.domain.reservedSeat.entity.ReservedSeat;
+import com.sparta.projectblue.domain.reservedSeat.repository.ReservedSeatRepository;
+import com.sparta.projectblue.domain.review.entity.Review;
+import com.sparta.projectblue.domain.review.repository.ReviewRepository;
 import com.sparta.projectblue.domain.round.entity.Round;
 import com.sparta.projectblue.domain.round.repository.RoundRepository;
 import com.sparta.projectblue.domain.user.entity.User;
@@ -40,6 +41,8 @@ public class TestService {
     private final PerformerPerformanceRepository performerPerformanceRepository;
     private final PosterRepository posterRepository;
     private final ReservationRepository reservationRepository;
+    private final ReservedSeatRepository reservedSeatRepository;
+    private final ReviewRepository reviewRepository;
     private final RoundRepository roundRepository;
     private final UserRepository userRepository;
 
@@ -83,7 +86,6 @@ public class TestService {
             performerPerformanceRepository.save(performerPerformance);
         });
 
-
         // 회차
         IntStream.range(0, 10).forEach(i -> {
             PerformanceStatus status = PerformanceStatus.values()[i % PerformanceStatus.values().length];
@@ -91,19 +93,29 @@ public class TestService {
             roundRepository.save(round);
         });
 
-
         // 예매
         IntStream.range(0, 10).forEach(i -> {
-            ReservationStatus status = ReservationStatus.values()[i % ReservationStatus.values().length]; // 순환해서 상태 선택
-            Reservation reservation = new Reservation(1L, 1L, 1L, status, 5000 + i * 100);  // 생성자에 맞게 수정
+            ReservationStatus status = ReservationStatus.values()[i % ReservationStatus.values().length];
+            Reservation reservation = new Reservation(1L, 1L, 1L, status, 5000 + i * 100);
             reservationRepository.save(reservation);
-        });
 
+            reservation.setPaymentId((long) i + 1);
+
+            // 예약된 좌석 생성
+            ReservedSeat reservedSeat = new ReservedSeat(reservation.getId(), 1L, i + 1);
+            reservedSeatRepository.save(reservedSeat);
+        });
 
         // 결제
         IntStream.range(0, 10).forEach(i -> {
             Payment payment = new Payment("Card", "TXID" + i, "Credit Card", 5000 + i * 100, LocalDateTime.now());
             paymentRepository.save(payment);
+        });
+
+        // 리뷰 생성
+        IntStream.range(0, 10).forEach(i -> {
+            Review review = new Review(1L, 1L, ReviewRate.FIVE, "This is review " + i);
+            reviewRepository.save(review);
         });
     }
 }

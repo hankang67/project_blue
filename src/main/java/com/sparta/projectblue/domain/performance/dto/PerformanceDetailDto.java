@@ -18,9 +18,11 @@ public class PerformanceDetailDto {
     private String description;
     private int duration;
     private String hallName;
+    private String posterName;
+    private String posterUrl;
 
     @QueryProjection
-    public PerformanceDetailDto(String title, LocalDateTime startDate, LocalDateTime endDate, int price, String category, String description, int duration, String hallName) {
+    public PerformanceDetailDto(String title, LocalDateTime startDate, LocalDateTime endDate, int price, String category, String description, int duration, String hallName,String posterName, String posterUrl) {
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -29,9 +31,9 @@ public class PerformanceDetailDto {
         this.description = description;
         this.duration = duration;
         this.hallName = hallName;
+        this.posterName = posterName;
+        this.posterUrl = posterUrl;
     }
-
-
 }
 
 

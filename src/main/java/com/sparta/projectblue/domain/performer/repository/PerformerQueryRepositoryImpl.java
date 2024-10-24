@@ -35,10 +35,6 @@ public class PerformerQueryRepositoryImpl implements PerformerQueryRepository {
                 ))
                 .collect(Collectors.toList());
 
-        if (performers.isEmpty()) {
-            throw new IllegalArgumentException("No performer information found for the given performance.");
-        }
-
         return performers;
     }
 }

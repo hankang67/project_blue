@@ -47,7 +47,6 @@ public class HallAdminService {
         hallRepository.delete(hall);
     }
 
-    // 권한 확인
     public void hasRole(AuthUser authUser) {
         if (!authUser.hasRole(UserRole.ROLE_ADMIN)) {
             throw new IllegalArgumentException("관리자만 접근할 수 있습니다.");

@@ -5,6 +5,7 @@ import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.hall.dto.HallRequestDto;
 import com.sparta.projectblue.domain.hall.service.HallAdminService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/admin/halls")
 @RequiredArgsConstructor
+@Tag(name = "HallAdmin", description = "관리자 전용 공연장 API")
 public class HallAdminController {
 
     private final HallAdminService hallAdminService;

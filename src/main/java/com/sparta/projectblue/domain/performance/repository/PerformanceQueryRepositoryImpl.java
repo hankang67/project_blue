@@ -18,6 +18,7 @@ import static com.sparta.projectblue.domain.hall.entity.QHall.hall;
 import static com.sparta.projectblue.domain.performance.entity.QPerformance.performance;
 import static com.sparta.projectblue.domain.performer.entity.QPerformer.performer;
 import static com.sparta.projectblue.domain.performerPerformance.entity.QPerformerPerformance.performerPerformance;
+import static com.sparta.projectblue.domain.poster.entity.QPoster.poster;
 
 
 @Repository
@@ -100,10 +101,13 @@ public class PerformanceQueryRepositoryImpl implements PerformanceQueryRepositor
                         performance.category.stringValue(),
                         performance.description,
                         performance.duration,
-                        hall.name)
+                        hall.name,
+                        poster.name,
+                        poster.imageUrl)
                 )
                 .from(performance)
                 .leftJoin(hall).on(performance.hallId.eq(hall.id))
+                .leftJoin(poster).on(performance.id.eq(poster.performanceId))
                 .where(performance.id.eq(id))
                 .fetchOne();
 
