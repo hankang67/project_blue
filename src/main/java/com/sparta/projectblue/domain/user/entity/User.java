@@ -25,6 +25,9 @@ public class User extends BaseEntity {
     @Column(nullable = false, length = 20, name = "user_role")
     private UserRole userRole;
 
+    @Column(name = "kakao_id")
+    private Long kakaoId;
+
     @Column(name = "is_deleted")
     private boolean isDeleted;
 
@@ -35,7 +38,19 @@ public class User extends BaseEntity {
         this.userRole = userRole;
     }
 
+    public User(String email, String name, String password, UserRole userRole, Long kakaoId) {
+        this.email = email;
+        this.name = name;
+        this.password = password;
+        this.userRole = userRole;
+        this.kakaoId = kakaoId;
+    }
+
     public void userDeleted() {
         this.isDeleted = true; // 탈퇴 처리
+    }
+
+    public void InsertKakaoId(Long kakaoId) {
+        this.kakaoId = kakaoId;
     }
 }

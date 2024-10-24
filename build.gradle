@@ -63,8 +63,11 @@ dependencies {
 	// Swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 
-	//데이터 추가용
-	implementation 'org.apache.commons:commons-csv:1.11.0'
+	// JSON
+	implementation 'com.googlecode.json-simple:json-simple:1.1'
+
+	//OAuth2
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 }
 
 tasks.named('test') {
