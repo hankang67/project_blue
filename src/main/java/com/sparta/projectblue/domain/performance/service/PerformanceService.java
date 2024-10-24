@@ -64,10 +64,10 @@ public class PerformanceService {
         if (performanceDetailDto == null) {
             throw new IllegalArgumentException("해당 공연 정보를 찾을 수 없습니다.");
         }
-        if (performanceDetailDto.getHallName().isEmpty()) {
+        if (performanceDetailDto.getHallName() == null || performanceDetailDto.getHallName().isEmpty()) {
             throw new IllegalArgumentException("공연장의 정보가 없습니다.");
         }
-        if (performanceDetailDto.getPosterUrl().isEmpty()) {
+        if (performanceDetailDto.getPosterUrl() == null || performanceDetailDto.getPosterUrl().isEmpty()) {
             throw new IllegalArgumentException("포스터 정보가 없습니다.");
         }
 
