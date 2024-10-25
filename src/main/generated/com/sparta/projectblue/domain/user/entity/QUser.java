@@ -31,6 +31,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final BooleanPath isDeleted = createBoolean("isDeleted");
 
+    public final NumberPath<Long> kakaoId = createNumber("kakaoId", Long.class);
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedAt = _super.modifiedAt;
 
