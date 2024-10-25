@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "reservations")
@@ -31,9 +30,9 @@ public class Reservation extends BaseEntity {
     private ReservationStatus status;
 
     @Column(nullable = false)
-    private int price;
+    private Long price;
 
-    public Reservation(Long userId, Long performanceId, Long roundId, ReservationStatus status, int price) {
+    public Reservation(Long userId, Long performanceId, Long roundId, ReservationStatus status, Long price) {
         this.userId = userId;
         this.performanceId = performanceId;
         this.roundId = roundId;
