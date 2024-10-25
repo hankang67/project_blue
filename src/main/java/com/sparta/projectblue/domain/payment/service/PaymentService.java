@@ -26,6 +26,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Objects;
@@ -43,6 +44,7 @@ public class PaymentService {
     private static final String TOSS_BASIC_URL = "https://api.tosspayments.com/v1/payments/";
     private static final String WIDGET_SECRET_KEY = "test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6";
 
+    @Transactional
     public JSONObject confirmPayment(String jsonBody) throws Exception {
         JSONParser parser = new JSONParser();
         String orderId;
@@ -93,40 +95,46 @@ public class PaymentService {
         responseStream.close();
 
         if(!verifyPayment(orderId, Long.parseLong(amount))) {
-            // 결제 취소 부탁드립니다 //
-            
+            // 결제 취소 부탁드립니다
+            cancelPayment(paymentKey, "wrong orderId!!!!!!!!!");
             throw new PaymentException("주문ID에 대한 가격이 상이합니다.");
-        }
+        } // 별 필요 없을듯
 
         if (isSuccess) {
             // 결제 승인 후 처리
-
+            savePayment(jsonObject);
         }
         
         return jsonObject;
     }
 
     @Transactional
-    public PaymentResponseDto setValue(Long reservationId) {
+    public void savePayment(JSONObject jsonObject) {
+        String orderId = (String) jsonObject.get("orderId");
+
+        Long reservationId = Long.parseLong(orderId.substring(23));
+
         Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(() ->
-                new IllegalArgumentException("예약 내역이 없습니다."));
+                new IllegalArgumentException("예매 정보를 찾을 수 없습니다"));
 
-        Performance performance = performanceRepository.findById(reservation.getPerformanceId()).orElseThrow(() ->
-                new IllegalArgumentException("해당 공연이 존재하지 않습니다."));
+        OffsetDateTime approvedAt = OffsetDateTime.parse((String) jsonObject.get("approvedAt"));
 
-        User user = userRepository.findById(reservation.getUserId()).orElseThrow(() ->
-                new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
+        Payment payment = paymentRepository.findByOrderId(orderId).orElseThrow(()->
+                new IllegalArgumentException("결제 정보를 찾을 수 없습니다"));
 
-        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
-        String orderId = "blueRes_" + timestamp + "_" + reservationId;
+        payment.addPaymentInfo(
+                (String) jsonObject.get("paymentKey"),
+                (String) jsonObject.get("type"),
+                (String) jsonObject.get("method"),
+                (Long) jsonObject.get("suppliedAmount"),
+                (Long) jsonObject.get("vat"),
+                approvedAt.toLocalDateTime()
+        );
+        // 실패된 결제는 유지 status값 추가
 
-        return PaymentResponseDto.builder()
-                .orderId(orderId)
-                .orderName(performance.getTitle())
-                .amount(reservation.getPrice())
-                .customerEmail(user.getEmail())
-                .customerName(user.getName())
-                .build();
+        reservation.addPaymentId(payment.getId());
+
+        reservation.resCompleted();
     }
 
     @Transactional
@@ -149,32 +157,53 @@ public class PaymentService {
         int code = connection.getResponseCode();
         boolean isSuccess = code == 200;
 
-        InputStream responseStream = isSuccess ? connection.getInputStream() : connection.getErrorStream();
-        Reader reader = new InputStreamReader(responseStream, StandardCharsets.UTF_8);
-        JSONParser parser = new JSONParser();
-        JSONObject jsonObject = (JSONObject) parser.parse(reader);
+//        InputStream responseStream = isSuccess ? connection.getInputStream() : connection.getErrorStream();
+//        Reader reader = new InputStreamReader(responseStream, StandardCharsets.UTF_8);
+//        JSONParser parser = new JSONParser();
+//        JSONObject jsonObject = (JSONObject) parser.parse(reader);
 
         if (isSuccess) {
-            // 결제 취소 승인 후 처리
-            updatePaymentStatus(paymentKey);
+            // payment 상태 취소 변경
+            Payment payment = paymentRepository.findByPaymentKey(paymentKey)
+                    .orElseThrow(() -> new IllegalArgumentException("결제 정보를 찾을 수 없습니다."));
+
+            payment.canceled();
         }
 
         return String.valueOf(obj);
     }
 
     @Transactional
-    public void updatePaymentStatus(String paymentKey) {
-        // payment 상태 취소 변경
-        Payment payment = paymentRepository.findByPaymentKey(paymentKey)
-                .orElseThrow(() -> new IllegalArgumentException("결제 정보를 찾을 수 없습니다."));
+    public PaymentResponseDto setValue(Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(() ->
+                new IllegalArgumentException("예약 내역이 없습니다."));
 
-        payment.canceled();
+        Performance performance = performanceRepository.findById(reservation.getPerformanceId()).orElseThrow(() ->
+                new IllegalArgumentException("해당 공연이 존재하지 않습니다."));
 
-        // 결제에 연결된 예매 정보 업데이트 (취소된 결제는 예매 ID와 결제 ID를 null 처리 또는 별도 로직에 맞게 처리)
-        Reservation reservation = reservationRepository.findById(payment.getReservationId())
-                .orElseThrow(() -> new IllegalArgumentException("예매 정보를 찾을 수 없습니다."));
+        User user = userRepository.findById(reservation.getUserId()).orElseThrow(() ->
+                new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
 
-        reservation.resCanceled();
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+        String orderId = "blueRes_" + timestamp + "_" + reservationId;
+
+        Payment payment = new Payment(
+                user.getId(),
+                reservation.getId(),
+                performance.getId(),
+                reservation.getPrice(),
+                orderId
+        );
+
+        paymentRepository.save(payment);
+
+        return PaymentResponseDto.builder()
+                .orderId(orderId)
+                .orderName(performance.getTitle())
+                .amount(reservation.getPrice())
+                .customerEmail(user.getEmail())
+                .customerName(user.getName())
+                .build();
     }
 
     public String secretKeyEncoder() {

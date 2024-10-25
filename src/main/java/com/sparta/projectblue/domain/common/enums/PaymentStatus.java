@@ -4,7 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum PaymentStatus {
-    DONE("성공"),
+    READY("인증전"),
+    DONE("결제승인"),
     CANCELED("취소");
 
     private final String value;

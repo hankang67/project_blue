@@ -6,6 +6,7 @@ import com.sparta.projectblue.domain.hall.entity.Hall;
 import com.sparta.projectblue.domain.hall.repository.HallRepository;
 import com.sparta.projectblue.domain.payment.entity.Payment;
 import com.sparta.projectblue.domain.payment.repository.PaymentRepository;
+import com.sparta.projectblue.domain.payment.service.PaymentService;
 import com.sparta.projectblue.domain.performance.entity.Performance;
 import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
 import com.sparta.projectblue.domain.reservation.dto.CreateReservationDto;
@@ -27,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,6 +44,8 @@ public class ReservationService {
     private final ReservedSeatRepository reservedSeatRepository;
     private final RoundRepository roundRepository;
     private final UserRepository userRepository;
+
+    private final PaymentService paymentService;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -117,7 +121,7 @@ public class ReservationService {
     }
 
     @Transactional
-    public void delete(Long id, DeleteReservationDto.Request request) {
+    public void delete(Long id, DeleteReservationDto.Request request) throws Exception {
         // 사용자 가져옴
         User user =
                 userRepository.findById(id).orElseThrow(() ->
@@ -144,6 +148,13 @@ public class ReservationService {
         }
 
         reservedSeatRepository.deleteAll(reservedSeats);
+
+        if(Objects.nonNull(reservation.getPaymentId())) {
+            Payment payment = paymentRepository.findById(reservation.getPaymentId()).orElseThrow(() ->
+                    new IllegalArgumentException("payment not found"));
+
+            paymentService.cancelPayment(payment.getPaymentKey(), "예매를 취소합니다");
+        }
 
         reservation.resCanceled();
     }

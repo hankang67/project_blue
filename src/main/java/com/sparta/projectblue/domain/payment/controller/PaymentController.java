@@ -58,11 +58,11 @@ public class PaymentController {
         return "/fail";
     }
 
-    @PostMapping("/cancel")
-    public ResponseEntity<String> cancelPayment(
-            @RequestParam String paymentKey,
-            @RequestParam String cancelReason) throws Exception {
-        String response = paymentService.cancelPayment(paymentKey, cancelReason);
-        return ResponseEntity.ok(response);
-    }
+//    @PostMapping("/cancel")
+//    public ResponseEntity<String> cancelPayment(
+//            @RequestParam String paymentKey,
+//            @RequestParam String cancelReason) throws Exception {
+//        String response = paymentService.cancelPayment(paymentKey, cancelReason);
+//        return ResponseEntity.ok(response);
+//    }
 }

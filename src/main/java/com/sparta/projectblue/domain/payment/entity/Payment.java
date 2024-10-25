@@ -52,17 +52,22 @@ public class Payment extends BaseEntity {
     @Column(nullable = false, length = 30, name = "order_id")
     private String orderId;
 
-    public Payment(Long userId, Long reservationId, Long performanceId, String paymentKey, String type, String method, Long amountSupplied, Long amountVat, Long amountTotal, PaymentStatus status, LocalDateTime approvedAt) {
+    public Payment(Long userId, Long reservationId, Long performanceId, Long amountTotal, String orderId){
         this.userId = userId;
         this.reservationId = reservationId;
         this.performanceId = performanceId;
+        this.amountTotal = amountTotal;
+        this.orderId = orderId;
+        this.status = PaymentStatus.READY;
+    }
+
+    public void addPaymentInfo(String paymentKey, String type, String method, Long amountSupplied, Long amountVat, LocalDateTime approvedAt) {
         this.paymentKey = paymentKey;
         this.type = type;
         this.method = method;
         this.amountSupplied = amountSupplied;
         this.amountVat = amountVat;
-        this.amountTotal = amountTotal;
-        this.status = status;
+        this.status = PaymentStatus.DONE;
         this.approvedAt = approvedAt;
     }
 
