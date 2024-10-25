@@ -35,24 +35,47 @@ public class PerformanceController {
 
     @GetMapping("/{id}")
     @Operation(summary = "공연 단건 조회", description = "공연 상세정보 조회")
-    public ResponseEntity<PerformanceDetailDto> getPerformance(
+    public ResponseEntity<ApiResponse<PerformanceDetailDto>> getPerformance(
             @PathVariable Long id) {
         PerformanceDetailDto dto = performanceService.getPerformance(id);
-        return ResponseEntity.ok(dto);
+        return ResponseEntity.ok(ApiResponse.success(dto));
     }
 
-    // 공연에 대한 출연자 목록 조회
     @Operation(summary = "공연 출연자 조회", description = "공연 출연자 다건 조회")
     @GetMapping("/{id}/performers")
-    public ResponseEntity<List<PerformerDetailDto>> getPerformers(
+    public ResponseEntity<ApiResponse<List<PerformerDetailDto>>> getPerformers(
             @PathVariable Long id) {
         List<PerformerDetailDto> performers = performanceService.getPerformers(id);
-        return ResponseEntity.ok(performers);
+        return ResponseEntity.ok(ApiResponse.success(performers));
     }
 
     @GetMapping("/{id}/rounds")
     @Operation(summary = "공연 회차 조회", description = "공연에 해당하는 전체 회차와 예매 가능 상태를 조회함")
     public ResponseEntity<ApiResponse<?>> getRounds(@PathVariable Long id) {
         return ResponseEntity.ok(ApiResponse.success(performanceService.getRounds(id)));
+    }
+  
+    @GetMapping("/{id}/reviews")
+    @Operation(summary = "관람평 조회", description = "공연에 등록된 관람평 전체 조회")
+    public ResponseEntity<ApiResponse<?>> getReviews(@PathVariable Long id) {
+        return ResponseEntity.ok(ApiResponse.success(performanceService.getReviews(id)));
+    }
+
+    @PostMapping("/{id}/performers")
+    @Operation(summary = "배우 공연 등록", description = "공연에 배우를 등록합니다.")
+    public ResponseEntity<ApiResponse<?>> addPerformer(
+            @PathVariable Long id,
+            @RequestParam Long performerId) {
+        performanceService.addPerformer(id, performerId);
+        return ResponseEntity.ok(ApiResponse.successWithNoContent());
+    }
+
+    @DeleteMapping("{id}/performers/{performerId}")
+    @Operation(summary = "배우 공연 삭제", description = "공연에 등록된 배우를 삭제합니다.")
+    public ResponseEntity<ApiResponse<?>> removePerformerFromPerformance(
+            @PathVariable Long id,
+            @PathVariable Long performerId) {
+        performanceService.removePerformer(id, performerId);
+        return ResponseEntity.ok(ApiResponse.successWithNoContent());
     }
 }

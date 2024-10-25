@@ -1,5 +1,6 @@
 package com.sparta.projectblue.domain.reservation.service;
 
+import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.common.enums.PerformanceStatus;
 import com.sparta.projectblue.domain.common.enums.ReservationStatus;
 import com.sparta.projectblue.domain.hall.entity.Hall;
@@ -11,14 +12,16 @@ import com.sparta.projectblue.domain.performance.entity.Performance;
 import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
 import com.sparta.projectblue.domain.reservation.dto.CreateReservationDto;
 import com.sparta.projectblue.domain.reservation.dto.DeleteReservationDto;
+import com.sparta.projectblue.domain.reservation.dto.GetReservationDto;
+import com.sparta.projectblue.domain.reservation.dto.GetReservationsDto;
 import com.sparta.projectblue.domain.reservation.entity.Reservation;
 import com.sparta.projectblue.domain.reservation.repository.ReservationRepository;
 import com.sparta.projectblue.domain.reservedSeat.entity.ReservedSeat;
 import com.sparta.projectblue.domain.reservedSeat.repository.ReservedSeatRepository;
+import com.sparta.projectblue.domain.review.entity.Review;
+import com.sparta.projectblue.domain.review.repository.ReviewRepository;
 import com.sparta.projectblue.domain.round.entity.Round;
 import com.sparta.projectblue.domain.round.repository.RoundRepository;
-import com.sparta.projectblue.domain.user.dto.ReservationDetailDto;
-import com.sparta.projectblue.domain.user.dto.ReservationDto;
 import com.sparta.projectblue.domain.user.entity.User;
 import com.sparta.projectblue.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +45,7 @@ public class ReservationService {
     private final PaymentRepository paymentRepository;
     private final PerformanceRepository performanceRepository;
     private final ReservedSeatRepository reservedSeatRepository;
+    private final ReviewRepository reviewRepository;
     private final RoundRepository roundRepository;
     private final UserRepository userRepository;
 
@@ -160,29 +164,19 @@ public class ReservationService {
     }
 
     //예매 내역 상세 조회
-    public ReservationDetailDto.Response getReservation(Long userId, Long reservationId) {
-        // Fetch the reservation
-        Reservation reservation = reservationRepository.findByIdAndUserId(reservationId, userId);
+    public GetReservationDto.Response getReservation(AuthUser user, Long reservationId) {
+        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(()->
+                new IllegalArgumentException("예약 내역을 찾을 수 없습니다"));
 
-        if (reservation == null) {
-            throw new IllegalArgumentException("Reservation not found.");
+        if(!reservation.getUserId().equals(user.getId())) {
+            throw new IllegalArgumentException("예매자가 아닙니다");
         }
 
-        // Fetch the associated performance
         Performance performance = performanceRepository.findById(reservation.getPerformanceId())
-                .orElseThrow(() -> new IllegalArgumentException("Performance not found for reservation"));
+                .orElseThrow(() -> new IllegalArgumentException("공연을 찾을 수 없습니다."));
 
-        // Fetch the associated payment, if it exists (check if paymentId is not null)
-        ReservationDetailDto.PaymentDto payDto = null;
-        if (reservation.getPaymentId() != null) {
-            Payment payment = paymentRepository.findById(reservation.getPaymentId())
-//                    .orElseThrow(() -> new IllegalArgumentException("Payment not found for reservation"));
-                    .orElse(null);
-            payDto = new ReservationDetailDto.PaymentDto(payment);
-        }
-
-        // Create DTOs
-        ReservationDetailDto.PerformanceDto perDto = new ReservationDetailDto.PerformanceDto(performance);
+        Round round = roundRepository.findById(reservation.getRoundId()).orElseThrow(() ->
+                new IllegalArgumentException("공연 회차를 찾을 수 없습니다"));
 
         List<ReservedSeat> reservedSeats = reservedSeatRepository.findByReservationId(reservation.getId());
 
@@ -194,46 +188,53 @@ public class ReservationService {
                 .map(ReservedSeat::getSeatNumber)
                 .collect(Collectors.toList());
 
-        // Return the response DTO
-        return new ReservationDetailDto.Response(
-                reservation.getId(),
-                perDto,
-                payDto,  // Could be null if no payment exists
+        Payment payment = null;
+        if(Objects.nonNull(reservation.getPaymentId())) {
+            payment = paymentRepository.findById(reservation.getPaymentId()).orElseThrow(()->
+                    new IllegalArgumentException("결제 정보를 찾을 수 없습니다"));
+        }
+
+        Review review = reviewRepository.findByReservationId(reservation.getId()).orElse(null);
+
+        return new GetReservationDto.Response(
+                performance,
+                round.getDate(),
+                reservation,
+                user.getName(),
                 seats,
-                reservation.getStatus()
+                payment,
+                review
         );
     }
 
     // 예매 내역 전체 조회
-    public List<ReservationDto.Response> getReservations(Long userId) {
+    public List<GetReservationsDto.Response> getReservations(Long userId) {
         // 예약 가져옴
         List<Reservation> reservations = reservationRepository.findByUserId(userId);
 
-        if (reservations.isEmpty()) {
-            throw new IllegalArgumentException("No reservations found for this user.");
-        }
+        List<GetReservationsDto.Response> responseList = new ArrayList<>();
 
-        List<ReservationDto.Response> responseList = new ArrayList<>();
-
-        // Iterate through each reservation and get associated details
         for (Reservation reservation : reservations) {
-            // Fetch the associated performance
             Performance performance = performanceRepository.findById(reservation.getPerformanceId())
                     .orElseThrow(() -> new IllegalArgumentException("Performance not found for reservation"));
 
-            // Create performance DTO
-            ReservationDto.PerformanceDto perDto = new ReservationDto.PerformanceDto(performance);
+            List<ReservedSeat> seats = reservedSeatRepository.findByReservationId(reservation.getId());
 
+            Hall hall = hallRepository.findById(performance.getHallId()).orElseThrow(() ->
+                    new IllegalArgumentException("공연장을 찾을 수 없습니다"));
 
-            // Create the response DTO for the current reservation
-            ReservationDto.Response responseDto = new ReservationDto.Response(
+            Round round = roundRepository.findById(reservation.getRoundId()).orElseThrow(() ->
+                    new IllegalArgumentException("공연 회차를 찾을 수 없습니다"));
+
+            responseList.add(new GetReservationsDto.Response(
+                    performance.getTitle(),
+                    seats.size(),
                     reservation.getId(),
-                    perDto,
+                    reservation.getCreatedAt(),
+                    hall.getName(),
+                    round.getDate(),
                     reservation.getStatus()
-            );
-
-            // Add the response DTO to the list
-            responseList.add(responseDto);
+            ));
         }
 
         return responseList;

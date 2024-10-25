@@ -4,9 +4,9 @@ import com.sparta.projectblue.config.ApiResponse;
 import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.reservation.dto.CreateReservationDto;
 import com.sparta.projectblue.domain.reservation.dto.DeleteReservationDto;
+import com.sparta.projectblue.domain.reservation.dto.GetReservationDto;
+import com.sparta.projectblue.domain.reservation.dto.GetReservationsDto;
 import com.sparta.projectblue.domain.reservation.service.ReservationService;
-import com.sparta.projectblue.domain.user.dto.ReservationDetailDto;
-import com.sparta.projectblue.domain.user.dto.ReservationDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -48,16 +48,16 @@ public class ReservationController {
     // 예매 전체 조회
     @GetMapping
     @Operation(summary = "예매 다건 조회", description = "authUser가 예매한 내역 다건")
-    public ResponseEntity<List<ReservationDto.Response>> getReservations(@AuthenticationPrincipal AuthUser authUser) {
-        List<ReservationDto.Response> reservations = reservationService.getReservations(authUser.getId());
-        return ResponseEntity.ok(reservations);
+    public ResponseEntity<ApiResponse<?>> getReservations(@AuthenticationPrincipal AuthUser authUser) {
+        List<GetReservationsDto.Response> reservations = reservationService.getReservations(authUser.getId());
+        return ResponseEntity.ok(ApiResponse.success(reservations));
     }
 
     // 예매 상세 조회
     @GetMapping("/{id}")
     @Operation(summary = "예매 단건 조회", description = "authUser가 예매한 내역 단건")
-    public ResponseEntity<ReservationDetailDto.Response> getReservation(@AuthenticationPrincipal AuthUser authUser, @PathVariable Long id) {
-        ReservationDetailDto.Response reservation = reservationService.getReservation(authUser.getId(), id);
-        return ResponseEntity.ok(reservation);
+    public ResponseEntity<ApiResponse<?>> getReservation(@AuthenticationPrincipal AuthUser authUser, @PathVariable Long id) {
+        GetReservationDto.Response reservation = reservationService.getReservation(authUser, id);
+        return ResponseEntity.ok(ApiResponse.success(reservation));
     }
 }

@@ -59,12 +59,16 @@ dependencies {
 
 	// AWS SDK S3
 	implementation 'software.amazon.awssdk:s3:2.20.1'
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
 	// Swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 
-	// Json
-	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+	// JSON
+	implementation 'com.googlecode.json-simple:json-simple:1.1'
+
+	//OAuth2
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 }
 
 tasks.named('test') {

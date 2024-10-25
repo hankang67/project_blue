@@ -2,7 +2,6 @@ package com.sparta.projectblue.domain.performance.entity;
 
 import com.sparta.projectblue.domain.common.entity.BaseEntity;
 import com.sparta.projectblue.domain.common.enums.Category;
-import com.sparta.projectblue.domain.performance.dto.PerformanceRequestDto;
 import com.sparta.projectblue.domain.performance.dto.PerformanceUpdateRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
