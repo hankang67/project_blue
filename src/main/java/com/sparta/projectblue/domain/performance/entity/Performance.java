@@ -30,7 +30,7 @@ public class Performance extends BaseEntity {
     private LocalDateTime endDate;
 
     @Column(nullable = false)
-    private int price;
+    private Long price;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 10)
@@ -42,7 +42,7 @@ public class Performance extends BaseEntity {
     @Column(nullable = false)
     private int duration; // 러닝타임 분단위
 
-    public Performance(Long hallId, String title, LocalDateTime startDate, LocalDateTime endDate, int price, Category category, String description, int duration) {
+    public Performance(Long hallId, String title, LocalDateTime startDate, LocalDateTime endDate, Long price, Category category, String description, int duration) {
         this.hallId = hallId;
         this.title = title;
         this.startDate = startDate;

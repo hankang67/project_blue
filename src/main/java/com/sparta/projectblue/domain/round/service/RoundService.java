@@ -79,9 +79,9 @@ public class RoundService {
     @Transactional
     public List<CreateRoundsDto.Response> createRounds(Long id, CreateRoundsDto.Request request) {
         // 공연 존재 여부 확인
-        Performance performance = performanceRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("공연을 찾을 수 없습니다."));
-
+        if (performanceRepository.findById(id).isEmpty()) {
+            throw new IllegalArgumentException("공연을 찾을 수 없습니다");
+        }
         LocalDateTime now = LocalDateTime.now();
 
         List<Round> newRounds = request.getDates().stream()

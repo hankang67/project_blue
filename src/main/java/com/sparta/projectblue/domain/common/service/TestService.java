@@ -3,7 +3,6 @@ package com.sparta.projectblue.domain.common.service;
 import com.sparta.projectblue.domain.common.enums.*;
 import com.sparta.projectblue.domain.hall.entity.Hall;
 import com.sparta.projectblue.domain.hall.repository.HallRepository;
-import com.sparta.projectblue.domain.payment.entity.Payment;
 import com.sparta.projectblue.domain.payment.repository.PaymentRepository;
 import com.sparta.projectblue.domain.performance.entity.Performance;
 import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
@@ -49,7 +48,7 @@ public class TestService {
     private final PasswordEncoder passwordEncoder;
 
     public void test() {
-        // 사용자
+
         IntStream.range(0, 10).forEach(i -> {
             User user = new User( "user" + i + "@example.com","User" + i, passwordEncoder.encode("abc123?!"), UserRole.ROLE_USER);
             userRepository.save(user);
@@ -64,7 +63,7 @@ public class TestService {
         // 공연
         IntStream.range(0, 10).forEach(i -> {
             Category category = Category.values()[i % Category.values().length];
-            Performance performance = new Performance(1L, "Performance" + i, LocalDateTime.now(), LocalDateTime.now().plusDays(10), 5000 + i * 100, category, "Description" + i, 120);
+            Performance performance = new Performance(1L, "Performance" + i, LocalDateTime.now(), LocalDateTime.now().plusDays(10), (long)(5000 + i * 100), category, "Description" + i, 120);
             performanceRepository.save(performance);
         });
 
@@ -96,21 +95,21 @@ public class TestService {
         // 예매
         IntStream.range(0, 10).forEach(i -> {
             ReservationStatus status = ReservationStatus.values()[i % ReservationStatus.values().length];
-            Reservation reservation = new Reservation(1L, 1L, 1L, status, 5000 + i * 100);
+            Reservation reservation = new Reservation(1L, 1L, 1L, status, (long)5000 + i * 100);
             reservationRepository.save(reservation);
 
-            reservation.setPaymentId((long) i + 1);
+            reservation.addPaymentId((long) i + 1);
 
             // 예약된 좌석 생성
             ReservedSeat reservedSeat = new ReservedSeat(reservation.getId(), 1L, i + 1);
             reservedSeatRepository.save(reservedSeat);
         });
 
-        // 결제
-        IntStream.range(0, 10).forEach(i -> {
-            Payment payment = new Payment("Card", "TXID" + i, "Credit Card", 5000 + i * 100, LocalDateTime.now());
-            paymentRepository.save(payment);
-        });
+//        // 결제
+//        IntStream.range(0, 10).forEach(i -> {
+//            Payment payment = new Payment("Card", "TXID" + i, "Credit Card", 5000 + i * 100, LocalDateTime.now());
+//            paymentRepository.save(payment);
+//        });
 
         // 리뷰 생성
         IntStream.range(0, 10).forEach(i -> {

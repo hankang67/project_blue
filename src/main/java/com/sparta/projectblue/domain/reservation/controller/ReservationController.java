@@ -38,7 +38,7 @@ public class ReservationController {
     @Operation(summary = "예매 취소", description = "예매 취소 api, 비밀번호 입력 필수")
     public ResponseEntity<ApiResponse<?>> delete(
             @AuthenticationPrincipal AuthUser authUser,
-            @Valid @RequestBody DeleteReservationDto.Request request) {
+            @Valid @RequestBody DeleteReservationDto.Request request) throws Exception {
 
         reservationService.delete(authUser.getId(), request);
 

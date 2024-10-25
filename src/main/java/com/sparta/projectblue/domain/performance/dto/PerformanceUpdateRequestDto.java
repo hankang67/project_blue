@@ -15,7 +15,7 @@ public class PerformanceUpdateRequestDto {
     @NotNull
     private String endDate;
     @NotNull
-    private int price;
+    private Long price;
     @Enumerated(EnumType.STRING)
     @NotNull
     private Category category;

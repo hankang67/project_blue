@@ -1,5 +1,6 @@
 package com.sparta.projectblue.config;
 
+import com.sparta.projectblue.domain.common.exception.PaymentException;
 import jakarta.security.auth.message.AuthException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AuthException.class)
     public ResponseEntity<ApiResponse<?>> handleAuthException(AuthException ex) {
         HttpStatus status = HttpStatus.UNAUTHORIZED;
+        return getErrorResponse(status, ex.getMessage());
+    }
+
+    @ExceptionHandler(PaymentException.class)
+    public ResponseEntity<ApiResponse<?>> handlePaymentException(AuthException ex) {
+        HttpStatus status = HttpStatus.PAYMENT_REQUIRED;
         return getErrorResponse(status, ex.getMessage());
     }
 

@@ -4,10 +4,8 @@ import com.sparta.projectblue.domain.performance.dto.PerformanceDetailDto;
 import com.sparta.projectblue.domain.performance.dto.PerformanceResponseDto;
 import com.sparta.projectblue.domain.performance.dto.PerformanceReviewDto;
 import com.sparta.projectblue.domain.performance.dto.PerformanceRoundsDto;
-import com.sparta.projectblue.domain.performance.entity.Performance;
 import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
 import com.sparta.projectblue.domain.performer.dto.PerformerDetailDto;
-import com.sparta.projectblue.domain.performer.entity.Performer;
 import com.sparta.projectblue.domain.performer.repository.PerformerRepository;
 import com.sparta.projectblue.domain.performerPerformance.entity.PerformerPerformance;
 import com.sparta.projectblue.domain.performerPerformance.repository.PerformerPerformanceRepository;
@@ -48,12 +46,29 @@ public class PerformanceService {
         return performanceRepository.findByCondition(pageable, null, performanceDay, null);
     }
 
+    //공연 출연자 정보 조회
     public List<PerformerDetailDto> getPerformers(Long id) {
+        PerformanceDetailDto performanceDetailDto = performanceRepository.findPerformanceDetailById(id);
+        if (performanceDetailDto == null) {
+            throw new IllegalArgumentException("해당 공연 정보를 찾을 수 없습니다.");
+        }
         return performerRepository.findPerformersByPerformanceId(id);
     }
 
     //공연 상세 정보 조회
     public PerformanceDetailDto getPerformance(Long id) {
+        PerformanceDetailDto performanceDetailDto = performanceRepository.findPerformanceDetailById(id);
+
+        if (performanceDetailDto == null) {
+            throw new IllegalArgumentException("해당 공연 정보를 찾을 수 없습니다.");
+        }
+        if (performanceDetailDto.getHallName() == null || performanceDetailDto.getHallName().isEmpty()) {
+            throw new IllegalArgumentException("공연장의 정보가 없습니다.");
+        }
+        if (performanceDetailDto.getImageUrl() == null || performanceDetailDto.getImageUrl().isEmpty()) {
+            throw new IllegalArgumentException("포스터 정보가 없습니다.");
+        }
+
         return performanceRepository.findPerformanceDetailById(id);
     }
 
@@ -92,12 +107,12 @@ public class PerformanceService {
 
     @Transactional
     public void addPerformer(Long performanceId, Long performerId) {
-        Performance performance = performanceRepository.findById(performanceId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 공연을 찾을 수 없습니다."));
-        Performer performer = performerRepository.findById(performerId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 배우를 찾을 수 없습니다."));
-
-
+        if (performanceRepository.findById(performanceId).isEmpty()) {
+            throw new IllegalArgumentException("공연을 찾을 수 없습니다");
+        }
+        if (performerRepository.findById(performerId).isEmpty()) {
+            throw new IllegalArgumentException("공연을 찾을 수 없습니다");
+        }
         if (performerPerformanceRepository.existsByPerformanceIdAndPerformerId(performanceId, performerId)) {
             throw new IllegalArgumentException("해당 배우는 이미 이 공연에 등록되어 있습니다.");
         }
@@ -109,11 +124,12 @@ public class PerformanceService {
 
     @Transactional
     public void removePerformer(Long performanceId, Long performerId) {
-        Performance performance = performanceRepository.findById(performanceId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 공연을 찾을 수 없습니다."));
-        Performer performer = performerRepository.findById(performerId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 배우를 찾을 수 없습니다."));
-
+        if (performanceRepository.findById(performanceId).isEmpty()) {
+            throw new IllegalArgumentException("공연을 찾을 수 없습니다");
+        }
+        if (performerRepository.findById(performerId).isEmpty()) {
+            throw new IllegalArgumentException("공연을 찾을 수 없습니다");
+        }
         PerformerPerformance performerPerformance = performerPerformanceRepository
                 .findByPerformanceIdAndPerformerId(performanceId, performerId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 배우는 이 공연에 등록되어 있지 않습니다."));
