@@ -69,7 +69,7 @@ public class TestService {
 
         // 포스터
         IntStream.range(0, 10).forEach(i -> {
-            Poster poster = new Poster((long) (i + 1), "Poster" + i, "https://example.com/poster" + i);
+            Poster poster = new Poster((long) (i + 1), "Poster" + i, "https://example.com/poster" + i, 5000L);
             posterRepository.save(poster);
         });
 

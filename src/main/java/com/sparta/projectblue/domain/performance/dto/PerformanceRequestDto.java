@@ -28,12 +28,7 @@ public class PerformanceRequestDto {
     private Long hallId;
     @NotNull
     private int duration;
-    @NotNull
-    private int seats;
-    @NotNull
-    private String posterName;
-    @NotNull
-    private String posterUrl;
+
     private Long[] performers;
 
 }

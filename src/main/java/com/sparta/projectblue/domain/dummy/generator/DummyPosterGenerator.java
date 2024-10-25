@@ -20,7 +20,7 @@ public class DummyPosterGenerator {
         String imageUrl = getRandomImageUrl();
 
         // Poster 객체 생성 및 반환
-        return new Poster(performanceId, name, imageUrl);
+        return new Poster(performanceId, name, imageUrl, 10L);
     }
 
     // 순차적으로 Performance ID 선택 메서드
