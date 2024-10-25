@@ -13,7 +13,7 @@ public class PerformanceDetailDto {
     private String title;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private int price;
+    private Long price;
     private String category;
     private String description;
     private int duration;
@@ -22,7 +22,7 @@ public class PerformanceDetailDto {
     private String posterUrl;
 
     @QueryProjection
-    public PerformanceDetailDto(String title, LocalDateTime startDate, LocalDateTime endDate, int price, String category, String description, int duration, String hallName,String posterName, String posterUrl) {
+    public PerformanceDetailDto(String title, LocalDateTime startDate, LocalDateTime endDate, Long price, String category, String description, int duration, String hallName,String posterName, String posterUrl) {
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
