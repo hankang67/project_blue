@@ -7,6 +7,7 @@ import com.sparta.projectblue.domain.hall.entity.Hall;
 import com.sparta.projectblue.domain.hall.repository.HallRepository;
 import com.sparta.projectblue.domain.payment.entity.Payment;
 import com.sparta.projectblue.domain.payment.repository.PaymentRepository;
+import com.sparta.projectblue.domain.payment.service.PaymentService;
 import com.sparta.projectblue.domain.performance.entity.Performance;
 import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
 import com.sparta.projectblue.domain.reservation.dto.CreateReservationDto;
@@ -47,6 +48,8 @@ public class ReservationService {
     private final ReviewRepository reviewRepository;
     private final RoundRepository roundRepository;
     private final UserRepository userRepository;
+
+    private final PaymentService paymentService;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -94,7 +97,7 @@ public class ReservationService {
         }
 
         // 가격정보 가져옴
-        int price = performance.getPrice() * request.getSeats().size();
+        Long price = performance.getPrice() * request.getSeats().size();
 
         // 예약 생성
         Reservation newReservation = new Reservation(
@@ -122,7 +125,7 @@ public class ReservationService {
     }
 
     @Transactional
-    public void delete(Long id, DeleteReservationDto.Request request) {
+    public void delete(Long id, DeleteReservationDto.Request request) throws Exception {
         // 사용자 가져옴
         User user =
                 userRepository.findById(id).orElseThrow(() ->
@@ -149,6 +152,13 @@ public class ReservationService {
         }
 
         reservedSeatRepository.deleteAll(reservedSeats);
+
+        if(Objects.nonNull(reservation.getPaymentId())) {
+            Payment payment = paymentRepository.findById(reservation.getPaymentId()).orElseThrow(() ->
+                    new IllegalArgumentException("payment not found"));
+
+            paymentService.cancelPayment(payment.getPaymentKey(), "예매를 취소합니다");
+        }
 
         reservation.resCanceled();
     }

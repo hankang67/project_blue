@@ -64,7 +64,7 @@ public class TestService {
         // 공연
         IntStream.range(0, 10).forEach(i -> {
             Category category = Category.values()[i % Category.values().length];
-            Performance performance = new Performance(1L, "Performance" + i, LocalDateTime.now(), LocalDateTime.now().plusDays(10), 5000 + i * 100, category, "Description" + i, 120);
+            Performance performance = new Performance(1L, "Performance" + i, LocalDateTime.now(), LocalDateTime.now().plusDays(10), (long)(5000 + i * 100), category, "Description" + i, 120);
             performanceRepository.save(performance);
         });
 
@@ -96,21 +96,21 @@ public class TestService {
         // 예매
         IntStream.range(0, 10).forEach(i -> {
             ReservationStatus status = ReservationStatus.values()[i % ReservationStatus.values().length];
-            Reservation reservation = new Reservation(1L, 1L, 1L, status, 5000 + i * 100);
+            Reservation reservation = new Reservation(1L, 1L, 1L, status, (long)5000 + i * 100);
             reservationRepository.save(reservation);
 
-            reservation.setPaymentId((long) i + 1);
+            reservation.addPaymentId((long) i + 1);
 
             // 예약된 좌석 생성
             ReservedSeat reservedSeat = new ReservedSeat(reservation.getId(), 1L, i + 1);
             reservedSeatRepository.save(reservedSeat);
         });
 
-        // 결제
-        IntStream.range(0, 10).forEach(i -> {
-            Payment payment = new Payment("Card", "TXID" + i, "Credit Card", 5000 + i * 100, LocalDateTime.now());
-            paymentRepository.save(payment);
-        });
+//        // 결제
+//        IntStream.range(0, 10).forEach(i -> {
+//            Payment payment = new Payment("Card", "TXID" + i, "Credit Card", 5000 + i * 100, LocalDateTime.now());
+//            paymentRepository.save(payment);
+//        });
 
         // 리뷰 생성
         IntStream.range(0, 10).forEach(i -> {

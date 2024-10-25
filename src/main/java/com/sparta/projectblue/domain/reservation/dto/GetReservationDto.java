@@ -30,7 +30,7 @@ public class GetReservationDto {
         private final List<Integer> seats; // reservedSeat
 
         private final String paymentMethod; // payment
-        private final int paymentPrice; // payment
+        private final Long paymentPrice; // payment
         private final LocalDateTime paymentTime; // payment
 
         private final ReviewRate rate ; // review
@@ -51,12 +51,12 @@ public class GetReservationDto {
             this.seats = seats;
 
             if (payment != null) {
-                this.paymentMethod = payment.getPaymentMethod();
-                this.paymentPrice = payment.getPaymentPrice();
-                this.paymentTime = payment.getPaymentTime();
+                this.paymentMethod = payment.getMethod();
+                this.paymentPrice = payment.getAmountTotal();
+                this.paymentTime = payment.getApprovedAt();
             } else {
                 this.paymentMethod = null;
-                this.paymentPrice = 0;
+                this.paymentPrice = 0L;
                 this.paymentTime = null;
             }
 

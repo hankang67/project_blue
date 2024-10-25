@@ -28,10 +28,10 @@ public class CreateReservationDto {
         private final String performanceTitle;
         private final LocalDateTime roundDate;
         private final List<Integer> seats;
-        private final int price;
+        private final Long price;
         private final ReservationStatus status;
 
-        public Response(Long id, String performanceTitle, LocalDateTime roundDate, List<Integer> seats, int price, ReservationStatus status) {
+        public Response(Long id, String performanceTitle, LocalDateTime roundDate, List<Integer> seats, Long price, ReservationStatus status) {
             this.id = id;
             this.performanceTitle = performanceTitle;
             this.roundDate = roundDate;
