@@ -1,7 +1,6 @@
 package com.sparta.projectblue.domain.round.controller;
 
 import com.sparta.projectblue.config.ApiResponse;
-import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.common.enums.PerformanceStatus;
 import com.sparta.projectblue.domain.round.dto.CreateRoundsDto;
 import com.sparta.projectblue.domain.round.service.RoundService;

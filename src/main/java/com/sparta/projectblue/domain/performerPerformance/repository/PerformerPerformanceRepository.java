@@ -1,7 +1,5 @@
 package com.sparta.projectblue.domain.performerPerformance.repository;
 
-import com.sparta.projectblue.domain.performance.entity.Performance;
-import com.sparta.projectblue.domain.performer.entity.Performer;
 import com.sparta.projectblue.domain.performerPerformance.entity.PerformerPerformance;
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,6 +1,5 @@
 package com.sparta.projectblue.domain.review.service;
 
-import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
 import com.sparta.projectblue.domain.reservation.entity.Reservation;
 import com.sparta.projectblue.domain.reservation.repository.ReservationRepository;
 import com.sparta.projectblue.domain.review.dto.CreateReviewDto;
