@@ -23,7 +23,7 @@ public class DummyPerformanceGenerator {
         LocalDateTime endDate = startDate.plusDays(getRandomDurationDays());
 
         // 무작위 가격 생성 (예: 10000 ~ 150000 사이)
-        int price = getRandomPrice();
+        long price = getRandomPrice();
 
         // 무작위 카테고리 생성
         Category category = getRandomCategory();
