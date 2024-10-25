@@ -109,12 +109,12 @@ public class PerformanceService {
 
     @Transactional
     public void addPerformer(Long performanceId, Long performerId) {
-        Performance performance = performanceRepository.findById(performanceId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 공연을 찾을 수 없습니다."));
-        Performer performer = performerRepository.findById(performerId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 배우를 찾을 수 없습니다."));
-
-
+        if (performanceRepository.findById(performanceId).isEmpty()) {
+            throw new IllegalArgumentException("공연을 찾을 수 없습니다");
+        }
+        if (performerRepository.findById(performerId).isEmpty()) {
+            throw new IllegalArgumentException("공연을 찾을 수 없습니다");
+        }
         if (performerPerformanceRepository.existsByPerformanceIdAndPerformerId(performanceId, performerId)) {
             throw new IllegalArgumentException("해당 배우는 이미 이 공연에 등록되어 있습니다.");
         }
@@ -126,11 +126,12 @@ public class PerformanceService {
 
     @Transactional
     public void removePerformer(Long performanceId, Long performerId) {
-        Performance performance = performanceRepository.findById(performanceId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 공연을 찾을 수 없습니다."));
-        Performer performer = performerRepository.findById(performerId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 배우를 찾을 수 없습니다."));
-
+        if (performanceRepository.findById(performanceId).isEmpty()) {
+            throw new IllegalArgumentException("공연을 찾을 수 없습니다");
+        }
+        if (performerRepository.findById(performerId).isEmpty()) {
+            throw new IllegalArgumentException("공연을 찾을 수 없습니다");
+        }
         PerformerPerformance performerPerformance = performerPerformanceRepository
                 .findByPerformanceIdAndPerformerId(performanceId, performerId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 배우는 이 공연에 등록되어 있지 않습니다."));
