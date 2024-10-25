@@ -3,7 +3,6 @@ package com.sparta.projectblue.domain.common.service;
 import com.sparta.projectblue.domain.common.enums.*;
 import com.sparta.projectblue.domain.hall.entity.Hall;
 import com.sparta.projectblue.domain.hall.repository.HallRepository;
-import com.sparta.projectblue.domain.payment.entity.Payment;
 import com.sparta.projectblue.domain.payment.repository.PaymentRepository;
 import com.sparta.projectblue.domain.performance.entity.Performance;
 import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;

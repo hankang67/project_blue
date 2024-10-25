@@ -111,6 +111,8 @@ public class PerformanceQueryRepositoryImpl implements PerformanceQueryRepositor
                 .where(performance.id.eq(id))
                 .fetchOne();
 
+
+
         return performanceDetailDto;
     }
 }

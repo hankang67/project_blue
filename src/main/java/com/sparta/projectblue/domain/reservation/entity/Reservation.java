@@ -5,7 +5,6 @@ import com.sparta.projectblue.domain.common.enums.ReservationStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @NoArgsConstructor

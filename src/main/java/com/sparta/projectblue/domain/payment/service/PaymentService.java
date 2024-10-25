@@ -1,6 +1,5 @@
 package com.sparta.projectblue.domain.payment.service;
 
-import com.sparta.projectblue.domain.common.enums.PaymentStatus;
 import com.sparta.projectblue.domain.common.exception.PaymentException;
 import com.sparta.projectblue.domain.payment.dto.PaymentResponseDto;
 import com.sparta.projectblue.domain.payment.entity.Payment;
