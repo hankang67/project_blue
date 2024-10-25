@@ -26,18 +26,14 @@ public class HallController {
     @GetMapping
     @Operation(summary = "공연장 다건 조회")
     public ResponseEntity<ApiResponse<?>> getHalls() {
-
         List<HallsResponseDto> hallsResponseDto = hallService.getHalls();
-
         return ResponseEntity.ok(ApiResponse.success(hallsResponseDto));
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "공연장 단건 조회")
     public ResponseEntity<ApiResponse<?>> getHall(@PathVariable("id") Long id) {
-
         HallResponseDto hallResponseDto = hallService.getHall(id);
-
         return ResponseEntity.ok(ApiResponse.success(hallResponseDto));
     }
 }

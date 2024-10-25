@@ -56,11 +56,11 @@ public class TestService {
             userRepository.save(user);
         });
 
-//        // 공연장
-//        IntStream.range(0, 10).forEach(i -> {
-//            Hall hall = new Hall("Hall" + i, "Address" + i, 100 + i);
-//            hallRepository.save(hall);
-//        });
+        // 공연장
+        IntStream.range(0, 10).forEach(i -> {
+            Hall hall = new Hall("Hall" + i, "Address" + i, 100 + i);
+            hallRepository.save(hall);
+        });
 
         // 공연
         IntStream.range(0, 10).forEach(i -> {
