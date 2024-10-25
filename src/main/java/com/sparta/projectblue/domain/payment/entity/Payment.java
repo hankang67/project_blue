@@ -2,7 +2,6 @@ package com.sparta.projectblue.domain.payment.entity;
 
 import com.sparta.projectblue.domain.common.entity.BaseEntity;
 import com.sparta.projectblue.domain.common.enums.PaymentStatus;
-import com.sparta.projectblue.domain.payment.dto.PaymentResponseDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

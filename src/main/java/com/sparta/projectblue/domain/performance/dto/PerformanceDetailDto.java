@@ -1,6 +1,5 @@
 package com.sparta.projectblue.domain.performance.dto;
 
-import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
