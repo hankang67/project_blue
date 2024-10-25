@@ -111,9 +111,7 @@ public class PerformanceQueryRepositoryImpl implements PerformanceQueryRepositor
                 .where(performance.id.eq(id))
                 .fetchOne();
 
-        if (performanceDetailDto == null) {
-            throw new IllegalArgumentException("해당 공연 정보를 찾을 수 없습니다.");
-        }
+
 
         return performanceDetailDto;
     }

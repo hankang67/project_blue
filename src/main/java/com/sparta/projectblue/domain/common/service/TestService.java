@@ -49,7 +49,7 @@ public class TestService {
     private final PasswordEncoder passwordEncoder;
 
     public void test() {
-        // 사용자
+
         IntStream.range(0, 10).forEach(i -> {
             User user = new User( "user" + i + "@example.com","User" + i, passwordEncoder.encode("abc123?!"), UserRole.ROLE_USER);
             userRepository.save(user);
