@@ -2,7 +2,7 @@ package com.sparta.projectblue.domain.user.controller;
 
 import com.sparta.projectblue.config.ApiResponse;
 import com.sparta.projectblue.domain.common.dto.AuthUser;
-import com.sparta.projectblue.domain.user.dto.DeleteUserDto;
+import com.sparta.projectblue.domain.user.dto.DeleteUserRequestDto;
 import com.sparta.projectblue.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,9 +27,9 @@ public class UserController {
     @Operation(summary = "탈퇴")
     public ResponseEntity<ApiResponse<?>> deleteUser(
             @AuthenticationPrincipal AuthUser authUser,
-            @Valid @RequestBody DeleteUserDto.Request deleteUserRequest) {
+            @Valid @RequestBody DeleteUserRequestDto request) {
 
-        userService.deleteUser(authUser, deleteUserRequest);
+        userService.deleteUser(authUser, request);
 
         return ResponseEntity.ok(ApiResponse.successWithNoContent());
     }
