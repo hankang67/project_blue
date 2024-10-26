@@ -1,5 +1,6 @@
 package com.sparta.projectblue.domain.payment.service;
 
+import com.sparta.projectblue.domain.common.enums.PaymentStatus;
 import com.sparta.projectblue.domain.common.exception.PaymentException;
 import com.sparta.projectblue.domain.payment.dto.PaymentResponseDto;
 import com.sparta.projectblue.domain.payment.entity.Payment;
@@ -111,7 +112,7 @@ public class PaymentService {
         OffsetDateTime approvedAt = OffsetDateTime.parse((String) jsonObject.get("approvedAt"));
 
         Payment payment = paymentRepository.findByOrderId(orderId).orElseThrow(()->
-                new IllegalArgumentException("결제 정보를 찾을 수 없습니다"));
+                new PaymentException("결제 정보를 찾을 수 없습니다"));
 
         payment.addPaymentInfo(
                 (String) jsonObject.get("paymentKey"),
@@ -149,7 +150,7 @@ public class PaymentService {
         if (isSuccess) {
             // payment 상태 취소 변경
             Payment payment = paymentRepository.findByPaymentKey(paymentKey)
-                    .orElseThrow(() -> new IllegalArgumentException("결제 정보를 찾을 수 없습니다."));
+                    .orElseThrow(() -> new PaymentException("결제 정보를 찾을 수 없습니다."));
 
             payment.canceled();
         }
@@ -181,13 +182,7 @@ public class PaymentService {
 
         paymentRepository.save(payment);
 
-        return PaymentResponseDto.builder()
-                .orderId(orderId)
-                .orderName(performance.getTitle())
-                .amount(reservation.getPrice())
-                .customerEmail(user.getEmail())
-                .customerName(user.getName())
-                .build();
+        return new PaymentResponseDto(orderId, performance.getTitle(), reservation.getPrice(), user.getEmail(), user.getName());
     }
 
     public String secretKeyEncoder() {
@@ -201,7 +196,17 @@ public class PaymentService {
 
     private boolean verifyPayment(String orderId, Long amount) {
         Payment payment = paymentRepository.findByOrderId(orderId).orElseThrow(() ->
-                new IllegalArgumentException("결제 내역이 존재하지 않습니다."));
+                new PaymentException("결제 내역이 존재하지 않습니다."));
+
+        Long reservationId = Long.parseLong(orderId.substring(23));
+
+        if (paymentRepository.findByReservationIdAndStatus(reservationId, PaymentStatus.DONE).isPresent()) {
+            throw new PaymentException("이미 결제 완료된 예매정보입니다");
+        }
+
+        if (paymentRepository.findByReservationIdAndStatus(reservationId, PaymentStatus.CANCELED).isPresent()) {
+            throw new PaymentException("이미 취소된 예매정보입니다");
+        }
 
         return Objects.equals(amount, payment.getAmountTotal());
     }
