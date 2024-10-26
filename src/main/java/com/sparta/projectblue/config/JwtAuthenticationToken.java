@@ -1,7 +1,8 @@
 package com.sparta.projectblue.config;
 
-import com.sparta.projectblue.domain.common.dto.AuthUser;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
+
+import com.sparta.projectblue.domain.common.dto.AuthUser;
 
 public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 

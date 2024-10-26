@@ -1,9 +1,9 @@
 package com.sparta.projectblue.domain.common.generator;
 
-import com.sparta.projectblue.domain.poster.entity.Poster;
-
 import java.util.List;
 import java.util.UUID;
+
+import com.sparta.projectblue.domain.poster.entity.Poster;
 
 public class DummyPosterGenerator {
     private static int performanceIndex = 0; // 순차적으로 접근할 인덱스
@@ -34,10 +34,10 @@ public class DummyPosterGenerator {
     private static String getRandomImageUrl() {
         // 여기에서는 예시로 임의의 이미지 URL을 생성
         String[] sampleUrls = {
-                "https://example.com/image1.jpg",
-                "https://example.com/image2.jpg",
-                "https://example.com/image3.jpg",
-                "https://example.com/image4.jpg"
+            "https://example.com/image1.jpg",
+            "https://example.com/image2.jpg",
+            "https://example.com/image3.jpg",
+            "https://example.com/image4.jpg"
         };
         int index = (int) (Math.random() * sampleUrls.length);
         return sampleUrls[index];

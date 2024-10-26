@@ -1,9 +1,9 @@
 package com.sparta.projectblue.domain.common.enums;
 
+import java.util.Arrays;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import java.util.Arrays;
 
 @Getter
 @RequiredArgsConstructor

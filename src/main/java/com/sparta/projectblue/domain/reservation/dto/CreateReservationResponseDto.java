@@ -1,10 +1,11 @@
 package com.sparta.projectblue.domain.reservation.dto;
 
-import com.sparta.projectblue.domain.common.enums.ReservationStatus;
-import lombok.Getter;
-
 import java.time.LocalDateTime;
 import java.util.List;
+
+import com.sparta.projectblue.domain.common.enums.ReservationStatus;
+
+import lombok.Getter;
 
 @Getter
 public class CreateReservationResponseDto {
@@ -15,7 +16,13 @@ public class CreateReservationResponseDto {
     private final Long price;
     private final ReservationStatus status;
 
-    public CreateReservationResponseDto(Long id, String performanceTitle, LocalDateTime roundDate, List<Integer> seats, Long price, ReservationStatus status) {
+    public CreateReservationResponseDto(
+            Long id,
+            String performanceTitle,
+            LocalDateTime roundDate,
+            List<Integer> seats,
+            Long price,
+            ReservationStatus status) {
         this.id = id;
         this.performanceTitle = performanceTitle;
         this.roundDate = roundDate;

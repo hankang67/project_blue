@@ -1,5 +1,8 @@
 package com.sparta.projectblue.domain.reservation.dto;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import com.sparta.projectblue.domain.common.enums.Category;
 import com.sparta.projectblue.domain.common.enums.ReservationStatus;
 import com.sparta.projectblue.domain.common.enums.ReviewRate;
@@ -7,14 +10,11 @@ import com.sparta.projectblue.domain.payment.entity.Payment;
 import com.sparta.projectblue.domain.performance.entity.Performance;
 import com.sparta.projectblue.domain.reservation.entity.Reservation;
 import com.sparta.projectblue.domain.review.entity.Review;
-import lombok.Getter;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import lombok.Getter;
 
 @Getter
 public class GetReservationResponseDto {
-
 
     private final Category category; // performance
     private final String performanceTitle; // performance
@@ -36,7 +36,14 @@ public class GetReservationResponseDto {
     private final ReviewRate rate; // review
     private final String content; // review
 
-    public GetReservationResponseDto(Performance performance, LocalDateTime round, Reservation reservation, String userName, List<Integer> seats, Payment payment, Review review) {
+    public GetReservationResponseDto(
+            Performance performance,
+            LocalDateTime round,
+            Reservation reservation,
+            String userName,
+            List<Integer> seats,
+            Payment payment,
+            Review review) {
         this.category = performance.getCategory();
         this.performanceTitle = performance.getTitle();
 
@@ -67,6 +74,5 @@ public class GetReservationResponseDto {
             this.rate = null;
             this.content = null;
         }
-
     }
 }

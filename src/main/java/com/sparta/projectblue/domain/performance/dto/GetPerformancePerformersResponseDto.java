@@ -1,11 +1,12 @@
 package com.sparta.projectblue.domain.performance.dto;
 
+import java.util.List;
+
 import com.sparta.projectblue.domain.performer.entity.Performer;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Getter
 public class GetPerformancePerformersResponseDto {

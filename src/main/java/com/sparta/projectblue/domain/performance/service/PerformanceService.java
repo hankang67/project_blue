@@ -1,5 +1,15 @@
 package com.sparta.projectblue.domain.performance.service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.sparta.projectblue.domain.hall.entity.Hall;
 import com.sparta.projectblue.domain.hall.repository.HallRepository;
 import com.sparta.projectblue.domain.performance.dto.*;
@@ -13,17 +23,8 @@ import com.sparta.projectblue.domain.review.entity.Review;
 import com.sparta.projectblue.domain.review.repository.ReviewRepository;
 import com.sparta.projectblue.domain.round.entity.Round;
 import com.sparta.projectblue.domain.round.repository.RoundRepository;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
-
 
 @Service
 @RequiredArgsConstructor
@@ -47,16 +48,21 @@ public class PerformanceService {
         return performanceRepository.findByCondition(pageable, null, performanceDay, null);
     }
 
-
     public GetPerformanceResponseDto getPerformance(Long id) {
-        Performance performance = performanceRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("해당 공연 정보를 찾을 수 없습니다"));
+        Performance performance =
+                performanceRepository
+                        .findById(id)
+                        .orElseThrow(() -> new IllegalArgumentException("해당 공연 정보를 찾을 수 없습니다"));
 
-        Hall hall = hallRepository.findById(performance.getHallId()).orElseThrow(() ->
-                new IllegalArgumentException("공연장의 정보가 없습니다."));
+        Hall hall =
+                hallRepository
+                        .findById(performance.getHallId())
+                        .orElseThrow(() -> new IllegalArgumentException("공연장의 정보가 없습니다."));
 
-        Poster poster = posterRepository.findByPerformanceId(performance.getId()).orElseThrow(()->
-                new IllegalArgumentException("포스터 정보가 없습니다."));
+        Poster poster =
+                posterRepository
+                        .findByPerformanceId(performance.getId())
+                        .orElseThrow(() -> new IllegalArgumentException("포스터 정보가 없습니다."));
 
         return new GetPerformanceResponseDto(performance, hall, poster);
     }
@@ -71,12 +77,15 @@ public class PerformanceService {
         List<Round> rounds = roundRepository.findByPerformanceId(id).stream().toList();
 
         // 회차 날짜정보, 예매 상태만 분리
-        List<GetPerformanceRoundsResponseDto.RoundInfo> roundInfos = rounds.stream()
-                .map(round -> new GetPerformanceRoundsResponseDto.RoundInfo(round.getDate(), round.getStatus()))
-                .collect(Collectors.toList());
+        List<GetPerformanceRoundsResponseDto.RoundInfo> roundInfos =
+                rounds.stream()
+                        .map(
+                                round ->
+                                        new GetPerformanceRoundsResponseDto.RoundInfo(
+                                                round.getDate(), round.getStatus()))
+                        .collect(Collectors.toList());
 
         return new GetPerformanceRoundsResponseDto(roundInfos);
-
     }
 
     public GetPerformanceReviewsResponseDto getReviews(Long id) {
@@ -87,9 +96,13 @@ public class PerformanceService {
 
         List<Review> reviews = reviewRepository.findByPerformanceId(id).stream().toList();
 
-        List<GetPerformanceReviewsResponseDto.ReviewInfo> reviewInfos = reviews.stream()
-                .map(review -> new GetPerformanceReviewsResponseDto.ReviewInfo(review.getReviewRate(), review.getContent()))
-                .collect(Collectors.toList());
+        List<GetPerformanceReviewsResponseDto.ReviewInfo> reviewInfos =
+                reviews.stream()
+                        .map(
+                                review ->
+                                        new GetPerformanceReviewsResponseDto.ReviewInfo(
+                                                review.getReviewRate(), review.getContent()))
+                        .collect(Collectors.toList());
 
         return new GetPerformanceReviewsResponseDto(reviewInfos);
     }

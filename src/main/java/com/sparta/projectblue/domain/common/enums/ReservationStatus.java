@@ -13,5 +13,4 @@ public enum ReservationStatus {
     ReservationStatus(String status) {
         this.status = status;
     }
-
 }

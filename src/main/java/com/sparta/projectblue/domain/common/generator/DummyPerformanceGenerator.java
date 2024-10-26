@@ -1,11 +1,11 @@
 package com.sparta.projectblue.domain.common.generator;
 
-import com.sparta.projectblue.domain.common.enums.Category;
-import com.sparta.projectblue.domain.performance.entity.Performance;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+
+import com.sparta.projectblue.domain.common.enums.Category;
+import com.sparta.projectblue.domain.performance.entity.Performance;
 
 public class DummyPerformanceGenerator {
     private static int hallIndex = 0; // 순차적으로 접근할 인덱스
@@ -35,7 +35,8 @@ public class DummyPerformanceGenerator {
         int duration = getRandomDurationMinutes();
 
         // Performance 객체 생성 및 반환
-        return new Performance(hallId, title, startDate, endDate, price, category, description, duration);
+        return new Performance(
+                hallId, title, startDate, endDate, price, category, description, duration);
     }
 
     // 순차적으로 Hall ID 선택 메서드

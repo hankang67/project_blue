@@ -1,5 +1,9 @@
 package com.sparta.projectblue.domain.auth.service;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.sparta.projectblue.config.JwtUtil;
 import com.sparta.projectblue.domain.auth.dto.SigninRequestDto;
 import com.sparta.projectblue.domain.auth.dto.SigninResponseDto;
@@ -9,10 +13,8 @@ import com.sparta.projectblue.domain.common.enums.UserRole;
 import com.sparta.projectblue.domain.common.exception.AuthException;
 import com.sparta.projectblue.domain.user.entity.User;
 import com.sparta.projectblue.domain.user.repository.UserRepository;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -40,12 +42,7 @@ public class AuthService {
         String encodedPassword = passwordEncoder.encode(request.getPassword());
         UserRole userRole = UserRole.of(request.getUserRole());
 
-        User newUser =
-                new User(
-                        request.getEmail(),
-                        request.getName(),
-                        encodedPassword,
-                        userRole);
+        User newUser = new User(request.getEmail(), request.getName(), encodedPassword, userRole);
         User savedUser = userRepository.save(newUser);
 
         String bearerToken =
@@ -87,4 +84,3 @@ public class AuthService {
         }
     }
 }
-

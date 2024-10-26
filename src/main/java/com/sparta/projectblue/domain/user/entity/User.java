@@ -1,8 +1,10 @@
 package com.sparta.projectblue.domain.user.entity;
 
+import jakarta.persistence.*;
+
 import com.sparta.projectblue.domain.common.entity.BaseEntity;
 import com.sparta.projectblue.domain.common.enums.UserRole;
-import jakarta.persistence.*;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

@@ -1,31 +1,31 @@
-//package com.sparta.projectblue.domain.common.service;
+// package com.sparta.projectblue.domain.common.service;
 //
-//import com.sparta.projectblue.domain.common.generator.*;
-//import com.sparta.projectblue.domain.hall.entity.Hall;
-//import com.sparta.projectblue.domain.hall.repository.HallRepository;
-//import com.sparta.projectblue.domain.performance.entity.Performance;
-//import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
-//import com.sparta.projectblue.domain.performer.entity.Performer;
-//import com.sparta.projectblue.domain.performer.repository.PerformerRepository;
-//import com.sparta.projectblue.domain.poster.entity.Poster;
-//import com.sparta.projectblue.domain.poster.repository.PosterRepository;
-//import com.sparta.projectblue.domain.reservation.repository.ReservationRepository;
-//import com.sparta.projectblue.domain.review.repository.ReviewRepository;
-//import com.sparta.projectblue.domain.round.entity.Round;
-//import com.sparta.projectblue.domain.round.repository.RoundRepository;
-//import com.sparta.projectblue.domain.user.entity.User;
-//import com.sparta.projectblue.domain.user.repository.UserRepository;
-//import jakarta.annotation.PostConstruct;
-//import org.springframework.beans.factory.annotation.Autowired;
+// import com.sparta.projectblue.domain.common.generator.*;
+// import com.sparta.projectblue.domain.hall.entity.Hall;
+// import com.sparta.projectblue.domain.hall.repository.HallRepository;
+// import com.sparta.projectblue.domain.performance.entity.Performance;
+// import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
+// import com.sparta.projectblue.domain.performer.entity.Performer;
+// import com.sparta.projectblue.domain.performer.repository.PerformerRepository;
+// import com.sparta.projectblue.domain.poster.entity.Poster;
+// import com.sparta.projectblue.domain.poster.repository.PosterRepository;
+// import com.sparta.projectblue.domain.reservation.repository.ReservationRepository;
+// import com.sparta.projectblue.domain.review.repository.ReviewRepository;
+// import com.sparta.projectblue.domain.round.entity.Round;
+// import com.sparta.projectblue.domain.round.repository.RoundRepository;
+// import com.sparta.projectblue.domain.user.entity.User;
+// import com.sparta.projectblue.domain.user.repository.UserRepository;
+// import jakarta.annotation.PostConstruct;
+// import org.springframework.beans.factory.annotation.Autowired;
 //
-//import org.springframework.stereotype.Component;
+// import org.springframework.stereotype.Component;
 //
-//import java.util.List;
-//import java.util.stream.Collectors;
-//import java.util.stream.IntStream;
+// import java.util.List;
+// import java.util.stream.Collectors;
+// import java.util.stream.IntStream;
 //
-//@Component
-//public class DummyDataService {
+// @Component
+// public class DummyDataService {
 //    @Autowired
 //    private HallRepository hallRepository;
 //
@@ -103,5 +103,5 @@
 //
 //
 //    }
-//}
+// }
 //

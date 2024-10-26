@@ -13,5 +13,4 @@ public enum Category {
     Category(String value) {
         this.value = value;
     }
-
 }

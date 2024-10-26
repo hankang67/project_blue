@@ -2,7 +2,6 @@ package com.sparta.projectblue.domain.payment.dto;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 @Builder
@@ -13,7 +12,12 @@ public class PaymentResponseDto {
     private String customerEmail;
     private String customerName;
 
-    public PaymentResponseDto(String orderId, String orderName, Long amount, String customerEmail, String customerName) {
+    public PaymentResponseDto(
+            String orderId,
+            String orderName,
+            Long amount,
+            String customerEmail,
+            String customerName) {
         this.orderId = orderId;
         this.orderName = orderName;
         this.amount = amount;

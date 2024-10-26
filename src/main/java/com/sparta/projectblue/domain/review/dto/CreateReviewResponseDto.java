@@ -2,6 +2,7 @@ package com.sparta.projectblue.domain.review.dto;
 
 import com.sparta.projectblue.domain.common.enums.ReviewRate;
 import com.sparta.projectblue.domain.review.entity.Review;
+
 import lombok.Getter;
 
 @Getter

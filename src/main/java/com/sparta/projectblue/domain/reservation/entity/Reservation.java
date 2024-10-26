@@ -1,8 +1,10 @@
 package com.sparta.projectblue.domain.reservation.entity;
 
+import jakarta.persistence.*;
+
 import com.sparta.projectblue.domain.common.entity.BaseEntity;
 import com.sparta.projectblue.domain.common.enums.ReservationStatus;
-import jakarta.persistence.*;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,7 +33,8 @@ public class Reservation extends BaseEntity {
     @Column(nullable = false)
     private Long price;
 
-    public Reservation(Long userId, Long performanceId, Long roundId, ReservationStatus status, Long price) {
+    public Reservation(
+            Long userId, Long performanceId, Long roundId, ReservationStatus status, Long price) {
         this.userId = userId;
         this.performanceId = performanceId;
         this.roundId = roundId;
@@ -50,5 +53,4 @@ public class Reservation extends BaseEntity {
     public void resCompleted() {
         this.status = ReservationStatus.COMPLETED;
     }
-
 }

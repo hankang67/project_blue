@@ -1,17 +1,19 @@
 package com.sparta.projectblue.domain.search.controller;
 
-import com.sparta.projectblue.config.ApiResponse;
-import com.sparta.projectblue.domain.performance.dto.GetPerformancesResponseDto;
-import com.sparta.projectblue.domain.search.service.SearchService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.sparta.projectblue.config.ApiResponse;
+import com.sparta.projectblue.domain.performance.dto.GetPerformancesResponseDto;
+import com.sparta.projectblue.domain.search.service.SearchService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,8 +30,10 @@ public class SearchController {
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String performanceNm,
             @RequestParam(required = false) String userSelectDay,
-            @RequestParam(required = false) String performer
-    ) {
-        return ResponseEntity.ok(ApiResponse.success(searchService.searchPerformances(page, size, performanceNm, userSelectDay, performer)));
+            @RequestParam(required = false) String performer) {
+        return ResponseEntity.ok(
+                ApiResponse.success(
+                        searchService.searchPerformances(
+                                page, size, performanceNm, userSelectDay, performer)));
     }
 }

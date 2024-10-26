@@ -1,5 +1,14 @@
 package com.sparta.projectblue.domain.reservation.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.common.enums.PerformanceStatus;
 import com.sparta.projectblue.domain.common.enums.ReservationStatus;
@@ -21,15 +30,8 @@ import com.sparta.projectblue.domain.round.entity.Round;
 import com.sparta.projectblue.domain.round.repository.RoundRepository;
 import com.sparta.projectblue.domain.user.entity.User;
 import com.sparta.projectblue.domain.user.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -54,12 +56,16 @@ public class ReservationService {
     public CreateReservationResponseDto create(Long id, CreateReservationRequestDto request) {
 
         // 회차 가져옴 (예매상태확인)
-        Round round = roundRepository.findById(request.getRoundId()).orElseThrow(() ->
-                new IllegalArgumentException("round not found"));
+        Round round =
+                roundRepository
+                        .findById(request.getRoundId())
+                        .orElseThrow(() -> new IllegalArgumentException("round not found"));
 
         // 공연 가져옴 (이름 뽑아야함)
-        Performance performance = performanceRepository.findById(round.getPerformanceId()).orElseThrow(() ->
-                new IllegalArgumentException("performance not found"));
+        Performance performance =
+                performanceRepository
+                        .findById(round.getPerformanceId())
+                        .orElseThrow(() -> new IllegalArgumentException("performance not found"));
 
         // 오픈전
         if (round.getStatus().equals(PerformanceStatus.BEFORE_OPEN)) {
@@ -72,8 +78,10 @@ public class ReservationService {
         }
 
         // 공연장 가져옴 (좌석수 확인용)
-        Hall hall = hallRepository.findById(performance.getHallId()).orElseThrow(() ->
-                new IllegalArgumentException("hallo not found"));
+        Hall hall =
+                hallRepository
+                        .findById(performance.getHallId())
+                        .orElseThrow(() -> new IllegalArgumentException("hallo not found"));
 
         // 예매 가능 티켓 매수 제한
         if (request.getSeats().size() > 4) {
@@ -88,7 +96,9 @@ public class ReservationService {
             }
 
             // reservedSeats 에 좌석이 있으면 예매 불가
-            if (reservedSeatRepository.findByRoundIdAndSeatNumber(request.getRoundId(), i).isPresent()) {
+            if (reservedSeatRepository
+                    .findByRoundIdAndSeatNumber(request.getRoundId(), i)
+                    .isPresent()) {
                 throw new IllegalArgumentException("ReservedSeat already reserved");
             }
         }
@@ -97,18 +107,19 @@ public class ReservationService {
         Long price = performance.getPrice() * request.getSeats().size();
 
         // 예약 생성
-        Reservation newReservation = new Reservation(
-                id,
-                round.getPerformanceId(),
-                request.getRoundId(),
-                ReservationStatus.PENDING,
-                price
-        );
+        Reservation newReservation =
+                new Reservation(
+                        id,
+                        round.getPerformanceId(),
+                        request.getRoundId(),
+                        ReservationStatus.PENDING,
+                        price);
 
         reservationRepository.save(newReservation);
 
         for (Integer i : request.getSeats()) {
-            reservedSeatRepository.save(new ReservedSeat(newReservation.getId(), newReservation.getRoundId(), i));
+            reservedSeatRepository.save(
+                    new ReservedSeat(newReservation.getId(), newReservation.getRoundId(), i));
         }
 
         return new CreateReservationResponseDto(
@@ -117,16 +128,16 @@ public class ReservationService {
                 round.getDate(),
                 request.getSeats(),
                 newReservation.getPrice(),
-                ReservationStatus.PENDING
-        );
+                ReservationStatus.PENDING);
     }
 
     @Transactional
     public void delete(Long id, DeleteReservationRequestDto request) throws Exception {
         // 사용자 가져옴
         User user =
-                userRepository.findById(id).orElseThrow(() ->
-                        new IllegalArgumentException("User not found"));
+                userRepository
+                        .findById(id)
+                        .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         // 계정 비밀번호 확인
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
@@ -134,15 +145,18 @@ public class ReservationService {
         }
 
         // 예매내역이 있는지 확인
-        Reservation reservation = reservationRepository.findById(request.getReservationId()).orElseThrow(() ->
-                new IllegalArgumentException("reservation not found"));
+        Reservation reservation =
+                reservationRepository
+                        .findById(request.getReservationId())
+                        .orElseThrow(() -> new IllegalArgumentException("reservation not found"));
 
         // 이미 취소 되었는지 확인
         if (reservation.getStatus().equals(ReservationStatus.CANCELED)) {
             throw new IllegalArgumentException("Reservation already cancelled.");
         }
 
-        List<ReservedSeat> reservedSeats = reservedSeatRepository.findByReservationId(reservation.getId());
+        List<ReservedSeat> reservedSeats =
+                reservedSeatRepository.findByReservationId(reservation.getId());
 
         if (reservedSeats.isEmpty()) {
             throw new IllegalArgumentException("ReservedSeat does not exist");
@@ -150,9 +164,11 @@ public class ReservationService {
 
         reservedSeatRepository.deleteAll(reservedSeats);
 
-        if(Objects.nonNull(reservation.getPaymentId())) {
-            Payment payment = paymentRepository.findById(reservation.getPaymentId()).orElseThrow(() ->
-                    new IllegalArgumentException("payment not found"));
+        if (Objects.nonNull(reservation.getPaymentId())) {
+            Payment payment =
+                    paymentRepository
+                            .findById(reservation.getPaymentId())
+                            .orElseThrow(() -> new IllegalArgumentException("payment not found"));
 
             paymentService.cancelPayment(payment.getPaymentKey(), "예매를 취소합니다");
         }
@@ -161,46 +177,49 @@ public class ReservationService {
     }
 
     public GetReservationResponseDto getReservation(AuthUser user, Long reservationId) {
-        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(()->
-                new IllegalArgumentException("예약 내역을 찾을 수 없습니다"));
+        Reservation reservation =
+                reservationRepository
+                        .findById(reservationId)
+                        .orElseThrow(() -> new IllegalArgumentException("예약 내역을 찾을 수 없습니다"));
 
-        if(!reservation.getUserId().equals(user.getId())) {
+        if (!reservation.getUserId().equals(user.getId())) {
             throw new IllegalArgumentException("예매자가 아닙니다");
         }
 
-        Performance performance = performanceRepository.findById(reservation.getPerformanceId())
-                .orElseThrow(() -> new IllegalArgumentException("공연을 찾을 수 없습니다."));
+        Performance performance =
+                performanceRepository
+                        .findById(reservation.getPerformanceId())
+                        .orElseThrow(() -> new IllegalArgumentException("공연을 찾을 수 없습니다."));
 
-        Round round = roundRepository.findById(reservation.getRoundId()).orElseThrow(() ->
-                new IllegalArgumentException("공연 회차를 찾을 수 없습니다"));
+        Round round =
+                roundRepository
+                        .findById(reservation.getRoundId())
+                        .orElseThrow(() -> new IllegalArgumentException("공연 회차를 찾을 수 없습니다"));
 
-        List<ReservedSeat> reservedSeats = reservedSeatRepository.findByReservationId(reservation.getId());
+        List<ReservedSeat> reservedSeats =
+                reservedSeatRepository.findByReservationId(reservation.getId());
 
         if (reservedSeats.isEmpty()) {
             throw new IllegalArgumentException("ReservedSeat does not exist");
         }
 
-        List<Integer> seats = reservedSeats.stream()
-                .map(ReservedSeat::getSeatNumber)
-                .collect(Collectors.toList());
+        List<Integer> seats =
+                reservedSeats.stream()
+                        .map(ReservedSeat::getSeatNumber)
+                        .collect(Collectors.toList());
 
         Payment payment = null;
-        if(Objects.nonNull(reservation.getPaymentId())) {
-            payment = paymentRepository.findById(reservation.getPaymentId()).orElseThrow(()->
-                    new IllegalArgumentException("결제 정보를 찾을 수 없습니다"));
+        if (Objects.nonNull(reservation.getPaymentId())) {
+            payment =
+                    paymentRepository
+                            .findById(reservation.getPaymentId())
+                            .orElseThrow(() -> new IllegalArgumentException("결제 정보를 찾을 수 없습니다"));
         }
 
         Review review = reviewRepository.findByReservationId(reservation.getId()).orElse(null);
 
         return new GetReservationResponseDto(
-                performance,
-                round.getDate(),
-                reservation,
-                user.getName(),
-                seats,
-                payment,
-                review
-        );
+                performance, round.getDate(), reservation, user.getName(), seats, payment, review);
     }
 
     public List<GetReservationsResponseDto> getReservations(Long userId) {
@@ -210,26 +229,36 @@ public class ReservationService {
         List<GetReservationsResponseDto> responseList = new ArrayList<>();
 
         for (Reservation reservation : reservations) {
-            Performance performance = performanceRepository.findById(reservation.getPerformanceId())
-                    .orElseThrow(() -> new IllegalArgumentException("Performance not found for reservation"));
+            Performance performance =
+                    performanceRepository
+                            .findById(reservation.getPerformanceId())
+                            .orElseThrow(
+                                    () ->
+                                            new IllegalArgumentException(
+                                                    "Performance not found for reservation"));
 
-            List<ReservedSeat> seats = reservedSeatRepository.findByReservationId(reservation.getId());
+            List<ReservedSeat> seats =
+                    reservedSeatRepository.findByReservationId(reservation.getId());
 
-            Hall hall = hallRepository.findById(performance.getHallId()).orElseThrow(() ->
-                    new IllegalArgumentException("공연장을 찾을 수 없습니다"));
+            Hall hall =
+                    hallRepository
+                            .findById(performance.getHallId())
+                            .orElseThrow(() -> new IllegalArgumentException("공연장을 찾을 수 없습니다"));
 
-            Round round = roundRepository.findById(reservation.getRoundId()).orElseThrow(() ->
-                    new IllegalArgumentException("공연 회차를 찾을 수 없습니다"));
+            Round round =
+                    roundRepository
+                            .findById(reservation.getRoundId())
+                            .orElseThrow(() -> new IllegalArgumentException("공연 회차를 찾을 수 없습니다"));
 
-            responseList.add(new GetReservationsResponseDto(
-                    performance.getTitle(),
-                    seats.size(),
-                    reservation.getId(),
-                    reservation.getCreatedAt(),
-                    hall.getName(),
-                    round.getDate(),
-                    reservation.getStatus()
-            ));
+            responseList.add(
+                    new GetReservationsResponseDto(
+                            performance.getTitle(),
+                            seats.size(),
+                            reservation.getId(),
+                            reservation.getCreatedAt(),
+                            hall.getName(),
+                            round.getDate(),
+                            reservation.getStatus()));
         }
 
         return responseList;

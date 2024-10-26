@@ -1,10 +1,10 @@
 package com.sparta.projectblue.domain.common.generator;
 
-import com.sparta.projectblue.domain.common.enums.PerformanceStatus;
-import com.sparta.projectblue.domain.round.entity.Round;
-
 import java.time.LocalDateTime;
 import java.util.List;
+
+import com.sparta.projectblue.domain.common.enums.PerformanceStatus;
+import com.sparta.projectblue.domain.round.entity.Round;
 
 public class DummyRoundGenerator {
     private static int performanceIndex = 0; // 순차적으로 접근할 인덱스
@@ -33,6 +33,9 @@ public class DummyRoundGenerator {
         int daysToAdd = (int) (Math.random() * 365) + 1; // 최대 1년 이내의 무작위 날짜
         int hoursToAdd = (int) (Math.random() * 24);
         int minutesToAdd = (int) (Math.random() * 60);
-        return LocalDateTime.now().plusDays(daysToAdd).plusHours(hoursToAdd).plusMinutes(minutesToAdd);
+        return LocalDateTime.now()
+                .plusDays(daysToAdd)
+                .plusHours(hoursToAdd)
+                .plusMinutes(minutesToAdd);
     }
 }

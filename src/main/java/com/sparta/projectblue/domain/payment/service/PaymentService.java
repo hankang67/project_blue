@@ -1,23 +1,5 @@
 package com.sparta.projectblue.domain.payment.service;
 
-import com.sparta.projectblue.domain.common.enums.PaymentStatus;
-import com.sparta.projectblue.domain.common.exception.PaymentException;
-import com.sparta.projectblue.domain.payment.dto.PaymentResponseDto;
-import com.sparta.projectblue.domain.payment.entity.Payment;
-import com.sparta.projectblue.domain.payment.repository.PaymentRepository;
-import com.sparta.projectblue.domain.performance.entity.Performance;
-import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
-import com.sparta.projectblue.domain.reservation.entity.Reservation;
-import com.sparta.projectblue.domain.reservation.repository.ReservationRepository;
-import com.sparta.projectblue.domain.user.entity.User;
-import com.sparta.projectblue.domain.user.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -30,6 +12,26 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Objects;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.sparta.projectblue.domain.common.enums.PaymentStatus;
+import com.sparta.projectblue.domain.common.exception.PaymentException;
+import com.sparta.projectblue.domain.payment.dto.PaymentResponseDto;
+import com.sparta.projectblue.domain.payment.entity.Payment;
+import com.sparta.projectblue.domain.payment.repository.PaymentRepository;
+import com.sparta.projectblue.domain.performance.entity.Performance;
+import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
+import com.sparta.projectblue.domain.reservation.entity.Reservation;
+import com.sparta.projectblue.domain.reservation.repository.ReservationRepository;
+import com.sparta.projectblue.domain.user.entity.User;
+import com.sparta.projectblue.domain.user.repository.UserRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -58,9 +60,10 @@ public class PaymentService {
             amount = (String) requestData.get("amount");
         } catch (ParseException e) {
             throw new RuntimeException(e);
-        };
+        }
+        ;
 
-        if(!verifyPayment(orderId, Long.parseLong(amount))) {
+        if (!verifyPayment(orderId, Long.parseLong(amount))) {
             throw new PaymentException("주문ID에 대한 가격이 상이합니다.");
         }
 
@@ -86,7 +89,8 @@ public class PaymentService {
         int code = connection.getResponseCode();
         boolean isSuccess = code == 200;
 
-        InputStream responseStream = isSuccess ? connection.getInputStream() : connection.getErrorStream();
+        InputStream responseStream =
+                isSuccess ? connection.getInputStream() : connection.getErrorStream();
 
         Reader reader = new InputStreamReader(responseStream, StandardCharsets.UTF_8);
         JSONObject jsonObject = (JSONObject) parser.parse(reader);
@@ -96,7 +100,7 @@ public class PaymentService {
             // 결제 승인 후 처리
             savePayment(jsonObject);
         }
-        
+
         return jsonObject;
     }
 
@@ -106,13 +110,17 @@ public class PaymentService {
 
         Long reservationId = Long.parseLong(orderId.substring(23));
 
-        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(() ->
-                new IllegalArgumentException("예매 정보를 찾을 수 없습니다"));
+        Reservation reservation =
+                reservationRepository
+                        .findById(reservationId)
+                        .orElseThrow(() -> new IllegalArgumentException("예매 정보를 찾을 수 없습니다"));
 
         OffsetDateTime approvedAt = OffsetDateTime.parse((String) jsonObject.get("approvedAt"));
 
-        Payment payment = paymentRepository.findByOrderId(orderId).orElseThrow(()->
-                new PaymentException("결제 정보를 찾을 수 없습니다"));
+        Payment payment =
+                paymentRepository
+                        .findByOrderId(orderId)
+                        .orElseThrow(() -> new PaymentException("결제 정보를 찾을 수 없습니다"));
 
         payment.addPaymentInfo(
                 (String) jsonObject.get("paymentKey"),
@@ -120,8 +128,7 @@ public class PaymentService {
                 (String) jsonObject.get("method"),
                 (Long) jsonObject.get("suppliedAmount"),
                 (Long) jsonObject.get("vat"),
-                approvedAt.toLocalDateTime()
-        );
+                approvedAt.toLocalDateTime());
         reservation.addPaymentId(payment.getId());
 
         reservation.resCompleted();
@@ -149,8 +156,10 @@ public class PaymentService {
 
         if (isSuccess) {
             // payment 상태 취소 변경
-            Payment payment = paymentRepository.findByPaymentKey(paymentKey)
-                    .orElseThrow(() -> new PaymentException("결제 정보를 찾을 수 없습니다."));
+            Payment payment =
+                    paymentRepository
+                            .findByPaymentKey(paymentKey)
+                            .orElseThrow(() -> new PaymentException("결제 정보를 찾을 수 없습니다."));
 
             payment.canceled();
         }
@@ -160,29 +169,41 @@ public class PaymentService {
 
     @Transactional
     public PaymentResponseDto setValue(Long reservationId) {
-        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(() ->
-                new IllegalArgumentException("예약 내역이 없습니다."));
+        Reservation reservation =
+                reservationRepository
+                        .findById(reservationId)
+                        .orElseThrow(() -> new IllegalArgumentException("예약 내역이 없습니다."));
 
-        Performance performance = performanceRepository.findById(reservation.getPerformanceId()).orElseThrow(() ->
-                new IllegalArgumentException("해당 공연이 존재하지 않습니다."));
+        Performance performance =
+                performanceRepository
+                        .findById(reservation.getPerformanceId())
+                        .orElseThrow(() -> new IllegalArgumentException("해당 공연이 존재하지 않습니다."));
 
-        User user = userRepository.findById(reservation.getUserId()).orElseThrow(() ->
-                new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
+        User user =
+                userRepository
+                        .findById(reservation.getUserId())
+                        .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
 
-        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+        String timestamp =
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
         String orderId = "blueRes_" + timestamp + "_" + reservationId;
 
-        Payment payment = new Payment(
-                user.getId(),
-                reservation.getId(),
-                performance.getId(),
-                reservation.getPrice(),
-                orderId
-        );
+        Payment payment =
+                new Payment(
+                        user.getId(),
+                        reservation.getId(),
+                        performance.getId(),
+                        reservation.getPrice(),
+                        orderId);
 
         paymentRepository.save(payment);
 
-        return new PaymentResponseDto(orderId, performance.getTitle(), reservation.getPrice(), user.getEmail(), user.getName());
+        return new PaymentResponseDto(
+                orderId,
+                performance.getTitle(),
+                reservation.getPrice(),
+                user.getEmail(),
+                user.getName());
     }
 
     public String secretKeyEncoder() {
@@ -190,21 +211,28 @@ public class PaymentService {
         // 비밀번호가 없다는 것을 알리기 위해 시크릿 키 뒤에 콜론을 추가합니다.
         // @docs https://docs.tosspayments.com/reference/using-api/authorization#%EC%9D%B8%EC%A6%9D
         Base64.Encoder encoder = Base64.getEncoder();
-        byte[] encodedBytes = encoder.encode((WIDGET_SECRET_KEY + ":").getBytes(StandardCharsets.UTF_8));
+        byte[] encodedBytes =
+                encoder.encode((WIDGET_SECRET_KEY + ":").getBytes(StandardCharsets.UTF_8));
         return "Basic " + new String(encodedBytes);
     }
 
     private boolean verifyPayment(String orderId, Long amount) {
-        Payment payment = paymentRepository.findByOrderId(orderId).orElseThrow(() ->
-                new PaymentException("결제 내역이 존재하지 않습니다."));
+        Payment payment =
+                paymentRepository
+                        .findByOrderId(orderId)
+                        .orElseThrow(() -> new PaymentException("결제 내역이 존재하지 않습니다."));
 
         Long reservationId = Long.parseLong(orderId.substring(23));
 
-        if (paymentRepository.findByReservationIdAndStatus(reservationId, PaymentStatus.DONE).isPresent()) {
+        if (paymentRepository
+                .findByReservationIdAndStatus(reservationId, PaymentStatus.DONE)
+                .isPresent()) {
             throw new PaymentException("이미 결제 완료된 예매정보입니다");
         }
 
-        if (paymentRepository.findByReservationIdAndStatus(reservationId, PaymentStatus.CANCELED).isPresent()) {
+        if (paymentRepository
+                .findByReservationIdAndStatus(reservationId, PaymentStatus.CANCELED)
+                .isPresent()) {
             throw new PaymentException("이미 취소된 예매정보입니다");
         }
 

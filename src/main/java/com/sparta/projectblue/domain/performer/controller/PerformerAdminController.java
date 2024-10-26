@@ -1,17 +1,20 @@
 package com.sparta.projectblue.domain.performer.controller;
 
+import jakarta.validation.Valid;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+
 import com.sparta.projectblue.config.ApiResponse;
 import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.performer.dto.CreatePerformerRequestDto;
 import com.sparta.projectblue.domain.performer.dto.UpdatePerformerRequestDto;
 import com.sparta.projectblue.domain.performer.service.PerformerAdminService;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/admin/performers")
@@ -26,7 +29,8 @@ public class PerformerAdminController {
     public ResponseEntity<ApiResponse<?>> createPerformer(
             @AuthenticationPrincipal AuthUser authUser,
             @Valid @RequestBody CreatePerformerRequestDto request) {
-        return ResponseEntity.ok(ApiResponse.success(performerAdminService.createPerformer(authUser, request)));
+        return ResponseEntity.ok(
+                ApiResponse.success(performerAdminService.createPerformer(authUser, request)));
     }
 
     @PutMapping("/{id}")
@@ -35,17 +39,15 @@ public class PerformerAdminController {
             @AuthenticationPrincipal AuthUser authUser,
             @PathVariable Long id,
             @Valid @RequestBody UpdatePerformerRequestDto request) {
-        return ResponseEntity.ok(ApiResponse.success(performerAdminService.updatePerformer(authUser, id, request)));
+        return ResponseEntity.ok(
+                ApiResponse.success(performerAdminService.updatePerformer(authUser, id, request)));
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "배우 삭제", description = "기존 배우 정보를 삭제합니다.")
     public ResponseEntity<ApiResponse<?>> deletePerformer(
-            @AuthenticationPrincipal AuthUser authUser,
-            @PathVariable Long id) {
+            @AuthenticationPrincipal AuthUser authUser, @PathVariable Long id) {
         performerAdminService.deletePerformer(authUser, id);
         return ResponseEntity.ok(ApiResponse.successWithNoContent());
     }
-
-
 }

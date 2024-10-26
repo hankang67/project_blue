@@ -1,9 +1,9 @@
 package com.sparta.projectblue.domain.reservation.repository;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+
+import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class ReservationQueryRepositoryImpl implements ReservationQueryRepository {
-}
+public class ReservationQueryRepositoryImpl implements ReservationQueryRepository {}

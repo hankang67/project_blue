@@ -1,9 +1,10 @@
 package com.sparta.projectblue.domain.performance.dto;
 
-import com.sparta.projectblue.domain.common.enums.ReviewRate;
-import lombok.Getter;
-
 import java.util.List;
+
+import com.sparta.projectblue.domain.common.enums.ReviewRate;
+
+import lombok.Getter;
 
 @Getter
 public class GetPerformanceReviewsResponseDto {
@@ -13,7 +14,6 @@ public class GetPerformanceReviewsResponseDto {
     public GetPerformanceReviewsResponseDto(List<ReviewInfo> reviews) {
         this.reviews = reviews;
     }
-
 
     @Getter
     public static class ReviewInfo {

@@ -1,16 +1,18 @@
 package com.sparta.projectblue.domain.review.controller;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+
 import com.sparta.projectblue.config.ApiResponse;
 import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.review.dto.CreateReviewRequestDto;
 import com.sparta.projectblue.domain.review.dto.UpdateReviewRequestDto;
 import com.sparta.projectblue.domain.review.service.ReviewService;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/reviews")
@@ -26,7 +28,8 @@ public class ReviewController {
             @AuthenticationPrincipal AuthUser authUser,
             @RequestBody CreateReviewRequestDto request) {
 
-        return ResponseEntity.ok(ApiResponse.success(reviewService.create(authUser.getId(), request)));
+        return ResponseEntity.ok(
+                ApiResponse.success(reviewService.create(authUser.getId(), request)));
     }
 
     @PutMapping("/{id}")
@@ -35,16 +38,15 @@ public class ReviewController {
             @AuthenticationPrincipal AuthUser authUser,
             @PathVariable Long id,
             @RequestBody UpdateReviewRequestDto requestDto) {
-        return ResponseEntity.ok(ApiResponse.success(reviewService.update(authUser.getId(), id, requestDto)));
+        return ResponseEntity.ok(
+                ApiResponse.success(reviewService.update(authUser.getId(), id, requestDto)));
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "관람평 삭제")
     public ResponseEntity<ApiResponse<?>> delete(
-            @AuthenticationPrincipal AuthUser authUser,
-            @PathVariable Long id) {
+            @AuthenticationPrincipal AuthUser authUser, @PathVariable Long id) {
         reviewService.delete(authUser.getId(), id);
         return ResponseEntity.ok(ApiResponse.successWithNoContent());
     }
 }
-

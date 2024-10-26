@@ -1,6 +1,7 @@
 package com.sparta.projectblue.domain.poster.dto;
 
 import com.sparta.projectblue.domain.poster.entity.Poster;
+
 import lombok.Getter;
 
 @Getter

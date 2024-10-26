@@ -1,5 +1,14 @@
 package com.sparta.projectblue.domain.round.service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.sparta.projectblue.domain.common.enums.PerformanceStatus;
 import com.sparta.projectblue.domain.hall.entity.Hall;
 import com.sparta.projectblue.domain.hall.repository.HallRepository;
@@ -10,15 +19,8 @@ import com.sparta.projectblue.domain.reservedSeat.repository.ReservedSeatReposit
 import com.sparta.projectblue.domain.round.dto.*;
 import com.sparta.projectblue.domain.round.entity.Round;
 import com.sparta.projectblue.domain.round.repository.RoundRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -33,8 +35,10 @@ public class RoundService {
 
     public GetRoundAvailableSeatsResponseDto getAvailableSeats(Long id) {
         // 회차 가져옴
-        Round round = roundRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("회차를 찾을 수 없습니다."));
+        Round round =
+                roundRepository
+                        .findById(id)
+                        .orElseThrow(() -> new IllegalArgumentException("회차를 찾을 수 없습니다."));
 
         // 오픈전
         if (round.getStatus().equals(PerformanceStatus.BEFORE_OPEN)) {
@@ -47,19 +51,21 @@ public class RoundService {
         }
 
         // 공연 가져옴
-        Performance performance = performanceRepository.findById(round.getPerformanceId()).orElseThrow(() ->
-                new IllegalArgumentException("출연자를 찾을 수 없습니다."));
+        Performance performance =
+                performanceRepository
+                        .findById(round.getPerformanceId())
+                        .orElseThrow(() -> new IllegalArgumentException("출연자를 찾을 수 없습니다."));
 
         // 공연장 가져옴
-        Hall hall = hallRepository.findById(performance.getHallId()).orElseThrow(() ->
-                new IllegalArgumentException("공연장을 찾을 수 없습니다."));
-
+        Hall hall =
+                hallRepository
+                        .findById(performance.getHallId())
+                        .orElseThrow(() -> new IllegalArgumentException("공연장을 찾을 수 없습니다."));
 
         // 예약된 좌석 가져옴
         List<ReservedSeat> reservedSeats = reservedSeatRepository.findByRoundId(round.getId());
-        Set<Integer> reservedSeatNumbers = reservedSeats.stream()
-                .map(ReservedSeat::getSeatNumber)
-                .collect(Collectors.toSet());
+        Set<Integer> reservedSeatNumbers =
+                reservedSeats.stream().map(ReservedSeat::getSeatNumber).collect(Collectors.toSet());
 
         // 전체 좌석수 가져옴
         int totalSeats = hall.getSeats();
@@ -72,7 +78,8 @@ public class RoundService {
             }
         }
 
-        return new GetRoundAvailableSeatsResponseDto(performance.getTitle(), round.getDate(), availableSeats);
+        return new GetRoundAvailableSeatsResponseDto(
+                performance.getTitle(), round.getDate(), availableSeats);
     }
 
     @Transactional
@@ -83,27 +90,38 @@ public class RoundService {
         }
         LocalDateTime now = LocalDateTime.now();
 
-        List<Round> newRounds = request.getDates().stream()
-                .peek(date -> {
-                    if (date.isBefore(now)) {
-                        throw new IllegalArgumentException("과거의 날짜로 회차를 생성할 수 없습니다.");
-                    }
-                })
-                .map(date -> new Round(id, date, PerformanceStatus.BEFORE_OPEN))
-                .collect(Collectors.toList());
+        List<Round> newRounds =
+                request.getDates().stream()
+                        .peek(
+                                date -> {
+                                    if (date.isBefore(now)) {
+                                        throw new IllegalArgumentException(
+                                                "과거의 날짜로 회차를 생성할 수 없습니다.");
+                                    }
+                                })
+                        .map(date -> new Round(id, date, PerformanceStatus.BEFORE_OPEN))
+                        .collect(Collectors.toList());
 
         List<Round> savedRounds = roundRepository.saveAll(newRounds);
 
         return savedRounds.stream()
-                .map(round -> new CreateRoundResponseDto(round.getId(), round.getPerformanceId(), round.getDate(), round.getStatus()))
+                .map(
+                        round ->
+                                new CreateRoundResponseDto(
+                                        round.getId(),
+                                        round.getPerformanceId(),
+                                        round.getDate(),
+                                        round.getStatus()))
                 .collect(Collectors.toList());
     }
 
     @Transactional
     public UpdateRoundResponseDto updateRound(Long id, UpdateRoundRequestDto request) {
         // 회차 가져옴
-        Round round = roundRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("회차를 찾을 수 없습니다."));
+        Round round =
+                roundRepository
+                        .findById(id)
+                        .orElseThrow(() -> new IllegalArgumentException("회차를 찾을 수 없습니다."));
 
         LocalDateTime now = LocalDateTime.now();
 
@@ -115,18 +133,17 @@ public class RoundService {
         round.updateStatus(request.getStatus());
         roundRepository.save(round);
 
-        return new UpdateRoundResponseDto(round.getId(), round.getPerformanceId(), round.getDate(), round.getStatus());
+        return new UpdateRoundResponseDto(
+                round.getId(), round.getPerformanceId(), round.getDate(), round.getStatus());
     }
 
     @Transactional
     public void deleteRound(Long id) {
-        Round round = roundRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("회차를 찾을 수 없습니다."));
+        Round round =
+                roundRepository
+                        .findById(id)
+                        .orElseThrow(() -> new IllegalArgumentException("회차를 찾을 수 없습니다."));
 
         roundRepository.delete(round);
     }
-
-
-
-
 }

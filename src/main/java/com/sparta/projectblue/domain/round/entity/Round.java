@@ -1,12 +1,14 @@
 package com.sparta.projectblue.domain.round.entity;
 
+import java.time.LocalDateTime;
+
+import jakarta.persistence.*;
+
 import com.sparta.projectblue.domain.common.entity.BaseEntity;
 import com.sparta.projectblue.domain.common.enums.PerformanceStatus;
-import jakarta.persistence.*;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -29,6 +31,7 @@ public class Round extends BaseEntity {
         this.date = date;
         this.status = status;
     }
+
     public void updateDate(LocalDateTime date) {
         this.date = date;
     }

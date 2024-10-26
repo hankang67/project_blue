@@ -1,11 +1,13 @@
 package com.sparta.projectblue.domain.review.entity;
 
-import com.sparta.projectblue.domain.common.entity.BaseEntity;
-import com.sparta.projectblue.domain.common.enums.ReviewRate;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+
+import com.sparta.projectblue.domain.common.entity.BaseEntity;
+import com.sparta.projectblue.domain.common.enums.ReviewRate;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

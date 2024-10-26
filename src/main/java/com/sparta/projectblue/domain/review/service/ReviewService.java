@@ -1,5 +1,8 @@
 package com.sparta.projectblue.domain.review.service;
 
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.sparta.projectblue.domain.common.enums.ReservationStatus;
 import com.sparta.projectblue.domain.reservation.entity.Reservation;
 import com.sparta.projectblue.domain.reservation.repository.ReservationRepository;
@@ -9,9 +12,8 @@ import com.sparta.projectblue.domain.review.dto.UpdateReviewRequestDto;
 import com.sparta.projectblue.domain.review.dto.UpdateReviewResponseDto;
 import com.sparta.projectblue.domain.review.entity.Review;
 import com.sparta.projectblue.domain.review.repository.ReviewRepository;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,10 +26,12 @@ public class ReviewService {
 
     @Transactional
     public CreateReviewResponseDto create(Long userId, CreateReviewRequestDto request) {
-        Reservation reservation = reservationRepository.findById(request.getReservationId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 예매를 찾을 수 없습니다."));
+        Reservation reservation =
+                reservationRepository
+                        .findById(request.getReservationId())
+                        .orElseThrow(() -> new IllegalArgumentException("해당 예매를 찾을 수 없습니다."));
 
-        if(!reservation.getUserId().equals(userId)) {
+        if (!reservation.getUserId().equals(userId)) {
             throw new IllegalArgumentException("리뷰 작성 권한이 없습니다");
         }
 
@@ -37,14 +41,19 @@ public class ReviewService {
         }
 
         // 유저가 이미 한번 리뷰를 달았는지 검증
-        boolean reviewExists = reviewRepository.existsByReservationIdAndPerformanceId(
-                request.getReservationId(), reservation.getPerformanceId());
+        boolean reviewExists =
+                reviewRepository.existsByReservationIdAndPerformanceId(
+                        request.getReservationId(), reservation.getPerformanceId());
         if (reviewExists) {
             throw new IllegalArgumentException("이 공연에 대한 리뷰는 이미 등록되었습니다.");
         }
 
-
-        Review review = new Review(reservation.getPerformanceId(), reservation.getId(), request.getReviewRate(), request.getContents());
+        Review review =
+                new Review(
+                        reservation.getPerformanceId(),
+                        reservation.getId(),
+                        request.getReviewRate(),
+                        request.getContents());
 
         reviewRepository.save(review);
 
@@ -53,11 +62,15 @@ public class ReviewService {
 
     @Transactional
     public UpdateReviewResponseDto update(Long userId, Long id, UpdateReviewRequestDto request) {
-        Review review = reviewRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 리뷰를 찾을 수 없습니다."));
+        Review review =
+                reviewRepository
+                        .findById(id)
+                        .orElseThrow(() -> new IllegalArgumentException("해당 리뷰를 찾을 수 없습니다."));
 
-        Reservation reservation = reservationRepository.findById(review.getReservationId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 예매를 찾을 수 없습니다."));
+        Reservation reservation =
+                reservationRepository
+                        .findById(review.getReservationId())
+                        .orElseThrow(() -> new IllegalArgumentException("해당 예매를 찾을 수 없습니다."));
 
         if (!reservation.getUserId().equals(userId)) {
             throw new IllegalArgumentException("리뷰 작성자가 아닙니다");
@@ -70,11 +83,15 @@ public class ReviewService {
 
     @Transactional
     public void delete(Long userId, Long id) {
-        Review review = reviewRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 리뷰를 찾을 수 없습니다."));
+        Review review =
+                reviewRepository
+                        .findById(id)
+                        .orElseThrow(() -> new IllegalArgumentException("해당 리뷰를 찾을 수 없습니다."));
 
-        Reservation reservation = reservationRepository.findById(review.getReservationId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 예매를 찾을 수 없습니다."));
+        Reservation reservation =
+                reservationRepository
+                        .findById(review.getReservationId())
+                        .orElseThrow(() -> new IllegalArgumentException("해당 예매를 찾을 수 없습니다."));
 
         if (!reservation.getUserId().equals(userId)) {
             throw new IllegalArgumentException("리뷰 작성자가 아닙니다");

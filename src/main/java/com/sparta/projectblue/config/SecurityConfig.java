@@ -1,6 +1,5 @@
 package com.sparta.projectblue.config;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -12,6 +11,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @RequiredArgsConstructor
@@ -34,7 +35,7 @@ public class SecurityConfig {
                                 session.sessionCreationPolicy(
                                         SessionCreationPolicy.STATELESS) // SessionManagementFilter,
                         // SecurityContextPersistenceFilter
-                )
+                        )
                 .addFilterBefore(jwtSecurityFilter, SecurityContextHolderAwareRequestFilter.class)
                 .formLogin(AbstractHttpConfigurer::disable) // UsernamePasswordAuthenticationFilter,
                 // DefaultLoginPageGeneratingFilter 비활성화
@@ -42,15 +43,16 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable) // BasicAuthenticationFilter 비활성화
                 .logout(AbstractHttpConfigurer::disable) // LogoutFilter 비활성화
                 .authorizeHttpRequests(
-                        auth ->
-                                auth.requestMatchers("/**").permitAll()
-                                .anyRequest().permitAll())
-//                                auth.requestMatchers("/auth/signin", "/auth/signup")
-//                                        .permitAll()
-//                                        .requestMatchers("/test").hasAuthority(Authority.ADMIN)
-//                                        .requestMatchers("/admin/**").hasAuthority(Authority.ADMIN)
-//                                        .anyRequest()
-//                                        .authenticated())
+                        auth -> auth.requestMatchers("/**").permitAll().anyRequest().permitAll())
+                //                                auth.requestMatchers("/auth/signin",
+                // "/auth/signup")
+                //                                        .permitAll()
+                //
+                // .requestMatchers("/test").hasAuthority(Authority.ADMIN)
+                //
+                // .requestMatchers("/admin/**").hasAuthority(Authority.ADMIN)
+                //                                        .anyRequest()
+                //                                        .authenticated())
                 .build();
     }
 }

@@ -1,12 +1,14 @@
 package com.sparta.projectblue.domain.common.dto;
 
-import com.sparta.projectblue.domain.common.enums.UserRole;
-import lombok.Getter;
+import java.util.Collection;
+import java.util.List;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.util.Collection;
-import java.util.List;
+import com.sparta.projectblue.domain.common.enums.UserRole;
+
+import lombok.Getter;
 
 @Getter
 public class AuthUser {

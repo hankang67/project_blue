@@ -1,9 +1,10 @@
 package com.sparta.projectblue.domain.round.dto;
 
-import com.sparta.projectblue.domain.common.enums.PerformanceStatus;
-import lombok.Getter;
-
 import java.time.LocalDateTime;
+
+import com.sparta.projectblue.domain.common.enums.PerformanceStatus;
+
+import lombok.Getter;
 
 @Getter
 public class UpdateRoundResponseDto {
@@ -12,7 +13,8 @@ public class UpdateRoundResponseDto {
     private LocalDateTime date;
     private PerformanceStatus status;
 
-    public UpdateRoundResponseDto(Long id, Long performanceId, LocalDateTime date, PerformanceStatus status) {
+    public UpdateRoundResponseDto(
+            Long id, Long performanceId, LocalDateTime date, PerformanceStatus status) {
         this.id = id;
         this.performanceId = performanceId;
         this.date = date;

@@ -1,12 +1,13 @@
 package com.sparta.projectblue.domain.performance.dto;
 
+import java.time.LocalDateTime;
+
 import com.sparta.projectblue.domain.common.enums.Category;
 import com.sparta.projectblue.domain.hall.entity.Hall;
 import com.sparta.projectblue.domain.performance.entity.Performance;
 import com.sparta.projectblue.domain.poster.entity.Poster;
-import lombok.Getter;
 
-import java.time.LocalDateTime;
+import lombok.Getter;
 
 @Getter
 public class GetPerformanceResponseDto {

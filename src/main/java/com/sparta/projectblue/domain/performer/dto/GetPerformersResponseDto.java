@@ -1,9 +1,10 @@
 package com.sparta.projectblue.domain.performer.dto;
 
-import com.sparta.projectblue.domain.performer.entity.Performer;
-import lombok.Getter;
-
 import java.util.List;
+
+import com.sparta.projectblue.domain.performer.entity.Performer;
+
+import lombok.Getter;
 
 @Getter
 public class GetPerformersResponseDto {

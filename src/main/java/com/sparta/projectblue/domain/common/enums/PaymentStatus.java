@@ -13,5 +13,4 @@ public enum PaymentStatus {
     PaymentStatus(String value) {
         this.value = value;
     }
-
 }

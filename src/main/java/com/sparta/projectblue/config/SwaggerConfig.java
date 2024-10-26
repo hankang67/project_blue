@@ -1,12 +1,13 @@
 package com.sparta.projectblue.config;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class SwaggerConfig {
@@ -19,12 +20,16 @@ public class SwaggerConfig {
         SecurityRequirement securityRequirement = new SecurityRequirement().addList(jwt);
 
         // 보안 스키마를 구성합니다. 이 보안 스키마는 HTTP 타입으로 "bearer" 토큰을 사용.
-        Components components = new Components().addSecuritySchemes(jwt, new SecurityScheme()
-                .name(jwt) // 보안 스키마의 이름
-                .type(SecurityScheme.Type.HTTP) // HTTP 타입의 인증을 사용
-                .scheme("bearer") // Bearer 인증을 사용
-                .bearerFormat("JWT") // Bearer 인증에 사용하는 포맷을 JWT로 지정
-        );
+        Components components =
+                new Components()
+                        .addSecuritySchemes(
+                                jwt,
+                                new SecurityScheme()
+                                        .name(jwt) // 보안 스키마의 이름
+                                        .type(SecurityScheme.Type.HTTP) // HTTP 타입의 인증을 사용
+                                        .scheme("bearer") // Bearer 인증을 사용
+                                        .bearerFormat("JWT") // Bearer 인증에 사용하는 포맷을 JWT로 지정
+                                );
 
         // OpenAPI 객체를 생성하여 정보, 보안 설정, 컴포넌트를 추가합니다.
         return new OpenAPI()

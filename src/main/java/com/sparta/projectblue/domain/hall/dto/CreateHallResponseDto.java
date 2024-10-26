@@ -1,10 +1,10 @@
 package com.sparta.projectblue.domain.hall.dto;
 
-import com.sparta.projectblue.domain.hall.entity.Hall;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
 import java.time.LocalDateTime;
+
+import com.sparta.projectblue.domain.hall.entity.Hall;
+
+import lombok.Getter;
 
 @Getter
 public class CreateHallResponseDto {

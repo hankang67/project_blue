@@ -1,6 +1,7 @@
 package com.sparta.projectblue.domain.hall.dto;
 
 import jakarta.validation.constraints.NotNull;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,13 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CreateHallRequestDto {
 
-    @NotNull
-    private String name;
+    @NotNull private String name;
 
-    @NotNull
-    private String address;
+    @NotNull private String address;
 
-    @NotNull
-    private Integer seats;
-
+    @NotNull private Integer seats;
 }

@@ -1,9 +1,9 @@
 package com.sparta.projectblue.domain.common.generator;
 
+import java.util.UUID;
+
 import com.sparta.projectblue.domain.common.enums.UserRole;
 import com.sparta.projectblue.domain.user.entity.User;
-
-import java.util.UUID;
 
 public class DummyUserGenerator {
     // 더미 User 생성 메서드

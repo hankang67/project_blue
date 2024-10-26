@@ -1,15 +1,17 @@
 package com.sparta.projectblue.domain.performance.entity;
 
-import com.sparta.projectblue.domain.common.entity.BaseEntity;
-import com.sparta.projectblue.domain.common.enums.Category;
-import com.sparta.projectblue.domain.performance.dto.UpdatePerformanceRequestDto;
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+
+import jakarta.persistence.*;
+
+import com.sparta.projectblue.domain.common.entity.BaseEntity;
+import com.sparta.projectblue.domain.common.enums.Category;
+import com.sparta.projectblue.domain.performance.dto.UpdatePerformanceRequestDto;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
@@ -42,7 +44,15 @@ public class Performance extends BaseEntity {
     @Column(nullable = false)
     private int duration; // 러닝타임 분단위
 
-    public Performance(Long hallId, String title, LocalDateTime startDate, LocalDateTime endDate, Long price, Category category, String description, int duration) {
+    public Performance(
+            Long hallId,
+            String title,
+            LocalDateTime startDate,
+            LocalDateTime endDate,
+            Long price,
+            Category category,
+            String description,
+            int duration) {
         this.hallId = hallId;
         this.title = title;
         this.startDate = startDate;
