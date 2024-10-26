@@ -2,8 +2,8 @@ package com.sparta.projectblue.domain.review.controller;
 
 import com.sparta.projectblue.config.ApiResponse;
 import com.sparta.projectblue.domain.common.dto.AuthUser;
-import com.sparta.projectblue.domain.review.dto.CreateReviewDto;
-import com.sparta.projectblue.domain.review.dto.UpdateReviewDto;
+import com.sparta.projectblue.domain.review.dto.CreateReviewRequestDto;
+import com.sparta.projectblue.domain.review.dto.UpdateReviewRequestDto;
 import com.sparta.projectblue.domain.review.service.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,9 +24,9 @@ public class ReviewController {
     @Operation(summary = "관람평 작성", description = "예매한 공연에 관람평 작성 가능")
     public ResponseEntity<ApiResponse<?>> create(
             @AuthenticationPrincipal AuthUser authUser,
-            @RequestBody CreateReviewDto.Request request) {
-        CreateReviewDto.Response response = reviewService.create(authUser.getId(), request);
-        return ResponseEntity.ok(ApiResponse.success(response));
+            @RequestBody CreateReviewRequestDto request) {
+
+        return ResponseEntity.ok(ApiResponse.success(reviewService.create(authUser.getId(), request)));
     }
 
     @PutMapping("/{id}")
@@ -34,9 +34,8 @@ public class ReviewController {
     public ResponseEntity<ApiResponse<?>> update(
             @AuthenticationPrincipal AuthUser authUser,
             @PathVariable Long id,
-            @RequestBody UpdateReviewDto.Request requestDto) {
-        UpdateReviewDto.Response updatedReview = reviewService.update(authUser.getId(), id, requestDto);
-        return ResponseEntity.ok(ApiResponse.success(updatedReview));
+            @RequestBody UpdateReviewRequestDto requestDto) {
+        return ResponseEntity.ok(ApiResponse.success(reviewService.update(authUser.getId(), id, requestDto)));
     }
 
     @DeleteMapping("/{id}")
