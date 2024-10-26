@@ -21,7 +21,6 @@ public class SearchController {
 
     private final SearchService searchService;
 
-    // 필터링해서 검색
     @GetMapping
     @Operation(summary = "공연리스트 필터 조회", description = "현재 진행중인 공연 리스트 조건에 따라 출력")
     public ResponseEntity<ApiResponse<Page<PerformanceResponseDto>>> getFilterPerformances(

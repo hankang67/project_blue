@@ -45,7 +45,6 @@ public class ReservationController {
         return ResponseEntity.ok(ApiResponse.successWithNoContent());
     }
 
-    // 예매 전체 조회
     @GetMapping
     @Operation(summary = "예매 다건 조회", description = "authUser가 예매한 내역 다건")
     public ResponseEntity<ApiResponse<?>> getReservations(@AuthenticationPrincipal AuthUser authUser) {
@@ -53,7 +52,6 @@ public class ReservationController {
         return ResponseEntity.ok(ApiResponse.success(reservations));
     }
 
-    // 예매 상세 조회
     @GetMapping("/{id}")
     @Operation(summary = "예매 단건 조회", description = "authUser가 예매한 내역 단건")
     public ResponseEntity<ApiResponse<?>> getReservation(@AuthenticationPrincipal AuthUser authUser, @PathVariable Long id) {

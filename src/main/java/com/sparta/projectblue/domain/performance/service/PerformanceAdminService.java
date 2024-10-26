@@ -120,7 +120,6 @@ public class PerformanceAdminService {
         return "공연 ID : " + savedPerformance.getId() + ", 공연 이름 : " + savedPerformance.getTitle();
     }
 
-    // 공연 수정
     @Transactional
     public String update(AuthUser authUser, Long performanceId, PerformanceUpdateRequestDto requestDto) {
         hasRole(authUser);

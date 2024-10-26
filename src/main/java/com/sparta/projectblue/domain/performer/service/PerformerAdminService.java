@@ -20,12 +20,11 @@ public class PerformerAdminService {
 
     private final PerformerRepository performerRepository;
 
-    //배우 생성
     @Transactional
     public PerformerDetailDto.Response createPerformer(AuthUser authUser, @Valid PerformerDetailDto requestDto) {
         hasRole(authUser);
 
-        //생일관련 유효성검사
+        // 생일관련 유효성검사
         try {
             LocalDate birthDate = LocalDate.parse(requestDto.getBirth());
             if (birthDate.isBefore(LocalDate.of(1900, 1, 1)) || birthDate.isAfter(LocalDate.now())) {
@@ -40,7 +39,6 @@ public class PerformerAdminService {
         return new PerformerDetailDto.Response(savedPerformer.getName(), savedPerformer.getBirth(), savedPerformer.getNation());
     }
 
-    //배우 수정
     @Transactional
     public PerformerDetailDto.Response updatePerformer(AuthUser authUser, Long id, @Valid PerformerDetailDto requestDto) {
         hasRole(authUser);
@@ -66,7 +64,6 @@ public class PerformerAdminService {
         );
     }
 
-    //배우 삭제
     @Transactional
     public void deletePerformer(AuthUser authUser, Long id) {
         hasRole(authUser);

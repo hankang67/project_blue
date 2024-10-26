@@ -38,7 +38,7 @@ public class PosterService {
 
     @Transactional
     public String update(AuthUser authUser, Long posterId, MultipartFile file) {
-        // Admin권한 확인, security에서 검증하면 없어져도됨.
+
         performanceAdminService.hasRole(authUser);
 
         Poster poster = getPoster(posterId);

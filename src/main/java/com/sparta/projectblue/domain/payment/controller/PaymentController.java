@@ -31,25 +31,11 @@ public class PaymentController {
         return "/checkout";
     }
 
-    /**
-     * 인증성공처리
-     * @param request
-     * @param model
-     * @return
-     * @throws Exception
-     */
     @GetMapping("/payments/success")
     public String paymentRequest(HttpServletRequest request, Model model) throws Exception {
         return "/success";
     }
 
-    /**
-     * 인증실패처리
-     * @param request
-     * @param model
-     * @return
-     * @throws Exception
-     */
     @GetMapping("/fail")
     public String failPayment(HttpServletRequest request, Model model) throws Exception {
         String failCode = request.getParameter("code");
@@ -60,12 +46,4 @@ public class PaymentController {
 
         return "/fail";
     }
-
-//    @PostMapping("/cancel")
-//    public ResponseEntity<String> cancelPayment(
-//            @RequestParam String paymentKey,
-//            @RequestParam String cancelReason) throws Exception {
-//        String response = paymentService.cancelPayment(paymentKey, cancelReason);
-//        return ResponseEntity.ok(response);
-//    }
 }

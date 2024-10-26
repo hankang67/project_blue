@@ -47,7 +47,7 @@ public class User extends BaseEntity {
     }
 
     public void userDeleted() {
-        this.isDeleted = true; // 탈퇴 처리
+        this.isDeleted = true;
     }
 
     public void InsertKakaoId(Long kakaoId) {

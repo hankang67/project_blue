@@ -26,10 +26,6 @@ public class ReviewService {
         Reservation reservation = reservationRepository.findById(request.getReservationId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 예매를 찾을 수 없습니다."));
 
-//        if (!reservation.getUserId().equals(userId)) {
-//            throw new IllegalArgumentException("해당 예매의 사용자가 아닙니다.");
-//        }
-
         // 예매 상태가 COMPLETED 일 때만 리뷰를 등록할 수 있음
         if (!reservation.getStatus().equals(ReservationStatus.COMPLETED)) {
             throw new IllegalArgumentException("결제가 완료된 공연에 대해서만 리뷰를 작성할 수 있습니다.");

@@ -37,7 +37,6 @@ public class PerformanceService {
     private final ReviewRepository reviewRepository;
     private final RoundRepository roundRepository;
 
-    // 진행중인 전체 공연 리스트 출력
     public Page<PerformanceResponseDto> getPerformances(int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
 
@@ -46,7 +45,6 @@ public class PerformanceService {
         return performanceRepository.findByCondition(pageable, null, performanceDay, null);
     }
 
-    //공연 출연자 정보 조회
     public List<PerformerDetailDto> getPerformers(Long id) {
         PerformanceDetailDto performanceDetailDto = performanceRepository.findPerformanceDetailById(id);
         if (performanceDetailDto == null) {
@@ -55,7 +53,6 @@ public class PerformanceService {
         return performerRepository.findPerformersByPerformanceId(id);
     }
 
-    //공연 상세 정보 조회
     public PerformanceDetailDto getPerformance(Long id) {
         PerformanceDetailDto performanceDetailDto = performanceRepository.findPerformanceDetailById(id);
 

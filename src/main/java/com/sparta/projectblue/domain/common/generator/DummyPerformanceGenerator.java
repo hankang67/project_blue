@@ -1,4 +1,4 @@
-package com.sparta.projectblue.domain.dummy.generator;
+package com.sparta.projectblue.domain.common.generator;
 
 import com.sparta.projectblue.domain.common.enums.Category;
 import com.sparta.projectblue.domain.performance.entity.Performance;

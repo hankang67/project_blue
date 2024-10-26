@@ -163,7 +163,6 @@ public class ReservationService {
         reservation.resCanceled();
     }
 
-    //예매 내역 상세 조회
     public GetReservationDto.Response getReservation(AuthUser user, Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(()->
                 new IllegalArgumentException("예약 내역을 찾을 수 없습니다"));
@@ -207,7 +206,6 @@ public class ReservationService {
         );
     }
 
-    // 예매 내역 전체 조회
     public List<GetReservationsDto.Response> getReservations(Long userId) {
         // 예약 가져옴
         List<Reservation> reservations = reservationRepository.findByUserId(userId);

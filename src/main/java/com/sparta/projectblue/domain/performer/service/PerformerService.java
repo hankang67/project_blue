@@ -14,7 +14,6 @@ public class PerformerService {
 
     private final PerformerRepository performerRepository;
 
-    //배우 조회
     @Transactional(readOnly = true)
     public PerformerDetailDto.Response getPerformer(Long id) {
         Performer performer = performerRepository.findById(id)

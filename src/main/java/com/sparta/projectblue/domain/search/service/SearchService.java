@@ -20,15 +20,6 @@ public class SearchService {
 
     private final PerformanceRepository performanceRepository;
 
-    /**
-     * 공연 리스트 출력
-     *
-     * @param page
-     * @param size          : 한 페이지에 나타날 공연 갯수
-     * @param performanceNm : 검색할 공연의 이름
-     * @param userSelectDay : 검색할 공연의 날짜
-     * @return : 공연 정보(공연 이름, 공연장, 시작 날짜, 끝 날짜)
-     */
     public Page<PerformanceResponseDto> searchPerformances(int page, int size, String performanceNm, String userSelectDay, String performer) {
         Pageable pageable = PageRequest.of(page - 1, size);
 

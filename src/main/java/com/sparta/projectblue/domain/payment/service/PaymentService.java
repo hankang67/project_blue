@@ -50,7 +50,7 @@ public class PaymentService {
         String amount;
         String paymentKey;
         try {
-            // 클라이언트에서 받은 JSON 요청 바디입니다.
+            // 클라이언트에서 받은 JSON 요청 바디
             JSONObject requestData = (JSONObject) parser.parse(jsonBody);
             paymentKey = (String) requestData.get("paymentKey");
             orderId = (String) requestData.get("orderId");
@@ -70,8 +70,7 @@ public class PaymentService {
 
         String authorizations = secretKeyEncoder();
 
-        // 결제 승인 API를 호출하세요.
-        // 결제를 승인하면 결제수단에서 금액이 차감돼요.
+        // 결제 승인 API 호출
         // @docs https://docs.tosspayments.com/guides/v2/payment-widget/integration#3-결제-승인하기
         URL url = new URL(TOSS_BASIC_URL + "confirm");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -88,16 +87,9 @@ public class PaymentService {
 
         InputStream responseStream = isSuccess ? connection.getInputStream() : connection.getErrorStream();
 
-        // TODO: 결제 성공 및 실패 비즈니스 로직을 구현하세요.
         Reader reader = new InputStreamReader(responseStream, StandardCharsets.UTF_8);
         JSONObject jsonObject = (JSONObject) parser.parse(reader);
         responseStream.close();
-
-        if(!verifyPayment(orderId, Long.parseLong(amount))) {
-            // 결제 취소 부탁드립니다
-            cancelPayment(paymentKey, "wrong orderId!!!!!!!!!");
-            throw new PaymentException("주문ID에 대한 가격이 상이합니다.");
-        } // 별 필요 없을듯
 
         if (isSuccess) {
             // 결제 승인 후 처리
@@ -129,8 +121,6 @@ public class PaymentService {
                 (Long) jsonObject.get("vat"),
                 approvedAt.toLocalDateTime()
         );
-        // 실패된 결제는 유지 status값 추가
-
         reservation.addPaymentId(payment.getId());
 
         reservation.resCompleted();
@@ -138,7 +128,7 @@ public class PaymentService {
 
     @Transactional
     public String cancelPayment(String paymentKey, String cancelReason) throws Exception {
-        // 취소 API 호출 URL
+        // 취소 API 호출
         URL url = new URL(TOSS_BASIC_URL + paymentKey + "/cancel");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestProperty("Authorization", secretKeyEncoder());
@@ -155,11 +145,6 @@ public class PaymentService {
 
         int code = connection.getResponseCode();
         boolean isSuccess = code == 200;
-
-//        InputStream responseStream = isSuccess ? connection.getInputStream() : connection.getErrorStream();
-//        Reader reader = new InputStreamReader(responseStream, StandardCharsets.UTF_8);
-//        JSONParser parser = new JSONParser();
-//        JSONObject jsonObject = (JSONObject) parser.parse(reader);
 
         if (isSuccess) {
             // payment 상태 취소 변경

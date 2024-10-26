@@ -27,7 +27,6 @@ public class UpdateReviewDto {
         private final ReviewRate reviewRate;
         private final String contents;
 
-        // 생성자를 클래스 내부로 이동
         public Response(Review review) {
             this.id = review.getId();
             this.performanceId = review.getPerformanceId();

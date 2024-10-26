@@ -20,7 +20,6 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    // 리뷰 생성
     @PostMapping
     @Operation(summary = "관람평 작성", description = "예매한 공연에 관람평 작성 가능")
     public ResponseEntity<ApiResponse<?>> create(
@@ -30,7 +29,6 @@ public class ReviewController {
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
-    // 리뷰 수정
     @PutMapping("/{id}")
     @Operation(summary = "관람평 수정")
     public ResponseEntity<ApiResponse<?>> update(
@@ -41,7 +39,6 @@ public class ReviewController {
         return ResponseEntity.ok(ApiResponse.success(updatedReview));
     }
 
-    // 리뷰 삭제
     @DeleteMapping("/{id}")
     @Operation(summary = "관람평 삭제")
     public ResponseEntity<ApiResponse<?>> delete(

@@ -33,7 +33,6 @@ public class RoundController {
     @Operation(summary = "공연별 다건 회차 등록", description = "공연별 다건 회차를 등록합니다.")
     public ResponseEntity<ApiResponse<?>> createRound(
             @Valid @RequestBody CreateRoundsDto.Request requestDto) {
-        // 2024-10-25T16:00:00
         List<CreateRoundsDto.Response> responseDto = roundService.createRounds(requestDto.getPerformanceId(), requestDto);
 
         return ResponseEntity.ok(ApiResponse.success(responseDto));

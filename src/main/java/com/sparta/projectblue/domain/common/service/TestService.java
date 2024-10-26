@@ -49,6 +49,7 @@ public class TestService {
 
     public void test() {
 
+        // 사용자
         IntStream.range(0, 10).forEach(i -> {
             User user = new User( "user" + i + "@example.com","User" + i, passwordEncoder.encode("abc123?!"), UserRole.ROLE_USER);
             userRepository.save(user);
@@ -104,12 +105,6 @@ public class TestService {
             ReservedSeat reservedSeat = new ReservedSeat(reservation.getId(), 1L, i + 1);
             reservedSeatRepository.save(reservedSeat);
         });
-
-//        // 결제
-//        IntStream.range(0, 10).forEach(i -> {
-//            Payment payment = new Payment("Card", "TXID" + i, "Credit Card", 5000 + i * 100, LocalDateTime.now());
-//            paymentRepository.save(payment);
-//        });
 
         // 리뷰 생성
         IntStream.range(0, 10).forEach(i -> {

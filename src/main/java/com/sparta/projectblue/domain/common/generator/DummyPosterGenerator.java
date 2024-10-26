@@ -1,4 +1,4 @@
-package com.sparta.projectblue.domain.dummy.generator;
+package com.sparta.projectblue.domain.common.generator;
 
 import com.sparta.projectblue.domain.poster.entity.Poster;
 

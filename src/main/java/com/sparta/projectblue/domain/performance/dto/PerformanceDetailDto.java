@@ -20,7 +20,6 @@ public class PerformanceDetailDto {
     private String posterName;
     private String imageUrl;
 
-    // 지우지 마세요. 쿼리에서 써요.
     public PerformanceDetailDto(String title, LocalDateTime startDate, LocalDateTime endDate, Long price, String category, String description, int duration, String hallName,String posterName, String imageUrl) {
         this.title = title;
         this.startDate = startDate;
