@@ -104,15 +104,7 @@ public class RoundService {
 
         List<Round> savedRounds = roundRepository.saveAll(newRounds);
 
-        return savedRounds.stream()
-                .map(
-                        round ->
-                                new CreateRoundResponseDto(
-                                        round.getId(),
-                                        round.getPerformanceId(),
-                                        round.getDate(),
-                                        round.getStatus()))
-                .collect(Collectors.toList());
+        return savedRounds.stream().map(CreateRoundResponseDto::new).collect(Collectors.toList());
     }
 
     @Transactional
@@ -133,8 +125,7 @@ public class RoundService {
         round.updateStatus(request.getStatus());
         roundRepository.save(round);
 
-        return new UpdateRoundResponseDto(
-                round.getId(), round.getPerformanceId(), round.getDate(), round.getStatus());
+        return new UpdateRoundResponseDto(round);
     }
 
     @Transactional
