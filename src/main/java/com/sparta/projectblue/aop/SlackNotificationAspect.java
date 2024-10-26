@@ -81,8 +81,8 @@ public class SlackNotificationAspect {
         }
     }
 
-    @AfterReturning(pointcut = "deleteMessagePointcut()", returning = "result")
-    public void deleteSend(JoinPoint joinPoint, Object result) {
+    @AfterReturning(pointcut = "deleteMessagePointcut()")
+    public void deleteSend(JoinPoint joinPoint) {
         DeleteReservationRequestDto request = (DeleteReservationRequestDto) joinPoint.getArgs()[1];
 
         // 예약 정보를 가져오기 위해 ID를 사용
