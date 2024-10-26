@@ -14,6 +14,4 @@ public interface PerformerPerformanceRepository extends JpaRepository<PerformerP
 
     Optional<PerformerPerformance> findByPerformanceIdAndPerformerId(
             Long performanceId, Long performerId);
-
-    List<PerformerPerformance> findByPerformanceId(Long performanceId);
 }
