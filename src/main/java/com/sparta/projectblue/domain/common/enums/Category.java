@@ -4,7 +4,6 @@ import lombok.Getter;
 
 @Getter
 public enum Category {
-
     CONCERT("콘서트"),
     MUSICAL("뮤지컬"),
     SPORTS("스포츠");

@@ -4,7 +4,6 @@ import lombok.Getter;
 
 @Getter
 public enum PerformanceStatus {
-
     BEFORE_OPEN("예매오픈전"),
     AVAILABLE("예매가능"),
     SOLD_OUT("매진");

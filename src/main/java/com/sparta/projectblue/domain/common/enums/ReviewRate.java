@@ -4,7 +4,6 @@ import lombok.Getter;
 
 @Getter
 public enum ReviewRate {
-
     ZERO("0점"),
     ONE("1점"),
     TWO("2점"),

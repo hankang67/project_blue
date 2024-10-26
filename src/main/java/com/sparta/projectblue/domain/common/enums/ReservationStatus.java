@@ -4,7 +4,6 @@ import lombok.Getter;
 
 @Getter
 public enum ReservationStatus {
-
     PENDING("결제대기"),
     COMPLETED("예매완료"),
     CANCELED("예매취소");

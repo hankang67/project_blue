@@ -9,7 +9,6 @@ import lombok.Getter;
 public class ApiResponse<T> {
 
     public enum Status {
-
         SUCCESS,
         ERROR
     }
