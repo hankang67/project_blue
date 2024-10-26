@@ -48,6 +48,7 @@ public class PaymentService {
 
     @Transactional
     public JSONObject confirmPayment(String jsonBody) throws Exception {
+
         JSONParser parser = new JSONParser();
         String orderId;
         String amount;
@@ -106,6 +107,7 @@ public class PaymentService {
 
     @Transactional
     public void savePayment(JSONObject jsonObject) {
+
         String orderId = (String) jsonObject.get("orderId");
 
         Long reservationId = Long.parseLong(orderId.substring(23));
@@ -136,6 +138,7 @@ public class PaymentService {
 
     @Transactional
     public String cancelPayment(String paymentKey, String cancelReason) throws Exception {
+
         // 취소 API 호출
         URL url = new URL(TOSS_BASIC_URL + paymentKey + "/cancel");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -169,6 +172,7 @@ public class PaymentService {
 
     @Transactional
     public PaymentResponseDto setValue(Long reservationId) {
+
         Reservation reservation =
                 reservationRepository
                         .findById(reservationId)
@@ -207,6 +211,7 @@ public class PaymentService {
     }
 
     public String secretKeyEncoder() {
+
         // 토스페이먼츠 API는 시크릿 키를 사용자 ID로 사용하고, 비밀번호는 사용하지 않습니다.
         // 비밀번호가 없다는 것을 알리기 위해 시크릿 키 뒤에 콜론을 추가합니다.
         // @docs https://docs.tosspayments.com/reference/using-api/authorization#%EC%9D%B8%EC%A6%9D
@@ -217,6 +222,7 @@ public class PaymentService {
     }
 
     private boolean verifyPayment(String orderId, Long amount) {
+
         Payment payment =
                 paymentRepository
                         .findByOrderId(orderId)

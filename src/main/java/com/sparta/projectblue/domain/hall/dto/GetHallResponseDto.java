@@ -13,6 +13,7 @@ public class GetHallResponseDto {
     private final Integer seats;
 
     public GetHallResponseDto(Hall hall) {
+
         this.id = hall.getId();
         this.name = hall.getName();
         this.address = hall.getAddress();

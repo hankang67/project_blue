@@ -22,6 +22,7 @@ public class PerformerPerformance extends BaseEntity {
     private Long performanceId;
 
     public PerformerPerformance(Long performerId, Long performanceId) {
+
         this.performerId = performerId;
         this.performanceId = performanceId;
     }

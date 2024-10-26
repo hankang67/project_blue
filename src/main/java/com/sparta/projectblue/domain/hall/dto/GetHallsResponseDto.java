@@ -11,6 +11,7 @@ public class GetHallsResponseDto {
     private final Integer seats;
 
     public GetHallsResponseDto(Hall hall) {
+
         this.name = hall.getName();
         this.seats = hall.getSeats();
     }

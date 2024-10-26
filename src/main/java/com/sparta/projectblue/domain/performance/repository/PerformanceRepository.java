@@ -8,5 +8,6 @@ import com.sparta.projectblue.domain.performance.entity.Performance;
 
 public interface PerformanceRepository
         extends JpaRepository<Performance, Long>, PerformanceQueryRepository {
+
     List<Performance> findAllById(Long performanceId);
 }

@@ -34,6 +34,7 @@ public class RoundService {
     private final ReservedSeatRepository reservedSeatRepository;
 
     public GetRoundAvailableSeatsResponseDto getAvailableSeats(Long id) {
+
         // 회차 가져옴
         Round round =
                 roundRepository
@@ -84,6 +85,7 @@ public class RoundService {
 
     @Transactional
     public List<CreateRoundResponseDto> createRounds(Long id, CreateRoundRequestDto request) {
+
         // 공연 존재 여부 확인
         if (performanceRepository.findById(id).isEmpty()) {
             throw new IllegalArgumentException("공연을 찾을 수 없습니다");
@@ -109,6 +111,7 @@ public class RoundService {
 
     @Transactional
     public UpdateRoundResponseDto updateRound(Long id, UpdateRoundRequestDto request) {
+
         // 회차 가져옴
         Round round =
                 roundRepository
@@ -122,7 +125,9 @@ public class RoundService {
         }
 
         round.updateDate(request.getDate());
+
         round.updateStatus(request.getStatus());
+
         roundRepository.save(round);
 
         return new UpdateRoundResponseDto(round);
@@ -130,6 +135,7 @@ public class RoundService {
 
     @Transactional
     public void deleteRound(Long id) {
+
         Round round =
                 roundRepository
                         .findById(id)

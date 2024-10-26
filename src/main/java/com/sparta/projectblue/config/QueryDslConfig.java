@@ -16,6 +16,7 @@ public class QueryDslConfig {
 
     @Bean
     public JPAQueryFactory jpaQueryFactory() {
+
         return new JPAQueryFactory(JPQLTemplates.DEFAULT, em);
     }
 }

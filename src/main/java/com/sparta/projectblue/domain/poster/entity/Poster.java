@@ -28,6 +28,7 @@ public class Poster extends BaseEntity {
     private Long fileSize;
 
     public Poster(Long performanceId, String name, String imageUrl, Long fileSize) {
+
         this.performanceId = performanceId;
         this.name = name;
         this.imageUrl = imageUrl;
@@ -35,6 +36,7 @@ public class Poster extends BaseEntity {
     }
 
     public void update(String name, String imageUrl, Long fileSize) {
+
         this.name = name;
         this.imageUrl = imageUrl;
         this.fileSize = fileSize;

@@ -24,13 +24,16 @@ public class HallController {
     public ResponseEntity<ApiResponse<?>> getHalls(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
+
         return ResponseEntity.ok(ApiResponse.success(hallService.getHalls(page, size)));
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "공연장 단건 조회")
     public ResponseEntity<ApiResponse<?>> getHall(@PathVariable("id") Long id) {
+
         GetHallResponseDto getHallResponseDto = hallService.getHall(id);
+
         return ResponseEntity.ok(ApiResponse.success(getHallResponseDto));
     }
 }

@@ -29,6 +29,7 @@ public class PerformerAdminController {
     public ResponseEntity<ApiResponse<?>> createPerformer(
             @AuthenticationPrincipal AuthUser authUser,
             @Valid @RequestBody CreatePerformerRequestDto request) {
+
         return ResponseEntity.ok(
                 ApiResponse.success(performerAdminService.createPerformer(authUser, request)));
     }
@@ -39,6 +40,7 @@ public class PerformerAdminController {
             @AuthenticationPrincipal AuthUser authUser,
             @PathVariable Long id,
             @Valid @RequestBody UpdatePerformerRequestDto request) {
+
         return ResponseEntity.ok(
                 ApiResponse.success(performerAdminService.updatePerformer(authUser, id, request)));
     }
@@ -47,7 +49,9 @@ public class PerformerAdminController {
     @Operation(summary = "배우 삭제", description = "기존 배우 정보를 삭제합니다.")
     public ResponseEntity<ApiResponse<?>> deletePerformer(
             @AuthenticationPrincipal AuthUser authUser, @PathVariable Long id) {
+
         performerAdminService.deletePerformer(authUser, id);
+
         return ResponseEntity.ok(ApiResponse.successWithNoContent());
     }
 }

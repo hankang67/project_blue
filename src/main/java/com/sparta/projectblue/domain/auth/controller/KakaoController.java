@@ -21,12 +21,14 @@ public class KakaoController {
 
     @GetMapping("/kakao")
     public String kakaoConnect() {
+
         return kakaoService.kakaoLogin();
     }
 
     @GetMapping("/kakaoCallback")
     public ResponseEntity<ApiResponse<String>> kakaoSignin(HttpServletRequest request)
             throws Exception {
+
         return ResponseEntity.ok(
                 ApiResponse.success(kakaoService.callback(request.getParameter("code"))));
     }

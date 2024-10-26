@@ -58,6 +58,7 @@ public class PerformanceAdminService {
     @Transactional
     public CreatePerformanceResponseDto create(
             AuthUser authUser, CreatePerformanceRequestDto request, MultipartFile posterFile) {
+
         hasRole(authUser);
 
         if (!hallRepository.existsById(request.getHallId())) {
@@ -112,7 +113,6 @@ public class PerformanceAdminService {
             log.info("File uploaded successfully.");
 
             posterUrl = amazonS3.getUrl(bucket, posterName).toString();
-
         } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
         }
@@ -129,6 +129,7 @@ public class PerformanceAdminService {
     @Transactional
     public UpdatePerformanceResponseDto update(
             AuthUser authUser, Long performanceId, UpdatePerformanceRequestDto requestDto) {
+
         hasRole(authUser);
 
         Performance performance =
@@ -156,6 +157,7 @@ public class PerformanceAdminService {
 
     @Transactional
     public void delete(AuthUser authUser, Long performanceId) {
+
         hasRole(authUser);
 
         List<Performance> performances = performanceRepository.findAllById(performanceId);
@@ -185,12 +187,14 @@ public class PerformanceAdminService {
     }
 
     public void hasRole(AuthUser authUser) {
+
         if (!authUser.hasRole(UserRole.ROLE_ADMIN)) {
             throw new IllegalArgumentException("관리자만 접근할 수 있습니다.");
         }
     }
 
     private void deletePerformerPerformance(Long performanceId) {
+
         List<PerformerPerformance> performerPerformances =
                 performerPerformanceRepository.findAllByPerformanceId(performanceId);
 
@@ -202,11 +206,13 @@ public class PerformanceAdminService {
     }
 
     public String createFileName(String fileName) {
+
         // aws 업로드를 위한 unique name 생성
         return UUID.randomUUID().toString().concat(getFileExtension(fileName));
     }
 
     private String getFileExtension(String fileName) {
+
         try {
             return fileName.substring(fileName.lastIndexOf("."));
         } catch (StringIndexOutOfBoundsException e) {
@@ -217,12 +223,15 @@ public class PerformanceAdminService {
 
     @Transactional
     public void addPerformer(Long performanceId, Long performerId) {
+
         if (performanceRepository.findById(performanceId).isEmpty()) {
             throw new IllegalArgumentException("공연을 찾을 수 없습니다");
         }
+
         if (performerRepository.findById(performerId).isEmpty()) {
             throw new IllegalArgumentException("공연을 찾을 수 없습니다");
         }
+
         if (performerPerformanceRepository.existsByPerformanceIdAndPerformerId(
                 performanceId, performerId)) {
             throw new IllegalArgumentException("해당 배우는 이미 이 공연에 등록되어 있습니다.");
@@ -230,17 +239,21 @@ public class PerformanceAdminService {
 
         PerformerPerformance performerPerformance =
                 new PerformerPerformance(performerId, performanceId);
+
         performerPerformanceRepository.save(performerPerformance);
     }
 
     @Transactional
     public void removePerformer(Long performanceId, Long performerId) {
+
         if (performanceRepository.findById(performanceId).isEmpty()) {
             throw new IllegalArgumentException("공연을 찾을 수 없습니다");
         }
+
         if (performerRepository.findById(performerId).isEmpty()) {
             throw new IllegalArgumentException("공연을 찾을 수 없습니다");
         }
+
         PerformerPerformance performerPerformance =
                 performerPerformanceRepository
                         .findByPerformanceIdAndPerformerId(performanceId, performerId)

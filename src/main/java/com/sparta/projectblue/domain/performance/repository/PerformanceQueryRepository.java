@@ -10,6 +10,7 @@ import com.sparta.projectblue.domain.performance.dto.GetPerformancePerformersRes
 import com.sparta.projectblue.domain.performance.dto.GetPerformancesResponseDto;
 
 public interface PerformanceQueryRepository {
+
     Page<GetPerformancesResponseDto> findByCondition(
             Pageable pageable,
             String performanceNm,

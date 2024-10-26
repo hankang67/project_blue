@@ -22,6 +22,7 @@ public class UserService {
 
     @Transactional
     public void deleteUser(AuthUser authUser, DeleteUserRequestDto request) {
+
         User user =
                 userRepository
                         .findById(authUser.getId())

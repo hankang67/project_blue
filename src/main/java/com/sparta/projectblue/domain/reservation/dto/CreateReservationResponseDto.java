@@ -9,6 +9,7 @@ import lombok.Getter;
 
 @Getter
 public class CreateReservationResponseDto {
+
     private final Long id;
     private final String performanceTitle;
     private final LocalDateTime roundDate;
@@ -23,6 +24,7 @@ public class CreateReservationResponseDto {
             List<Integer> seats,
             Long price,
             ReservationStatus status) {
+
         this.id = id;
         this.performanceTitle = performanceTitle;
         this.roundDate = roundDate;

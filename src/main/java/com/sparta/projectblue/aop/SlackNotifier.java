@@ -16,6 +16,7 @@ public class SlackNotifier {
     private String slackWebhookUrl;
 
     public void sendMessage(String title, String message) {
+
         Map<String, Object> payload = new HashMap<>();
 
         String formattedMessage = "*" + title + "*\n" + message;

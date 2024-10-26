@@ -29,6 +29,7 @@ public class SearchController {
             @RequestParam(required = false) String performanceNm,
             @RequestParam(required = false) String userSelectDay,
             @RequestParam(required = false) String performer) {
+
         return ResponseEntity.ok(
                 ApiResponse.success(
                         searchService.searchPerformances(

@@ -77,6 +77,7 @@ public class PosterService {
     }
 
     private Poster getPoster(Long posterId) {
+
         return posterRepository
                 .findById(posterId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 포스터입니다."));

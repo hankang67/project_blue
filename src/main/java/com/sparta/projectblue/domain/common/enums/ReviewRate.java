@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum ReviewRate {
+
     ZERO("0점"),
     ONE("1점"),
     TWO("2점"),
@@ -14,6 +15,7 @@ public enum ReviewRate {
     private final String value;
 
     ReviewRate(String value) {
+
         this.value = value;
     }
 }

@@ -31,6 +31,7 @@ public class PerformanceAdminController {
             @AuthenticationPrincipal AuthUser authUser,
             @RequestPart("data") CreatePerformanceRequestDto request,
             @RequestPart("file") MultipartFile posterFile) {
+
         return ResponseEntity.ok(
                 ApiResponse.success(performanceAdminService.create(authUser, request, posterFile)));
     }
@@ -41,6 +42,7 @@ public class PerformanceAdminController {
             @AuthenticationPrincipal AuthUser authUser,
             @PathVariable Long id,
             @Valid @RequestBody UpdatePerformanceRequestDto requestDto) {
+
         return ResponseEntity.ok(
                 ApiResponse.success(performanceAdminService.update(authUser, id, requestDto)));
     }
@@ -49,7 +51,9 @@ public class PerformanceAdminController {
     @Operation(summary = "공연 삭제")
     public ResponseEntity<ApiResponse<?>> delete(
             @AuthenticationPrincipal AuthUser authUser, @PathVariable Long id) {
+
         performanceAdminService.delete(authUser, id);
+
         return ResponseEntity.ok(ApiResponse.successWithNoContent());
     }
 
@@ -57,7 +61,9 @@ public class PerformanceAdminController {
     @Operation(summary = "배우 공연 등록", description = "공연에 배우를 등록합니다.")
     public ResponseEntity<ApiResponse<?>> addPerformer(
             @PathVariable Long id, @RequestParam Long performerId) {
+
         performanceAdminService.addPerformer(id, performerId);
+
         return ResponseEntity.ok(ApiResponse.successWithNoContent());
     }
 
@@ -65,7 +71,9 @@ public class PerformanceAdminController {
     @Operation(summary = "배우 공연 삭제", description = "공연에 등록된 배우를 삭제합니다.")
     public ResponseEntity<ApiResponse<?>> removePerformerFromPerformance(
             @PathVariable Long id, @PathVariable Long performerId) {
+
         performanceAdminService.removePerformer(id, performerId);
+
         return ResponseEntity.ok(ApiResponse.successWithNoContent());
     }
 }

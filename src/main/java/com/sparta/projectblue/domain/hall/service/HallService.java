@@ -21,12 +21,14 @@ public class HallService {
     private final HallRepository hallRepository;
 
     public Page<GetHallsResponseDto> getHalls(int page, int size) {
+
         Pageable pageable = PageRequest.of(page - 1, size);
 
         return hallRepository.findAll(pageable).map(GetHallsResponseDto::new);
     }
 
     public GetHallResponseDto getHall(Long id) {
+
         Hall hall = hallRepository.findByIdOrElseThrow(id);
 
         return new GetHallResponseDto(hall);

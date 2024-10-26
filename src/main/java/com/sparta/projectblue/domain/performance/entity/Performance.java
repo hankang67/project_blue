@@ -53,6 +53,7 @@ public class Performance extends BaseEntity {
             Category category,
             String description,
             int duration) {
+
         this.hallId = hallId;
         this.title = title;
         this.startDate = startDate;
@@ -64,6 +65,7 @@ public class Performance extends BaseEntity {
     }
 
     public void update(UpdatePerformanceRequestDto requestDto) {
+
         this.hallId = requestDto.getHallId();
         this.title = requestDto.getTitle();
         this.startDate = LocalDate.parse(requestDto.getStartDate()).atStartOfDay();

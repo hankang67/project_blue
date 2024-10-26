@@ -8,12 +8,14 @@ import lombok.Getter;
 
 @Getter
 public class GetPerformerResponseDto {
+
     private final String name;
     private final String nation;
     private final String birth;
     private final LocalDateTime createdAt;
 
     public GetPerformerResponseDto(Performer performer) {
+
         this.name = performer.getName();
         this.nation = performer.getNation();
         this.birth = performer.getBirth();

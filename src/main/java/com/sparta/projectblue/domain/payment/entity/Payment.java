@@ -55,6 +55,7 @@ public class Payment extends BaseEntity {
 
     public Payment(
             Long userId, Long reservationId, Long performanceId, Long amountTotal, String orderId) {
+
         this.userId = userId;
         this.reservationId = reservationId;
         this.performanceId = performanceId;
@@ -70,6 +71,7 @@ public class Payment extends BaseEntity {
             Long amountSupplied,
             Long amountVat,
             LocalDateTime approvedAt) {
+
         this.paymentKey = paymentKey;
         this.type = type;
         this.method = method;
@@ -80,6 +82,7 @@ public class Payment extends BaseEntity {
     }
 
     public void canceled() {
+
         this.status = PaymentStatus.CANCELED;
     }
 }

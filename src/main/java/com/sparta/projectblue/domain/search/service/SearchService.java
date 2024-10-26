@@ -24,6 +24,7 @@ public class SearchService {
 
     public Page<GetPerformancesResponseDto> searchPerformances(
             int page, int size, String performanceNm, String userSelectDay, String performer) {
+
         Pageable pageable = PageRequest.of(page - 1, size);
 
         LocalDateTime performanceDay =

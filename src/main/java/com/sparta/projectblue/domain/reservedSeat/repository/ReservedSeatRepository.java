@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.sparta.projectblue.domain.reservedSeat.entity.ReservedSeat;
 
 public interface ReservedSeatRepository extends JpaRepository<ReservedSeat, Long> {
+
     Optional<ReservedSeat> findByRoundIdAndSeatNumber(Long roundId, Integer seatNumber);
 
     List<ReservedSeat> findByReservationId(Long reservationId);

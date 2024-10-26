@@ -21,6 +21,7 @@ public class PerformerService {
     private final PerformerRepository performerRepository;
 
     public GetPerformerResponseDto getPerformer(Long id) {
+
         Performer performer =
                 performerRepository
                         .findById(id)
@@ -30,6 +31,7 @@ public class PerformerService {
     }
 
     public GetPerformersResponseDto getPerformers() {
+
         List<GetPerformersResponseDto.PerformerInfo> performers =
                 performerRepository.findAll().stream()
                         .map(GetPerformersResponseDto.PerformerInfo::new)

@@ -8,6 +8,7 @@ import lombok.Getter;
 
 @Getter
 public class CreatePerformerResponseDto {
+
     private final Long id;
     private final String name;
     private final String birth;
@@ -15,6 +16,7 @@ public class CreatePerformerResponseDto {
     private final LocalDateTime createdAt;
 
     public CreatePerformerResponseDto(Performer performer) {
+
         this.id = performer.getId();
         this.name = performer.getName();
         this.birth = performer.getBirth();

@@ -16,6 +16,7 @@ public class CreateHallResponseDto {
     private final LocalDateTime createdAt;
 
     public CreateHallResponseDto(Hall hall) {
+
         this.id = hall.getId();
         this.name = hall.getName();
         this.address = hall.getAddress();

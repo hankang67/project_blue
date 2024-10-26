@@ -25,11 +25,12 @@ public class GetReservationsResponseDto {
             String hallName,
             LocalDateTime round,
             ReservationStatus status) {
+
         this.performanceTitle = performanceTitle;
         this.tickets = tickets;
         this.reservationId = reservationId;
         this.reservationDate = reservationDate;
-        HallName = hallName;
+        this.HallName = hallName;
         this.round = round;
         this.status = status;
     }

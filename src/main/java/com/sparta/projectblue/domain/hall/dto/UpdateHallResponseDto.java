@@ -17,6 +17,7 @@ public class UpdateHallResponseDto {
     private final LocalDateTime modifiedAt;
 
     public UpdateHallResponseDto(Hall hall) {
+
         this.id = hall.getId();
         this.name = hall.getName();
         this.address = hall.getAddress();

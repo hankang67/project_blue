@@ -21,11 +21,13 @@ public class GetPerformancePerformersResponseDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class PerformerInfo {
+
         private String name;
         private String nation;
         private String birth;
 
         public PerformerInfo(Performer performer) {
+
             this.name = performer.getName();
             this.nation = performer.getNation();
             this.birth = performer.getBirth();

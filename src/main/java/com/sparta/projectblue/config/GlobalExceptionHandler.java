@@ -15,19 +15,25 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiResponse<?>> handleInvalidRequestException(
             IllegalArgumentException ex) {
+
         HttpStatus status = HttpStatus.BAD_REQUEST;
+
         return getErrorResponse(status, ex.getMessage());
     }
 
     @ExceptionHandler(AuthException.class)
     public ResponseEntity<ApiResponse<?>> handleAuthException(AuthException ex) {
+
         HttpStatus status = HttpStatus.UNAUTHORIZED;
+
         return getErrorResponse(status, ex.getMessage());
     }
 
     @ExceptionHandler(PaymentException.class)
     public ResponseEntity<ApiResponse<?>> handlePaymentException(AuthException ex) {
+
         HttpStatus status = HttpStatus.PAYMENT_REQUIRED;
+
         return getErrorResponse(status, ex.getMessage());
     }
 

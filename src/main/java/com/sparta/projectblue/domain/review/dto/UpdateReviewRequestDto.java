@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateReviewRequestDto {
+
     @NotNull private ReviewRate reviewRate;
 
     @NotNull private String contents;

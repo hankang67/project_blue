@@ -7,6 +7,7 @@ import lombok.Getter;
 
 @Getter
 public class CreateReviewResponseDto {
+
     private final Long id;
     private final Long performanceId;
     private final Long reservationId;
@@ -14,6 +15,7 @@ public class CreateReviewResponseDto {
     private final String contents;
 
     public CreateReviewResponseDto(Review review) {
+
         this.id = review.getId();
         this.performanceId = review.getPerformanceId();
         this.reservationId = review.getReservationId();

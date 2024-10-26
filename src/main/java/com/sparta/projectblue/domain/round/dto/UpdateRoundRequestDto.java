@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateRoundRequestDto {
+
     private LocalDateTime date;
     private PerformanceStatus status;
 }

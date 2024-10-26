@@ -11,9 +11,11 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 
 @Configuration
 public class SwaggerConfig {
+
     // OpenAPI 객체를 Bean으로 등록하여 Swagger 설정을 초기화합니다.
     @Bean
     public OpenAPI openAPI() {
+
         String jwt = "JWT"; // JWT라는 이름의 보안 스키마를 정의합니다.
 
         // 보안 요구사항 설정: "JWT"를 사용하여 보안 요구사항을 설정.
@@ -41,6 +43,7 @@ public class SwaggerConfig {
 
     // API의 기본 정보를 설정합니다. 제목, 설명, 버전을 명시합니다.
     private Info apiInfo() {
+
         return new Info()
                 .title("API Test") // API의 제목을 "API Test"로 설정
                 .description("프로젝트 블루 테스트") // API에 대한 설명을 추가

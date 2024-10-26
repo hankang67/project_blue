@@ -25,12 +25,14 @@ public class Hall extends BaseEntity {
     private int seats;
 
     public Hall(String name, String address, int seats) {
+
         this.name = name;
         this.address = address;
         this.seats = seats;
     }
 
     public void update(String name, String address, int seats) {
+
         this.name = name;
         this.address = address;
         this.seats = seats;

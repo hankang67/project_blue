@@ -29,6 +29,7 @@ public class AuthService {
 
     @Transactional
     public SignupResponseDto signup(SignupRequestDto request) {
+
         validatePassword(request.getPassword());
 
         if (userRepository.existsByEmailAndIsDeletedTrue(request.getEmail())) {
@@ -53,6 +54,7 @@ public class AuthService {
     }
 
     public SigninResponseDto signin(SigninRequestDto request) {
+
         User user =
                 userRepository
                         .findByEmail(request.getEmail())
@@ -70,6 +72,7 @@ public class AuthService {
     }
 
     private void validatePassword(String password) {
+
         if (password.length() < 8) {
             throw new IllegalArgumentException("비밀번호는 최소 8자 이상이어야 합니다.");
         }

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class GetPerformancesResponseDto {
+
     private String title;
     private String hallNm;
     private LocalDateTime startDate;

@@ -23,6 +23,7 @@ public class HallAdminService {
 
     @Transactional
     public CreateHallResponseDto create(AuthUser authUser, CreateHallRequestDto request) {
+
         hasRole(authUser);
 
         Hall hall = new Hall(request.getName(), request.getAddress(), request.getSeats());
@@ -34,6 +35,7 @@ public class HallAdminService {
 
     @Transactional
     public UpdateHallResponseDto update(AuthUser authUser, Long id, UpdateHallRequestDto request) {
+
         hasRole(authUser);
 
         Hall hall = hallRepository.findByIdOrElseThrow(id);
@@ -45,6 +47,7 @@ public class HallAdminService {
 
     @Transactional
     public void delete(AuthUser authUser, Long id) {
+
         hasRole(authUser);
 
         Hall hall = hallRepository.findByIdOrElseThrow(id);
@@ -53,6 +56,7 @@ public class HallAdminService {
     }
 
     public void hasRole(AuthUser authUser) {
+
         if (!authUser.hasRole(UserRole.ROLE_ADMIN)) {
             throw new IllegalArgumentException("관리자만 접근할 수 있습니다.");
         }

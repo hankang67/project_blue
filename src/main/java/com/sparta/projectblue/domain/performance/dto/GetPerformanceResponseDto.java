@@ -11,6 +11,7 @@ import lombok.Getter;
 
 @Getter
 public class GetPerformanceResponseDto {
+
     private final String title;
     private final LocalDateTime startDate;
     private final LocalDateTime endDate;
@@ -23,6 +24,7 @@ public class GetPerformanceResponseDto {
     private final String imageUrl;
 
     public GetPerformanceResponseDto(Performance performance, Hall hall, Poster poster) {
+
         this.title = performance.getTitle();
         this.startDate = performance.getStartDate();
         this.endDate = performance.getEndDate();

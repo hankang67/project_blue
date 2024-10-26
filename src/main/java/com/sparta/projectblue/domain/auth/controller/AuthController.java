@@ -26,12 +26,14 @@ public class AuthController {
     @PostMapping("/auth/signup")
     @Operation(summary = "회원가입")
     public SignupResponseDto signup(@Valid @RequestBody SignupRequestDto request) {
+
         return authService.signup(request);
     }
 
     @PostMapping("/auth/signin")
     @Operation(summary = "로그인", description = "testuser password : abc123?!")
     public SigninResponseDto signin(@Valid @RequestBody SigninRequestDto request) {
+
         return authService.signin(request);
     }
 }

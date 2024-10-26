@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateReviewRequestDto {
+
     @NotNull private Long reservationId;
 
     @NotNull private ReviewRate reviewRate;

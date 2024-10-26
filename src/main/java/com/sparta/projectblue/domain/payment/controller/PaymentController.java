@@ -25,23 +25,29 @@ public class PaymentController {
     @PostMapping("/confirm")
     public ResponseEntity<JSONObject> confirmPayment(@RequestBody String jsonBody)
             throws Exception {
+
         return ResponseEntity.ok(paymentService.confirmPayment(jsonBody));
     }
 
     @GetMapping("/payments/{reservationId}")
     public String payments(Model model, @PathVariable Long reservationId) {
+
         PaymentResponseDto responseDto = paymentService.setValue(reservationId);
+
         model.addAttribute("paymentResponse", responseDto);
+
         return "/checkout";
     }
 
     @GetMapping("/payments/success")
     public String paymentRequest(HttpServletRequest request, Model model) throws Exception {
+
         return "/success";
     }
 
     @GetMapping("/fail")
     public String failPayment(HttpServletRequest request, Model model) throws Exception {
+
         String failCode = request.getParameter("code");
         String failMessage = request.getParameter("message");
 

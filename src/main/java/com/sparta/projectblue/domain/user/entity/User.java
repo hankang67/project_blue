@@ -34,6 +34,7 @@ public class User extends BaseEntity {
     private boolean isDeleted;
 
     public User(String email, String name, String password, UserRole userRole) {
+
         this.email = email;
         this.name = name;
         this.password = password;
@@ -41,6 +42,7 @@ public class User extends BaseEntity {
     }
 
     public User(String email, String name, String password, UserRole userRole, Long kakaoId) {
+
         this.email = email;
         this.name = name;
         this.password = password;
@@ -49,10 +51,12 @@ public class User extends BaseEntity {
     }
 
     public void userDeleted() {
+
         this.isDeleted = true;
     }
 
     public void InsertKakaoId(Long kakaoId) {
+
         this.kakaoId = kakaoId;
     }
 }

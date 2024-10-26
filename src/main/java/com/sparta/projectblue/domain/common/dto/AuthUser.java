@@ -19,6 +19,7 @@ public class AuthUser {
     private final Collection<? extends GrantedAuthority> authorities;
 
     public AuthUser(Long id, String email, String name, UserRole userRole) {
+
         this.id = id;
         this.email = email;
         this.name = name;
@@ -26,6 +27,7 @@ public class AuthUser {
     }
 
     public boolean hasRole(UserRole userRole) {
+
         for (GrantedAuthority authority : authorities) {
             if (authority.getAuthority().equals(userRole.name())) {
                 return true;

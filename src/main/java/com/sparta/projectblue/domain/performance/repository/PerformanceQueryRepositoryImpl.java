@@ -81,19 +81,23 @@ public class PerformanceQueryRepositoryImpl implements PerformanceQueryRepositor
     }
 
     private BooleanExpression containPerformanceNm(String performanceNm) {
+
         return (performanceNm != null && !performanceNm.isEmpty())
                 ? performance.title.containsIgnoreCase(performanceNm)
                 : null;
     }
 
     private BooleanExpression containPerformerNm(String performerNm) {
+
         return (performerNm != null && !performerNm.isEmpty())
                 ? performer.name.containsIgnoreCase(performerNm)
                 : null;
     }
 
     private BooleanExpression performanceBetweenIn(LocalDateTime performanceDay) {
+
         BooleanExpression afterStart = performance.startDate.loe(performanceDay);
+
         BooleanExpression beforeEnd = performance.endDate.goe(performanceDay);
 
         return afterStart.and(beforeEnd);

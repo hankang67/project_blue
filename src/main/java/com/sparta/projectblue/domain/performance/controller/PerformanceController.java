@@ -23,6 +23,7 @@ public class PerformanceController {
     public ResponseEntity<ApiResponse<?>> getPerformances(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
+
         return ResponseEntity.ok(
                 ApiResponse.success(performanceService.getPerformances(page, size)));
     }
@@ -37,18 +38,21 @@ public class PerformanceController {
     @GetMapping("/{id}/rounds")
     @Operation(summary = "공연 회차 조회", description = "공연에 해당하는 전체 회차와 예매 가능 상태를 조회함")
     public ResponseEntity<ApiResponse<?>> getRounds(@PathVariable Long id) {
+
         return ResponseEntity.ok(ApiResponse.success(performanceService.getRounds(id)));
     }
 
     @GetMapping("/{id}/reviews")
     @Operation(summary = "관람평 조회", description = "공연에 등록된 관람평 전체 조회")
     public ResponseEntity<ApiResponse<?>> getReviews(@PathVariable Long id) {
+
         return ResponseEntity.ok(ApiResponse.success(performanceService.getReviews(id)));
     }
 
     @Operation(summary = "공연 출연자 조회", description = "공연 출연자 다건 조회")
     @GetMapping("/{id}/performers")
     public ResponseEntity<ApiResponse<?>> getPerformers(@PathVariable Long id) {
+
         return ResponseEntity.ok(ApiResponse.success(performanceService.getPerformers(id)));
     }
 }

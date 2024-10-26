@@ -8,6 +8,7 @@ import lombok.Getter;
 
 @Getter
 public class UpdatePerformerResponseDto {
+
     private final Long id;
     private final String name;
     private final String birth;
@@ -16,6 +17,7 @@ public class UpdatePerformerResponseDto {
     private final LocalDateTime modifiedAt;
 
     public UpdatePerformerResponseDto(Performer performer) {
+
         this.id = performer.getId();
         this.name = performer.getName();
         this.birth = performer.getBirth();

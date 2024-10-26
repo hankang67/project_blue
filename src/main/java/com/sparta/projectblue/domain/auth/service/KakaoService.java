@@ -37,6 +37,7 @@ public class KakaoService {
     private String redirect_uri;
 
     public String kakaoLogin() {
+
         return UriComponentsBuilder.fromUriString("https://kauth.kakao.com")
                 .path("/oauth/authorize")
                 .queryParam("client_id", client_id)

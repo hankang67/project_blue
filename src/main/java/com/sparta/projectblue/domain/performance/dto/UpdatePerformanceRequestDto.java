@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdatePerformanceRequestDto {
+
     @NotNull private String title;
     @NotNull private String startDate;
     @NotNull private String endDate;

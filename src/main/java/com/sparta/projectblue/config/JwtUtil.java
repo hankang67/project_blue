@@ -34,11 +34,13 @@ public class JwtUtil {
 
     @PostConstruct
     public void init() {
+
         byte[] bytes = Base64.getDecoder().decode(secretKey);
         key = Keys.hmacShaKeyFor(bytes);
     }
 
     public String createToken(Long userId, String email, String name, UserRole userRole) {
+
         Date date = new Date();
 
         return BEARER_PREFIX
@@ -54,6 +56,7 @@ public class JwtUtil {
     }
 
     public String substringToken(String tokenValue) {
+
         if (StringUtils.hasText(tokenValue) && tokenValue.startsWith(BEARER_PREFIX)) {
             return tokenValue.substring(7);
         }
@@ -62,6 +65,7 @@ public class JwtUtil {
     }
 
     public Claims extractClaims(String token) {
+
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 }

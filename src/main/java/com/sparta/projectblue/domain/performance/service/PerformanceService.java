@@ -33,14 +33,13 @@ public class PerformanceService {
 
     private final PerformanceRepository performanceRepository;
 
-    private final HallRepository hallRepository;
-    private final PerformerRepository performerRepository;
-    private final PerformerPerformanceRepository performerPerformanceRepository;
+    private final HallRepository hallRepository;=
     private final ReviewRepository reviewRepository;
     private final RoundRepository roundRepository;
     private final PosterRepository posterRepository;
 
     public Page<GetPerformancesResponseDto> getPerformances(int page, int size) {
+
         Pageable pageable = PageRequest.of(page - 1, size);
 
         LocalDateTime performanceDay = LocalDateTime.now();
@@ -68,6 +67,7 @@ public class PerformanceService {
     }
 
     public GetPerformanceRoundsResponseDto getRounds(Long id) {
+
         // 공연 id값 검증
         if (performanceRepository.findById(id).isEmpty()) {
             throw new IllegalArgumentException("공연을 찾을 수 없습니다");
@@ -89,6 +89,7 @@ public class PerformanceService {
     }
 
     public GetPerformanceReviewsResponseDto getReviews(Long id) {
+
         // 공연 id값 검증
         if (performanceRepository.findById(id).isEmpty()) {
             throw new IllegalArgumentException("공연을 찾을 수 없습니다");
@@ -108,6 +109,7 @@ public class PerformanceService {
     }
 
     public GetPerformancePerformersResponseDto getPerformers(Long id) {
+
         if (performanceRepository.findById(id).isEmpty()) {
             throw new IllegalArgumentException("공연을 찾을 수 없습니다");
         }

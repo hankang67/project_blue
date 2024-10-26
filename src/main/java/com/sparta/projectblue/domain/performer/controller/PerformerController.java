@@ -24,12 +24,14 @@ public class PerformerController {
     @GetMapping("/{id}")
     @Operation(summary = "배우 단건 조회", description = "배우 정보를 조회합니다.")
     public ResponseEntity<ApiResponse<?>> getPerformer(@PathVariable Long id) {
+
         return ResponseEntity.ok(ApiResponse.success(performerService.getPerformer(id)));
     }
 
     @GetMapping
     @Operation(summary = "배우 다건 조회", description = "배우를 전체 조회합니다.")
     public ResponseEntity<ApiResponse<?>> getPerformers() {
+
         return ResponseEntity.ok(ApiResponse.success(performerService.getPerformers()));
     }
 }

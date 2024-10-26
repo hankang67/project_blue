@@ -26,6 +26,7 @@ public class PerformerAdminService {
     @Transactional
     public CreatePerformerResponseDto createPerformer(
             AuthUser authUser, @Valid CreatePerformerRequestDto request) {
+
         hasRole(authUser);
 
         // 생일관련 유효성검사
@@ -48,6 +49,7 @@ public class PerformerAdminService {
     @Transactional
     public UpdatePerformerResponseDto updatePerformer(
             AuthUser authUser, Long id, @Valid UpdatePerformerRequestDto request) {
+
         hasRole(authUser);
 
         Performer performer =
@@ -72,6 +74,7 @@ public class PerformerAdminService {
 
     @Transactional
     public void deletePerformer(AuthUser authUser, Long id) {
+
         hasRole(authUser);
 
         Performer performer =
@@ -83,6 +86,7 @@ public class PerformerAdminService {
     }
 
     public void hasRole(AuthUser authUser) {
+
         if (!authUser.hasRole(UserRole.ROLE_ADMIN)) {
             throw new IllegalArgumentException("관리자만 접근할 수 있습니다.");
         }

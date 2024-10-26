@@ -44,6 +44,7 @@ public class GetReservationResponseDto {
             List<Integer> seats,
             Payment payment,
             Review review) {
+
         this.category = performance.getCategory();
         this.performanceTitle = performance.getTitle();
 

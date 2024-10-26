@@ -133,6 +133,7 @@ public class ReservationService {
 
     @Transactional
     public void delete(Long id, DeleteReservationRequestDto request) throws Exception {
+
         // 사용자 가져옴
         User user =
                 userRepository
@@ -177,6 +178,7 @@ public class ReservationService {
     }
 
     public GetReservationResponseDto getReservation(AuthUser user, Long reservationId) {
+
         Reservation reservation =
                 reservationRepository
                         .findById(reservationId)
@@ -223,6 +225,7 @@ public class ReservationService {
     }
 
     public List<GetReservationsResponseDto> getReservations(Long userId) {
+
         // 예약 가져옴
         List<Reservation> reservations = reservationRepository.findByUserId(userId);
 

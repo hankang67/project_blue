@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class PaymentResponseDto {
+
     private String orderId;
     private String orderName;
     private Long amount;
@@ -18,6 +19,7 @@ public class PaymentResponseDto {
             Long amount,
             String customerEmail,
             String customerName) {
+
         this.orderId = orderId;
         this.orderName = orderName;
         this.amount = amount;

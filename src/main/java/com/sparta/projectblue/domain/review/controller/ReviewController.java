@@ -38,6 +38,7 @@ public class ReviewController {
             @AuthenticationPrincipal AuthUser authUser,
             @PathVariable Long id,
             @RequestBody UpdateReviewRequestDto requestDto) {
+
         return ResponseEntity.ok(
                 ApiResponse.success(reviewService.update(authUser.getId(), id, requestDto)));
     }
@@ -46,7 +47,9 @@ public class ReviewController {
     @Operation(summary = "관람평 삭제")
     public ResponseEntity<ApiResponse<?>> delete(
             @AuthenticationPrincipal AuthUser authUser, @PathVariable Long id) {
+
         reviewService.delete(authUser.getId(), id);
+
         return ResponseEntity.ok(ApiResponse.successWithNoContent());
     }
 }
