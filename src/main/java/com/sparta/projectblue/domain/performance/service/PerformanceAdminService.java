@@ -7,8 +7,10 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.common.enums.UserRole;
 import com.sparta.projectblue.domain.hall.repository.HallRepository;
-import com.sparta.projectblue.domain.performance.dto.PerformanceRequestDto;
-import com.sparta.projectblue.domain.performance.dto.PerformanceUpdateRequestDto;
+import com.sparta.projectblue.domain.performance.dto.CreatePerformanceRequestDto;
+import com.sparta.projectblue.domain.performance.dto.CreatePerformanceResponseDto;
+import com.sparta.projectblue.domain.performance.dto.UpdatePerformanceRequestDto;
+import com.sparta.projectblue.domain.performance.dto.UpdatePerformanceResponseDto;
 import com.sparta.projectblue.domain.performance.entity.Performance;
 import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
 import com.sparta.projectblue.domain.performer.repository.PerformerRepository;
@@ -30,7 +32,6 @@ import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -54,35 +55,35 @@ public class PerformanceAdminService {
 
 
     @Transactional
-    public String create(AuthUser authUser, PerformanceRequestDto requestDto, MultipartFile posterFile) {
+    public CreatePerformanceResponseDto create(AuthUser authUser, CreatePerformanceRequestDto request, MultipartFile posterFile) {
         hasRole(authUser);
 
-        if (!hallRepository.existsById(requestDto.getHallId())) {
+        if (!hallRepository.existsById(request.getHallId())) {
             throw new IllegalArgumentException("존재하지 않는 공연장입니다.");
         }
 
-        LocalDateTime startDate = LocalDate.parse(requestDto.getStartDate()).atStartOfDay();
-        LocalDateTime endDate = LocalDate.parse(requestDto.getEndDate()).atTime(LocalTime.MAX);
+        LocalDateTime startDate = LocalDate.parse(request.getStartDate()).atStartOfDay();
+        LocalDateTime endDate = LocalDate.parse(request.getEndDate()).atTime(LocalTime.MAX);
 
         if (startDate.isAfter(endDate)) {
             throw new IllegalArgumentException("종료일이 시작일보다 빠를 수 없습니다.");
         }
 
         Performance performance = new Performance(
-                requestDto.getHallId(),
-                requestDto.getTitle(),
+                request.getHallId(),
+                request.getTitle(),
                 startDate,
                 endDate,
-                requestDto.getPrice(),
-                requestDto.getCategory(),
-                requestDto.getDescription(),
-                requestDto.getDuration());
+                request.getPrice(),
+                request.getCategory(),
+                request.getDescription(),
+                request.getDuration());
 
         // 공연 등록
         Performance savedPerformance = performanceRepository.save(performance);
 
         // 출연자 등록
-        for (Long performerId : requestDto.getPerformers()) {
+        for (Long performerId : request.getPerformers()) {
             if (!performerRepository.existsById(performerId)) {
                 throw new IllegalArgumentException("존재하지 않는 출연자입니다.");
             }
@@ -117,11 +118,11 @@ public class PerformanceAdminService {
         posterRepository.save(poster);
 
 
-        return "공연 ID : " + savedPerformance.getId() + ", 공연 이름 : " + savedPerformance.getTitle();
+        return new CreatePerformanceResponseDto(savedPerformance.getId(), savedPerformance.getTitle());
     }
 
     @Transactional
-    public String update(AuthUser authUser, Long performanceId, PerformanceUpdateRequestDto requestDto) {
+    public UpdatePerformanceResponseDto update(AuthUser authUser, Long performanceId, UpdatePerformanceRequestDto requestDto) {
         hasRole(authUser);
 
         Performance performance = performanceRepository.findById(performanceId).orElseThrow(() ->
@@ -142,11 +143,11 @@ public class PerformanceAdminService {
             performerPerformanceRepository.save(per);
         }
 
-        return "공연 ID : " + performance.getId() + ", 공연 이름 : " + performance.getTitle() + " 수정 완료.";
+        return new UpdatePerformanceResponseDto(performance.getId(), performance.getTitle());
     }
 
     @Transactional
-    public String delete(AuthUser authUser, Long performanceId) {
+    public void delete(AuthUser authUser, Long performanceId) {
         hasRole(authUser);
 
         List<Performance> performances = performanceRepository.findAllById(performanceId);
@@ -171,8 +172,6 @@ public class PerformanceAdminService {
         log.info("Poster file deleted successfully from S3.");
 
         posterRepository.delete(poster);
-
-        return "공연이 삭제되었습니다.";
     }
 
     public void hasRole(AuthUser authUser) {
@@ -192,7 +191,6 @@ public class PerformanceAdminService {
     }
 
 
-
     public String createFileName(String fileName) {
         // aws 업로드를 위한 unique name 생성
         return UUID.randomUUID().toString().concat(getFileExtension(fileName));
@@ -206,6 +204,35 @@ public class PerformanceAdminService {
         }
     }
 
+    @Transactional
+    public void addPerformer(Long performanceId, Long performerId) {
+        if (performanceRepository.findById(performanceId).isEmpty()) {
+            throw new IllegalArgumentException("공연을 찾을 수 없습니다");
+        }
+        if (performerRepository.findById(performerId).isEmpty()) {
+            throw new IllegalArgumentException("공연을 찾을 수 없습니다");
+        }
+        if (performerPerformanceRepository.existsByPerformanceIdAndPerformerId(performanceId, performerId)) {
+            throw new IllegalArgumentException("해당 배우는 이미 이 공연에 등록되어 있습니다.");
+        }
 
+        PerformerPerformance performerPerformance = new PerformerPerformance(performerId, performanceId);
+        performerPerformanceRepository.save(performerPerformance);
 
+    }
+
+    @Transactional
+    public void removePerformer(Long performanceId, Long performerId) {
+        if (performanceRepository.findById(performanceId).isEmpty()) {
+            throw new IllegalArgumentException("공연을 찾을 수 없습니다");
+        }
+        if (performerRepository.findById(performerId).isEmpty()) {
+            throw new IllegalArgumentException("공연을 찾을 수 없습니다");
+        }
+        PerformerPerformance performerPerformance = performerPerformanceRepository
+                .findByPerformanceIdAndPerformerId(performanceId, performerId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 배우는 이 공연에 등록되어 있지 않습니다."));
+
+        performerPerformanceRepository.delete(performerPerformance);
+    }
 }

@@ -6,15 +6,12 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class PerformanceRoundsDto {
+@Getter
+public class GetPerformanceRoundsResponseDto {
+    private final List<RoundInfo> rounds;
 
-    @Getter
-    public static class Response {
-        private final List<RoundInfo> rounds;
-
-        public Response(List<RoundInfo> rounds) {
-            this.rounds = rounds;
-        }
+    public GetPerformanceRoundsResponseDto(List<RoundInfo> rounds) {
+        this.rounds = rounds;
     }
 
     @Getter

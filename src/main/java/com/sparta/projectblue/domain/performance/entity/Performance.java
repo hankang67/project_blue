@@ -2,7 +2,7 @@ package com.sparta.projectblue.domain.performance.entity;
 
 import com.sparta.projectblue.domain.common.entity.BaseEntity;
 import com.sparta.projectblue.domain.common.enums.Category;
-import com.sparta.projectblue.domain.performance.dto.PerformanceUpdateRequestDto;
+import com.sparta.projectblue.domain.performance.dto.UpdatePerformanceRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -53,7 +53,7 @@ public class Performance extends BaseEntity {
         this.duration = duration;
     }
 
-    public void update(PerformanceUpdateRequestDto requestDto) {
+    public void update(UpdatePerformanceRequestDto requestDto) {
         this.hallId = requestDto.getHallId();
         this.title = requestDto.getTitle();
         this.startDate = LocalDate.parse(requestDto.getStartDate()).atStartOfDay();

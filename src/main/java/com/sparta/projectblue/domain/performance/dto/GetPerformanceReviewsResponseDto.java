@@ -5,16 +5,15 @@ import lombok.Getter;
 
 import java.util.List;
 
-public class PerformanceReviewDto {
+@Getter
+public class GetPerformanceReviewsResponseDto {
 
-    @Getter
-    public static class Response {
-        private final List<ReviewInfo> reviews;
+    private final List<ReviewInfo> reviews;
 
-        public Response(List<ReviewInfo> reviews) {
-            this.reviews = reviews;
-        }
+    public GetPerformanceReviewsResponseDto(List<ReviewInfo> reviews) {
+        this.reviews = reviews;
     }
+
 
     @Getter
     public static class ReviewInfo {

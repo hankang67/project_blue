@@ -4,13 +4,14 @@ import com.sparta.projectblue.domain.common.enums.Category;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class PerformanceRequestDto {
-
+@AllArgsConstructor
+public class UpdatePerformanceRequestDto {
     @NotNull
     private String title;
     @NotNull
@@ -28,7 +29,8 @@ public class PerformanceRequestDto {
     private Long hallId;
     @NotNull
     private int duration;
+    @NotNull
+    private int seats;
 
     private Long[] performers;
-
 }

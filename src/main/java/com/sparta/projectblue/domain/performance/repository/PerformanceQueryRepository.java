@@ -1,14 +1,15 @@
 package com.sparta.projectblue.domain.performance.repository;
 
-import com.sparta.projectblue.domain.performance.dto.PerformanceDetailDto;
-import com.sparta.projectblue.domain.performance.dto.PerformanceResponseDto;
+import com.sparta.projectblue.domain.performance.dto.GetPerformancePerformersResponseDto;
+import com.sparta.projectblue.domain.performance.dto.GetPerformancesResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface PerformanceQueryRepository {
-    Page<PerformanceResponseDto> findByCondition(Pageable pageable, String performanceNm, LocalDateTime performanceDay, String performer);
+    Page<GetPerformancesResponseDto> findByCondition(Pageable pageable, String performanceNm, LocalDateTime performanceDay, String performer);
 
-    PerformanceDetailDto findPerformanceDetailById(Long id);
+    List<GetPerformancePerformersResponseDto.PerformerInfo> findPerformersByPerformanceId(Long performanceId);
 }

@@ -3,8 +3,10 @@ package com.sparta.projectblue.domain.performance.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.sparta.projectblue.domain.performance.dto.PerformanceDetailDto;
-import com.sparta.projectblue.domain.performance.dto.PerformanceResponseDto;
+import com.sparta.projectblue.domain.performance.dto.GetPerformancePerformersResponseDto;
+import com.sparta.projectblue.domain.performance.dto.GetPerformancesResponseDto;
+import com.sparta.projectblue.domain.performer.entity.QPerformer;
+import com.sparta.projectblue.domain.performerPerformance.entity.QPerformerPerformance;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -18,7 +20,6 @@ import static com.sparta.projectblue.domain.hall.entity.QHall.hall;
 import static com.sparta.projectblue.domain.performance.entity.QPerformance.performance;
 import static com.sparta.projectblue.domain.performer.entity.QPerformer.performer;
 import static com.sparta.projectblue.domain.performerPerformance.entity.QPerformerPerformance.performerPerformance;
-import static com.sparta.projectblue.domain.poster.entity.QPoster.poster;
 
 
 @Repository
@@ -28,11 +29,11 @@ public class PerformanceQueryRepositoryImpl implements PerformanceQueryRepositor
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<PerformanceResponseDto> findByCondition(Pageable pageable, String performanceNm, LocalDateTime performanceDay, String performerNm) {
+    public Page<GetPerformancesResponseDto> findByCondition(Pageable pageable, String performanceNm, LocalDateTime performanceDay, String performerNm) {
 
-        List<PerformanceResponseDto> query = jpaQueryFactory
+        List<GetPerformancesResponseDto> query = jpaQueryFactory
                 .select(
-                        Projections.fields(PerformanceResponseDto.class,
+                        Projections.fields(GetPerformancesResponseDto.class,
                                 performance.title.as("title"),
                                 hall.name.as("hallNm"),
                                 performance.startDate.as("startDate"),
@@ -89,30 +90,18 @@ public class PerformanceQueryRepositoryImpl implements PerformanceQueryRepositor
     }
 
     @Override
-    public PerformanceDetailDto findPerformanceDetailById(Long id) {
+    public List<GetPerformancePerformersResponseDto.PerformerInfo> findPerformersByPerformanceId(Long performanceId) {
 
-        PerformanceDetailDto performanceDetailDto = jpaQueryFactory
+        return jpaQueryFactory
                 .select(Projections.constructor(
-                        PerformanceDetailDto.class,
-                        performance.title,
-                        performance.startDate,
-                        performance.endDate,
-                        performance.price,
-                        performance.category.stringValue(),
-                        performance.description,
-                        performance.duration,
-                        hall.name,
-                        poster.name,
-                        poster.imageUrl)
-                )
-                .from(performance)
-                .leftJoin(hall).on(performance.hallId.eq(hall.id))
-                .leftJoin(poster).on(performance.id.eq(poster.performanceId))
-                .where(performance.id.eq(id))
-                .fetchOne();
-
-
-
-        return performanceDetailDto;
+                        GetPerformancePerformersResponseDto.PerformerInfo.class,
+                        performer.name,
+                        performer.nation,
+                        performer.birth
+                ))
+                .from(performer)
+                .join(performerPerformance).on(performer.id.eq(performerPerformance.performerId))
+                .where(performerPerformance.performanceId.eq(performanceId))
+                .fetch();
     }
 }

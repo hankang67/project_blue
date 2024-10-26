@@ -1,7 +1,7 @@
 package com.sparta.projectblue.domain.search.controller;
 
 import com.sparta.projectblue.config.ApiResponse;
-import com.sparta.projectblue.domain.performance.dto.PerformanceResponseDto;
+import com.sparta.projectblue.domain.performance.dto.GetPerformancesResponseDto;
 import com.sparta.projectblue.domain.search.service.SearchService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,7 +23,7 @@ public class SearchController {
 
     @GetMapping
     @Operation(summary = "공연리스트 필터 조회", description = "현재 진행중인 공연 리스트 조건에 따라 출력")
-    public ResponseEntity<ApiResponse<Page<PerformanceResponseDto>>> getFilterPerformances(
+    public ResponseEntity<ApiResponse<Page<GetPerformancesResponseDto>>> getFilterPerformances(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String performanceNm,
