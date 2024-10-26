@@ -2,7 +2,8 @@ package com.sparta.projectblue.domain.performer.controller;
 
 import com.sparta.projectblue.config.ApiResponse;
 import com.sparta.projectblue.domain.common.dto.AuthUser;
-import com.sparta.projectblue.domain.performer.dto.PerformerDetailDto;
+import com.sparta.projectblue.domain.performer.dto.CreatePerformerRequestDto;
+import com.sparta.projectblue.domain.performer.dto.UpdatePerformerRequestDto;
 import com.sparta.projectblue.domain.performer.service.PerformerAdminService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,9 +25,8 @@ public class PerformerAdminController {
     @Operation(summary = "배우 등록", description = "새로운 배우를 등록합니다.")
     public ResponseEntity<ApiResponse<?>> createPerformer(
             @AuthenticationPrincipal AuthUser authUser,
-            @Valid @RequestBody PerformerDetailDto requestDto) {
-        PerformerDetailDto.Response response = performerAdminService.createPerformer(authUser, requestDto);
-        return ResponseEntity.ok(ApiResponse.success(response));
+            @Valid @RequestBody CreatePerformerRequestDto request) {
+        return ResponseEntity.ok(ApiResponse.success(performerAdminService.createPerformer(authUser, request)));
     }
 
     @PutMapping("/{id}")
@@ -34,9 +34,8 @@ public class PerformerAdminController {
     public ResponseEntity<ApiResponse<?>> updatePerformer(
             @AuthenticationPrincipal AuthUser authUser,
             @PathVariable Long id,
-            @Valid @RequestBody PerformerDetailDto requestDto) {
-        PerformerDetailDto.Response response = performerAdminService.updatePerformer(authUser, id, requestDto);
-        return ResponseEntity.ok(ApiResponse.success(response));
+            @Valid @RequestBody UpdatePerformerRequestDto request) {
+        return ResponseEntity.ok(ApiResponse.success(performerAdminService.updatePerformer(authUser, id, request)));
     }
 
     @DeleteMapping("/{id}")
