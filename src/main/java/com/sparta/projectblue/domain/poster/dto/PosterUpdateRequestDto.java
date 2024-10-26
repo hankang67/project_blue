@@ -6,4 +6,5 @@ import lombok.Getter;
 public class PosterUpdateRequestDto {
     private String name;
     private String imageUrl;
+    private Long fileSize;
 }

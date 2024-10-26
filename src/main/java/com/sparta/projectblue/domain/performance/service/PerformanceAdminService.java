@@ -1,5 +1,9 @@
 package com.sparta.projectblue.domain.performance.service;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.common.enums.UserRole;
 import com.sparta.projectblue.domain.hall.repository.HallRepository;
@@ -13,17 +17,27 @@ import com.sparta.projectblue.domain.performerPerformance.repository.PerformerPe
 import com.sparta.projectblue.domain.poster.entity.Poster;
 import com.sparta.projectblue.domain.poster.repository.PosterRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class PerformanceAdminService {
 
     private final PerformanceRepository performanceRepository;
@@ -33,8 +47,14 @@ public class PerformanceAdminService {
     private final PerformerPerformanceRepository performerPerformanceRepository;
     private final PosterRepository posterRepository;
 
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
+
+    private final AmazonS3 amazonS3;
+
+
     @Transactional
-    public String create(AuthUser authUser, PerformanceRequestDto requestDto) {
+    public String create(AuthUser authUser, PerformanceRequestDto requestDto, MultipartFile posterFile) {
         hasRole(authUser);
 
         if (!hallRepository.existsById(requestDto.getHallId())) {
@@ -71,9 +91,31 @@ public class PerformanceAdminService {
             performerPerformanceRepository.save(per);
         }
 
+        // aws 추가
+        String posterName = "images/" + createFileName(posterFile.getOriginalFilename());
+
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentLength(posterFile.getSize());
+        objectMetadata.setContentType(posterFile.getContentType());
+
+        String posterUrl;
+
+        try (InputStream inputStream = posterFile.getInputStream()) {
+            log.info("Uploading file: " + posterName + " to bucket: " + bucket);
+            amazonS3.putObject(new PutObjectRequest(bucket, posterName, inputStream, objectMetadata));
+            log.info("File uploaded successfully.");
+
+            posterUrl = amazonS3.getUrl(bucket, posterName).toString();
+
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
+        }
+
+
         // 포스터 등록
-        Poster poster = new Poster(savedPerformance.getId(), requestDto.getPosterName(), requestDto.getPosterUrl());
+        Poster poster = new Poster(savedPerformance.getId(), posterName, posterUrl, posterFile.getSize());
         posterRepository.save(poster);
+
 
         return "공연 ID : " + savedPerformance.getId() + ", 공연 이름 : " + savedPerformance.getTitle();
     }
@@ -127,6 +169,10 @@ public class PerformanceAdminService {
         Poster poster = posterRepository.findByPerformanceId(performanceId).orElseThrow(() ->
                 new IllegalArgumentException("공연에 대한 포스터가 없습니다."));
 
+        log.info("Deleting poster file: " + poster.getName() + " from bucket: " + bucket);
+        amazonS3.deleteObject(new DeleteObjectRequest(bucket, poster.getName()));
+        log.info("Poster file deleted successfully from S3.");
+
         posterRepository.delete(poster);
 
         return "공연이 삭제되었습니다.";
@@ -148,4 +194,21 @@ public class PerformanceAdminService {
 
         performerPerformanceRepository.deleteAll(performerPerformances);
     }
+
+
+    // 먼저 파일 업로드 시, 파일명을 난수화하기 위해 random으로 돌립니다.
+    public String createFileName(String fileName) {
+        return UUID.randomUUID().toString().concat(getFileExtension(fileName));
+    }
+
+    private String getFileExtension(String fileName) {
+        try {
+            return fileName.substring(fileName.lastIndexOf("."));
+        } catch (StringIndexOutOfBoundsException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 형식의 파일(" + fileName + ") 입니다.");
+        }
+    }
+
+
+
 }
