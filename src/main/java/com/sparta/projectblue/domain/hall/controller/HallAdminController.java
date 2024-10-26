@@ -2,7 +2,8 @@ package com.sparta.projectblue.domain.hall.controller;
 
 import com.sparta.projectblue.config.ApiResponse;
 import com.sparta.projectblue.domain.common.dto.AuthUser;
-import com.sparta.projectblue.domain.hall.dto.HallRequestDto;
+import com.sparta.projectblue.domain.hall.dto.CreateHallRequestDto;
+import com.sparta.projectblue.domain.hall.dto.UpdateHallRequestDto;
 import com.sparta.projectblue.domain.hall.service.HallAdminService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,7 +25,7 @@ public class HallAdminController {
     @Operation(summary = "공연장 등록")
     public ResponseEntity<ApiResponse<?>> create(
             @AuthenticationPrincipal AuthUser authUser,
-            @Valid @RequestBody HallRequestDto request) {
+            @Valid @RequestBody CreateHallRequestDto request) {
 
         return ResponseEntity.ok(ApiResponse.success(hallAdminService.create(authUser, request)));
     }
@@ -34,7 +35,7 @@ public class HallAdminController {
     public ResponseEntity<ApiResponse<?>> update(
             @AuthenticationPrincipal AuthUser authUser,
             @PathVariable("id") Long id,
-            @Valid @RequestBody HallRequestDto request) {
+            @Valid @RequestBody UpdateHallRequestDto request) {
 
         return ResponseEntity.ok(ApiResponse.success(hallAdminService.update(authUser, id, request)));
     }

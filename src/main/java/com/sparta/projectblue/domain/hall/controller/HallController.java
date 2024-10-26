@@ -1,8 +1,8 @@
 package com.sparta.projectblue.domain.hall.controller;
 
 import com.sparta.projectblue.config.ApiResponse;
-import com.sparta.projectblue.domain.hall.dto.HallResponseDto;
-import com.sparta.projectblue.domain.hall.dto.HallsResponseDto;
+import com.sparta.projectblue.domain.hall.dto.GetHallResponseDto;
+import com.sparta.projectblue.domain.hall.dto.GetHallsResponseDto;
 import com.sparta.projectblue.domain.hall.service.HallService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,7 +21,7 @@ public class HallController {
 
     @GetMapping
     @Operation(summary = "공연장 다건 조회")
-    public ResponseEntity<ApiResponse<Page<HallsResponseDto>>> getHalls(
+    public ResponseEntity<ApiResponse<?>> getHalls(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
@@ -31,8 +31,8 @@ public class HallController {
     @GetMapping("/{id}")
     @Operation(summary = "공연장 단건 조회")
     public ResponseEntity<ApiResponse<?>> getHall(@PathVariable("id") Long id) {
-        HallResponseDto hallResponseDto = hallService.getHall(id);
-        return ResponseEntity.ok(ApiResponse.success(hallResponseDto));
+        GetHallResponseDto getHallResponseDto = hallService.getHall(id);
+        return ResponseEntity.ok(ApiResponse.success(getHallResponseDto));
     }
 }
 

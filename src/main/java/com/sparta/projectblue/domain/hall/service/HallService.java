@@ -1,8 +1,8 @@
 package com.sparta.projectblue.domain.hall.service;
 
 
-import com.sparta.projectblue.domain.hall.dto.HallResponseDto;
-import com.sparta.projectblue.domain.hall.dto.HallsResponseDto;
+import com.sparta.projectblue.domain.hall.dto.GetHallResponseDto;
+import com.sparta.projectblue.domain.hall.dto.GetHallsResponseDto;
 import com.sparta.projectblue.domain.hall.entity.Hall;
 import com.sparta.projectblue.domain.hall.repository.HallRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,16 +19,15 @@ public class HallService {
 
     private final HallRepository hallRepository;
 
-    public Page<HallsResponseDto> getHalls(int page, int size) {
+    public Page<GetHallsResponseDto> getHalls(int page, int size) {
         Pageable pageable = PageRequest.of(page-1, size);
 
-        return hallRepository.findAll(pageable).map(hall -> new HallsResponseDto(hall.getName(),
-                hall.getSeats()));
+        return hallRepository.findAll(pageable).map(GetHallsResponseDto::new);
     }
 
-    public HallResponseDto getHall(Long id) {
+    public GetHallResponseDto getHall(Long id) {
         Hall hall = hallRepository.findByIdOrElseThrow(id);
 
-        return new HallResponseDto(hall.getId(), hall.getName(), hall.getAddress(), hall.getSeats());
+        return new GetHallResponseDto(hall);
     }
 }
