@@ -7,8 +7,7 @@ import com.sparta.projectblue.domain.performance.entity.Performance;
 import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
 import com.sparta.projectblue.domain.reservedSeat.entity.ReservedSeat;
 import com.sparta.projectblue.domain.reservedSeat.repository.ReservedSeatRepository;
-import com.sparta.projectblue.domain.round.dto.CreateRoundsDto;
-import com.sparta.projectblue.domain.round.dto.GetAvailableSeatsDto;
+import com.sparta.projectblue.domain.round.dto.*;
 import com.sparta.projectblue.domain.round.entity.Round;
 import com.sparta.projectblue.domain.round.repository.RoundRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +31,7 @@ public class RoundService {
     private final PerformanceRepository performanceRepository;
     private final ReservedSeatRepository reservedSeatRepository;
 
-    public GetAvailableSeatsDto.Response getAvailableSeats(Long id) {
+    public GetRoundAvailableSeatsResponseDto getAvailableSeats(Long id) {
         // 회차 가져옴
         Round round = roundRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("회차를 찾을 수 없습니다."));
@@ -73,11 +72,11 @@ public class RoundService {
             }
         }
 
-        return new GetAvailableSeatsDto.Response(performance.getTitle(), round.getDate(), availableSeats);
+        return new GetRoundAvailableSeatsResponseDto(performance.getTitle(), round.getDate(), availableSeats);
     }
 
     @Transactional
-    public List<CreateRoundsDto.Response> createRounds(Long id, CreateRoundsDto.Request request) {
+    public List<CreateRoundResponseDto> createRounds(Long id, CreateRoundRequestDto request) {
         // 공연 존재 여부 확인
         if (performanceRepository.findById(id).isEmpty()) {
             throw new IllegalArgumentException("공연을 찾을 수 없습니다");
@@ -96,27 +95,27 @@ public class RoundService {
         List<Round> savedRounds = roundRepository.saveAll(newRounds);
 
         return savedRounds.stream()
-                .map(round -> new CreateRoundsDto.Response(round.getId(), round.getPerformanceId(), round.getDate(), round.getStatus()))
+                .map(round -> new CreateRoundResponseDto(round.getId(), round.getPerformanceId(), round.getDate(), round.getStatus()))
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public CreateRoundsDto.Response updateRound(Long id, CreateRoundsDto.UpdateRequest updateRequest) {
+    public UpdateRoundResponseDto updateRound(Long id, UpdateRoundRequestDto request) {
         // 회차 가져옴
         Round round = roundRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("회차를 찾을 수 없습니다."));
 
         LocalDateTime now = LocalDateTime.now();
 
-        if (updateRequest.getDate().isBefore(now)) {
+        if (request.getDate().isBefore(now)) {
             throw new IllegalArgumentException("과거의 날짜로 회차를 수정할 수 없습니다.");
         }
 
-        round.updateDate(updateRequest.getDate());
-        round.updateStatus(updateRequest.getStatus());
+        round.updateDate(request.getDate());
+        round.updateStatus(request.getStatus());
         roundRepository.save(round);
 
-        return new CreateRoundsDto.Response(round.getId(), round.getPerformanceId(), round.getDate(), round.getStatus());
+        return new UpdateRoundResponseDto(round.getId(), round.getPerformanceId(), round.getDate(), round.getStatus());
     }
 
     @Transactional

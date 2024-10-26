@@ -2,7 +2,8 @@ package com.sparta.projectblue.domain.round.controller;
 
 import com.sparta.projectblue.config.ApiResponse;
 import com.sparta.projectblue.domain.common.enums.PerformanceStatus;
-import com.sparta.projectblue.domain.round.dto.CreateRoundsDto;
+import com.sparta.projectblue.domain.round.dto.CreateRoundRequestDto;
+import com.sparta.projectblue.domain.round.dto.UpdateRoundRequestDto;
 import com.sparta.projectblue.domain.round.service.RoundService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,10 +33,9 @@ public class RoundController {
     @PostMapping
     @Operation(summary = "공연별 다건 회차 등록", description = "공연별 다건 회차를 등록합니다.")
     public ResponseEntity<ApiResponse<?>> createRound(
-            @Valid @RequestBody CreateRoundsDto.Request requestDto) {
-        List<CreateRoundsDto.Response> responseDto = roundService.createRounds(requestDto.getPerformanceId(), requestDto);
+            @Valid @RequestBody CreateRoundRequestDto requestDto) {
 
-        return ResponseEntity.ok(ApiResponse.success(responseDto));
+        return ResponseEntity.ok(ApiResponse.success(roundService.createRounds(requestDto.getPerformanceId(), requestDto)));
     }
 
     @PutMapping("/{id}")
@@ -45,10 +45,7 @@ public class RoundController {
             @RequestParam LocalDateTime date,
             @RequestParam PerformanceStatus status) {
 
-        CreateRoundsDto.UpdateRequest updateRequest = new CreateRoundsDto.UpdateRequest(date, status);
-        CreateRoundsDto.Response responseDto = roundService.updateRound(id, updateRequest);
-
-        return ResponseEntity.ok(ApiResponse.success(responseDto));
+        return ResponseEntity.ok(ApiResponse.success(roundService.updateRound(id, new UpdateRoundRequestDto(date, status))));
     }
 
     @DeleteMapping("/{id}")
