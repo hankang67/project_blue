@@ -28,11 +28,11 @@ public class UserController {
 
     @DeleteMapping
     @Operation(summary = "탈퇴")
-    public ResponseEntity<ApiResponse<?>> deleteUser(
+    public ResponseEntity<ApiResponse<?>> delete(
             @AuthenticationPrincipal AuthUser authUser,
             @Valid @RequestBody DeleteUserRequestDto request) {
 
-        userService.deleteUser(authUser, request);
+        userService.delete(authUser, request);
 
         return ResponseEntity.ok(ApiResponse.successWithNoContent());
     }

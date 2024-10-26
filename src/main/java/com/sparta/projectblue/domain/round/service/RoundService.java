@@ -84,7 +84,7 @@ public class RoundService {
     }
 
     @Transactional
-    public List<CreateRoundResponseDto> createRounds(Long id, CreateRoundRequestDto request) {
+    public List<CreateRoundResponseDto> create(Long id, CreateRoundRequestDto request) {
 
         // 공연 존재 여부 확인
         if (performanceRepository.findById(id).isEmpty()) {
@@ -110,7 +110,7 @@ public class RoundService {
     }
 
     @Transactional
-    public UpdateRoundResponseDto updateRound(Long id, UpdateRoundRequestDto request) {
+    public UpdateRoundResponseDto update(Long id, UpdateRoundRequestDto request) {
 
         // 회차 가져옴
         Round round =
@@ -134,7 +134,7 @@ public class RoundService {
     }
 
     @Transactional
-    public void deleteRound(Long id) {
+    public void delete(Long id) {
 
         Round round =
                 roundRepository

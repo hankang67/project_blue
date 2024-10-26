@@ -4,7 +4,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.sparta.projectblue.config.ApiResponse;
-import com.sparta.projectblue.domain.hall.dto.GetHallResponseDto;
 import com.sparta.projectblue.domain.hall.service.HallService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,8 +31,6 @@ public class HallController {
     @Operation(summary = "공연장 단건 조회")
     public ResponseEntity<ApiResponse<?>> getHall(@PathVariable("id") Long id) {
 
-        GetHallResponseDto getHallResponseDto = hallService.getHall(id);
-
-        return ResponseEntity.ok(ApiResponse.success(getHallResponseDto));
+        return ResponseEntity.ok(ApiResponse.success(hallService.getHall(id)));
     }
 }

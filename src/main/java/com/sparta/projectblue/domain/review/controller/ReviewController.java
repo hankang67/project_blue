@@ -37,10 +37,10 @@ public class ReviewController {
     public ResponseEntity<ApiResponse<?>> update(
             @AuthenticationPrincipal AuthUser authUser,
             @PathVariable Long id,
-            @RequestBody UpdateReviewRequestDto requestDto) {
+            @RequestBody UpdateReviewRequestDto request) {
 
         return ResponseEntity.ok(
-                ApiResponse.success(reviewService.update(authUser.getId(), id, requestDto)));
+                ApiResponse.success(reviewService.update(authUser.getId(), id, request)));
     }
 
     @DeleteMapping("/{id}")

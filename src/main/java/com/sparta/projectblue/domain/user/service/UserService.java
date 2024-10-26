@@ -21,7 +21,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public void deleteUser(AuthUser authUser, DeleteUserRequestDto request) {
+    public void delete(AuthUser authUser, DeleteUserRequestDto request) {
 
         User user =
                 userRepository

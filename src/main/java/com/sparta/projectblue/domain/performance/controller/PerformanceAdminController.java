@@ -41,10 +41,10 @@ public class PerformanceAdminController {
     public ResponseEntity<ApiResponse<?>> update(
             @AuthenticationPrincipal AuthUser authUser,
             @PathVariable Long id,
-            @Valid @RequestBody UpdatePerformanceRequestDto requestDto) {
+            @Valid @RequestBody UpdatePerformanceRequestDto request) {
 
         return ResponseEntity.ok(
-                ApiResponse.success(performanceAdminService.update(authUser, id, requestDto)));
+                ApiResponse.success(performanceAdminService.update(authUser, id, request)));
     }
 
     @DeleteMapping("/{id}")
@@ -69,7 +69,7 @@ public class PerformanceAdminController {
 
     @DeleteMapping("{id}/performers/{performerId}")
     @Operation(summary = "배우 공연 삭제", description = "공연에 등록된 배우를 삭제합니다.")
-    public ResponseEntity<ApiResponse<?>> removePerformerFromPerformance(
+    public ResponseEntity<ApiResponse<?>> removePerformer(
             @PathVariable Long id, @PathVariable Long performerId) {
 
         performanceAdminService.removePerformer(id, performerId);

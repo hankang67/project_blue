@@ -24,7 +24,7 @@ public class PerformerAdminService {
     private final PerformerRepository performerRepository;
 
     @Transactional
-    public CreatePerformerResponseDto createPerformer(
+    public CreatePerformerResponseDto create(
             AuthUser authUser, @Valid CreatePerformerRequestDto request) {
 
         hasRole(authUser);
@@ -47,7 +47,7 @@ public class PerformerAdminService {
     }
 
     @Transactional
-    public UpdatePerformerResponseDto updatePerformer(
+    public UpdatePerformerResponseDto update(
             AuthUser authUser, Long id, @Valid UpdatePerformerRequestDto request) {
 
         hasRole(authUser);
@@ -73,7 +73,7 @@ public class PerformerAdminService {
     }
 
     @Transactional
-    public void deletePerformer(AuthUser authUser, Long id) {
+    public void delete(AuthUser authUser, Long id) {
 
         hasRole(authUser);
 
