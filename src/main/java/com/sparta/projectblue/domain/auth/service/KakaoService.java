@@ -103,7 +103,7 @@ public class KakaoService {
                 String.class
         );
 
-        //Response 데이터 파싱
+        // Response 데이터 파싱
         JSONParser jsonParser = new JSONParser();
         JSONObject jsonObject = (JSONObject) jsonParser.parse(response.getBody());
         JSONObject account = (JSONObject) jsonObject.get("kakao_account");
