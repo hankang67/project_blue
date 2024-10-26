@@ -53,7 +53,6 @@ public class KakaoService {
         }
 
         String accessToken;
-        String refreshToken;
 
         try {
             HttpHeaders headers = new HttpHeaders();
@@ -81,7 +80,6 @@ public class KakaoService {
             JSONObject jsonObject = (JSONObject) jsonParser.parse(response.getBody());
 
             accessToken = (String) jsonObject.get("access_token");
-            refreshToken = (String) jsonObject.get("refresh_token");
         } catch (Exception e) {
             throw new AuthException("Kakao 요청 실패");
         }

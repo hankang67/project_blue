@@ -19,7 +19,6 @@ public class KakaoController {
 
     private final KakaoService kakaoService;
 
-    // 카카오 로그인 요청
     @GetMapping("/kakao")
     public String kakaoConnect() {
         return kakaoService.kakaoLogin();
