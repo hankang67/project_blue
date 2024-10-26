@@ -130,7 +130,6 @@ public class PerformanceAdminService {
         // 공연 정보 수정
         performance.update(requestDto);
 
-        // 출연자 리스트 수정
         // 출연자 리스트 전체 삭제 후 다시 추가
         deletePerformerPerformance(performanceId);
 
@@ -146,7 +145,6 @@ public class PerformanceAdminService {
         return "공연 ID : " + performance.getId() + ", 공연 이름 : " + performance.getTitle() + " 수정 완료.";
     }
 
-    // 공연 삭제
     @Transactional
     public String delete(AuthUser authUser, Long performanceId) {
         hasRole(authUser);
@@ -177,7 +175,6 @@ public class PerformanceAdminService {
         return "공연이 삭제되었습니다.";
     }
 
-    // 권한 확인
     public void hasRole(AuthUser authUser) {
         if (!authUser.hasRole(UserRole.ROLE_ADMIN)) {
             throw new IllegalArgumentException("관리자만 접근할 수 있습니다.");
@@ -195,8 +192,9 @@ public class PerformanceAdminService {
     }
 
 
-    // 먼저 파일 업로드 시, 파일명을 난수화하기 위해 random으로 돌립니다.
+
     public String createFileName(String fileName) {
+        // aws 업로드를 위한 unique name 생성
         return UUID.randomUUID().toString().concat(getFileExtension(fileName));
     }
 

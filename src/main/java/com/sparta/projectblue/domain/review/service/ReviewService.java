@@ -20,7 +20,6 @@ public class ReviewService {
 
     private final ReservationRepository reservationRepository;
 
-    // 리뷰 생성
     @Transactional
     public CreateReviewDto.Response create(Long userId, CreateReviewDto.Request request) {
         Reservation reservation = reservationRepository.findById(request.getReservationId())
