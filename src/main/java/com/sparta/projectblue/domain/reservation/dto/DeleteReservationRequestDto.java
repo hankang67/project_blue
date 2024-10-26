@@ -6,16 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-public class DeleteReservationDto {
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+public class DeleteReservationRequestDto {
 
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class Request {
-        @NotNull
-        private Long reservationId;
+    @NotNull
+    private Long reservationId;
 
-        @NotBlank
-        private String password;
-    }
+    @NotBlank
+    private String password;
 }

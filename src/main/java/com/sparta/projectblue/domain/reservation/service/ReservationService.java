@@ -10,10 +10,7 @@ import com.sparta.projectblue.domain.payment.repository.PaymentRepository;
 import com.sparta.projectblue.domain.payment.service.PaymentService;
 import com.sparta.projectblue.domain.performance.entity.Performance;
 import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
-import com.sparta.projectblue.domain.reservation.dto.CreateReservationDto;
-import com.sparta.projectblue.domain.reservation.dto.DeleteReservationDto;
-import com.sparta.projectblue.domain.reservation.dto.GetReservationDto;
-import com.sparta.projectblue.domain.reservation.dto.GetReservationsDto;
+import com.sparta.projectblue.domain.reservation.dto.*;
 import com.sparta.projectblue.domain.reservation.entity.Reservation;
 import com.sparta.projectblue.domain.reservation.repository.ReservationRepository;
 import com.sparta.projectblue.domain.reservedSeat.entity.ReservedSeat;
@@ -54,7 +51,7 @@ public class ReservationService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public CreateReservationDto.Response create(Long id, CreateReservationDto.Request request) {
+    public CreateReservationResponseDto create(Long id, CreateReservationRequestDto request) {
 
         // 회차 가져옴 (예매상태확인)
         Round round = roundRepository.findById(request.getRoundId()).orElseThrow(() ->
@@ -114,7 +111,7 @@ public class ReservationService {
             reservedSeatRepository.save(new ReservedSeat(newReservation.getId(), newReservation.getRoundId(), i));
         }
 
-        return new CreateReservationDto.Response(
+        return new CreateReservationResponseDto(
                 newReservation.getId(),
                 performance.getTitle(),
                 round.getDate(),
@@ -125,7 +122,7 @@ public class ReservationService {
     }
 
     @Transactional
-    public void delete(Long id, DeleteReservationDto.Request request) throws Exception {
+    public void delete(Long id, DeleteReservationRequestDto request) throws Exception {
         // 사용자 가져옴
         User user =
                 userRepository.findById(id).orElseThrow(() ->
@@ -163,7 +160,7 @@ public class ReservationService {
         reservation.resCanceled();
     }
 
-    public GetReservationDto.Response getReservation(AuthUser user, Long reservationId) {
+    public GetReservationResponseDto getReservation(AuthUser user, Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(()->
                 new IllegalArgumentException("예약 내역을 찾을 수 없습니다"));
 
@@ -195,7 +192,7 @@ public class ReservationService {
 
         Review review = reviewRepository.findByReservationId(reservation.getId()).orElse(null);
 
-        return new GetReservationDto.Response(
+        return new GetReservationResponseDto(
                 performance,
                 round.getDate(),
                 reservation,
@@ -206,11 +203,11 @@ public class ReservationService {
         );
     }
 
-    public List<GetReservationsDto.Response> getReservations(Long userId) {
+    public List<GetReservationsResponseDto> getReservations(Long userId) {
         // 예약 가져옴
         List<Reservation> reservations = reservationRepository.findByUserId(userId);
 
-        List<GetReservationsDto.Response> responseList = new ArrayList<>();
+        List<GetReservationsResponseDto> responseList = new ArrayList<>();
 
         for (Reservation reservation : reservations) {
             Performance performance = performanceRepository.findById(reservation.getPerformanceId())
@@ -224,7 +221,7 @@ public class ReservationService {
             Round round = roundRepository.findById(reservation.getRoundId()).orElseThrow(() ->
                     new IllegalArgumentException("공연 회차를 찾을 수 없습니다"));
 
-            responseList.add(new GetReservationsDto.Response(
+            responseList.add(new GetReservationsResponseDto(
                     performance.getTitle(),
                     seats.size(),
                     reservation.getId(),

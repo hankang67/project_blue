@@ -2,10 +2,9 @@ package com.sparta.projectblue.domain.reservation.controller;
 
 import com.sparta.projectblue.config.ApiResponse;
 import com.sparta.projectblue.domain.common.dto.AuthUser;
-import com.sparta.projectblue.domain.reservation.dto.CreateReservationDto;
-import com.sparta.projectblue.domain.reservation.dto.DeleteReservationDto;
-import com.sparta.projectblue.domain.reservation.dto.GetReservationDto;
-import com.sparta.projectblue.domain.reservation.dto.GetReservationsDto;
+import com.sparta.projectblue.domain.reservation.dto.CreateReservationRequestDto;
+import com.sparta.projectblue.domain.reservation.dto.DeleteReservationRequestDto;
+import com.sparta.projectblue.domain.reservation.dto.GetReservationsResponseDto;
 import com.sparta.projectblue.domain.reservation.service.ReservationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,7 +28,7 @@ public class ReservationController {
     @Operation(summary = "공연 예매")
     public ResponseEntity<ApiResponse<?>> create(
             @AuthenticationPrincipal AuthUser authUser,
-            @Valid @RequestBody CreateReservationDto.Request request) {
+            @Valid @RequestBody CreateReservationRequestDto request) {
 
         return ResponseEntity.ok(ApiResponse.success(reservationService.create(authUser.getId(), request)));
     }
@@ -38,7 +37,7 @@ public class ReservationController {
     @Operation(summary = "예매 취소", description = "예매 취소 api, 비밀번호 입력 필수")
     public ResponseEntity<ApiResponse<?>> delete(
             @AuthenticationPrincipal AuthUser authUser,
-            @Valid @RequestBody DeleteReservationDto.Request request) throws Exception {
+            @Valid @RequestBody DeleteReservationRequestDto request) throws Exception {
 
         reservationService.delete(authUser.getId(), request);
 
@@ -48,14 +47,14 @@ public class ReservationController {
     @GetMapping
     @Operation(summary = "예매 다건 조회", description = "authUser가 예매한 내역 다건")
     public ResponseEntity<ApiResponse<?>> getReservations(@AuthenticationPrincipal AuthUser authUser) {
-        List<GetReservationsDto.Response> reservations = reservationService.getReservations(authUser.getId());
-        return ResponseEntity.ok(ApiResponse.success(reservations));
+
+        return ResponseEntity.ok(ApiResponse.success(reservationService.getReservations(authUser.getId())));
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "예매 단건 조회", description = "authUser가 예매한 내역 단건")
     public ResponseEntity<ApiResponse<?>> getReservation(@AuthenticationPrincipal AuthUser authUser, @PathVariable Long id) {
-        GetReservationDto.Response reservation = reservationService.getReservation(authUser, id);
-        return ResponseEntity.ok(ApiResponse.success(reservation));
+
+        return ResponseEntity.ok(ApiResponse.success(reservationService.getReservation(authUser, id)));
     }
 }

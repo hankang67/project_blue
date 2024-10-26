@@ -5,8 +5,8 @@ import com.sparta.projectblue.domain.hall.entity.Hall;
 import com.sparta.projectblue.domain.hall.repository.HallRepository;
 import com.sparta.projectblue.domain.performance.entity.Performance;
 import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
-import com.sparta.projectblue.domain.reservation.dto.CreateReservationDto;
-import com.sparta.projectblue.domain.reservation.dto.DeleteReservationDto;
+import com.sparta.projectblue.domain.reservation.dto.CreateReservationResponseDto;
+import com.sparta.projectblue.domain.reservation.dto.DeleteReservationRequestDto;
 import com.sparta.projectblue.domain.reservation.entity.Reservation;
 import com.sparta.projectblue.domain.reservation.repository.ReservationRepository;
 import com.sparta.projectblue.domain.user.entity.User;
@@ -39,7 +39,7 @@ public class SlackNotificationAspect {
     }
 
     @AfterReturning(pointcut = "createMessagePointcut()", returning = "result")
-    public void sendMessage(CreateReservationDto.Response result) {
+    public void sendMessage(CreateReservationResponseDto result) {
 
         // 예약 정보를 가져오기 위해 ID를 사용
         Long reservationId = result.getId();
@@ -71,7 +71,7 @@ public class SlackNotificationAspect {
 
     @AfterReturning(pointcut = "deleteMessagePointcut()", returning = "result")
     public void deleteSend(JoinPoint joinPoint, Object result) {
-        DeleteReservationDto.Request request = (DeleteReservationDto.Request) joinPoint.getArgs()[1];
+        DeleteReservationRequestDto request = (DeleteReservationRequestDto) joinPoint.getArgs()[1];
 
         // 예약 정보를 가져오기 위해 ID를 사용
         Long reservationId = request.getReservationId();
