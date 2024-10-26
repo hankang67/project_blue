@@ -6,7 +6,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.performance.service.PerformanceAdminService;
-import com.sparta.projectblue.domain.poster.dto.PosterUpdateRequestDto;
+import com.sparta.projectblue.domain.poster.dto.UpdatePosterResponseDto;
 import com.sparta.projectblue.domain.poster.entity.Poster;
 import com.sparta.projectblue.domain.poster.repository.PosterRepository;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +37,7 @@ public class PosterService {
     private String bucket;
 
     @Transactional
-    public String update(AuthUser authUser, Long posterId, MultipartFile file) {
+    public UpdatePosterResponseDto update(AuthUser authUser, Long posterId, MultipartFile file) {
 
         performanceAdminService.hasRole(authUser);
 
@@ -71,7 +71,7 @@ public class PosterService {
 
         poster.update(posterName, posterUrl, poster.getFileSize());
 
-        return poster.getName() + "의 정보가 수정되었습니다.";
+        return new UpdatePosterResponseDto(poster);
     }
 
     private Poster getPoster(Long posterId) {

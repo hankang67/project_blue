@@ -2,11 +2,9 @@ package com.sparta.projectblue.domain.poster.controller;
 
 import com.sparta.projectblue.config.ApiResponse;
 import com.sparta.projectblue.domain.common.dto.AuthUser;
-import com.sparta.projectblue.domain.poster.dto.PosterUpdateRequestDto;
 import com.sparta.projectblue.domain.poster.service.PosterService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,7 +21,7 @@ public class PosterController {
 
     @Operation(summary = "포스터 수정", description = "특정 공연의 포스터 이름과 url 수정")
     @PutMapping("/admin/posters/{id}")
-    public ResponseEntity<ApiResponse<String>> update(
+    public ResponseEntity<ApiResponse<?>> update(
             @AuthenticationPrincipal AuthUser authUser,
             @PathVariable Long id,
             @RequestPart("file") MultipartFile posterFile) {
