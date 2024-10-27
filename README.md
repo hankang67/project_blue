@@ -6,4 +6,9 @@
 
 ## [Jira 프로젝트 관리하기](https://everyday-spring.com/626)
 
+- 프로젝트 관리 툴 Jira 도입
+- Jira - GitHub 연동하기
+
 ## [Docker 왜 이미지라고 할까?](https://everyday-spring.com/627)
+
+- Docker 학습
