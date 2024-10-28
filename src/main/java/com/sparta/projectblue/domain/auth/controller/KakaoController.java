@@ -1,29 +1,40 @@
 package com.sparta.projectblue.domain.auth.controller;
 
-import com.sparta.projectblue.config.ApiResponse;
-import com.sparta.projectblue.domain.auth.service.KakaoService;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sparta.projectblue.config.ApiResponse;
+import com.sparta.projectblue.domain.auth.service.KakaoService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
+@Tag(name = "KakaoUser", description = "카카오 회원가입 로그인 API")
 public class KakaoController {
 
     private final KakaoService kakaoService;
 
-    // 카카오 로그인 요청
     @GetMapping("/kakao")
+    @Operation(summary = "연동")
     public String kakaoConnect() {
+
         return kakaoService.kakaoLogin();
     }
 
     @GetMapping("/kakaoCallback")
-    public ResponseEntity<ApiResponse<String>> kakaoSignin(HttpServletRequest request) throws Exception {
-        return ResponseEntity.ok(ApiResponse.success(kakaoService.callback(request.getParameter("code"))));
+    @Operation(summary = "로그인")
+    public ResponseEntity<ApiResponse<String>> kakaoSignin(HttpServletRequest request)
+            throws Exception {
+
+        return ResponseEntity.ok(
+                ApiResponse.success(kakaoService.callback(request.getParameter("code"))));
     }
 }

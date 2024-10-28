@@ -1,29 +1,28 @@
 package com.sparta.projectblue.domain.performance.service;
 
-import com.sparta.projectblue.domain.performance.dto.PerformanceDetailDto;
-import com.sparta.projectblue.domain.performance.dto.PerformanceResponseDto;
-import com.sparta.projectblue.domain.performance.dto.PerformanceReviewDto;
-import com.sparta.projectblue.domain.performance.dto.PerformanceRoundsDto;
-import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
-import com.sparta.projectblue.domain.performer.dto.PerformerDetailDto;
-import com.sparta.projectblue.domain.performer.repository.PerformerRepository;
-import com.sparta.projectblue.domain.performerPerformance.entity.PerformerPerformance;
-import com.sparta.projectblue.domain.performerPerformance.repository.PerformerPerformanceRepository;
-import com.sparta.projectblue.domain.review.entity.Review;
-import com.sparta.projectblue.domain.review.repository.ReviewRepository;
-import com.sparta.projectblue.domain.round.entity.Round;
-import com.sparta.projectblue.domain.round.repository.RoundRepository;
-import lombok.RequiredArgsConstructor;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.sparta.projectblue.domain.hall.entity.Hall;
+import com.sparta.projectblue.domain.hall.repository.HallRepository;
+import com.sparta.projectblue.domain.performance.dto.*;
+import com.sparta.projectblue.domain.performance.entity.Performance;
+import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
+import com.sparta.projectblue.domain.poster.entity.Poster;
+import com.sparta.projectblue.domain.poster.repository.PosterRepository;
+import com.sparta.projectblue.domain.review.entity.Review;
+import com.sparta.projectblue.domain.review.repository.ReviewRepository;
+import com.sparta.projectblue.domain.round.entity.Round;
+import com.sparta.projectblue.domain.round.repository.RoundRepository;
 
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -32,13 +31,13 @@ public class PerformanceService {
 
     private final PerformanceRepository performanceRepository;
 
-    private final PerformerRepository performerRepository;
-    private final PerformerPerformanceRepository performerPerformanceRepository;
+    private final HallRepository hallRepository;
     private final ReviewRepository reviewRepository;
     private final RoundRepository roundRepository;
+    private final PosterRepository posterRepository;
 
-    // 진행중인 전체 공연 리스트 출력
-    public Page<PerformanceResponseDto> getPerformances(int page, int size) {
+    public Page<GetPerformancesResponseDto> getPerformances(int page, int size) {
+
         Pageable pageable = PageRequest.of(page - 1, size);
 
         LocalDateTime performanceDay = LocalDateTime.now();
@@ -46,33 +45,27 @@ public class PerformanceService {
         return performanceRepository.findByCondition(pageable, null, performanceDay, null);
     }
 
-    //공연 출연자 정보 조회
-    public List<PerformerDetailDto> getPerformers(Long id) {
-        PerformanceDetailDto performanceDetailDto = performanceRepository.findPerformanceDetailById(id);
-        if (performanceDetailDto == null) {
-            throw new IllegalArgumentException("해당 공연 정보를 찾을 수 없습니다.");
-        }
-        return performerRepository.findPerformersByPerformanceId(id);
+    public GetPerformanceResponseDto getPerformance(Long id) {
+        Performance performance =
+                performanceRepository
+                        .findById(id)
+                        .orElseThrow(() -> new IllegalArgumentException("해당 공연 정보를 찾을 수 없습니다"));
+
+        Hall hall =
+                hallRepository
+                        .findById(performance.getHallId())
+                        .orElseThrow(() -> new IllegalArgumentException("공연장의 정보가 없습니다."));
+
+        Poster poster =
+                posterRepository
+                        .findByPerformanceId(performance.getId())
+                        .orElseThrow(() -> new IllegalArgumentException("포스터 정보가 없습니다."));
+
+        return new GetPerformanceResponseDto(performance, hall, poster);
     }
 
-    //공연 상세 정보 조회
-    public PerformanceDetailDto getPerformance(Long id) {
-        PerformanceDetailDto performanceDetailDto = performanceRepository.findPerformanceDetailById(id);
+    public GetPerformanceRoundsResponseDto getRounds(Long id) {
 
-        if (performanceDetailDto == null) {
-            throw new IllegalArgumentException("해당 공연 정보를 찾을 수 없습니다.");
-        }
-        if (performanceDetailDto.getHallName() == null || performanceDetailDto.getHallName().isEmpty()) {
-            throw new IllegalArgumentException("공연장의 정보가 없습니다.");
-        }
-        if (performanceDetailDto.getImageUrl() == null || performanceDetailDto.getImageUrl().isEmpty()) {
-            throw new IllegalArgumentException("포스터 정보가 없습니다.");
-        }
-
-        return performanceRepository.findPerformanceDetailById(id);
-    }
-
-    public PerformanceRoundsDto.Response getRounds(Long id) {
         // 공연 id값 검증
         if (performanceRepository.findById(id).isEmpty()) {
             throw new IllegalArgumentException("공연을 찾을 수 없습니다");
@@ -82,15 +75,19 @@ public class PerformanceService {
         List<Round> rounds = roundRepository.findByPerformanceId(id).stream().toList();
 
         // 회차 날짜정보, 예매 상태만 분리
-        List<PerformanceRoundsDto.RoundInfo> roundInfos = rounds.stream()
-                .map(round -> new PerformanceRoundsDto.RoundInfo(round.getDate(), round.getStatus()))
-                .collect(Collectors.toList());
+        List<GetPerformanceRoundsResponseDto.RoundInfo> roundInfos =
+                rounds.stream()
+                        .map(
+                                round ->
+                                        new GetPerformanceRoundsResponseDto.RoundInfo(
+                                                round.getDate(), round.getStatus()))
+                        .collect(Collectors.toList());
 
-        return new PerformanceRoundsDto.Response(roundInfos);
-
+        return new GetPerformanceRoundsResponseDto(roundInfos);
     }
 
-    public PerformanceReviewDto.Response getReviews(Long id) {
+    public GetPerformanceReviewsResponseDto getReviews(Long id) {
+
         // 공연 id값 검증
         if (performanceRepository.findById(id).isEmpty()) {
             throw new IllegalArgumentException("공연을 찾을 수 없습니다");
@@ -98,42 +95,26 @@ public class PerformanceService {
 
         List<Review> reviews = reviewRepository.findByPerformanceId(id).stream().toList();
 
-        List<PerformanceReviewDto.ReviewInfo> reviewInfos = reviews.stream()
-                .map(review -> new PerformanceReviewDto.ReviewInfo(review.getReviewRate(), review.getContent()))
-                .collect(Collectors.toList());
+        List<GetPerformanceReviewsResponseDto.ReviewInfo> reviewInfos =
+                reviews.stream()
+                        .map(
+                                review ->
+                                        new GetPerformanceReviewsResponseDto.ReviewInfo(
+                                                review.getReviewRate(), review.getContent()))
+                        .collect(Collectors.toList());
 
-        return new PerformanceReviewDto.Response(reviewInfos);
+        return new GetPerformanceReviewsResponseDto(reviewInfos);
     }
 
-    @Transactional
-    public void addPerformer(Long performanceId, Long performerId) {
-        if (performanceRepository.findById(performanceId).isEmpty()) {
+    public GetPerformancePerformersResponseDto getPerformers(Long id) {
+
+        if (performanceRepository.findById(id).isEmpty()) {
             throw new IllegalArgumentException("공연을 찾을 수 없습니다");
         }
-        if (performerRepository.findById(performerId).isEmpty()) {
-            throw new IllegalArgumentException("공연을 찾을 수 없습니다");
-        }
-        if (performerPerformanceRepository.existsByPerformanceIdAndPerformerId(performanceId, performerId)) {
-            throw new IllegalArgumentException("해당 배우는 이미 이 공연에 등록되어 있습니다.");
-        }
 
-        PerformerPerformance performerPerformance = new PerformerPerformance(performerId, performanceId);
-        performerPerformanceRepository.save(performerPerformance);
+        List<GetPerformancePerformersResponseDto.PerformerInfo> performers =
+                performanceRepository.findPerformersByPerformanceId(id);
 
-    }
-
-    @Transactional
-    public void removePerformer(Long performanceId, Long performerId) {
-        if (performanceRepository.findById(performanceId).isEmpty()) {
-            throw new IllegalArgumentException("공연을 찾을 수 없습니다");
-        }
-        if (performerRepository.findById(performerId).isEmpty()) {
-            throw new IllegalArgumentException("공연을 찾을 수 없습니다");
-        }
-        PerformerPerformance performerPerformance = performerPerformanceRepository
-                .findByPerformanceIdAndPerformerId(performanceId, performerId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 배우는 이 공연에 등록되어 있지 않습니다."));
-
-        performerPerformanceRepository.delete(performerPerformance);
+        return new GetPerformancePerformersResponseDto(performers);
     }
 }

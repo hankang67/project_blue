@@ -11,7 +11,7 @@ public enum Category {
     private final String value;
 
     Category(String value) {
+
         this.value = value;
     }
-
 }

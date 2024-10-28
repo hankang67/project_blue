@@ -1,9 +1,11 @@
 package com.sparta.projectblue.domain.performer.entity;
 
-import com.sparta.projectblue.domain.common.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+
+import com.sparta.projectblue.domain.common.entity.BaseEntity;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,11 +25,14 @@ public class Performer extends BaseEntity {
     private String nation;
 
     public Performer(String name, String birth, String nation) {
+
         this.name = name;
         this.birth = birth;
         this.nation = nation;
     }
+
     public void updateInfo(String name, String birth, String nation) {
+
         this.name = name;
         this.birth = birth;
         this.nation = nation;

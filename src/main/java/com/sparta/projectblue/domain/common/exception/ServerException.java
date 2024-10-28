@@ -6,4 +6,3 @@ public class ServerException extends RuntimeException {
         super(message);
     }
 }
-

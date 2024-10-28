@@ -1,16 +1,20 @@
 package com.sparta.projectblue.domain.hall.controller;
 
-import com.sparta.projectblue.config.ApiResponse;
-import com.sparta.projectblue.domain.common.dto.AuthUser;
-import com.sparta.projectblue.domain.hall.dto.HallRequestDto;
-import com.sparta.projectblue.domain.hall.service.HallAdminService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import com.sparta.projectblue.config.ApiResponse;
+import com.sparta.projectblue.domain.common.dto.AuthUser;
+import com.sparta.projectblue.domain.hall.dto.CreateHallRequestDto;
+import com.sparta.projectblue.domain.hall.dto.UpdateHallRequestDto;
+import com.sparta.projectblue.domain.hall.service.HallAdminService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/admin/halls")
@@ -24,7 +28,7 @@ public class HallAdminController {
     @Operation(summary = "공연장 등록")
     public ResponseEntity<ApiResponse<?>> create(
             @AuthenticationPrincipal AuthUser authUser,
-            @Valid @RequestBody HallRequestDto request) {
+            @Valid @RequestBody CreateHallRequestDto request) {
 
         return ResponseEntity.ok(ApiResponse.success(hallAdminService.create(authUser, request)));
     }
@@ -34,16 +38,16 @@ public class HallAdminController {
     public ResponseEntity<ApiResponse<?>> update(
             @AuthenticationPrincipal AuthUser authUser,
             @PathVariable("id") Long id,
-            @Valid @RequestBody HallRequestDto request) {
+            @Valid @RequestBody UpdateHallRequestDto request) {
 
-        return ResponseEntity.ok(ApiResponse.success(hallAdminService.update(authUser, id, request)));
+        return ResponseEntity.ok(
+                ApiResponse.success(hallAdminService.update(authUser, id, request)));
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "공연장 삭제")
     public ResponseEntity<ApiResponse<?>> delete(
-            @AuthenticationPrincipal AuthUser authUser,
-            @PathVariable("id") Long id) {
+            @AuthenticationPrincipal AuthUser authUser, @PathVariable("id") Long id) {
 
         hallAdminService.delete(authUser, id);
 
