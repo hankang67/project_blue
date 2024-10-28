@@ -2,6 +2,7 @@ package com.sparta.projectblue.domain.coupon.controller;
 
 import com.sparta.projectblue.config.ApiResponse;
 import com.sparta.projectblue.domain.common.dto.AuthUser;
+import com.sparta.projectblue.domain.coupon.entity.Coupon;
 import com.sparta.projectblue.domain.coupon.service.CouponService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,15 @@ import org.springframework.web.bind.annotation.*;
 public class CouponController {
 
     private final CouponService couponService;
+
+    @PostMapping("/first/{couponid}")
+    @Operation(summary = "쿠폰 발행")
+    public ResponseEntity<ApiResponse<Coupon>> firstCoupon(
+            @AuthenticationPrincipal AuthUser authUser, @PathVariable Long couponid) {
+
+        return ResponseEntity.ok(
+                ApiResponse.success(couponService.firstCoupon(authUser, couponid)));
+    }
 
     @GetMapping("/{id}")
     @Operation(summary = "쿠폰 단건 조회")
