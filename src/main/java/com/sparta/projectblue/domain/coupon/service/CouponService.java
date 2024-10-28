@@ -18,6 +18,16 @@ public class CouponService {
 
     private final CouponRepository couponRepository;
 
+    @Transactional
+    public Coupon firstCoupon(AuthUser authUser, Long couponid) {
+        Coupon coupon = couponRepository.findByIdOrElseThrow(couponid);
+
+        // 현재 쿠폰 수량 증가
+        coupon.incerementQuantity();
+
+        return couponRepository.save(coupon);
+    }
+
     public GetCouponResponseDto getCoupon(Long id) {
 
         Coupon coupon = couponRepository.findByIdOrElseThrow(id);
