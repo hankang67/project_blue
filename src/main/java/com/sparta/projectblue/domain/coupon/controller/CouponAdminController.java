@@ -29,15 +29,6 @@ public class CouponAdminController {
                 ApiResponse.success(couponAdminService.create(authUser, requestDto)));
     }
 
-    @PostMapping("/first/{couponid}")
-    @Operation(summary = "쿠폰 발행")
-    public ResponseEntity<ApiResponse<Coupon>> firstCoupon(
-            @AuthenticationPrincipal AuthUser authUser, @PathVariable Long couponid) {
-
-        return ResponseEntity.ok(
-                ApiResponse.success(couponAdminService.firstCoupon(authUser, couponid)));
-    }
-
     @DeleteMapping("/{id}")
     @Operation(summary = "쿠폰 삭제")
     public ResponseEntity<ApiResponse<?>> delete(
