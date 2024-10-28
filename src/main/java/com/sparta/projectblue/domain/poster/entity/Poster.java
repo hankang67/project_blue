@@ -1,9 +1,11 @@
 package com.sparta.projectblue.domain.poster.entity;
 
-import com.sparta.projectblue.domain.common.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+
+import com.sparta.projectblue.domain.common.entity.BaseEntity;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,14 +24,21 @@ public class Poster extends BaseEntity {
     @Column(nullable = false, length = 255, name = "image_url")
     private String imageUrl;
 
-    public Poster(Long performanceId, String name, String imageUrl) {
+    @Column(nullable = false, name = "file_size")
+    private Long fileSize;
+
+    public Poster(Long performanceId, String name, String imageUrl, Long fileSize) {
+
         this.performanceId = performanceId;
         this.name = name;
         this.imageUrl = imageUrl;
+        this.fileSize = fileSize;
     }
 
-    public void update(String name, String imageUrl) {
+    public void update(String name, String imageUrl, Long fileSize) {
+
         this.name = name;
         this.imageUrl = imageUrl;
+        this.fileSize = fileSize;
     }
 }

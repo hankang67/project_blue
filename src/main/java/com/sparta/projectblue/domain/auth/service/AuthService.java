@@ -1,16 +1,20 @@
 package com.sparta.projectblue.domain.auth.service;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.sparta.projectblue.config.JwtUtil;
-import com.sparta.projectblue.domain.auth.dto.SignInDto;
-import com.sparta.projectblue.domain.auth.dto.SignUpDto;
+import com.sparta.projectblue.domain.auth.dto.SigninRequestDto;
+import com.sparta.projectblue.domain.auth.dto.SigninResponseDto;
+import com.sparta.projectblue.domain.auth.dto.SignupRequestDto;
+import com.sparta.projectblue.domain.auth.dto.SignupResponseDto;
 import com.sparta.projectblue.domain.common.enums.UserRole;
 import com.sparta.projectblue.domain.common.exception.AuthException;
 import com.sparta.projectblue.domain.user.entity.User;
 import com.sparta.projectblue.domain.user.repository.UserRepository;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,43 +28,39 @@ public class AuthService {
     private final JwtUtil jwtUtil;
 
     @Transactional
-    public SignUpDto.Response signup(SignUpDto.Request signupRequest) {
-        validatePassword(signupRequest.getPassword());
+    public SignupResponseDto signup(SignupRequestDto request) {
 
-        if (userRepository.existsByEmailAndIsDeletedTrue(signupRequest.getEmail())) {
+        validatePassword(request.getPassword());
+
+        if (userRepository.existsByEmailAndIsDeletedTrue(request.getEmail())) {
             throw new IllegalArgumentException("탈퇴한 유저의 이메일은 재사용할 수 없습니다.");
         }
 
-        if (userRepository.existsByEmail(signupRequest.getEmail())) {
+        if (userRepository.existsByEmail(request.getEmail())) {
             throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
         }
 
-        String encodedPassword = passwordEncoder.encode(signupRequest.getPassword());
-        UserRole userRole = UserRole.of(signupRequest.getUserRole());
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
+        UserRole userRole = UserRole.of(request.getUserRole());
 
-        User newUser =
-                new User(
-                        signupRequest.getEmail(),
-                        signupRequest.getName(),
-                        encodedPassword,
-                        userRole);
+        User newUser = new User(request.getEmail(), request.getName(), encodedPassword, userRole);
         User savedUser = userRepository.save(newUser);
 
         String bearerToken =
                 jwtUtil.createToken(
                         savedUser.getId(), savedUser.getEmail(), savedUser.getName(), userRole);
 
-        return new SignUpDto.Response(bearerToken);
+        return new SignupResponseDto(bearerToken);
     }
 
-    public SignInDto.Response signin(SignInDto.Request signinRequest) {
+    public SigninResponseDto signin(SigninRequestDto request) {
+
         User user =
                 userRepository
-                        .findByEmail(signinRequest.getEmail())
+                        .findByEmail(request.getEmail())
                         .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 유저입니다."));
 
-        // 로그인 시 이메일과 비밀번호가 일치하지 않을 경우 401을 반환합니다.
-        if (!passwordEncoder.matches(signinRequest.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new AuthException("잘못된 비밀번호입니다.");
         }
 
@@ -68,10 +68,11 @@ public class AuthService {
                 jwtUtil.createToken(
                         user.getId(), user.getEmail(), user.getName(), user.getUserRole());
 
-        return new SignInDto.Response(bearerToken);
+        return new SigninResponseDto(bearerToken);
     }
 
     private void validatePassword(String password) {
+
         if (password.length() < 8) {
             throw new IllegalArgumentException("비밀번호는 최소 8자 이상이어야 합니다.");
         }
@@ -86,4 +87,3 @@ public class AuthService {
         }
     }
 }
-

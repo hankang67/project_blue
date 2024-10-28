@@ -1,9 +1,11 @@
 package com.sparta.projectblue.domain.performerPerformance.entity;
 
-import com.sparta.projectblue.domain.common.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+
+import com.sparta.projectblue.domain.common.entity.BaseEntity;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,6 +22,7 @@ public class PerformerPerformance extends BaseEntity {
     private Long performanceId;
 
     public PerformerPerformance(Long performerId, Long performanceId) {
+
         this.performerId = performerId;
         this.performanceId = performanceId;
     }

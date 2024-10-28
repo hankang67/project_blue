@@ -11,7 +11,7 @@ public enum PerformanceStatus {
     private final String status;
 
     PerformanceStatus(String status) {
+
         this.status = status;
     }
-
 }

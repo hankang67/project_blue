@@ -14,6 +14,7 @@ public enum ReviewRate {
     private final String value;
 
     ReviewRate(String value) {
+
         this.value = value;
     }
 }

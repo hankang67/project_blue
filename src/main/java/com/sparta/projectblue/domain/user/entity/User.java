@@ -1,8 +1,10 @@
 package com.sparta.projectblue.domain.user.entity;
 
+import jakarta.persistence.*;
+
 import com.sparta.projectblue.domain.common.entity.BaseEntity;
 import com.sparta.projectblue.domain.common.enums.UserRole;
-import jakarta.persistence.*;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -32,6 +34,7 @@ public class User extends BaseEntity {
     private boolean isDeleted;
 
     public User(String email, String name, String password, UserRole userRole) {
+
         this.email = email;
         this.name = name;
         this.password = password;
@@ -39,6 +42,7 @@ public class User extends BaseEntity {
     }
 
     public User(String email, String name, String password, UserRole userRole, Long kakaoId) {
+
         this.email = email;
         this.name = name;
         this.password = password;
@@ -47,10 +51,12 @@ public class User extends BaseEntity {
     }
 
     public void userDeleted() {
-        this.isDeleted = true; // 탈퇴 처리
+
+        this.isDeleted = true;
     }
 
     public void InsertKakaoId(Long kakaoId) {
+
         this.kakaoId = kakaoId;
     }
 }

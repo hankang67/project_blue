@@ -1,12 +1,14 @@
 package com.sparta.projectblue.domain.payment.entity;
 
+import java.time.LocalDateTime;
+
+import jakarta.persistence.*;
+
 import com.sparta.projectblue.domain.common.entity.BaseEntity;
 import com.sparta.projectblue.domain.common.enums.PaymentStatus;
-import jakarta.persistence.*;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -51,7 +53,9 @@ public class Payment extends BaseEntity {
     @Column(nullable = false, length = 30, name = "order_id")
     private String orderId;
 
-    public Payment(Long userId, Long reservationId, Long performanceId, Long amountTotal, String orderId){
+    public Payment(
+            Long userId, Long reservationId, Long performanceId, Long amountTotal, String orderId) {
+
         this.userId = userId;
         this.reservationId = reservationId;
         this.performanceId = performanceId;
@@ -60,7 +64,14 @@ public class Payment extends BaseEntity {
         this.status = PaymentStatus.READY;
     }
 
-    public void addPaymentInfo(String paymentKey, String type, String method, Long amountSupplied, Long amountVat, LocalDateTime approvedAt) {
+    public void addPaymentInfo(
+            String paymentKey,
+            String type,
+            String method,
+            Long amountSupplied,
+            Long amountVat,
+            LocalDateTime approvedAt) {
+
         this.paymentKey = paymentKey;
         this.type = type;
         this.method = method;
@@ -71,6 +82,7 @@ public class Payment extends BaseEntity {
     }
 
     public void canceled() {
+
         this.status = PaymentStatus.CANCELED;
     }
 }
