@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-
 @Getter
 @NoArgsConstructor
 @Entity
@@ -34,8 +33,14 @@ public class UsedCoupon extends BaseEntity {
     @Column(nullable = false, name = "discount_amount")
     private int discountAmount;
 
-    public UsedCoupon(Long couponId, Long userId, Long paymentId, Long reservationId, LocalDateTime usedAt,
-                      int discountAmount) {
+    public UsedCoupon(
+            Long couponId,
+            Long userId,
+            Long paymentId,
+            Long reservationId,
+            LocalDateTime usedAt,
+            int discountAmount) {
+
         this.couponId = couponId;
         this.userId = userId;
         this.paymentId = paymentId;
@@ -43,6 +48,4 @@ public class UsedCoupon extends BaseEntity {
         this.usedAt = usedAt;
         this.discountAmount = discountAmount;
     }
-
-
 }

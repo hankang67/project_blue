@@ -2,11 +2,8 @@ package com.sparta.projectblue.domain.coupon.controller;
 
 import com.sparta.projectblue.config.ApiResponse;
 import com.sparta.projectblue.domain.common.dto.AuthUser;
-import com.sparta.projectblue.domain.coupon.dto.CouponRequestDto;
-import com.sparta.projectblue.domain.coupon.entity.Coupon;
 import com.sparta.projectblue.domain.coupon.service.CouponService;
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,28 +11,26 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin/coupons")
+@RequestMapping("/coupons")
 public class CouponController {
 
     private final CouponService couponService;
 
-    @PostMapping
-    @Operation(summary = "쿠폰 등록")
-    public ResponseEntity<ApiResponse<Coupon>> create(
-            @AuthenticationPrincipal AuthUser authUser,
-            @Valid @RequestBody CouponRequestDto requestDto) {
+    @GetMapping("/{id}")
+    @Operation(summary = "쿠폰 단건 조회")
+    public ResponseEntity<ApiResponse<?>> getCoupon(@PathVariable("id") Long id) {
 
-        return ResponseEntity.ok(ApiResponse.success(couponService.create(authUser, requestDto)));
+        return ResponseEntity.ok(ApiResponse.success(couponService.getCoupon(id)));
     }
 
-    @DeleteMapping("/{id}")
-    @Operation(summary = "쿠폰 삭제")
-    public ResponseEntity<ApiResponse<?>> delete(
+    @GetMapping
+    @Operation(summary = "쿠폰 다건 조회")
+    public ResponseEntity<ApiResponse<?>> getUserCoupons(
             @AuthenticationPrincipal AuthUser authUser,
-            @Valid @PathVariable("id") Long id) {
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
 
-        couponService.delete(authUser, id);
-
-        return ResponseEntity.ok(ApiResponse.successWithNoContent());
+        return ResponseEntity.ok(
+                ApiResponse.success(couponService.getUserCoupon(authUser, page, size)));
     }
 }

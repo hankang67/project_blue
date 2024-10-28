@@ -1,20 +1,25 @@
 package com.sparta.projectblue.domain.auth.service;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.sparta.projectblue.config.JwtUtil;
 import com.sparta.projectblue.domain.auth.dto.SigninRequestDto;
 import com.sparta.projectblue.domain.auth.dto.SigninResponseDto;
 import com.sparta.projectblue.domain.auth.dto.SignupRequestDto;
 import com.sparta.projectblue.domain.auth.dto.SignupResponseDto;
+import com.sparta.projectblue.domain.common.enums.CouponStatus;
+import com.sparta.projectblue.domain.common.enums.CouponType;
 import com.sparta.projectblue.domain.common.enums.UserRole;
 import com.sparta.projectblue.domain.common.exception.AuthException;
+import com.sparta.projectblue.domain.coupon.entity.Coupon;
+import com.sparta.projectblue.domain.coupon.repository.CouponRepository;
+import com.sparta.projectblue.domain.usedCoupon.repository.UsedCouponRepository;
 import com.sparta.projectblue.domain.user.entity.User;
 import com.sparta.projectblue.domain.user.repository.UserRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +27,10 @@ import lombok.RequiredArgsConstructor;
 public class AuthService {
 
     private final UserRepository userRepository;
+
+    private final CouponRepository couponRepository;
+
+    private final UsedCouponRepository usedCouponRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -50,7 +59,9 @@ public class AuthService {
                 jwtUtil.createToken(
                         savedUser.getId(), savedUser.getEmail(), savedUser.getName(), userRole);
 
-        return new SignupResponseDto(bearerToken);
+        Coupon coupon = signupCoupon(savedUser.getId()); // 쿠폰 생성
+
+        return new SignupResponseDto(bearerToken, coupon); // 응답시 쿠폰 정보 포함
     }
 
     public SigninResponseDto signin(SigninRequestDto request) {
@@ -85,5 +96,23 @@ public class AuthService {
         if (!password.matches(".*[!@#$%^&*(),.?\":{}|<>].*")) {
             throw new IllegalArgumentException("비밀번호는 특수문자를 포함해야 합니다.");
         }
+    }
+
+    // 쿠폰 생성 메서드
+    private Coupon signupCoupon(Long userId) {
+
+        Coupon coupon =
+                new Coupon(
+                        "신규고객쿠폰 5000원",
+                        CouponType.AMOUNT,
+                        CouponStatus.ACTIVE,
+                        1,
+                        0,
+                        5000,
+                        LocalDateTime.now(),
+                        LocalDateTime.now().plusDays(30));
+        couponRepository.save(coupon);
+
+        return coupon;
     }
 }

@@ -4,7 +4,6 @@ import lombok.Getter;
 
 @Getter
 public enum CouponType {
-
     AMOUNT("금액 할인 쿠폰"),
     RATE("퍼센트 할인 쿠폰");
 
