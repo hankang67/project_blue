@@ -11,9 +11,9 @@ spring:
   application:
     name: spring-blue
   datasource:
-    url: ${db_url}
-    username: root
-    password: ${db_password}
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   servlet:
     multipart:
@@ -32,4 +32,4 @@ spring:
 
 springdoc.swagger-ui.path: /api-test
 
-jwt.secret.key: ${secret_key}
+jwt.secret.key: ${SECRET_KEY}
