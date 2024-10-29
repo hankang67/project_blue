@@ -1,9 +1,6 @@
 package com.sparta.projectblue.domain.es.document;
 
-import java.time.LocalDateTime;
-
 import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
@@ -15,7 +12,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-@Document(indexName = "performance_v1")
+@Document(indexName = "performance_v3")
 public class PerformanceDocument {
     @Id private Long id;
 
@@ -34,17 +31,11 @@ public class PerformanceDocument {
     @Field(type = FieldType.Long)
     private Long price;
 
-    @Field(
-            type = FieldType.Date,
-            format = {DateFormat.date_time},
-            pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime startDate;
+    @Field(type = FieldType.Long)
+    private Long startDate;
 
-    @Field(
-            type = FieldType.Date,
-            format = {DateFormat.date_time},
-            pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime endDate;
+    @Field(type = FieldType.Long)
+    private Long endDate;
 
     private Long hallId;
 
@@ -55,8 +46,8 @@ public class PerformanceDocument {
             Category category,
             int duration,
             Long price,
-            LocalDateTime startDate,
-            LocalDateTime endDate,
+            Long startDate,
+            Long endDate,
             Long hallId) {
         this.id = id;
         this.title = title;

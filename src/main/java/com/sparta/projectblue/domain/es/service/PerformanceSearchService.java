@@ -1,58 +1,85 @@
 package com.sparta.projectblue.domain.es.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
 
-import org.joda.time.LocalDateTime;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
-import org.springframework.data.elasticsearch.core.SearchHit;
-import org.springframework.data.elasticsearch.core.SearchHits;
-import org.springframework.data.elasticsearch.core.query.Criteria;
-import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
 import org.springframework.stereotype.Service;
 
-import com.sparta.projectblue.domain.es.document.PerformanceDocument;
+import com.sparta.projectblue.domain.es.document.SearchDocument;
+import com.sparta.projectblue.domain.es.dto.KeywordSearchResponseDto;
+import com.sparta.projectblue.domain.es.repository.PerformanceEsRepository;
+import com.sparta.projectblue.domain.hall.entity.Hall;
+import com.sparta.projectblue.domain.hall.repository.HallRepository;
+import com.sparta.projectblue.domain.performer.entity.Performer;
+import com.sparta.projectblue.domain.performer.repository.PerformerRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class PerformanceSearchService {
 
-    @Autowired private ElasticsearchOperations elasticsearchOperations;
+    private final PerformanceEsRepository performanceEsRepository;
 
+    private final HallRepository hallRepository;
+    private final PerformerRepository performerRepository;
+
+    //    private final ElasticsearchOperations elasticsearchOperations;
     // 다양한 검색 조건을 처리하도록 수정
-    public List<PerformanceDocument> searchPerformances(
-            String title,
-            String description,
-            String actorName,
-            LocalDateTime startDate,
-            LocalDateTime endDate) {
+    //    public List<PerformanceDocument> searchPerformances(
+    //            String title,
+    //            String description,
+    //            String actorName,
+    //            LocalDateTime startDate,
+    //            LocalDateTime endDate) {
+    //
+    //        Criteria criteria = new Criteria();
+    //
+    //        if (title != null && !title.isEmpty()) {
+    //            criteria.and(new Criteria("title").matches(title));
+    //        }
+    //
+    //        if (description != null && !description.isEmpty()) {
+    //            criteria.and(new Criteria("description").matches(description));
+    //        }
+    //
+    //        if (actorName != null && !actorName.isEmpty()) {
+    //            criteria.and(new Criteria("actorNames").matches(actorName)); // 예시로 추가한 배우 이름 필드
+    //        }
+    //
+    //        if (startDate != null && endDate != null) {
+    //            criteria.and(
+    //                    new Criteria("startDate")
+    //                            .greaterThanEqual(startDate)
+    //                            .and(new Criteria("endDate").lessThanEqual(endDate)));
+    //        }
+    //
+    //        CriteriaQuery query = new CriteriaQuery(criteria);
+    //
+    //        SearchHits<PerformanceDocument> searchHits =
+    //                elasticsearchOperations.search(query, PerformanceDocument.class);
+    //
+    //        return searchHits.stream().map(SearchHit::getContent).collect(Collectors.toList());
+    //    }
 
-        Criteria criteria = new Criteria();
+    public KeywordSearchResponseDto search(String keyword) {
 
-        if (title != null && !title.isEmpty()) {
-            criteria.and(new Criteria("title").matches(title));
+        if (Objects.isNull(keyword) || keyword.trim().isEmpty()) {
+            return null;
         }
 
-        if (description != null && !description.isEmpty()) {
-            criteria.and(new Criteria("description").matches(description));
-        }
+        List<Performer> performers = performerRepository.findAllByName(keyword);
 
-        if (actorName != null && !actorName.isEmpty()) {
-            criteria.and(new Criteria("actorNames").matches(actorName)); // 예시로 추가한 배우 이름 필드
-        }
+        List<Long> performerIds = performers.stream().map(Performer::getId).toList();
 
-        if (startDate != null && endDate != null) {
-            criteria.and(
-                    new Criteria("startDate")
-                            .greaterThanEqual(startDate)
-                            .and(new Criteria("endDate").lessThanEqual(endDate)));
-        }
+        List<Hall> halls = hallRepository.findByNameContaining(keyword);
 
-        CriteriaQuery query = new CriteriaQuery(criteria);
+        List<Long> hallIds = halls.stream().map(Hall::getId).toList();
 
-        SearchHits<PerformanceDocument> searchHits =
-                elasticsearchOperations.search(query, PerformanceDocument.class);
+        List<SearchDocument> searchDocuments =
+                performanceEsRepository
+                        .findByPerformanceTitleContainingOrPerformersPerformerIdInOrHallIdIn(
+                                keyword, performerIds, hallIds);
 
-        return searchHits.stream().map(SearchHit::getContent).collect(Collectors.toList());
+        return new KeywordSearchResponseDto(performers, searchDocuments, halls);
     }
 }
