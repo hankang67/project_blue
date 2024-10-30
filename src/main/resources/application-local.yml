@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 9090
   servlet:
     context-path: /
     encoding:
@@ -56,6 +56,9 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id # 유저정보 조회 시 반환되는 최상위 필드명으로 해야 한다.
+  elasticsearch:
+    repositories:
+      enabled: true
 
 
 springdoc.swagger-ui.path: /api-test
@@ -79,3 +82,7 @@ cloud:
       accessKey: ${aws_access_key}
       secretKey: ${aws_secret_key}
 
+elastic:
+  host: localhost:9200
+  username: ${es_username}
+  password: ${es_password}
