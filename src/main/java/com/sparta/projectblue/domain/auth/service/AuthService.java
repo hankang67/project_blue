@@ -108,7 +108,7 @@ public class AuthService {
                         CouponStatus.ACTIVE,
                         1,
                         0,
-                        5000,
+                        5000L,
                         LocalDateTime.now(),
                         LocalDateTime.now().plusDays(30));
         couponRepository.save(coupon);

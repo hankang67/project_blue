@@ -1,20 +1,15 @@
 package com.sparta.projectblue.domain.payment.controller;
 
+import com.sparta.projectblue.config.ApiResponse;
+import com.sparta.projectblue.domain.payment.dto.PaymentResponseDto;
+import com.sparta.projectblue.domain.payment.service.PaymentService;
 import jakarta.servlet.http.HttpServletRequest;
-
+import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
-import com.sparta.projectblue.domain.payment.dto.PaymentResponseDto;
-import com.sparta.projectblue.domain.payment.service.PaymentService;
-
-import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -29,14 +24,30 @@ public class PaymentController {
         return ResponseEntity.ok(paymentService.confirmPayment(jsonBody));
     }
 
+    // 결제 금액이 100원 이상인 경우 TossPayments 사용
     @GetMapping("/payments/{reservationId}")
-    public String payments(Model model, @PathVariable Long reservationId) {
+    public String payments(
+            Model model,
+            @PathVariable Long reservationId,
+            @RequestParam(required = false) Long couponId,
+            @RequestParam(required = false) Long userId) {
 
-        PaymentResponseDto responseDto = paymentService.setValue(reservationId);
+        PaymentResponseDto responseDto = paymentService.setValue(reservationId, couponId, userId);
 
         model.addAttribute("paymentResponse", responseDto);
 
         return "/checkout";
+    }
+
+    // 결제 금액이 0원인 경우 TossPayments 사용 불가능
+    @PostMapping("/payments/{reservationId}")
+    @ResponseBody
+    public ResponseEntity<ApiResponse<?>> payments(
+            @PathVariable Long reservationId,
+            @RequestParam(required = false) Long couponId,
+            @RequestParam(required = false) Long userId) {
+        return ResponseEntity.ok(
+                ApiResponse.success(paymentService.freePay(reservationId, couponId, userId)));
     }
 
     @GetMapping("/payments/success")

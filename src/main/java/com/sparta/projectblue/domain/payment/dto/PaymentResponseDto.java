@@ -12,18 +12,21 @@ public class PaymentResponseDto {
     private Long amount;
     private String customerEmail;
     private String customerName;
+    private Long discountAmount;
 
     public PaymentResponseDto(
             String orderId,
             String orderName,
             Long amount,
             String customerEmail,
-            String customerName) {
+            String customerName,
+            Long discountAmount) {
 
         this.orderId = orderId;
         this.orderName = orderName;
         this.amount = amount;
         this.customerEmail = customerEmail;
         this.customerName = customerName;
+        this.discountAmount = discountAmount;
     }
 }

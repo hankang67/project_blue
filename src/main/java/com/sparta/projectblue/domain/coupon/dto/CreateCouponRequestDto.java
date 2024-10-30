@@ -30,7 +30,7 @@ public class CreateCouponRequestDto {
 
     @NotNull private int currentQuantity;
 
-    @NotNull private int discountValue;
+    @NotNull private Long discountValue;
 
     @NotNull private LocalDateTime startDate;
 

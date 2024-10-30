@@ -16,7 +16,7 @@ public class GetCouponResponseDto {
     private final CouponType type;
     private final int maxQuantity;
     private final int currentQuantity;
-    private final int discountValue;
+    private final Long discountValue;
     private final LocalDateTime startDate;
     private final LocalDateTime endDate;
 

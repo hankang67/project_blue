@@ -21,9 +21,6 @@ public class UsedCoupon extends BaseEntity {
     @Column(nullable = false, name = "user_id")
     private Long userId;
 
-    @Column(nullable = false, name = "payment_id")
-    private Long paymentId;
-
     @Column(nullable = false, name = "reservation_id")
     private Long reservationId;
 
@@ -31,19 +28,17 @@ public class UsedCoupon extends BaseEntity {
     private LocalDateTime usedAt;
 
     @Column(nullable = false, name = "discount_amount")
-    private int discountAmount;
+    private Long discountAmount;
 
     public UsedCoupon(
             Long couponId,
             Long userId,
-            Long paymentId,
             Long reservationId,
             LocalDateTime usedAt,
-            int discountAmount) {
+            Long discountAmount) {
 
         this.couponId = couponId;
         this.userId = userId;
-        this.paymentId = paymentId;
         this.reservationId = reservationId;
         this.usedAt = usedAt;
         this.discountAmount = discountAmount;
