@@ -60,7 +60,6 @@ spring:
     repositories:
       enabled: true
 
-
 springdoc.swagger-ui.path: /api-test
 
 jwt:
@@ -70,7 +69,6 @@ jwt:
 slack:
   webhook:
     url: ${SLACK_WEBHOOK_URL}
-
 
 cloud:
   aws:
@@ -84,5 +82,5 @@ cloud:
 
 elastic:
   host: localhost:9200
-  username: ${es_username}
-  password: ${es_password}
+  username: ${ES_USERNAME}
+  password: ${ES_PASSWORD}
