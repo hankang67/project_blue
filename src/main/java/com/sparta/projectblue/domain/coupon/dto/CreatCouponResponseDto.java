@@ -13,7 +13,7 @@ public class CreatCouponResponseDto {
     private final String code;
     private final CouponStatus status;
     private final CouponType type;
-    private final int discountValue;
+    private final Long discountValue;
     private final LocalDateTime startDate;
     private final LocalDateTime endDate;
 
@@ -22,7 +22,7 @@ public class CreatCouponResponseDto {
             String code,
             CouponStatus status,
             CouponType type,
-            int discountValue,
+            Long discountValue,
             LocalDateTime startDate,
             LocalDateTime endDate) {
         this.id = id;

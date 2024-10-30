@@ -33,7 +33,7 @@ public class Coupon extends BaseEntity {
     private int currentQuantity;
 
     @Column(nullable = false)
-    private int discountValue;
+    private Long discountValue;
 
     @Column(nullable = false, name = "start_date")
     private LocalDateTime startDate;
@@ -47,7 +47,7 @@ public class Coupon extends BaseEntity {
             CouponStatus status,
             int maxQuantity,
             int currentQuantity,
-            int discountValue,
+            Long discountValue,
             LocalDateTime startDate,
             LocalDateTime endDate) {
 
@@ -62,12 +62,17 @@ public class Coupon extends BaseEntity {
     }
 
     // 쿠폰 수량 증가 메서드
-    public int incerementQuantity() {
+    public int incrementQuantity() {
         if (currentQuantity < maxQuantity) {
             currentQuantity++;
             return currentQuantity;
         } else {
-            throw new IllegalArgumentException("쿠폰이 모두 소진되었 습니다.");
+            throw new IllegalArgumentException("쿠폰이 모두 소진되었습니다.");
         }
+    }
+
+    // 쿠폰 상태 변경 메서드
+    public void usedCoupon() {
+        this.status = CouponStatus.USED;
     }
 }
