@@ -304,6 +304,6 @@ public class PaymentService {
             throw new PaymentException("이미 취소된 예매정보입니다");
         }
 
-        return Objects.equals(amount, payment.getAmountTotal());
+        return Objects.equals(amount, payment.getOriginAmount() - payment.getDiscountValue());
     }
 }

@@ -65,10 +65,6 @@ public class CouponService {
             throw new IllegalArgumentException("이미 사용한 쿠폰 입니다.");
         }
 
-        // 결제시 쿠폰 상태 "USED"로 변경 및 저장
-        //        coupon.usedCoupon();
-        //        couponRepository.save(coupon);
-
         // 타입별 할인 금액 계산
         Long discountAmount;
         if (coupon.getType() == CouponType.RATE) {
