@@ -11,10 +11,18 @@ spring:
   application:
     name: spring-blue-local
   datasource:
-    url: jdbc:mysql://localhost:3306/project_blue
-    username: root
-    password: ${db_password}
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    master:
+      hikari:
+        jdbc-url: ${master_jdbc_url}
+        username: ${master_username}
+        password: ${master_password}
+        driver-class-name: com.mysql.cj.jdbc.Driver
+    slave:
+      hikari:
+        jdbc-url: ${slave_jdbc_url}
+        username: ${slave_username}
+        password: ${slave_password}
+        driver-class-name: com.mysql.cj.jdbc.Driver
   servlet:
     multipart:
       enabled: true
@@ -48,6 +56,7 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id # 유저정보 조회 시 반환되는 최상위 필드명으로 해야 한다.
+
 
 springdoc.swagger-ui.path: /api-test
 
