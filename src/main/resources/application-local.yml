@@ -68,7 +68,6 @@ slack:
   webhook:
     url: ${SLACK_WEBHOOK_URL}
 
-
 cloud:
   aws:
     s3:
