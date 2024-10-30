@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sparta.projectblue.domain.common.enums.PaymentStatus;
 import com.sparta.projectblue.domain.common.exception.PaymentException;
+import com.sparta.projectblue.domain.coupon.service.CouponService;
 import com.sparta.projectblue.domain.payment.dto.PaymentResponseDto;
 import com.sparta.projectblue.domain.payment.entity.Payment;
 import com.sparta.projectblue.domain.payment.repository.PaymentRepository;
@@ -42,6 +43,7 @@ public class PaymentService {
     private final ReservationRepository reservationRepository;
     private final PerformanceRepository performanceRepository;
     private final UserRepository userRepository;
+    private final CouponService couponService;
 
     private static final String TOSS_BASIC_URL = "https://api.tosspayments.com/v1/payments/";
     private static final String WIDGET_SECRET_KEY = "test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6";
@@ -62,7 +64,6 @@ public class PaymentService {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        ;
 
         if (!verifyPayment(orderId, Long.parseLong(amount))) {
             throw new PaymentException("주문ID에 대한 가격이 상이합니다.");
@@ -130,7 +131,9 @@ public class PaymentService {
                 (String) jsonObject.get("method"),
                 (Long) jsonObject.get("suppliedAmount"),
                 (Long) jsonObject.get("vat"),
-                approvedAt.toLocalDateTime());
+                approvedAt.toLocalDateTime(),
+                (Long) jsonObject.get("totalAmount"));
+
         reservation.addPaymentId(payment.getId());
 
         reservation.resCompleted();
@@ -171,8 +174,64 @@ public class PaymentService {
     }
 
     @Transactional
-    public PaymentResponseDto setValue(Long reservationId) {
+    public PaymentResponseDto setValue(Long reservationId, Long couponId) {
 
+        Reservation reservation =
+                reservationRepository
+                        .findById(reservationId)
+                        .orElseThrow(() -> new IllegalArgumentException("예약 내역이 없습니다."));
+
+        Performance performance =
+                performanceRepository
+                        .findById(reservation.getPerformanceId())
+                        .orElseThrow(() -> new IllegalArgumentException("해당 공연이 존재하지 않습니다."));
+
+        User user =
+                userRepository
+                        .findById(reservation.getUserId())
+                        .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
+
+        Long originPrice = reservation.getPrice();
+
+        Long discountValue = 0L;
+        if (couponId != null) {
+            discountValue =
+                    couponService.useCoupon(couponId, originPrice, user.getId(), reservationId);
+        }
+
+        long userPay = originPrice - discountValue;
+
+        if (userPay > 0 && userPay < 100) {
+            userPay = 100L;
+        }
+
+        String timestamp =
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+
+        String orderId = "blueRes_" + timestamp + "_" + reservationId;
+
+        Payment payment =
+                new Payment(
+                        user.getId(),
+                        reservation.getId(),
+                        performance.getId(),
+                        originPrice,
+                        discountValue,
+                        orderId);
+
+        paymentRepository.save(payment);
+
+        return new PaymentResponseDto(
+                orderId,
+                performance.getTitle(),
+                originPrice,
+                user.getEmail(),
+                user.getName(),
+                discountValue);
+    }
+
+    @Transactional
+    public Payment freePay(Long reservationId, Long couponId) {
         Reservation reservation =
                 reservationRepository
                         .findById(reservationId)
@@ -190,24 +249,29 @@ public class PaymentService {
 
         String timestamp =
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+
         String orderId = "blueRes_" + timestamp + "_" + reservationId;
+
+        Long originPrice = reservation.getPrice();
+        Long discountValue =
+                couponService.useCoupon(couponId, originPrice, user.getId(), reservationId);
 
         Payment payment =
                 new Payment(
                         user.getId(),
                         reservation.getId(),
                         performance.getId(),
-                        reservation.getPrice(),
+                        originPrice,
+                        discountValue,
                         orderId);
 
         paymentRepository.save(payment);
 
-        return new PaymentResponseDto(
-                orderId,
-                performance.getTitle(),
-                reservation.getPrice(),
-                user.getEmail(),
-                user.getName());
+        payment.addPaymentInfo(null, null, null, null, null, LocalDateTime.now(), 0L);
+        reservation.addPaymentId(payment.getId());
+        reservation.resCompleted();
+
+        return payment;
     }
 
     public String secretKeyEncoder() {
@@ -242,6 +306,6 @@ public class PaymentService {
             throw new PaymentException("이미 취소된 예매정보입니다");
         }
 
-        return Objects.equals(amount, payment.getAmountTotal());
+        return Objects.equals(amount, payment.getOriginAmount() - payment.getDiscountValue());
     }
 }

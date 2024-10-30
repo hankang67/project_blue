@@ -32,7 +32,10 @@ public class Payment extends BaseEntity {
     private String type; // 결제 종류 : NORMAL, BILLING, BRANDPAY
 
     @Column(length = 20)
-    private String method; // 결제 수단 : 칻, 가상계좌, 간편결제, 휴대폰, 계좌이체, 문화상품권, 도서상품권, 게임문화상품권
+    private String method; // 결제 수단 : 카드, 가상계좌, 간편결제, 휴대폰, 계좌이체, 문화상품권, 도서상품권, 게임문화상품권
+
+    @Column(nullable = false, name = "origin_amount")
+    private Long originAmount; // 실제 결제한 가격
 
     @Column(name = "amount_supplied")
     private Long amountSupplied; // 결제 수수료의 공급 가액
@@ -40,8 +43,11 @@ public class Payment extends BaseEntity {
     @Column(name = "amount_vat")
     private Long amountVat; // 수수료
 
-    @Column(nullable = false, name = "amount_total")
-    private Long amountTotal; // suppliedAmount + vat
+    @Column(name = "amount_total")
+    private Long amountTotal; // suppliedAmount + vat, 원래 가격
+
+    @Column(name = "discount_value")
+    private Long discountValue; // 쿠폰 할인 금액
 
     @Column(nullable = false, length = 10)
     @Enumerated(EnumType.STRING)
@@ -54,12 +60,18 @@ public class Payment extends BaseEntity {
     private String orderId;
 
     public Payment(
-            Long userId, Long reservationId, Long performanceId, Long amountTotal, String orderId) {
+            Long userId,
+            Long reservationId,
+            Long performanceId,
+            Long originAmount,
+            Long discountValue,
+            String orderId) {
 
         this.userId = userId;
         this.reservationId = reservationId;
         this.performanceId = performanceId;
-        this.amountTotal = amountTotal;
+        this.originAmount = originAmount;
+        this.discountValue = discountValue;
         this.orderId = orderId;
         this.status = PaymentStatus.READY;
     }
@@ -70,7 +82,8 @@ public class Payment extends BaseEntity {
             String method,
             Long amountSupplied,
             Long amountVat,
-            LocalDateTime approvedAt) {
+            LocalDateTime approvedAt,
+            Long amountTotal) {
 
         this.paymentKey = paymentKey;
         this.type = type;
@@ -79,6 +92,7 @@ public class Payment extends BaseEntity {
         this.amountVat = amountVat;
         this.status = PaymentStatus.DONE;
         this.approvedAt = approvedAt;
+        this.amountTotal = amountTotal;
     }
 
     public void canceled() {

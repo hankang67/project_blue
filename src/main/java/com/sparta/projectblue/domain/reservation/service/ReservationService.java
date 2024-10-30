@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.common.enums.PerformanceStatus;
 import com.sparta.projectblue.domain.common.enums.ReservationStatus;
+import com.sparta.projectblue.domain.coupon.repository.CouponRepository;
+import com.sparta.projectblue.domain.coupon.service.CouponService;
 import com.sparta.projectblue.domain.hall.entity.Hall;
 import com.sparta.projectblue.domain.hall.repository.HallRepository;
 import com.sparta.projectblue.domain.payment.entity.Payment;
@@ -47,6 +49,8 @@ public class ReservationService {
     private final ReviewRepository reviewRepository;
     private final RoundRepository roundRepository;
     private final UserRepository userRepository;
+    private final CouponRepository couponRepository;
+    private final CouponService couponService;
 
     private final PaymentService paymentService;
 
