@@ -13,15 +13,15 @@ spring:
   datasource:
     master:
       hikari:
-        jdbc-url: ${master_jdbc_url}
-        username: ${master_username}
-        password: ${master_password}
+        jdbc-url: ${LOCAL_MASTER_JDBC_URL}
+        username: ${LOCAL_MASTER_USERNAME}
+        password: ${LOCAL_MASTER_PASSWORD}
         driver-class-name: com.mysql.cj.jdbc.Driver
     slave:
       hikari:
-        jdbc-url: ${slave_jdbc_url}
-        username: ${slave_username}
-        password: ${slave_password}
+        jdbc-url: ${LOCAL_SLAVE_JDBC_URL}
+        username: ${LOCAL_SLAVE_USERNAME}
+        password: ${LOCAL_SLAVE_PASSWORD}
         driver-class-name: com.mysql.cj.jdbc.Driver
   servlet:
     multipart:
