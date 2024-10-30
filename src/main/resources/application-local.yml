@@ -59,6 +59,10 @@ spring:
     elasticsearch:
       repositories:
         enabled: true
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
 
 springdoc.swagger-ui.path: /api-test
 
@@ -84,3 +88,8 @@ elastic:
   host: localhost:9200
   username: ${ES_USERNAME}
   password: ${ES_PASSWORD}
+
+logging:
+  level:
+    org.springframework.data.redis: DEBUG
+    org.springframework.cache: DEBUG

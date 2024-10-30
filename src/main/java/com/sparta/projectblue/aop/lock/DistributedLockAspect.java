@@ -1,7 +1,7 @@
 package com.sparta.projectblue.aop.lock;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.lang.reflect.Method;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -10,7 +10,8 @@ import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Method;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Aspect
@@ -28,12 +29,20 @@ public class DistributedLockAspect {
         Method method = methodSignature.getMethod();
         DistributedLock distributedLock = method.getAnnotation(DistributedLock.class);
 
-        String key = REDISSON_LOCK_PREFIX + CustomSpringELParser.getDynamicValue(methodSignature.getParameterNames(),
-                joinPoint.getArgs(), distributedLock.key());
+        String key =
+                REDISSON_LOCK_PREFIX
+                        + CustomSpringELParser.getDynamicValue(
+                                methodSignature.getParameterNames(),
+                                joinPoint.getArgs(),
+                                distributedLock.key());
         RLock lock = redissonClient.getLock(key);
 
         try {
-            boolean available = lock.tryLock(distributedLock.waitTime(), distributedLock.leaseTime(), distributedLock.timeUnit());
+            boolean available =
+                    lock.tryLock(
+                            distributedLock.waitTime(),
+                            distributedLock.leaseTime(),
+                            distributedLock.timeUnit());
             if (!available) {
                 return false; // 락을 획득 못했을 경우 false 반환
             }
