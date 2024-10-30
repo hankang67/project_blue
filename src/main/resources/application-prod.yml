@@ -1,5 +1,5 @@
 server:
-  port: 9090
+  port: 8080
   servlet:
     context-path: /
     encoding:
@@ -11,18 +11,10 @@ spring:
   application:
     name: spring-blue
   datasource:
-    master:
-      hikari:
-        jdbc-url: ${PROD_MASTER_JDBC_URL}
-        username: ${PROD_MASTER_USERNAME}
-        password: ${PROD_MASTER_PASSWORD}
-        driver-class-name: com.mysql.cj.jdbc.Driver
-    slave:
-      hikari:
-        jdbc-url: ${PROD_SLAVE_JDBC_URL}
-        username: ${PROD_SLAVE_USERNAME}
-        password: ${PROD_SLAVE_PASSWORD}
-        driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/
+    username: root
+    password: ${db_password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
   servlet:
     multipart:
       enabled: true
@@ -37,6 +29,12 @@ spring:
         format_sql: true
         use_sql_comments: true
         dialect: org.hibernate.dialect.MySQL8Dialect
+
+
+springdoc.swagger-ui.path: /api-test
+
+jwt.secret.key: ${secret_key}
+
   security:
     oauth2:
       client:

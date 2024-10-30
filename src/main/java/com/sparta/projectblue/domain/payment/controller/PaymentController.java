@@ -1,18 +1,15 @@
 package com.sparta.projectblue.domain.payment.controller;
 
+import com.sparta.projectblue.config.ApiResponse;
+import com.sparta.projectblue.domain.payment.dto.PaymentResponseDto;
+import com.sparta.projectblue.domain.payment.service.PaymentService;
 import jakarta.servlet.http.HttpServletRequest;
-
+import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import com.sparta.projectblue.config.ApiResponse;
-import com.sparta.projectblue.domain.payment.dto.PaymentResponseDto;
-import com.sparta.projectblue.domain.payment.service.PaymentService;
-
-import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor

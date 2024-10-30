@@ -1,5 +1,5 @@
 server:
-  port: 9090
+  port: 8080
   servlet:
     context-path: /
     encoding:
@@ -13,15 +13,15 @@ spring:
   datasource:
     master:
       hikari:
-        jdbc-url: ${PROD_MASTER_JDBC_URL}
-        username: ${PROD_MASTER_USERNAME}
-        password: ${PROD_MASTER_PASSWORD}
+        jdbc-url: ${master_jdbc_url}
+        username: ${master_username}
+        password: ${master_password}
         driver-class-name: com.mysql.cj.jdbc.Driver
     slave:
       hikari:
-        jdbc-url: ${PROD_SLAVE_JDBC_URL}
-        username: ${PROD_SLAVE_USERNAME}
-        password: ${PROD_SLAVE_PASSWORD}
+        jdbc-url: ${slave_jdbc_url}
+        username: ${slave_username}
+        password: ${slave_password}
         driver-class-name: com.mysql.cj.jdbc.Driver
   servlet:
     multipart:
@@ -42,8 +42,8 @@ spring:
       client:
         registration:
           kakao:
-            client-id: ${KAKAO_CLIENT_ID}
-            redirect-uri: ${KAKAO_REDIRECT_URI}
+            client-id: ${kakao_client_id}
+            redirect-uri: ${kakao_redirect_uri}
             client-authentication-method: client_secret_post
             authorization-grant-type: authorization_code
             client-name: Kakao
@@ -56,15 +56,12 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id # 유저정보 조회 시 반환되는 최상위 필드명으로 해야 한다.
-  elasticsearch:
-    repositories:
-      enabled: true
 
 springdoc.swagger-ui.path: /api-test
 
 jwt:
   secret:
-    key: ${SECRET_KEY}
+    key: ${secret_key}
 
 slack:
   webhook:
@@ -77,10 +74,11 @@ cloud:
     stack.auto: false
     region.static: ap-northeast-2
     credentials:
-      accessKey: ${AWS_ACCESS_KEY}
-      secretKey: ${AWS_SECRET_KEY}
+      accessKey: ${aws_access_key}
+      secretKey: ${aws_secret_key}
 
 elastic:
   host: localhost:9200
   username: ${ES_USERNAME}
   password: ${ES_PASSWORD}
+

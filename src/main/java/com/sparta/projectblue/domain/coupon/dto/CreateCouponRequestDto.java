@@ -1,17 +1,15 @@
 package com.sparta.projectblue.domain.coupon.dto;
 
-import java.time.LocalDateTime;
-
+import com.sparta.projectblue.domain.common.enums.CouponStatus;
+import com.sparta.projectblue.domain.common.enums.CouponType;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
-
-import com.sparta.projectblue.domain.common.enums.CouponStatus;
-import com.sparta.projectblue.domain.common.enums.CouponType;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor

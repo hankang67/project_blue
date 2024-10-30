@@ -1,16 +1,13 @@
 package com.sparta.projectblue.domain.coupon.service;
 
-import jakarta.validation.Valid;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.coupon.dto.CreateCouponRequestDto;
 import com.sparta.projectblue.domain.coupon.entity.Coupon;
 import com.sparta.projectblue.domain.coupon.repository.CouponRepository;
-
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor

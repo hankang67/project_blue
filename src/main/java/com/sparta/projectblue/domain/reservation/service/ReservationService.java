@@ -1,14 +1,5 @@
 package com.sparta.projectblue.domain.reservation.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.common.enums.PerformanceStatus;
 import com.sparta.projectblue.domain.common.enums.ReservationStatus;
@@ -32,8 +23,15 @@ import com.sparta.projectblue.domain.round.entity.Round;
 import com.sparta.projectblue.domain.round.repository.RoundRepository;
 import com.sparta.projectblue.domain.user.entity.User;
 import com.sparta.projectblue.domain.user.repository.UserRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
