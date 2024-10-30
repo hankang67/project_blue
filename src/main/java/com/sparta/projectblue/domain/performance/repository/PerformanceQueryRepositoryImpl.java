@@ -16,9 +16,9 @@ import org.springframework.stereotype.Repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.sparta.projectblue.domain.es.document.SearchDocument;
 import com.sparta.projectblue.domain.performance.dto.GetPerformancePerformersResponseDto;
 import com.sparta.projectblue.domain.performance.dto.GetPerformancesResponseDto;
+import com.sparta.projectblue.domain.search.document.SearchDocument;
 
 import lombok.RequiredArgsConstructor;
 

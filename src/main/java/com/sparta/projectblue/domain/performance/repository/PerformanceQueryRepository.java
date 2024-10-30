@@ -6,9 +6,9 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.sparta.projectblue.domain.es.document.SearchDocument;
 import com.sparta.projectblue.domain.performance.dto.GetPerformancePerformersResponseDto;
 import com.sparta.projectblue.domain.performance.dto.GetPerformancesResponseDto;
+import com.sparta.projectblue.domain.search.document.SearchDocument;
 
 public interface PerformanceQueryRepository {
 

@@ -1,4 +1,4 @@
-package com.sparta.projectblue.domain.es.document;
+package com.sparta.projectblue.domain.search.document;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -8,8 +8,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
-
-import com.sparta.projectblue.domain.hall.entity.Hall;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

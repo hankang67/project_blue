@@ -1,10 +1,10 @@
-package com.sparta.projectblue.domain.es.dto;
+package com.sparta.projectblue.domain.search.dto;
 
 import java.util.List;
 
-import com.sparta.projectblue.domain.es.document.SearchDocument;
 import com.sparta.projectblue.domain.hall.entity.Hall;
 import com.sparta.projectblue.domain.performer.entity.Performer;
+import com.sparta.projectblue.domain.search.document.SearchDocument;
 
 import lombok.Getter;
 
