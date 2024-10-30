@@ -56,15 +56,19 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
+    elasticsearch:
+      repositories:
+        enabled: true
 
 springdoc.swagger-ui.path: /api-test
 
-jwt.secret.key: ${SECRET_KEY}
+jwt:
+  secret:
+    key: ${SECRET_KEY}
 
 slack:
   webhook:
     url: ${SLACK_WEBHOOK_URL}
-
 
 cloud:
   aws:
@@ -75,3 +79,8 @@ cloud:
     credentials:
       accessKey: ${AWS_ACCESS_KEY}
       secretKey: ${AWS_SECRET_KEY}
+
+elastic:
+  host: localhost:9200
+  username: ${ES_USERNAME}
+  password: ${ES_PASSWORD}

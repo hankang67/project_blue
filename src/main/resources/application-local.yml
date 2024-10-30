@@ -9,7 +9,7 @@ server:
 
 spring:
   application:
-    name: spring-blue-local
+    name: spring-blue
   datasource:
     master:
       hikari:
@@ -55,11 +55,10 @@ spring:
             authorization-uri: https://kauth.kakao.com/oauth/authorize
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
-            user-name-attribute: id # 유저정보 조회 시 반환되는 최상위 필드명으로 해야 한다.
-  elasticsearch:
-    repositories:
-      enabled: true
-
+            user-name-attribute: id
+    elasticsearch:
+      repositories:
+        enabled: true
 
 springdoc.swagger-ui.path: /api-test
 
@@ -70,7 +69,6 @@ jwt:
 slack:
   webhook:
     url: ${SLACK_WEBHOOK_URL}
-
 
 cloud:
   aws:
@@ -84,5 +82,5 @@ cloud:
 
 elastic:
   host: localhost:9200
-  username: ${es_username}
-  password: ${es_password}
+  username: ${ES_USERNAME}
+  password: ${ES_PASSWORD}
