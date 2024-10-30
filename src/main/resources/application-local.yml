@@ -13,15 +13,15 @@ spring:
   datasource:
     master:
       hikari:
-        jdbc-url: ${LOCAL_MASTER_JDBC_URL}
-        username: ${LOCAL_MASTER_USERNAME}
-        password: ${LOCAL_MASTER_PASSWORD}
+        jdbc-url: ${PROD_MASTER_JDBC_URL}
+        username: ${PROD_MASTER_USERNAME}
+        password: ${PROD_MASTER_PASSWORD}
         driver-class-name: com.mysql.cj.jdbc.Driver
     slave:
       hikari:
-        jdbc-url: ${LOCAL_SLAVE_JDBC_URL}
-        username: ${LOCAL_SLAVE_USERNAME}
-        password: ${LOCAL_SLAVE_PASSWORD}
+        jdbc-url: ${PROD_SLAVE_JDBC_URL}
+        username: ${PROD_SLAVE_USERNAME}
+        password: ${PROD_SLAVE_PASSWORD}
         driver-class-name: com.mysql.cj.jdbc.Driver
   servlet:
     multipart:
@@ -42,8 +42,8 @@ spring:
       client:
         registration:
           kakao:
-            client-id: ${kakao_client_id}
-            redirect-uri: ${kakao_redirect_uri}
+            client-id: ${KAKAO_CLIENT_ID}
+            redirect-uri: ${KAKAO_REDIRECT_URI}
             client-authentication-method: client_secret_post
             authorization-grant-type: authorization_code
             client-name: Kakao
@@ -65,7 +65,7 @@ springdoc.swagger-ui.path: /api-test
 
 jwt:
   secret:
-    key: ${secret_key}
+    key: ${SECRET_KEY}
 
 slack:
   webhook:
@@ -79,8 +79,8 @@ cloud:
     stack.auto: false
     region.static: ap-northeast-2
     credentials:
-      accessKey: ${aws_access_key}
-      secretKey: ${aws_secret_key}
+      accessKey: ${AWS_ACCESS_KEY}
+      secretKey: ${AWS_SECRET_KEY}
 
 elastic:
   host: localhost:9200

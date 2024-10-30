@@ -30,10 +30,10 @@ public class KakaoService {
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
 
-    @Value("${kakao_client_id}")
+    @Value("${KAKAO_CLIENT_ID}")
     private String client_id;
 
-    @Value("${kakao_redirect_uri}")
+    @Value("${KAKAO_REDIRECT_URI}")
     private String redirect_uri;
 
     public String kakaoLogin() {
