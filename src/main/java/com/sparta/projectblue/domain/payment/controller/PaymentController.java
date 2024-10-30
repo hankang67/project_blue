@@ -29,10 +29,9 @@ public class PaymentController {
     public String payments(
             Model model,
             @PathVariable Long reservationId,
-            @RequestParam(required = false) Long couponId,
-            @RequestParam(required = false) Long userId) {
+            @RequestParam(required = false) Long couponId) {
 
-        PaymentResponseDto responseDto = paymentService.setValue(reservationId, couponId, userId);
+        PaymentResponseDto responseDto = paymentService.setValue(reservationId, couponId);
 
         model.addAttribute("paymentResponse", responseDto);
 
@@ -43,11 +42,9 @@ public class PaymentController {
     @PostMapping("/payments/{reservationId}")
     @ResponseBody
     public ResponseEntity<ApiResponse<?>> payments(
-            @PathVariable Long reservationId,
-            @RequestParam(required = false) Long couponId,
-            @RequestParam(required = false) Long userId) {
+            @PathVariable Long reservationId, @RequestParam(required = false) Long couponId) {
         return ResponseEntity.ok(
-                ApiResponse.success(paymentService.freePay(reservationId, couponId, userId)));
+                ApiResponse.success(paymentService.freePay(reservationId, couponId)));
     }
 
     @GetMapping("/payments/success")

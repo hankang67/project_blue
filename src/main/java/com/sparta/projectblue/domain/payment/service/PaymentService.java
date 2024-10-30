@@ -10,7 +10,6 @@ import com.sparta.projectblue.domain.performance.entity.Performance;
 import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
 import com.sparta.projectblue.domain.reservation.entity.Reservation;
 import com.sparta.projectblue.domain.reservation.repository.ReservationRepository;
-import com.sparta.projectblue.domain.usedCoupon.repository.UsedCouponRepository;
 import com.sparta.projectblue.domain.user.entity.User;
 import com.sparta.projectblue.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +42,6 @@ public class PaymentService {
     private final PerformanceRepository performanceRepository;
     private final UserRepository userRepository;
     private final CouponService couponService;
-    private final UsedCouponRepository usedCouponRepository;
 
     private static final String TOSS_BASIC_URL = "https://api.tosspayments.com/v1/payments/";
     private static final String WIDGET_SECRET_KEY = "test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6";
@@ -174,7 +172,7 @@ public class PaymentService {
     }
 
     @Transactional
-    public PaymentResponseDto setValue(Long reservationId, Long couponId, Long userId) {
+    public PaymentResponseDto setValue(Long reservationId, Long couponId) {
 
         Reservation reservation =
                 reservationRepository
@@ -195,7 +193,8 @@ public class PaymentService {
 
         Long discountValue = 0L;
         if (couponId != null) {
-            discountValue = couponService.useCoupon(couponId, originPrice, userId, reservationId);
+            discountValue =
+                    couponService.useCoupon(couponId, originPrice, user.getId(), reservationId);
         }
 
         long userPay = originPrice - discountValue;
@@ -230,7 +229,7 @@ public class PaymentService {
     }
 
     @Transactional
-    public Payment freePay(Long reservationId, Long couponId, Long userId) {
+    public Payment freePay(Long reservationId, Long couponId) {
         Reservation reservation =
                 reservationRepository
                         .findById(reservationId)
@@ -252,7 +251,8 @@ public class PaymentService {
         String orderId = "blueRes_" + timestamp + "_" + reservationId;
 
         Long originPrice = reservation.getPrice();
-        Long discountValue = couponService.useCoupon(couponId, originPrice, userId, reservationId);
+        Long discountValue =
+                couponService.useCoupon(couponId, originPrice, user.getId(), reservationId);
 
         Payment payment =
                 new Payment(
@@ -304,6 +304,6 @@ public class PaymentService {
             throw new PaymentException("이미 취소된 예매정보입니다");
         }
 
-        return Objects.equals(amount, payment.getAmountTotal());
+        return Objects.equals(amount, payment.getOriginAmount() - payment.getDiscountValue());
     }
 }
