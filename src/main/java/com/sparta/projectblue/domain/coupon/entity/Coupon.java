@@ -1,13 +1,15 @@
 package com.sparta.projectblue.domain.coupon.entity;
 
+import java.time.LocalDateTime;
+
+import jakarta.persistence.*;
+
 import com.sparta.projectblue.domain.common.entity.BaseEntity;
 import com.sparta.projectblue.domain.common.enums.CouponStatus;
 import com.sparta.projectblue.domain.common.enums.CouponType;
-import jakarta.persistence.*;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
