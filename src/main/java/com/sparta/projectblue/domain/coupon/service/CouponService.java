@@ -6,6 +6,7 @@ import com.sparta.projectblue.domain.common.enums.CouponType;
 import com.sparta.projectblue.domain.coupon.dto.GetCouponResponseDto;
 import com.sparta.projectblue.domain.coupon.entity.Coupon;
 import com.sparta.projectblue.domain.coupon.repository.CouponRepository;
+import com.sparta.projectblue.domain.reservation.repository.ReservationRepository;
 import com.sparta.projectblue.domain.usedCoupon.entity.UsedCoupon;
 import com.sparta.projectblue.domain.usedCoupon.repository.UsedCouponRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ public class CouponService {
 
     private final CouponRepository couponRepository;
     private final UsedCouponRepository usedCouponRepository;
+    private final ReservationRepository reservationRepository;
 
     @Transactional
     public Coupon firstCoupon(AuthUser authUser, Long couponid) {
