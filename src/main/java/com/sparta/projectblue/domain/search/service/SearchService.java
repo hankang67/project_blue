@@ -5,10 +5,13 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +27,7 @@ import com.sparta.projectblue.domain.search.repository.ESRepository;
 
 import lombok.RequiredArgsConstructor;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -35,7 +39,7 @@ public class SearchService {
     private final HallRepository hallRepository;
     private final PerformerRepository performerRepository;
 
-    public Page<GetPerformancesResponseDto> filterSearch(
+    public Page<GetPerformancesResponseDto> searchFilter(
             int page, int size, String performanceNm, String userSelectDay, String performer) {
 
         Pageable pageable = PageRequest.of(page - 1, size);
@@ -49,7 +53,7 @@ public class SearchService {
                 pageable, performanceNm, performanceDay, performer);
     }
 
-    public KeywordSearchResponseDto search(String keyword) {
+    public KeywordSearchResponseDto searchKeyword(String keyword) {
 
         if (Objects.isNull(keyword) || keyword.trim().isEmpty()) {
             return null;
@@ -71,9 +75,15 @@ public class SearchService {
         return new KeywordSearchResponseDto(performers, searchDocuments, halls);
     }
 
-    public List<SearchDocument> syncDocument() {
-        List<SearchDocument> documents = performanceRepository.findForESDocument();
-        elasticsearchRepository.saveAll(documents);
-        return documents;
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void syncDocumentScheduled() {
+        try {
+            List<SearchDocument> documents = performanceRepository.findForESDocument();
+            elasticsearchRepository.saveAll(documents);
+            log.info("Elasticsearch sync completed successfully every 10 minutes with {} documents synced.", documents.size());
+        } catch (Exception e) {
+            log.error("Elasticsearch sync failed", e);
+        }
     }
+
 }

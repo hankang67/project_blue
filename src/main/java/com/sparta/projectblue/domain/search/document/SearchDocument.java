@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-@Document(indexName = "performance_v4")
+@Document(indexName = "search_v1")
 public class SearchDocument {
 
     @Id private Long performanceId;
