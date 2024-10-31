@@ -60,6 +60,7 @@ spring:
       repositories:
         enabled: true
 
+
 springdoc.swagger-ui.path: /api-test
 
 jwt:
@@ -81,6 +82,4 @@ cloud:
       secretKey: ${AWS_SECRET_KEY}
 
 elastic:
-  host: localhost:9200
-  username: ${ES_USERNAME}
-  password: ${ES_PASSWORD}
+  host: ${ES_URI}
