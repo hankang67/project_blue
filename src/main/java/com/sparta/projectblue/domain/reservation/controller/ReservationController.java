@@ -31,7 +31,7 @@ public class ReservationController {
             @Valid @RequestBody CreateReservationRequestDto request) {
 
         return ResponseEntity.ok(
-                ApiResponse.success(reservationService.create(authUser.getId(), request)));
+                ApiResponse.success(reservationService.create(authUser, request)));
     }
 
     @DeleteMapping

@@ -57,7 +57,7 @@ public class ReservationService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public CreateReservationResponseDto create(Long id, CreateReservationRequestDto request) {
+    public CreateReservationResponseDto create(AuthUser authUser, CreateReservationRequestDto request) {
 
         // 회차 가져옴 (예매상태확인)
         Round round =
@@ -113,7 +113,7 @@ public class ReservationService {
         // 예약 생성
         Reservation newReservation =
                 new Reservation(
-                        id,
+                        authUser.getId(),
                         round.getPerformanceId(),
                         request.getRoundId(),
                         ReservationStatus.PENDING,
