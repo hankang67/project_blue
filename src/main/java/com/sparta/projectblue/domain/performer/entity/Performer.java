@@ -2,6 +2,7 @@ package com.sparta.projectblue.domain.performer.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
 import com.sparta.projectblue.domain.common.entity.BaseEntity;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name = "performers")
+@Table(name = "performers", indexes = @Index(name = "idx_performer_name", columnList = "name"))
 public class Performer extends BaseEntity {
 
     @Column(nullable = false, length = 50)

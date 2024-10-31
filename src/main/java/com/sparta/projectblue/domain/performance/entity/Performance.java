@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name = "performances")
+@Table(name = "performances", indexes = @Index(name = "idx_title", columnList = "title"))
 public class Performance extends BaseEntity {
 
     @Column(nullable = false, name = "hall_id")
