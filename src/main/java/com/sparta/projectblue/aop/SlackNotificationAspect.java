@@ -51,8 +51,9 @@ public class SlackNotificationAspect {
     @AfterReturning(pointcut = "createMessagePointcut()", returning = "result")
     public void sendMessage(JoinPoint joinPoint, CreateReservationResponseDto result) {
 
-        AuthUser authUser = (AuthUser) joinPoint.getArgs()[0];
-        String username = authUser.getName();
+        Long userId = (Long) joinPoint.getArgs()[0];
+        User user = userRepository.findById(userId).orElseThrow();
+        String username = user.getName();
 
         // 예약 정보를 가져오기 위해 ID를 사용
         Long reservationId = result.getId();
@@ -90,7 +91,7 @@ public class SlackNotificationAspect {
 
         try {
             String body = "";
-            body += "<h1> " + authUser.getName() + " 님의 예매 내역입니다. </h1>";
+            body += "<h1> " + user.getName() + " 님의 예매 내역입니다. </h1>";
             body += "<h3> 이름 : " + result.getPerformanceTitle() + " </h3>";
             body += "<h3> 일시 : " + result.getRoundDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) + " </h3>";
             body += "<h3> 좌석 : " + result.getSeats() + " </h3>";
@@ -98,7 +99,7 @@ public class SlackNotificationAspect {
 
             MimeMessageHelper helper = new MimeMessageHelper(message,true,"utf-8");
             helper.setFrom(SENDER_EMAIL); // 보내는 사람
-            helper.setTo(authUser.getEmail()); // 받는 사람
+            helper.setTo(user.getEmail()); // 받는 사람
             helper.setSubject(username + "님의 예매 내역"); // 이메일 제목
             helper.setText(body, true);
         } catch (MessagingException e){
