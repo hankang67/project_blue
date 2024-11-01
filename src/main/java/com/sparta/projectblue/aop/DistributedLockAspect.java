@@ -34,9 +34,9 @@ public class DistributedLockAspect {
         String key =
                 REDISSON_LOCK_PREFIX
                         + CustomSpringELParser.getDynamicValue(
-                        methodSignature.getParameterNames(),
-                        joinPoint.getArgs(),
-                        distributedLock.key());
+                                methodSignature.getParameterNames(),
+                                joinPoint.getArgs(),
+                                distributedLock.key());
         RLock lock = redissonClient.getLock(key);
 
         lock.lock();

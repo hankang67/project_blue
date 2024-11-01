@@ -32,7 +32,7 @@ public class ReservationController {
             throws InterruptedException {
 
         return ResponseEntity.ok(
-                ApiResponse.success(reservationService.create(authUser.getId(), request)));
+                ApiResponse.success(reservationService.create(authUser, request)));
     }
 
     @DeleteMapping

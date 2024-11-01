@@ -2,6 +2,7 @@ package com.sparta.projectblue.domain.hall.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
 import com.sparta.projectblue.domain.common.entity.BaseEntity;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name = "halls")
+@Table(name = "halls", indexes = @Index(name = "idx_hall_name", columnList = "name"))
 public class Hall extends BaseEntity {
 
     @Column(nullable = false, length = 50)

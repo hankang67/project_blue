@@ -11,7 +11,7 @@ spring:
   cache:
     type: redis
   application:
-    name: spring-blue-local
+    name: spring-blue
   datasource:
     master:
       hikari:
@@ -91,5 +91,7 @@ elastic:
   username: ${ES_USERNAME}
   password: ${ES_PASSWORD}
 
-
-
+logging:
+  level:
+    org.springframework.data.redis: DEBUG
+    org.springframework.cache: DEBUG

@@ -18,7 +18,6 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.projectblue.domain.performance.dto.GetPerformancePerformersResponseDto;
 import com.sparta.projectblue.domain.performance.dto.GetPerformancesResponseDto;
-import com.sparta.projectblue.domain.search.document.SearchDocument;
 
 import lombok.RequiredArgsConstructor;
 
@@ -120,58 +119,5 @@ public class PerformanceQueryRepositoryImpl implements PerformanceQueryRepositor
                 .on(performer.id.eq(performerPerformance.performerId))
                 .where(performerPerformance.performanceId.eq(performanceId))
                 .fetch();
-    }
-
-    @Override
-    public List<SearchDocument> findForESDocument() {
-        // Performance 기본 정보 조회
-        List<SearchDocument> performances =
-                jpaQueryFactory
-                        .select(
-                                Projections.constructor(
-                                        SearchDocument.class,
-                                        performance.id.as("performanceId"),
-                                        hall.id.as("hallId"),
-                                        performance.title.as("performanceTitle"),
-                                        performance.startDate.as("startDate"),
-                                        performance.endDate.as("endDate"),
-                                        performance.price.as("price"),
-                                        performance.category.stringValue().as("category"),
-                                        performance.description.as("description"),
-                                        performance.duration.as("duration"),
-                                        Projections.constructor(
-                                                SearchDocument.Hall.class,
-                                                hall.name.as("hallName"),
-                                                hall.address.as("hallAddress"),
-                                                hall.seats.as("hallSeats"))))
-                        .from(performance)
-                        .leftJoin(hall)
-                        .on(performance.hallId.eq(hall.id))
-                        .fetch();
-
-        // 각 Performance에 대한 Performer 정보 조회 후 매핑
-        performances.forEach(
-                doc -> {
-                    List<SearchDocument.PerformerInfo> performers =
-                            jpaQueryFactory
-                                    .select(
-                                            Projections.constructor(
-                                                    SearchDocument.PerformerInfo.class,
-                                                    performer.id.as("performerId"),
-                                                    performer.name.as("performerName"),
-                                                    performer.birth.as("birth"),
-                                                    performer.nation.as("nation")))
-                                    .from(performer)
-                                    .join(performerPerformance)
-                                    .on(performer.id.eq(performerPerformance.performerId))
-                                    .where(
-                                            performerPerformance.performanceId.eq(
-                                                    doc.getPerformanceId()))
-                                    .fetch();
-
-                    doc.setPerformers(performers);
-                });
-
-        return performances;
     }
 }

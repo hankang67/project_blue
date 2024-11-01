@@ -8,7 +8,6 @@ import org.springframework.data.domain.Pageable;
 
 import com.sparta.projectblue.domain.performance.dto.GetPerformancePerformersResponseDto;
 import com.sparta.projectblue.domain.performance.dto.GetPerformancesResponseDto;
-import com.sparta.projectblue.domain.search.document.SearchDocument;
 
 public interface PerformanceQueryRepository {
 
@@ -20,6 +19,4 @@ public interface PerformanceQueryRepository {
 
     List<GetPerformancePerformersResponseDto.PerformerInfo> findPerformersByPerformanceId(
             Long performanceId);
-
-    List<SearchDocument> findForESDocument();
 }
