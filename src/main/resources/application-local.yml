@@ -10,8 +10,6 @@ server:
 spring:
   cache:
     type: redis
-  application:
-    name: spring-blue-local
   datasource:
     master:
       hikari:
