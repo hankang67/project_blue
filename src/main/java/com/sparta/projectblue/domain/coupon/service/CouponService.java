@@ -1,36 +1,35 @@
 package com.sparta.projectblue.domain.coupon.service;
 
-import java.time.LocalDateTime;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
+import com.sparta.projectblue.config.DistributedLock;
 import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.common.enums.CouponStatus;
 import com.sparta.projectblue.domain.common.enums.CouponType;
 import com.sparta.projectblue.domain.coupon.dto.GetCouponResponseDto;
 import com.sparta.projectblue.domain.coupon.entity.Coupon;
 import com.sparta.projectblue.domain.coupon.repository.CouponRepository;
-import com.sparta.projectblue.domain.reservation.repository.ReservationRepository;
 import com.sparta.projectblue.domain.usedCoupon.entity.UsedCoupon;
 import com.sparta.projectblue.domain.usedCoupon.repository.UsedCouponRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @Service
-@RequiredArgsConstructor
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class CouponService {
 
     private final CouponRepository couponRepository;
     private final UsedCouponRepository usedCouponRepository;
-    private final ReservationRepository reservationRepository;
 
+    @DistributedLock(key = "#couponId")
     @Transactional
     public Coupon firstCoupon(AuthUser authUser, Long couponid) {
+
         Coupon coupon = couponRepository.findByIdOrElseThrow(couponid);
 
         // 현재 쿠폰 수량 증가
