@@ -11,7 +11,7 @@ spring:
   cache:
     type: redis
   application:
-    name: spring-blue
+    name: spring-blue-local
   datasource:
     master:
       hikari:
@@ -87,11 +87,9 @@ cloud:
       secretKey: ${AWS_SECRET_KEY}
 
 elastic:
-  host: localhost:9200
-  username: ${ES_USERNAME}
-  password: ${ES_PASSWORD}
+  host: ${ES_URI}
 
-logging:
-  level:
-    org.springframework.data.redis: DEBUG
-    org.springframework.cache: DEBUG
+  logging:
+    level:
+      org.springframework.data.redis: DEBUG
+      org.springframework.cache: DEBUG
