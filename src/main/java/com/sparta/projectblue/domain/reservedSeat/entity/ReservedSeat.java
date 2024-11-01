@@ -6,6 +6,7 @@ import jakarta.persistence.Table;
 
 import com.sparta.projectblue.domain.common.entity.BaseEntity;
 
+import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "reserved_seats")
+
 public class ReservedSeat extends BaseEntity {
 
     @Column(nullable = false, name = "reservation_id")

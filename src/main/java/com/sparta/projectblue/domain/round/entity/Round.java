@@ -9,10 +9,12 @@ import com.sparta.projectblue.domain.common.enums.PerformanceStatus;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @NoArgsConstructor
 @Entity
+@Setter
 @Table(name = "rounds")
 public class Round extends BaseEntity {
 

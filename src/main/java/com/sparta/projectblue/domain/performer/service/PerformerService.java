@@ -3,6 +3,8 @@ package com.sparta.projectblue.domain.performer.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.sparta.projectblue.config.CacheKey;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +22,7 @@ public class PerformerService {
 
     private final PerformerRepository performerRepository;
 
+    @Cacheable(value=CacheKey.PERFORMER, key = "#id", cacheManager = "cacheManager")
     public GetPerformerResponseDto getPerformer(Long id) {
 
         Performer performer =

@@ -1,12 +1,12 @@
 package com.sparta.projectblue.domain.performer.dto;
 
-import java.time.LocalDateTime;
-
 import com.sparta.projectblue.domain.performer.entity.Performer;
-
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
+//@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
 public class GetPerformerResponseDto {
 
     private final String name;

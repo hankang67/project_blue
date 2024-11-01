@@ -8,6 +8,8 @@ server:
       force: true
 
 spring:
+  cache:
+    type: redis
   application:
     name: spring-blue-local
   datasource:
@@ -59,6 +61,10 @@ spring:
   elasticsearch:
     repositories:
       enabled: true
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
 
 springdoc.swagger-ui.path: /api-test
 
@@ -84,3 +90,6 @@ elastic:
   host: localhost:9200
   username: ${ES_USERNAME}
   password: ${ES_PASSWORD}
+
+
+

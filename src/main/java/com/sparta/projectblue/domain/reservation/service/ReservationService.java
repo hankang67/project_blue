@@ -3,10 +3,16 @@ package com.sparta.projectblue.domain.reservation.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import com.sparta.projectblue.config.DistributedLock;
+import jakarta.persistence.EntityManager;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sparta.projectblue.domain.common.dto.AuthUser;
@@ -34,7 +40,9 @@ import com.sparta.projectblue.domain.user.entity.User;
 import com.sparta.projectblue.domain.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -56,7 +64,14 @@ public class ReservationService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final RedissonClient redissonClient;
+
+    private final EntityManager entityManager;
+
+    //@Transactional
+    @DistributedLock(key = "#reservationId")
     @Transactional
+    //@DistributedLock(key = "'reservation_lock_' + #request.roundId + '_' + #seatNumber")
     public CreateReservationResponseDto create(Long id, CreateReservationRequestDto request) {
 
         // 회차 가져옴 (예매상태확인)
@@ -120,6 +135,7 @@ public class ReservationService {
                         price);
 
         reservationRepository.save(newReservation);
+
 
         for (Integer i : request.getSeats()) {
             reservedSeatRepository.save(
