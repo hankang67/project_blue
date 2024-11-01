@@ -1,4 +1,4 @@
-package com.sparta.projectblue.aop.lock;
+package com.sparta.projectblue.config;
 
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
