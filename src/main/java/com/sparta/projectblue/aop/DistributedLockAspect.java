@@ -39,6 +39,8 @@ public class DistributedLockAspect {
                                 distributedLock.key());
         RLock lock = redissonClient.getLock(key);
 
+        lock.lock();
+
         try {
             boolean available =
                     lock.tryLock(
@@ -47,6 +49,8 @@ public class DistributedLockAspect {
                             distributedLock.timeUnit());
             if (!available) {
                 return new IllegalStateException("락을 획득하지 못했습니다."); // 락을 획득 못했을 경우 false 반환
+            }else{
+                log.info("락을 획득");
             }
             return aopForTransaction.proceed(joinPoint);
         } catch (InterruptedException e) {

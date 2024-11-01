@@ -1,14 +1,6 @@
 package com.sparta.projectblue.domain.reservation.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
+import com.sparta.projectblue.config.DistributedLock;
 import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.common.enums.PerformanceStatus;
 import com.sparta.projectblue.domain.common.enums.ReservationStatus;
@@ -32,9 +24,20 @@ import com.sparta.projectblue.domain.round.entity.Round;
 import com.sparta.projectblue.domain.round.repository.RoundRepository;
 import com.sparta.projectblue.domain.user.entity.User;
 import com.sparta.projectblue.domain.user.repository.UserRepository;
-
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RedissonClient;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -56,8 +59,15 @@ public class ReservationService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final RedissonClient redissonClient;
+
+    private final EntityManager entityManager;
+
+    //@Transactional
+    @DistributedLock(key = "#reservationId")
     @Transactional
-    public CreateReservationResponseDto create(AuthUser authUser, CreateReservationRequestDto request) {
+    //@DistributedLock(key = "'reservation_lock_' + #request.roundId + '_' + #seatNumber")
+    public CreateReservationResponseDto create(Long id, CreateReservationRequestDto request) {
 
         // 회차 가져옴 (예매상태확인)
         Round round =
@@ -113,13 +123,14 @@ public class ReservationService {
         // 예약 생성
         Reservation newReservation =
                 new Reservation(
-                        authUser.getId(),
+                        id,
                         round.getPerformanceId(),
                         request.getRoundId(),
                         ReservationStatus.PENDING,
                         price);
 
         reservationRepository.save(newReservation);
+
 
         for (Integer i : request.getSeats()) {
             reservedSeatRepository.save(

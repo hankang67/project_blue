@@ -8,6 +8,8 @@ server:
       force: true
 
 spring:
+  cache:
+    type: redis
   application:
     name: spring-blue
   datasource:
@@ -55,14 +57,14 @@ spring:
             authorization-uri: https://kauth.kakao.com/oauth/authorize
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
-            user-name-attribute: id
-    elasticsearch:
-      repositories:
-        enabled: true
+            user-name-attribute: id # 유저정보 조회 시 반환되는 최상위 필드명으로 해야 한다.
+  elasticsearch:
+    repositories:
+      enabled: true
   data:
     redis:
-      host: 127.0.0.1
-      port: 6379
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
 
 springdoc.swagger-ui.path: /api-test
 
