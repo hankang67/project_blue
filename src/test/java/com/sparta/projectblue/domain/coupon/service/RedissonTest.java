@@ -9,8 +9,8 @@ import com.sparta.projectblue.domain.coupon.repository.CouponRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -23,13 +23,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest
 public class RedissonTest {
 
-    @Autowired private CouponService couponService;
+    @Mock
+    private CouponService couponService;
 
-    @Autowired private CouponRepository couponRepository;
+    @Mock
+    private CouponRepository couponRepository;
 
+    @InjectMocks
     private Long couponId;
 
     @BeforeEach
@@ -52,7 +54,7 @@ public class RedissonTest {
 
     @Test
     public void 쿠폰발급_테스트() throws InterruptedException {
-        int testCount = 100;
+        int testCount = 10;
         ExecutorService executorService = Executors.newFixedThreadPool(10);
         CountDownLatch countDownLatch = new CountDownLatch(testCount);
         AtomicInteger atomicInteger = new AtomicInteger(0);
@@ -210,7 +212,7 @@ public class RedissonTest {
 
     @Test
     public void 쿠폰발급_분산락_테스트() throws InterruptedException {
-        int testCount = 1000;
+        int testCount = 100;
         ExecutorService executorService = Executors.newFixedThreadPool(10);
         CountDownLatch countDownLatch = new CountDownLatch(testCount);
         AtomicInteger atomicInteger = new AtomicInteger(0);

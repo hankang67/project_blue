@@ -21,7 +21,6 @@ import java.util.stream.Stream;
 @SpringBootTest
 public class ReservationConcurrencyTest {
 
-
     @Autowired
     private ReservationService reservationService;
 
@@ -29,8 +28,6 @@ public class ReservationConcurrencyTest {
     private Long roundId = 2L;
     private String reservationKey;
     private int seatNumber=3;
-
-
 
     @Autowired
     private RoundRepository roundRepository;
