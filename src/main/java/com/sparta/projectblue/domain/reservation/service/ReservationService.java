@@ -149,22 +149,26 @@ public class ReservationService {
     @Transactional
     public void delete(Long id, DeleteReservationRequestDto request) throws Exception {
 
+        // 예매내역이 있는지 확인
+        Reservation reservation =
+                reservationRepository
+                        .findById(request.getReservationId())
+                        .orElseThrow(() -> new IllegalArgumentException("reservation not found"));
+
         // 사용자 가져옴
         User user =
                 userRepository
                         .findById(id)
                         .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
+        if(!reservation.getUserId().equals(user.getId())) {
+            throw new IllegalArgumentException("예매자가 아닙니다");
+        }
+
         // 계정 비밀번호 확인
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("Incorrect password");
         }
-
-        // 예매내역이 있는지 확인
-        Reservation reservation =
-                reservationRepository
-                        .findById(request.getReservationId())
-                        .orElseThrow(() -> new IllegalArgumentException("reservation not found"));
 
         // 이미 취소 되었는지 확인
         if (reservation.getStatus().equals(ReservationStatus.CANCELED)) {
