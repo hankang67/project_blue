@@ -1,6 +1,6 @@
 spring:
   application:
-    name: standard
+    name: project-blue
   profiles:
     active: local
 
