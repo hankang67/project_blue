@@ -11,18 +11,10 @@ spring:
   cache:
     type: redis
   datasource:
-    master:
-      hikari:
-        jdbc-url: ${PROD_MASTER_JDBC_URL}
-        username: ${PROD_MASTER_USERNAME}
-        password: ${PROD_MASTER_PASSWORD}
-        driver-class-name: com.mysql.cj.jdbc.Driver
-    slave:
-      hikari:
-        jdbc-url: ${PROD_SLAVE_JDBC_URL}
-        username: ${PROD_SLAVE_USERNAME}
-        password: ${PROD_SLAVE_PASSWORD}
-        driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/project_blue
+    username: root
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
   servlet:
     multipart:
       enabled: true
