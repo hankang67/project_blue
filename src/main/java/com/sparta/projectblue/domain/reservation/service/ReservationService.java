@@ -4,8 +4,6 @@ import com.sparta.projectblue.config.DistributedLock;
 import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.common.enums.PerformanceStatus;
 import com.sparta.projectblue.domain.common.enums.ReservationStatus;
-import com.sparta.projectblue.domain.coupon.repository.CouponRepository;
-import com.sparta.projectblue.domain.coupon.service.CouponService;
 import com.sparta.projectblue.domain.hall.entity.Hall;
 import com.sparta.projectblue.domain.hall.repository.HallRepository;
 import com.sparta.projectblue.domain.payment.entity.Payment;
@@ -24,10 +22,8 @@ import com.sparta.projectblue.domain.round.entity.Round;
 import com.sparta.projectblue.domain.round.repository.RoundRepository;
 import com.sparta.projectblue.domain.user.entity.User;
 import com.sparta.projectblue.domain.user.repository.UserRepository;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.redisson.api.RedissonClient;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,21 +48,13 @@ public class ReservationService {
     private final ReviewRepository reviewRepository;
     private final RoundRepository roundRepository;
     private final UserRepository userRepository;
-    private final CouponRepository couponRepository;
-    private final CouponService couponService;
 
     private final PaymentService paymentService;
 
     private final PasswordEncoder passwordEncoder;
 
-    private final RedissonClient redissonClient;
-
-    private final EntityManager entityManager;
-
-    //@Transactional
-    @DistributedLock(key = "#reservationId")
     @Transactional
-    //@DistributedLock(key = "'reservation_lock_' + #request.roundId + '_' + #seatNumber")
+    @DistributedLock(key = "#reservationId")
     public CreateReservationResponseDto create(Long id, CreateReservationRequestDto request) {
 
         // 회차 가져옴 (예매상태확인)
@@ -95,7 +83,7 @@ public class ReservationService {
         Hall hall =
                 hallRepository
                         .findById(performance.getHallId())
-                        .orElseThrow(() -> new IllegalArgumentException("hallo not found"));
+                        .orElseThrow(() -> new IllegalArgumentException("hall not found"));
 
         // 예매 가능 티켓 매수 제한
         if (request.getSeats().size() > 4) {
