@@ -117,7 +117,7 @@ public class PerformanceService {
 
 
     // 캐싱 적용 대상
-    @Cacheable(value = "performancePerformers", key = "'performancePerformers'")
+    //@Cacheable(value = "performancePerformers", key = "'performancePerformers'")
     public GetPerformancePerformersResponseDto getPerformers(Long id) {
 
         if (performanceRepository.findById(id).isEmpty()) {
