@@ -22,7 +22,7 @@ public class CreatePerformanceRequestDto {
 
     @Enumerated(EnumType.STRING)
     @NotNull
-    private Category category;
+    private String category;
 
     @NotNull private String description;
     @NotNull private Long hallId;
