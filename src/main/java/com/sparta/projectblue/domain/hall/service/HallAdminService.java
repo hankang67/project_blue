@@ -42,6 +42,8 @@ public class HallAdminService {
 
         validateHall(request.getName(), request.getAddress(), request.getSeats());
 
+        hall.update(request.getName(), request.getAddress(), request.getSeats());
+
         hallRepository.save(hall);
 
         return new UpdateHallResponseDto(hall);
@@ -65,15 +67,15 @@ public class HallAdminService {
     }
 
     // 공연 등록, 수정 예외처리
-    private void validateHall(String name, String address, int seats) {
+    private void validateHall(String name, String address, Integer seats) {
 
-        if (name.isEmpty()) {
+        if (name != null && name.isEmpty()) {
             throw new IllegalArgumentException("공연장 이름을 등록 해주세요");
         }
-        if (address.isEmpty()) {
+        if (address != null && address.isEmpty()) {
             throw new IllegalArgumentException("공연장 주소를 등록 해주세요");
         }
-        if (seats <= 0) {
+        if (seats != null && seats <= 0) {
             throw new IllegalArgumentException("좌석 수는 0개 이상이어야 합니다.");
         }
     }
