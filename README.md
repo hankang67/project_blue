@@ -6,16 +6,26 @@
 
 ### [지랄 아니고요 지라입니다 Jira로 프로젝트 관리하기](https://everyday-spring.com/626)
 
-- 프로젝트 관리 툴 Jira 도입 
+- 프로젝트 관리 툴 Jira 도입
 - Jira - GitHub 연동하기
 
-### [Docker 왜 이미지라고 할까?](https://everyday-spring.com/627)
+### Window PC에 Docker, jenkins 설치, GitHub 연동하기
 
-- Docker 학습
+- [ (1) 난 대학시절 삽질을 전공했단 사실](https://everyday-spring.com/628)
+- [ (2) 난 삽질로 유학까지 다녀왔단 사실](https://everyday-spring.com/629)
 
-### [Window PC에 Docker, jenkins 설치, GitHub 연동하기 (1) | 난 대학시절 삽질을 전공했단 사실](https://everyday-spring.com/628)
+### AWS EC2에 Docker Jenkins 설치, Github Spring Boot application CI/CD
 
-- Docker 설치
-- Jenkins 설치
-- GitHub 토큰 발급
- 
+- [ (1) CI/CD를 위한 EC2 준비하기](https://everyday-spring.com/630)
+- [ (2) EC2 Server 연결하기, ubuntu 메모리 스왑](https://everyday-spring.com/631)
+- [ (3) Docker, Jenkins 설치 | Docker in Docker](https://subin0522.tistory.com/632)
+- [ (4) Jenkins Pipeline CI/CD](https://subin0522.tistory.com/633)
+
+### [EC2 ubuntu Jenkins CI/CD 트러블 슈팅](https://everyday-spring.com/634)
+
+- Jenkins Spring Boot build 무한로딩
+- Spring Boot Spotless Plugin build resource
+- Docker not found
+- 그런데 또 무한로딩이 걸림 미쳐버리겠네
+- not in a git directory
+- Jenkins CI/CD 환경변수
