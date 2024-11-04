@@ -1,10 +1,14 @@
 package com.sparta.projectblue.domain.performer.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.sparta.projectblue.config.CacheKey;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +26,7 @@ public class PerformerService {
 
     private final PerformerRepository performerRepository;
 
-    @Cacheable(value=CacheKey.PERFORMER, key = "#id", cacheManager = "cacheManager")
+    @Cacheable(value=CacheKey.PERFORMER, key = "#id")
     public GetPerformerResponseDto getPerformer(Long id) {
 
         Performer performer =
@@ -33,6 +37,7 @@ public class PerformerService {
         return new GetPerformerResponseDto(performer);
     }
 
+    @Cacheable(value = CacheKey.PERFORMERS, key = "'all_performers'")
     public GetPerformersResponseDto getPerformers() {
 
         List<GetPerformersResponseDto.PerformerInfo> performers =

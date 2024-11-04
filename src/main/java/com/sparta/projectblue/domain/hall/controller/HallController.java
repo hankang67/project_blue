@@ -1,5 +1,7 @@
 package com.sparta.projectblue.domain.hall.controller;
 
+import com.sparta.projectblue.config.CacheKey;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,9 +29,10 @@ public class HallController {
         return ResponseEntity.ok(ApiResponse.success(hallService.getHalls(page, size)));
     }
 
+    // 캐싱 적용 대상
     @GetMapping("/{id}")
     @Operation(summary = "공연장 단건 조회")
-    public ResponseEntity<ApiResponse<?>> getHall(@PathVariable("id") Long id) {
+    public ResponseEntity<ApiResponse<?>> getHall(@PathVariable Long id) {
 
         return ResponseEntity.ok(ApiResponse.success(hallService.getHall(id)));
     }
