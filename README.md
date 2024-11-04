@@ -1,3 +1,5 @@
+![image](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fs2pI8%2FbtsKvC8F6fw%2FMYmpzfE0viiwGk9AyFrGU0%2Fimg.png)
+
 ### [Java SpringBoot Swagger 적용하기](https://everyday-spring.com/625)
 
 - Java SpringBoot Swagger 적용하기
