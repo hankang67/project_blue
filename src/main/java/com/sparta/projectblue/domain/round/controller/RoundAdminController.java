@@ -34,8 +34,8 @@ public class RoundAdminController {
     @Operation(summary = "회차 수정", description = "특정 회차의 정보를 수정합니다.")
     public ResponseEntity<ApiResponse<?>> update(
             @PathVariable Long id,
-            @RequestParam LocalDateTime date,
-            @RequestParam PerformanceStatus status) {
+            @RequestParam(required = false) LocalDateTime date,
+            @RequestParam(required = false) PerformanceStatus status) {
 
         return ResponseEntity.ok(
                 ApiResponse.success(

@@ -65,13 +65,17 @@ public class RoundAdminService {
 
         LocalDateTime now = LocalDateTime.now();
 
-        if (request.getDate().isBefore(now)) {
-            throw new IllegalArgumentException("과거의 날짜로 회차를 수정할 수 없습니다.");
+        if (request.getDate() != null) {
+            if (request.getDate().isBefore(now)) {
+                throw new IllegalArgumentException("과거의 날짜로 회차를 수정할 수 없습니다.");
+            }
+            round.updateDate(request.getDate());
+        } else {
+            request = new UpdateRoundRequestDto(round.getDate(), request.getStatus());
         }
 
-        round.updateDate(request.getDate());
-
-        round.updateStatus(request.getStatus());
+        PerformanceStatus newStatus = request.getStatus() != null ? request.getStatus() : round.getStatus();
+        round.updateStatus(newStatus);
 
         roundRepository.save(round);
 
