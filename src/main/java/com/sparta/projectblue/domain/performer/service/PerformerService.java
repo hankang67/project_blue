@@ -34,7 +34,6 @@ public class PerformerService {
         return new GetPerformerResponseDto(performer);
     }
 
-    @Cacheable(value = CacheKey.PERFORMERS, key = "'all_performers'")
     public GetPerformersResponseDto getPerformers(int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<Performer> performerPage = performerRepository.findAll(pageable);
