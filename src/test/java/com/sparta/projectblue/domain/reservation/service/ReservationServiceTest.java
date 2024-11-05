@@ -12,6 +12,7 @@ import com.sparta.projectblue.domain.performance.repository.PerformanceRepositor
 import com.sparta.projectblue.domain.reservation.dto.CreateReservationRequestDto;
 import com.sparta.projectblue.domain.reservation.dto.CreateReservationResponseDto;
 import com.sparta.projectblue.domain.reservation.dto.DeleteReservationRequestDto;
+import com.sparta.projectblue.domain.reservation.dto.GetReservationResponseDto;
 import com.sparta.projectblue.domain.reservation.entity.Reservation;
 import com.sparta.projectblue.domain.reservation.repository.ReservationRepository;
 import com.sparta.projectblue.domain.reservation.service.ReservationService;
@@ -446,4 +447,121 @@ public class ReservationServiceTest {
             assertEquals(exception.getMessage(), "ReservedSeat does not exist");
         }
     }
+
+    @Nested
+    class GetReservationTest {
+
+        @Test
+        void 예약_조회_정상_동작() {
+
+            // given
+            Category category = Category.CONCERT;
+
+            LocalDateTime reservationDate = LocalDateTime.now();
+
+            Reservation reservation = new Reservation(authUser.getId(), 1L, 1L, ReservationStatus.COMPLETED, 15000L);
+            ReflectionTestUtils.setField(reservation, "id", 1L);
+            ReflectionTestUtils.setField(reservation, "paymentId", 1L);
+            ReflectionTestUtils.setField(reservation, "createdAt", reservationDate);
+
+            given(reservationRepository.findById(anyLong())).willReturn(Optional.of(reservation));
+
+            Performance performance = new Performance(1L, "Concert", LocalDateTime.now(), LocalDateTime.now(), 15000L, category, "description", 150);
+            given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
+
+            Round round = new Round(1L, LocalDateTime.now(), PerformanceStatus.AVAILABLE);
+            given(roundRepository.findById(anyLong())).willReturn(Optional.of(round));
+
+            List<ReservedSeat> reservedSeats = List.of(new ReservedSeat(1L, 1L, 1), new ReservedSeat(1L, 1L, 2));
+            given(reservedSeatRepository.findByReservationId(anyLong())).willReturn(reservedSeats);
+
+            Payment payment = new Payment(authUser.getId(), reservation.getId(), 1L, 15000L, 0L, "orderId");
+            ReflectionTestUtils.setField(payment, "status", PaymentStatus.DONE);
+            given(paymentRepository.findById(anyLong())).willReturn(Optional.of(payment));
+
+            // when
+            GetReservationResponseDto response = reservationService.getReservation(authUser, reservation.getId());
+
+            // then
+            assertEquals(response.getCategory(), category);
+            assertEquals(response.getPerformanceTitle(), performance.getTitle());
+            assertEquals(response.getRound(), round.getDate());
+            assertEquals(response.getReservationDate(), reservationDate);
+            assertEquals(response.getReservationId(), reservation.getId());
+            assertEquals(response.getSeats(), List.of(1, 2));
+            assertEquals(response.getReservationStatus(), ReservationStatus.COMPLETED);
+        }
+
+        @Test
+        void 예약_조회_예매자가_아님_오류() {
+
+            // given
+            Reservation reservation = new Reservation(authUser.getId() + 1, 1L, 1L, ReservationStatus.COMPLETED, 15000L);
+            ReflectionTestUtils.setField(reservation, "id", 1L);
+
+            given(reservationRepository.findById(anyLong())).willReturn(Optional.of(reservation));
+
+            // when
+            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                    reservationService.getReservation(authUser, reservation.getId()));
+
+            // then
+            assertEquals(exception.getMessage(), "예매자가 아닙니다");
+        }
+
+        @Test
+        void 예약_조회_좌석정보_없음_오류() {
+
+            // given
+            Reservation reservation = new Reservation(authUser.getId(), 1L, 1L, ReservationStatus.COMPLETED, 15000L);
+            ReflectionTestUtils.setField(reservation, "id", 1L);
+
+            given(reservationRepository.findById(anyLong())).willReturn(Optional.of(reservation));
+
+            Performance performance = new Performance(1L, "Concert", LocalDateTime.now(), LocalDateTime.now(), 15000L, Category.CONCERT, "description", 150);
+            given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
+
+            Round round = new Round(1L, LocalDateTime.now(), PerformanceStatus.AVAILABLE);
+            given(roundRepository.findById(anyLong())).willReturn(Optional.of(round));
+
+            given(reservedSeatRepository.findByReservationId(anyLong())).willReturn(List.of());
+
+            // when
+            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                    reservationService.getReservation(authUser, reservation.getId()));
+
+            // then
+            assertEquals(exception.getMessage(), "ReservedSeat does not exist");
+        }
+
+        @Test
+        void 예약_조회_결제정보_없음_오류() {
+
+            // given
+            Reservation reservation = new Reservation(authUser.getId(), 1L, 1L, ReservationStatus.COMPLETED, 15000L);
+            ReflectionTestUtils.setField(reservation, "id", 1L);
+            ReflectionTestUtils.setField(reservation, "paymentId", 1L);
+
+            given(reservationRepository.findById(anyLong())).willReturn(Optional.of(reservation));
+
+            Performance performance = new Performance(1L, "Concert", LocalDateTime.now(), LocalDateTime.now(), 15000L, Category.CONCERT, "description", 150);
+            given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
+
+            Round round = new Round(1L, LocalDateTime.now(), PerformanceStatus.AVAILABLE);
+            given(roundRepository.findById(anyLong())).willReturn(Optional.of(round));
+
+            List<ReservedSeat> reservedSeats = List.of(new ReservedSeat(1L, 1L, 1), new ReservedSeat(1L, 1L, 2));
+            given(reservedSeatRepository.findByReservationId(anyLong())).willReturn(reservedSeats);
+
+            given(paymentRepository.findById(anyLong())).willReturn(Optional.empty());
+
+            // when
+            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                    reservationService.getReservation(authUser, reservation.getId()));
+
+            // then
+            assertEquals(exception.getMessage(), "결제 정보를 찾을 수 없습니다");
+        }
+    }
+
 }
