@@ -25,6 +25,22 @@ Communication
 ![슬랙](  https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white)
 ![노션](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white)
 
+# 🏗️프로젝트 설계
+
+### [Wireframe](https://drive.google.com/file/d/1cl51FhT9eB7Fn7WYQunUS5aeoeQceLgx/view?usp=sharing)
+
+### [API Document]
+
+### [ERD diagram]
+
+# 🔍 프로젝트 기능 정리
+
+# ⚒️트러블슈팅
+
+
+
+
+# 🔥 How to build
 ### [Java SpringBoot Swagger 적용하기](https://everyday-spring.com/625)
 
 - Java SpringBoot Swagger 적용하기
