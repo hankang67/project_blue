@@ -69,7 +69,7 @@ public class PerformanceService {
     }
 
     // 캐싱 적용 대상
-    @Cacheable(value = "rounds", key = "'all_rounds'")
+    @Cacheable(value = "rounds", key = "#id")
     public GetPerformanceRoundsResponseDto getRounds(Long id) {
 
         // 공연 id값 검증
@@ -94,7 +94,7 @@ public class PerformanceService {
 
 
     // 캐싱 적용 대상
-    @Cacheable(value = "reviews", key = "'all_reviews'")
+    @Cacheable(value = "reviews", key = "#id")
     public GetPerformanceReviewsResponseDto getReviews(Long id) {
 
         // 공연 id값 검증
@@ -117,7 +117,7 @@ public class PerformanceService {
 
 
     // 캐싱 적용 대상
-    //@Cacheable(value = "performancePerformers", key = "'performancePerformers'")
+    @Cacheable(value = "performancePerformers", key = "#id")
     public GetPerformancePerformersResponseDto getPerformers(Long id) {
 
         if (performanceRepository.findById(id).isEmpty()) {
