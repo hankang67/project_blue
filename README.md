@@ -14,6 +14,7 @@
 
 - 프로젝트 관리 툴 Jira 도입
 - Jira - GitHub 연동하기
+  
 ![project_blue_2024-11-05_07 56pm](https://github.com/user-attachments/assets/f19aec83-e838-4d49-8126-853e80b92654)
 
 ### Window PC에 Docker, jenkins 설치, GitHub 연동하기
