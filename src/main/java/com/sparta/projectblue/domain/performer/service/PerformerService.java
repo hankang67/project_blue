@@ -7,6 +7,9 @@ import com.sparta.projectblue.domain.performer.entity.Performer;
 import com.sparta.projectblue.domain.performer.repository.PerformerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,14 +34,18 @@ public class PerformerService {
         return new GetPerformerResponseDto(performer);
     }
 
-    @Cacheable(value = CacheKey.PERFORMERS, key = "'all_performers'")
-    public GetPerformersResponseDto getPerformers() {
+    public GetPerformersResponseDto getPerformers(int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<Performer> performerPage = performerRepository.findAll(pageable);
 
-        List<GetPerformersResponseDto.PerformerInfo> performers =
-                performerRepository.findAll().stream()
-                        .map(GetPerformersResponseDto.PerformerInfo::new)
-                        .collect(Collectors.toList());
+        List<GetPerformersResponseDto.PerformerInfo> performerInfoList = performerPage
+                .map(GetPerformersResponseDto.PerformerInfo::new)
+                .getContent();
 
-        return new GetPerformersResponseDto(performers);
+        return new GetPerformersResponseDto(performerInfoList);
     }
+
+
+
+
 }

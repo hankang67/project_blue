@@ -54,7 +54,7 @@ public class UserBookingController {
         return ResponseEntity.ok(ApiResponse.success(searchService.searchBookings(dto)));
     }
 
-    @GetMapping("/sync")
+    @PostMapping("/admin/sync")
     @Operation(summary = "데이터 동기화", description = "예약 정보를 Elasticsearch와 동기화합니다")
     public ResponseEntity<ApiResponse<String>> syncData() {
         searchService.syncData();
