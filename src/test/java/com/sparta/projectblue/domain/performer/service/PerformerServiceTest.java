@@ -45,6 +45,9 @@ public class PerformerServiceTest {
     @Test
     void 존재하는_배우_리스트를_반환하는_테스트_배우다건조회() {
         // given
+        int page = 1;
+        int size = 10;
+
         Performer performer1 = new Performer("배두훈", "1986-07-15", "KOREA");
         Performer performer2 = new Performer("김태희", "1990-04-22", "KOREA");
 
@@ -54,7 +57,7 @@ public class PerformerServiceTest {
         when(performerRepository.findAll()).thenReturn(List.of(performer1, performer2));
 
         // when
-        GetPerformersResponseDto result = performerService.getPerformers();
+        GetPerformersResponseDto result = performerService.getPerformers(page, size);
 
         // then
         assertNotNull(result);
