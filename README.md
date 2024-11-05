@@ -42,6 +42,12 @@
 - [ (2) AOP를 사용한 알림 연동 - 2 ](https://k-chongchong.tistory.com/41)
 - [ (3) 이벤트 기반 아키텍처(EDA)와 AOP의 비교 -3 ](https://k-chongchong.tistory.com/42)
 
+### elastic 환경설정 및 검색 api구현과정
+- https://velog.io/@uara67/Spring-ELK-1-엘라스틱-서치-그게-뭔데
+- https://velog.io/@uara67/Spring-ELK-Docker-Elastic-Search-Kibana를-설치해서-springboot와-연결하자-1
+- https://velog.io/@uara67/Spring-ELK-Docker-Elastic-Search-Kibana를-설치해서-springboot와-연결하자-2
+- https://velog.io/@uara67/Spring-ELK-es로-구현한-예매검색-api
+
 # 🚀 STACK
 
 Environment
