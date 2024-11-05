@@ -29,6 +29,8 @@ Communication
 
 ### [Wireframe](https://drive.google.com/file/d/1cl51FhT9eB7Fn7WYQunUS5aeoeQceLgx/view?usp=sharing)
 
+![ticket drawio](https://github.com/user-attachments/assets/e3d196e7-c34c-480b-8520-0da74506431c)
+
 ### [API Document]
 
 ### [ERD diagram]
