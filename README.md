@@ -37,6 +37,10 @@
 - not in a git directory
 - Jenkins CI/CD 환경변수
 
+### AOP 를 사용하여 알림설정
+- [ (1) spring 과 slack 알림 연동 - 1](https://k-chongchong.tistory.com/40)
+- [ (2) AOP를 사용한 알림 연동 - 2 ](https://k-chongchong.tistory.com/41)
+- [ (3) 이벤트 기반 아키텍처(EDA)와 AOP의 비교 -3 ](https://k-chongchong.tistory.com/42)
 
 # 🚀 STACK
 
