@@ -2,6 +2,7 @@ package com.sparta.projectblue.domain.reservation.service;
 
 import com.sparta.projectblue.config.DistributedLock;
 import com.sparta.projectblue.domain.common.dto.AuthUser;
+import com.sparta.projectblue.domain.common.enums.PaymentStatus;
 import com.sparta.projectblue.domain.common.enums.PerformanceStatus;
 import com.sparta.projectblue.domain.common.enums.ReservationStatus;
 import com.sparta.projectblue.domain.hall.entity.Hall;
@@ -178,7 +179,9 @@ public class ReservationService {
                             .findById(reservation.getPaymentId())
                             .orElseThrow(() -> new IllegalArgumentException("payment not found"));
 
-            paymentService.cancelPayment(payment.getPaymentKey(), "예매를 취소합니다");
+            if(! payment.getStatus().equals(PaymentStatus.CANCELED)) {
+                paymentService.cancelPayment(payment.getPaymentKey(), "예매를 취소합니다");
+            }
         }
 
         reservation.resCanceled();
