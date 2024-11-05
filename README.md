@@ -10,7 +10,7 @@
 - Java SpringBoot Swagger 적용하기
 - Swagger GET Method RequestBody
 - Swagger Request Form
-- 
+  
 ![image](https://github.com/user-attachments/assets/53cf4413-e273-4fc9-a5af-0db6d427888f)
 
 ### [지랄 아니고요 지라입니다 Jira로 프로젝트 관리하기](https://everyday-spring.com/626)
@@ -78,9 +78,13 @@ Communication
 
 ![ticket drawio](https://github.com/user-attachments/assets/e3d196e7-c34c-480b-8520-0da74506431c)
 
-### [API Document]
+### [API Document](https://teamsparta.notion.site/8b2632a9b7ac4fb0a518397e27eb6830)
+- 자세한 api명세서는 팀 노션에서 확인할 수 있습니다. 
+![image](https://github.com/user-attachments/assets/be815adc-b9d6-4e5e-bb3d-5a39d4494cb1)
+![image](https://github.com/user-attachments/assets/d20d10e4-0c4d-4643-9f93-19a47fedea16)
 
-### [ERD diagram]
+### [ERD diagram](https://www.erdcloud.com/d/5iR9JboxDdHp9rhv4)
+![image](https://github.com/user-attachments/assets/c8931c5d-13ba-4120-9876-4e0b613e9af6)
 
 # 🔍 프로젝트 기능 정리
 
