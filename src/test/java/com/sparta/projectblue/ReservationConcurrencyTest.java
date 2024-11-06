@@ -43,7 +43,7 @@ public class ReservationConcurrencyTest {
     @Test
     @Order(1)
     void lockUse() throws InterruptedException {
-        final int numberOfMember = 3;
+        final int numberOfMember = 80;
         final CountDownLatch countDownLatch = new CountDownLatch(numberOfMember);
 
         AtomicInteger successCount = new AtomicInteger(0);
@@ -55,7 +55,7 @@ public class ReservationConcurrencyTest {
         threadList.forEach(Thread::start);
         countDownLatch.await();
 
-        Assertions.assertEquals(3, successCount.get(), "Only one reservation should succeed with lock");
+        Assertions.assertEquals(80, successCount.get(), "Only one reservation should succeed with lock");
     }
 
     // 락 없이 100명의 동시 예매 시도
