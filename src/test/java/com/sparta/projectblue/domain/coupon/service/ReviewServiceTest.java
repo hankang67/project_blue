@@ -80,6 +80,7 @@ public class ReviewServiceTest {
     public void createReviewFailsWhenNoReservation() {
         CreateReviewRequestDto request = new CreateReviewRequestDto(reservationId, ReviewRate.FOUR, "별로");
 
+        // when
         when(reservationRepository.findById(reservationId)).thenReturn(Optional.empty());
 
         assertThrows(IllegalArgumentException.class, () -> reviewService.create(userId, request));
