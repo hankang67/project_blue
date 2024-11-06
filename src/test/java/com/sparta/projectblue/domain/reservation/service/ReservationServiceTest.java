@@ -6,6 +6,7 @@ import com.sparta.projectblue.domain.hall.entity.Hall;
 import com.sparta.projectblue.domain.hall.repository.HallRepository;
 import com.sparta.projectblue.domain.payment.entity.Payment;
 import com.sparta.projectblue.domain.payment.repository.PaymentRepository;
+import com.sparta.projectblue.domain.payment.service.PaymentService;
 import com.sparta.projectblue.domain.performance.entity.Performance;
 import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
 import com.sparta.projectblue.domain.reservation.dto.*;
@@ -13,6 +14,7 @@ import com.sparta.projectblue.domain.reservation.entity.Reservation;
 import com.sparta.projectblue.domain.reservation.repository.ReservationRepository;
 import com.sparta.projectblue.domain.reservedSeat.entity.ReservedSeat;
 import com.sparta.projectblue.domain.reservedSeat.repository.ReservedSeatRepository;
+import com.sparta.projectblue.domain.review.repository.ReviewRepository;
 import com.sparta.projectblue.domain.round.entity.Round;
 import com.sparta.projectblue.domain.round.repository.RoundRepository;
 import com.sparta.projectblue.domain.user.entity.User;
@@ -51,11 +53,15 @@ public class ReservationServiceTest {
     private PerformanceRepository performanceRepository;
     @Mock
     private ReservedSeatRepository reservedSeatRepository;
-
+    @Mock
+    private ReviewRepository reviewRepository;
     @Mock
     private RoundRepository roundRepository;
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private PaymentService paymentService;
 
     @Mock
     private PasswordEncoder passwordEncoder;
@@ -63,7 +69,7 @@ public class ReservationServiceTest {
     @InjectMocks
     private ReservationService reservationService;
 
-    private final AuthUser authUser = new AuthUser( 1L, "test@test.com", "testUser", UserRole.ROLE_USER);
+    private final AuthUser authUser = new AuthUser(1L, "test@test.com", "testUser", UserRole.ROLE_USER);
 
     @Nested
     class CreateReservationTest {
