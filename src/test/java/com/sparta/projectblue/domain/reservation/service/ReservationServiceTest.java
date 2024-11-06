@@ -6,16 +6,13 @@ import com.sparta.projectblue.domain.hall.entity.Hall;
 import com.sparta.projectblue.domain.hall.repository.HallRepository;
 import com.sparta.projectblue.domain.payment.entity.Payment;
 import com.sparta.projectblue.domain.payment.repository.PaymentRepository;
-import com.sparta.projectblue.domain.payment.service.PaymentService;
 import com.sparta.projectblue.domain.performance.entity.Performance;
 import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
 import com.sparta.projectblue.domain.reservation.dto.*;
 import com.sparta.projectblue.domain.reservation.entity.Reservation;
 import com.sparta.projectblue.domain.reservation.repository.ReservationRepository;
-import com.sparta.projectblue.domain.reservation.service.ReservationService;
 import com.sparta.projectblue.domain.reservedSeat.entity.ReservedSeat;
 import com.sparta.projectblue.domain.reservedSeat.repository.ReservedSeatRepository;
-import com.sparta.projectblue.domain.review.repository.ReviewRepository;
 import com.sparta.projectblue.domain.round.entity.Round;
 import com.sparta.projectblue.domain.round.repository.RoundRepository;
 import com.sparta.projectblue.domain.user.entity.User;
@@ -26,20 +23,19 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.util.ReflectionTestUtils;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.*;
-
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class ReservationServiceTest {
@@ -55,15 +51,11 @@ public class ReservationServiceTest {
     private PerformanceRepository performanceRepository;
     @Mock
     private ReservedSeatRepository reservedSeatRepository;
-    @Mock
-    private ReviewRepository reviewRepository;
+
     @Mock
     private RoundRepository roundRepository;
     @Mock
     private UserRepository userRepository;
-
-    @Mock
-    private PaymentService paymentService;
 
     @Mock
     private PasswordEncoder passwordEncoder;
