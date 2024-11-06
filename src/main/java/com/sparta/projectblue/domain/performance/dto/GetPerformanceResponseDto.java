@@ -2,6 +2,7 @@ package com.sparta.projectblue.domain.performance.dto;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.sparta.projectblue.domain.common.enums.Category;
 import com.sparta.projectblue.domain.hall.entity.Hall;
@@ -15,8 +16,13 @@ import lombok.Getter;
 public class GetPerformanceResponseDto {
 
     private String title;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startDate;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endDate;
+
     private Long price;
     private Category category;
     private String description;

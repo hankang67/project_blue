@@ -2,6 +2,7 @@ package com.sparta.projectblue.domain.usedCoupon.entity;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -26,6 +27,7 @@ public class UsedCoupon extends BaseEntity {
     @Column(nullable = false, name = "reservation_id")
     private Long reservationId;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(nullable = false, name = "used_at")
     private LocalDateTime usedAt;
 

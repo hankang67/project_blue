@@ -13,6 +13,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
+import io.swagger.v3.oas.annotations.Parameter;
+
+
 @RestController
 @RequestMapping("/admin/search")
 @RequiredArgsConstructor
@@ -24,13 +27,13 @@ public class SearchAdminController {
     @GetMapping
     @Operation(summary = "관리자 정보 검색", description = "다양한 조건을 이용해 정보를 검색합니다")
     public ResponseEntity<?> searchBookings(
-            @RequestParam(required = false) String userName,
-            @RequestParam(required = false) String performanceTitle,
-            @RequestParam(required = false) LocalDateTime bookingDateStart,
-            @RequestParam(required = false) LocalDateTime bookingDateEnd,
-            @RequestParam(required = false) String searchReservationStatus,
-            @RequestParam(required = false) Long minPaymentAmount,
-            @RequestParam(required = false) Long maxPaymentAmount) {
+            @Parameter(example = "user0") @RequestParam(required = false) String userName,
+            @Parameter(example = "Performance0") @RequestParam(required = false) String performanceTitle,
+            @Parameter(example = "2024-10-26T22:00:00") @RequestParam(required = false) LocalDateTime bookingDateStart,
+            @Parameter(example = "2024-10-26T22:00:00") @RequestParam(required = false) LocalDateTime bookingDateEnd,
+            @Parameter(example = "PENDING, COMPLETED, CANCELED") @RequestParam(required = false) String searchReservationStatus,
+            @Parameter(example = "1000") @RequestParam(required = false) Long minPaymentAmount,
+            @Parameter(example = "200000") @RequestParam(required = false) Long maxPaymentAmount) {
 
         // 검색 파라미터를 UserBookingDto에 매핑
         UserBookingDto dto = new UserBookingDto(

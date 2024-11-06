@@ -20,7 +20,7 @@ public class PosterController {
 
     private final PosterService posterService;
 
-    @Operation(summary = "포스터 수정", description = "특정 공연의 포스터 이름과 url 수정")
+    @Operation(summary = "포스터 수정", description = "파일 첨부로 포스트맨에서 테스트합니다")
     @PutMapping("/admin/posters/{id}")
     public ResponseEntity<ApiResponse<?>> update(
             @AuthenticationPrincipal AuthUser authUser,
