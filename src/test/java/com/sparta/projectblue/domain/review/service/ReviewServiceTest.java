@@ -1,4 +1,4 @@
-package com.sparta.projectblue.domain.coupon.service;
+package com.sparta.projectblue.domain.review.service;
 
 import com.sparta.projectblue.domain.common.enums.ReservationStatus;
 import com.sparta.projectblue.domain.common.enums.ReviewRate;
@@ -10,7 +10,6 @@ import com.sparta.projectblue.domain.review.dto.UpdateReviewRequestDto;
 import com.sparta.projectblue.domain.review.dto.UpdateReviewResponseDto;
 import com.sparta.projectblue.domain.review.entity.Review;
 import com.sparta.projectblue.domain.review.repository.ReviewRepository;
-import com.sparta.projectblue.domain.review.service.ReviewService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
