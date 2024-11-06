@@ -1,15 +1,17 @@
 package com.sparta.projectblue.domain.round.service;
 
+import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.common.enums.PerformanceStatus;
-import com.sparta.projectblue.domain.hall.repository.HallRepository;
+import com.sparta.projectblue.domain.common.enums.UserRole;
 import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
-import com.sparta.projectblue.domain.reservedSeat.repository.ReservedSeatRepository;
 import com.sparta.projectblue.domain.round.dto.CreateRoundRequestDto;
 import com.sparta.projectblue.domain.round.dto.CreateRoundResponseDto;
 import com.sparta.projectblue.domain.round.dto.UpdateRoundRequestDto;
 import com.sparta.projectblue.domain.round.dto.UpdateRoundResponseDto;
 import com.sparta.projectblue.domain.round.entity.Round;
 import com.sparta.projectblue.domain.round.repository.RoundRepository;
+import com.sparta.projectblue.domain.user.entity.User;
+import com.sparta.projectblue.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,9 +29,13 @@ public class RoundAdminService {
 
     private final RoundRepository roundRepository;
     private final PerformanceRepository performanceRepository;
+    private final UserRepository userRepository;
 
     @Transactional
-    public List<CreateRoundResponseDto> create(Long id, CreateRoundRequestDto request) {
+    public List<CreateRoundResponseDto> create(AuthUser authUser, Long id, CreateRoundRequestDto request) {
+
+        // 권한 확인
+        hasRole(authUser);
 
         // 공연 존재 여부 확인
         if (performanceRepository.findById(id).isEmpty()) {
@@ -55,7 +61,10 @@ public class RoundAdminService {
     }
 
     @Transactional
-    public UpdateRoundResponseDto update(Long id, UpdateRoundRequestDto request) {
+    public UpdateRoundResponseDto update(AuthUser authUser, Long id, UpdateRoundRequestDto request) {
+
+        // 권한 확인
+        hasRole(authUser);
 
         // 회차 가져옴
         Round round =
@@ -83,7 +92,10 @@ public class RoundAdminService {
     }
 
     @Transactional
-    public void delete(Long id) {
+    public void delete(AuthUser authUser, Long id) {
+
+        // 권한 확인
+        hasRole(authUser);
 
         Round round =
                 roundRepository
@@ -93,4 +105,16 @@ public class RoundAdminService {
         roundRepository.delete(round);
     }
 
+    private void hasRole(AuthUser authUser) {
+        if (!authUser.hasRole(UserRole.ROLE_ADMIN)) {
+            throw new IllegalArgumentException("관리자만 접근할 수 있습니다.");
+        }
+
+        User user = userRepository.findById(authUser.getId())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
+
+        if (user.getUserRole() != UserRole.ROLE_ADMIN) {
+            throw new IllegalArgumentException("관리자만 접근할 수 있습니다.");
+        }
+    }
 }
