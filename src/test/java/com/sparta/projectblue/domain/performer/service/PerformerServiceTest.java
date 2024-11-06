@@ -8,6 +8,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -16,6 +20,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(SpringExtension.class)
 public class PerformerServiceTest {
@@ -47,6 +52,7 @@ public class PerformerServiceTest {
         // given
         int page = 1;
         int size = 10;
+        Pageable pageable = PageRequest.of(page - 1, size);
 
         Performer performer1 = new Performer("배두훈", "1986-07-15", "KOREA");
         Performer performer2 = new Performer("김태희", "1990-04-22", "KOREA");
@@ -54,16 +60,17 @@ public class PerformerServiceTest {
         ReflectionTestUtils.setField(performer1, "id", 1L);
         ReflectionTestUtils.setField(performer2, "id", 2L);
 
-        when(performerRepository.findAll()).thenReturn(List.of(performer1, performer2));
+        Page<Performer> performerPage = new PageImpl<>(List.of(performer1, performer2), pageable, 2);
+        when(performerRepository.findAll(any(Pageable.class))).thenReturn(performerPage);
 
         // when
         GetPerformersResponseDto result = performerService.getPerformers(page, size);
 
         // then
         assertNotNull(result);
-        assertEquals(2, result.getPerformers().size()); // 반환된 리스트 크기 검증
-        assertEquals("배두훈", result.getPerformers().get(0).getName()); // 첫 번째 배우 이름 검증
-        assertEquals("김태희", result.getPerformers().get(1).getName()); // 두 번째 배우 이름 검증
+        assertEquals(2, result.getPerformers().size());
+        assertEquals("배두훈", result.getPerformers().get(0).getName());
+        assertEquals("김태희", result.getPerformers().get(1).getName());
 
         System.out.println("조회된 배우 리스트:");
         result.getPerformers().forEach(performerInfo -> {
