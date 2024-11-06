@@ -55,7 +55,7 @@ public class RoundService {
         Performance performance =
                 performanceRepository
                         .findById(round.getPerformanceId())
-                        .orElseThrow(() -> new IllegalArgumentException("출연자를 찾을 수 없습니다."));
+                        .orElseThrow(() -> new IllegalArgumentException("공연을 찾을 수 없습니다."));
 
         // 공연장 가져옴
         Hall hall =
