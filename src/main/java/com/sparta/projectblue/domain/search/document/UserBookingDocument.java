@@ -2,6 +2,7 @@ package com.sparta.projectblue.domain.search.document;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
@@ -29,6 +30,7 @@ public class UserBookingDocument {
             type = FieldType.Date,
             format = {},
             pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime bookingDate; // 예매한 날짜
 
     @Field(type = FieldType.Long)
@@ -44,6 +46,7 @@ public class UserBookingDocument {
             type = FieldType.Date,
             format = {},
             pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime paymentDate; // 결제 된 날짜(추가구현 가능하려나2)
 
     public UserBookingDocument(
