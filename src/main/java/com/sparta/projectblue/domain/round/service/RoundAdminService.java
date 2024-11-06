@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,9 +32,24 @@ public class RoundAdminService {
     private final PerformanceRepository performanceRepository;
     private final UserRepository userRepository;
 
+    // 1시간 이상 차이 검증 메서드 (새 회차 추가용)
+    private void validateTimeDifferenceForNewRound(Long performanceId, LocalDateTime newDate) {
+        List<Round> existingRounds = roundRepository.findByPerformanceId(performanceId);
+
+        for (Round existingRound : existingRounds) {
+            LocalDateTime existingDate = existingRound.getDate();
+            Duration duration = Duration.between(existingDate, newDate).abs();
+
+            // 1시간 이하의 차이인 경우 예외 발생
+            if (duration.toHours() < 1 && duration.toMinutes() < 60) {
+                throw new IllegalArgumentException("기존 회차와 1시간 이상 차이가 나야 합니다.");
+            }
+        }
+    }
+
+
     @Transactional
     public List<CreateRoundResponseDto> create(AuthUser authUser, Long id, CreateRoundRequestDto request) {
-
         // 권한 확인
         hasRole(authUser);
 
@@ -41,43 +57,76 @@ public class RoundAdminService {
         if (performanceRepository.findById(id).isEmpty()) {
             throw new IllegalArgumentException("공연을 찾을 수 없습니다");
         }
+
         LocalDateTime now = LocalDateTime.now();
 
-        List<Round> newRounds =
-                request.getDates().stream()
-                        .peek(
-                                date -> {
-                                    if (date.isBefore(now)) {
-                                        throw new IllegalArgumentException(
-                                                "과거의 날짜로 회차를 생성할 수 없습니다.");
-                                    }
-                                })
-                        .map(date -> new Round(id, date, PerformanceStatus.BEFORE_OPEN))
-                        .collect(Collectors.toList());
+        // 요청 날짜 내 중복 검증
+        List<LocalDateTime> dates = request.getDates();
+        if (dates.size() != dates.stream().distinct().count()) {
+            throw new IllegalArgumentException("요청 내 날짜들이 중복될 수 없습니다.");
+        }
+
+        // 요청된 각 날짜에 대해 검증 수행
+        List<Round> newRounds = dates.stream()
+                .peek(date -> {
+                    // 과거 날짜 확인
+                    if (date.isBefore(now)) {
+                        throw new IllegalArgumentException("과거의 날짜로 회차를 생성할 수 없습니다.");
+                    }
+
+                    // 기존 회차와 1시간 이상 차이 검증
+                    validateTimeDifferenceForNewRound(id, date);
+                })
+                .map(date -> new Round(id, date, PerformanceStatus.BEFORE_OPEN))
+                .collect(Collectors.toList());
 
         List<Round> savedRounds = roundRepository.saveAll(newRounds);
 
         return savedRounds.stream().map(CreateRoundResponseDto::new).collect(Collectors.toList());
     }
 
+
+    // 1시간 이상 차이 검증 메서드 (수정 중인 회차 제외)
+    private void validateTimeDifferenceForExistingRound(Long performanceId, LocalDateTime newDate, Long roundId) {
+        List<Round> existingRounds = roundRepository.findByPerformanceId(performanceId);
+
+        for (Round existingRound : existingRounds) {
+            if (existingRound.getId().equals(roundId)) {
+                continue;
+            }
+
+            LocalDateTime existingDate = existingRound.getDate();
+            Duration duration = Duration.between(existingDate, newDate).abs();
+
+            // 1시간 이하의 차이인 경우 예외 발생
+            if (duration.toHours() < 1 && duration.toMinutes() < 60) {
+                throw new IllegalArgumentException("기존 회차와 1시간 이상 차이가 나야 합니다.");
+            }
+        }
+    }
+
     @Transactional
     public UpdateRoundResponseDto update(AuthUser authUser, Long id, UpdateRoundRequestDto request) {
-
         // 권한 확인
         hasRole(authUser);
 
-        // 회차 가져옴
-        Round round =
-                roundRepository
-                        .findById(id)
-                        .orElseThrow(() -> new IllegalArgumentException("회차를 찾을 수 없습니다."));
+        // 회차 가져오기
+        Round round = roundRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("회차를 찾을 수 없습니다."));
 
         LocalDateTime now = LocalDateTime.now();
+
 
         if (request.getDate() != null) {
             if (request.getDate().isBefore(now)) {
                 throw new IllegalArgumentException("과거의 날짜로 회차를 수정할 수 없습니다.");
             }
+
+            // 기존 회차 시간과 다를 때만 1시간 이상 차이 검증
+            if (!round.getDate().equals(request.getDate())) {
+                validateTimeDifferenceForExistingRound(round.getPerformanceId(), request.getDate(), round.getId());
+            }
+
             round.updateDate(request.getDate());
         } else {
             request = new UpdateRoundRequestDto(round.getDate(), request.getStatus());
