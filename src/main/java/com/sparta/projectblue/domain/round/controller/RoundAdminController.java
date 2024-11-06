@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @RestController
 @RequestMapping("/admin/rounds")
 @RequiredArgsConstructor
-@Tag(name = "RoundAdmin", description = "관리자 전용 회차 API")
+@Tag(name = "Admin-Round", description = "관리자 전용 회차 API")
 public class RoundAdminController {
     private final RoundAdminService roundService;
 

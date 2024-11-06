@@ -1,5 +1,6 @@
 package com.sparta.projectblue.domain.coupon.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin/coupons")
+@Tag(name = "Admin-Coupon", description = "쿠폰 관리자 API")
 public class CouponAdminController {
 
     private final CouponAdminService couponAdminService;

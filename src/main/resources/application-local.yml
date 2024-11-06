@@ -56,7 +56,11 @@ spring:
       host: ${REDIS_HOST}
       port: ${REDIS_PORT}
 
-springdoc.swagger-ui.path: /api-test
+springdoc:
+  swagger-ui:
+    path: /api-test
+    operationsSorter: alpha
+    tags-sorter: alpha
 
 jwt:
   secret:

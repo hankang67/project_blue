@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "Poster", description = "포스터 CRUD API")
+@Tag(name = "Admin-Poster", description = "포스터 CRUD API")
 public class PosterController {
 
     private final PosterService posterService;

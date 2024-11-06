@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin/performances")
-@Tag(name = "PerformanceAdmin", description = "관리자 전용 공연 API")
+@Tag(name = "Admin-Performance", description = "관리자 전용 공연 API")
 public class PerformanceAdminController {
 
     private final PerformanceAdminService performanceAdminService;
