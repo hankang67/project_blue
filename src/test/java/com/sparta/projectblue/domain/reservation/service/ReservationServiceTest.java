@@ -9,10 +9,7 @@ import com.sparta.projectblue.domain.payment.repository.PaymentRepository;
 import com.sparta.projectblue.domain.payment.service.PaymentService;
 import com.sparta.projectblue.domain.performance.entity.Performance;
 import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
-import com.sparta.projectblue.domain.reservation.dto.CreateReservationRequestDto;
-import com.sparta.projectblue.domain.reservation.dto.CreateReservationResponseDto;
-import com.sparta.projectblue.domain.reservation.dto.DeleteReservationRequestDto;
-import com.sparta.projectblue.domain.reservation.dto.GetReservationResponseDto;
+import com.sparta.projectblue.domain.reservation.dto.*;
 import com.sparta.projectblue.domain.reservation.entity.Reservation;
 import com.sparta.projectblue.domain.reservation.repository.ReservationRepository;
 import com.sparta.projectblue.domain.reservation.service.ReservationService;
@@ -452,7 +449,7 @@ public class ReservationServiceTest {
     class GetReservationTest {
 
         @Test
-        void 예약_조회_정상_동작() {
+        void 예매_단건_조회_정상_동작() {
 
             // given
             Category category = Category.CONCERT;
@@ -493,7 +490,7 @@ public class ReservationServiceTest {
         }
 
         @Test
-        void 예약_조회_예매자가_아님_오류() {
+        void 예매자가_아님_오류() {
 
             // given
             Reservation reservation = new Reservation(authUser.getId() + 1, 1L, 1L, ReservationStatus.COMPLETED, 15000L);
@@ -510,7 +507,7 @@ public class ReservationServiceTest {
         }
 
         @Test
-        void 예약_조회_좌석정보_없음_오류() {
+        void 좌석정보_없음_오류() {
 
             // given
             Reservation reservation = new Reservation(authUser.getId(), 1L, 1L, ReservationStatus.COMPLETED, 15000L);
@@ -535,7 +532,7 @@ public class ReservationServiceTest {
         }
 
         @Test
-        void 예약_조회_결제정보_없음_오류() {
+        void 결제정보_없음_오류() {
 
             // given
             Reservation reservation = new Reservation(authUser.getId(), 1L, 1L, ReservationStatus.COMPLETED, 15000L);
@@ -564,4 +561,133 @@ public class ReservationServiceTest {
         }
     }
 
+    @Nested
+    class GetReservationsTest {
+
+        @Test
+        void 예매_다건_조회_정상_동작() {
+
+            // given
+            Long userId = 1L;
+
+            Reservation reservation1 = new Reservation(userId, 1L, 1L, ReservationStatus.COMPLETED, 15000L);
+            ReflectionTestUtils.setField(reservation1, "id", 1L);
+            Reservation reservation2 = new Reservation(userId, 2L, 2L, ReservationStatus.CANCELED, 20000L);
+            ReflectionTestUtils.setField(reservation2, "id", 2L);
+
+            given(reservationRepository.findByUserId(userId)).willReturn(List.of(reservation1, reservation2));
+
+            Performance performance1 = new Performance(1L, "Concert1", LocalDateTime.now(), LocalDateTime.now(), 15000L, Category.CONCERT, "description", 150);
+            Performance performance2 = new Performance(2L, "Concert2", LocalDateTime.now(), LocalDateTime.now(), 20000L, Category.CONCERT, "description", 200);
+
+            given(performanceRepository.findById(reservation1.getPerformanceId())).willReturn(Optional.of(performance1));
+            given(performanceRepository.findById(reservation2.getPerformanceId())).willReturn(Optional.of(performance2));
+
+            List<ReservedSeat> seats1 = List.of(new ReservedSeat(1L, reservation1.getId(), 1), new ReservedSeat(2L, reservation1.getId(), 2));
+            List<ReservedSeat> seats2 = List.of(new ReservedSeat(3L, reservation2.getId(), 1));
+
+            given(reservedSeatRepository.findByReservationId(reservation1.getId())).willReturn(seats1);
+            given(reservedSeatRepository.findByReservationId(reservation2.getId())).willReturn(seats2);
+
+            Hall hall1 = new Hall("Main Hall", "Address 123", 300);
+            Hall hall2 = new Hall("Side Hall", "Address 456", 150);
+
+            given(hallRepository.findById(performance1.getHallId())).willReturn(Optional.of(hall1));
+            given(hallRepository.findById(performance2.getHallId())).willReturn(Optional.of(hall2));
+
+            Round round1 = new Round(1L, LocalDateTime.now().plusDays(1), PerformanceStatus.AVAILABLE);
+            Round round2 = new Round(2L, LocalDateTime.now().plusDays(2), PerformanceStatus.SOLD_OUT);
+
+            given(roundRepository.findById(reservation1.getRoundId())).willReturn(Optional.of(round1));
+            given(roundRepository.findById(reservation2.getRoundId())).willReturn(Optional.of(round2));
+
+            // when
+            List<GetReservationsResponseDto> responseList = reservationService.getReservations(userId);
+
+            // then
+            assertEquals(2, responseList.size());
+
+            GetReservationsResponseDto response1 = responseList.get(0);
+            assertEquals("Concert1", response1.getPerformanceTitle());
+            assertEquals(2, response1.getTickets());
+            assertEquals(reservation1.getId(), response1.getReservationId());
+            assertEquals(hall1.getName(), response1.getHallName());
+            assertEquals(round1.getDate(), response1.getRound());
+            assertEquals(reservation1.getStatus(), response1.getStatus());
+
+            GetReservationsResponseDto response2 = responseList.get(1);
+            assertEquals("Concert2", response2.getPerformanceTitle());
+            assertEquals(1, response2.getTickets());
+            assertEquals(reservation2.getId(), response2.getReservationId());
+            assertEquals(hall2.getName(), response2.getHallName());
+            assertEquals(round2.getDate(), response2.getRound());
+            assertEquals(reservation2.getStatus(), response2.getStatus());
+        }
+
+        @Test
+        void 공연_없음_오류() {
+
+            // given
+            Long userId = 1L;
+            Reservation reservation = new Reservation(userId, 1L, 1L, ReservationStatus.COMPLETED, 15000L);
+
+            given(reservationRepository.findByUserId(userId)).willReturn(List.of(reservation));
+
+            given(performanceRepository.findById(reservation.getPerformanceId())).willReturn(Optional.empty());
+
+            // when
+            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                    reservationService.getReservations(userId));
+
+            // then
+            assertEquals("Performance not found for reservation", exception.getMessage());
+        }
+
+        @Test
+        void 공연장_없음_오류() {
+
+            // given
+            Long userId = 1L;
+            Reservation reservation = new Reservation(userId, 1L, 1L, ReservationStatus.COMPLETED, 15000L);
+
+            given(reservationRepository.findByUserId(userId)).willReturn(List.of(reservation));
+
+            Performance performance = new Performance(1L, "Concert1", LocalDateTime.now(), LocalDateTime.now(), 15000L, Category.CONCERT, "description", 150);
+            given(performanceRepository.findById(reservation.getPerformanceId())).willReturn(Optional.of(performance));
+
+            given(hallRepository.findById(performance.getHallId())).willReturn(Optional.empty());
+
+            // when
+            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                    reservationService.getReservations(userId));
+
+            // then
+            assertEquals("공연장을 찾을 수 없습니다", exception.getMessage());
+        }
+
+        @Test
+        void 회차_없음_오류() {
+
+            // given
+            Long userId = 1L;
+            Reservation reservation = new Reservation(userId, 1L, 1L, ReservationStatus.COMPLETED, 15000L);
+
+            given(reservationRepository.findByUserId(userId)).willReturn(List.of(reservation));
+
+            Performance performance = new Performance(1L, "Concert1", LocalDateTime.now(), LocalDateTime.now(), 15000L, Category.CONCERT, "description", 150);
+            given(performanceRepository.findById(reservation.getPerformanceId())).willReturn(Optional.of(performance));
+
+            Hall hall = new Hall("Main Hall", "Address 123", 300);
+            given(hallRepository.findById(performance.getHallId())).willReturn(Optional.of(hall));
+
+            given(roundRepository.findById(reservation.getRoundId())).willReturn(Optional.empty());
+
+            // when
+            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                    reservationService.getReservations(userId));
+
+            // then
+            assertEquals("공연 회차를 찾을 수 없습니다", exception.getMessage());
+        }
+    }
 }
