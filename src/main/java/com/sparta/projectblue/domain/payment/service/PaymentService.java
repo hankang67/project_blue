@@ -206,7 +206,9 @@ public class PaymentService {
         long userPay = originPrice - discountValue;
 
         if (userPay > 0 && userPay < 100) {
-            userPay = 100L;
+            originPrice += (100L - userPay);
+        } else if (userPay < 0 ) {
+            discountValue = originPrice;
         }
 
         String timestamp =
