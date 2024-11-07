@@ -5,6 +5,7 @@ import com.sparta.projectblue.domain.common.enums.CouponStatus;
 import com.sparta.projectblue.domain.common.enums.CouponType;
 import com.sparta.projectblue.domain.common.enums.UserRole;
 import com.sparta.projectblue.domain.coupon.dto.CreateCouponRequestDto;
+import com.sparta.projectblue.domain.coupon.dto.CreateCouponResponseDto;
 import com.sparta.projectblue.domain.coupon.entity.Coupon;
 import com.sparta.projectblue.domain.coupon.repository.CouponRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -52,7 +53,7 @@ public class CouponAdminServiceTest {
         AuthUser authUser = new AuthUser(1L, "test@test.com",
                 "testUser", UserRole.ROLE_ADMIN);
         // when
-        Coupon response = couponAdminService.create(authUser, createCouponRequestDto);
+        CreateCouponResponseDto response = couponAdminService.create(authUser, createCouponRequestDto);
 
         // then
         assertEquals(coupon, response);

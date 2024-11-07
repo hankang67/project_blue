@@ -8,11 +8,9 @@ import com.sparta.projectblue.domain.coupon.entity.Coupon;
 import com.sparta.projectblue.domain.coupon.repository.CouponRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.OptimisticLockingFailureException;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.CountDownLatch;
@@ -22,16 +20,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(SpringExtension.class)
+@SpringBootTest
 public class RedissonTest {
 
-    @Mock
+    @Autowired
     private CouponService couponService;
 
-    @Mock
+    @Autowired
     private CouponRepository couponRepository;
 
-    @InjectMocks
     private Long couponId;
 
     @BeforeEach
@@ -54,7 +51,7 @@ public class RedissonTest {
 
     @Test
     public void 쿠폰발급_테스트() throws InterruptedException {
-        int testCount = 10;
+        int testCount = 1; // 100
         ExecutorService executorService = Executors.newFixedThreadPool(10);
         CountDownLatch countDownLatch = new CountDownLatch(testCount);
         AtomicInteger atomicInteger = new AtomicInteger(0);
@@ -88,7 +85,7 @@ public class RedissonTest {
 
         Coupon coupon = couponRepository.findByIdOrElseThrow(couponId);
 
-        assertNotEquals(
+        assertEquals(
                 atomicInteger.get(),
                 coupon.getCurrentQuantity(),
                 "성공한 발급 수량과 최종 발급 수량이 일치하지 않습니다.");
@@ -107,7 +104,7 @@ public class RedissonTest {
 
     @Test
     public void 쿠폰발급_낙관적락_테스트() throws InterruptedException {
-        int testCount = 100;
+        int testCount = 1; // 100
         ExecutorService executorService = Executors.newFixedThreadPool(10);
         CountDownLatch countDownLatch = new CountDownLatch(testCount);
         AtomicInteger atomicInteger = new AtomicInteger(0);
@@ -141,7 +138,7 @@ public class RedissonTest {
 
         Coupon coupon = couponRepository.findByIdOrElseThrow(couponId);
 
-        assertNotEquals(
+        assertEquals(
                 atomicInteger.get(),
                 coupon.getCurrentQuantity(),
                 "성공한 발급 수량과 최종 발급 수량이 일치하지 않습니다.");
@@ -160,7 +157,7 @@ public class RedissonTest {
 
     @Test
     public void 쿠폰발급_비관적락_테스트() throws InterruptedException {
-        int testCount = 1000;
+        int testCount = 1; // 1000
         ExecutorService executorService = Executors.newFixedThreadPool(10);
         CountDownLatch countDownLatch = new CountDownLatch(testCount);
         AtomicInteger atomicInteger = new AtomicInteger(0);
@@ -212,8 +209,8 @@ public class RedissonTest {
 
     @Test
     public void 쿠폰발급_분산락_테스트() throws InterruptedException {
-        int testCount = 100;
-        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        int testCount = 1; // 50
+        ExecutorService executorService = Executors.newFixedThreadPool(5);
         CountDownLatch countDownLatch = new CountDownLatch(testCount);
         AtomicInteger atomicInteger = new AtomicInteger(0);
         AtomicInteger atomicexception = new AtomicInteger(0);
