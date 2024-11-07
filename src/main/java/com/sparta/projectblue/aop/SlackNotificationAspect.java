@@ -79,8 +79,11 @@ public class SlackNotificationAspect {
             String title = "[티켓_예매완료]";
             String message =
                     String.format(
-                            " %s 고객님, %s 공연이 %s 공연장 %s좌석 으로 예약되었습니다.",
-                            username, performance.getTitle(), hall.getName(), result.getSeats());
+                            " %s 고객님, 예매가 완료되었습니다.\n" +
+                                    "상품정보: %s 공연, %s 회차, %s 공연장, %s좌석\n" +
+                                    "일시: %s 으로 예약되었습니다.",
+                            username,  performance.getTitle(), reservation.getRoundId(), hall.getName(),
+                            result.getSeats(), result.getRoundDate());
 
             slackNotifier.sendMessage(title, message);
         }

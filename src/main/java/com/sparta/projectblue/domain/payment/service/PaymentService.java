@@ -1,5 +1,25 @@
 package com.sparta.projectblue.domain.payment.service;
 
+import com.sparta.projectblue.domain.common.enums.PaymentStatus;
+import com.sparta.projectblue.domain.common.exception.PaymentException;
+import com.sparta.projectblue.domain.coupon.service.CouponService;
+import com.sparta.projectblue.domain.payment.dto.PaymentResponseDto;
+import com.sparta.projectblue.domain.payment.entity.Payment;
+import com.sparta.projectblue.domain.payment.repository.PaymentRepository;
+import com.sparta.projectblue.domain.performance.entity.Performance;
+import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
+import com.sparta.projectblue.domain.reservation.entity.Reservation;
+import com.sparta.projectblue.domain.reservation.repository.ReservationRepository;
+import com.sparta.projectblue.domain.user.entity.User;
+import com.sparta.projectblue.domain.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -13,27 +33,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Objects;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.sparta.projectblue.domain.common.enums.PaymentStatus;
-import com.sparta.projectblue.domain.common.exception.PaymentException;
-import com.sparta.projectblue.domain.coupon.service.CouponService;
-import com.sparta.projectblue.domain.payment.dto.PaymentResponseDto;
-import com.sparta.projectblue.domain.payment.entity.Payment;
-import com.sparta.projectblue.domain.payment.repository.PaymentRepository;
-import com.sparta.projectblue.domain.performance.entity.Performance;
-import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
-import com.sparta.projectblue.domain.reservation.entity.Reservation;
-import com.sparta.projectblue.domain.reservation.repository.ReservationRepository;
-import com.sparta.projectblue.domain.user.entity.User;
-import com.sparta.projectblue.domain.user.repository.UserRepository;
-
-import lombok.RequiredArgsConstructor;
-
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -45,8 +44,11 @@ public class PaymentService {
     private final UserRepository userRepository;
     private final CouponService couponService;
 
-    private static final String TOSS_BASIC_URL = "https://api.tosspayments.com/v1/payments/";
-    private static final String WIDGET_SECRET_KEY = "test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6";
+    @Value("${toss.basic.url}")
+    private String TOSS_BASIC_URL;
+
+    @Value("${toss.widget.secret.key}")
+    private String WIDGET_SECRET_KEY;
 
     @Transactional
     public JSONObject confirmPayment(String jsonBody) throws Exception {
@@ -202,7 +204,9 @@ public class PaymentService {
         long userPay = originPrice - discountValue;
 
         if (userPay > 0 && userPay < 100) {
-            userPay = 100L;
+            originPrice += (100L - userPay);
+        } else if (userPay < 0 ) {
+            discountValue = originPrice;
         }
 
         String timestamp =
