@@ -15,14 +15,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/search")
+@RequestMapping("/admin/search")
 @RequiredArgsConstructor
 @Tag(name = "Search", description = "검색 API")
 public class UserBookingController {
 
     private final UserBookingSearchService searchService;
 
-    @GetMapping("/admin")
+    @GetMapping
     @Operation(summary = "관리자 정보 검색", description = "다양한 조건을 이용해 정보를 검색합니다")
     public ResponseEntity<?> searchBookings(
             @RequestParam(required = false) String userName,
@@ -54,7 +54,7 @@ public class UserBookingController {
         return ResponseEntity.ok(ApiResponse.success(searchService.searchBookings(dto)));
     }
 
-    @PostMapping("/admin/sync")
+    @PostMapping("/sync")
     @Operation(summary = "데이터 동기화", description = "예약 정보를 Elasticsearch와 동기화합니다")
     public ResponseEntity<ApiResponse<String>> syncData() {
         searchService.syncData();
