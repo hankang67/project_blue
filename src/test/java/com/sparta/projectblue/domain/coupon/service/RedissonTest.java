@@ -209,8 +209,8 @@
 //
 //    @Test
 //    public void 쿠폰발급_분산락_테스트() throws InterruptedException {
-//        int testCount = 5;
-//        ExecutorService executorService = Executors.newFixedThreadPool(10);
+//        int testCount = 50;
+//        ExecutorService executorService = Executors.newFixedThreadPool(5);
 //        CountDownLatch countDownLatch = new CountDownLatch(testCount);
 //        AtomicInteger atomicInteger = new AtomicInteger(0);
 //        AtomicInteger atomicexception = new AtomicInteger(0);
