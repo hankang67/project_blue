@@ -7,6 +7,7 @@ import com.sparta.projectblue.domain.round.dto.CreateRoundRequestDto;
 import com.sparta.projectblue.domain.round.dto.UpdateRoundRequestDto;
 import com.sparta.projectblue.domain.round.service.RoundAdminService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ import java.time.LocalDateTime;
 @RestController
 @RequestMapping("/admin/rounds")
 @RequiredArgsConstructor
-@Tag(name = "RoundAdmin", description = "관리자 전용 회차 API")
+@Tag(name = "Admin-Round", description = "관리자 전용 회차 API")
 public class RoundAdminController {
     private final RoundAdminService roundService;
 
@@ -34,12 +35,12 @@ public class RoundAdminController {
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "회차 수정", description = "특정 회차의 정보를 수정합니다.")
+    @Operation(summary = "회차 수정", description = "특정 회차의 정보를 수정합니다. / 2024-12-14T18:00:00")
     public ResponseEntity<ApiResponse<?>> update(
             @AuthenticationPrincipal AuthUser authUser,
 
             @PathVariable Long id,
-            @RequestParam(required = false) LocalDateTime date,
+            @Parameter(example = "2024-12-14T18:00:00") @RequestParam(required = false) LocalDateTime date,
             @RequestParam(required = false) PerformanceStatus status) {
 
         return ResponseEntity.ok(
