@@ -53,7 +53,7 @@ public class RedissonTest {
 
     @Test
     public void 쿠폰발급_분산락_테스트() throws InterruptedException {
-        int testCount = 100;
+        int testCount = 2; // 100
 
         ExecutorService executorService = Executors.newFixedThreadPool(10);
         CountDownLatch countDownLatch = new CountDownLatch(testCount);

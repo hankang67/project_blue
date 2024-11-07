@@ -18,6 +18,7 @@ import com.sparta.projectblue.domain.performerPerformance.entity.PerformerPerfor
 import com.sparta.projectblue.domain.performerPerformance.repository.PerformerPerformanceRepository;
 import com.sparta.projectblue.domain.poster.entity.Poster;
 import com.sparta.projectblue.domain.poster.repository.PosterRepository;
+import com.sparta.projectblue.domain.round.repository.RoundRepository;
 import com.sparta.projectblue.domain.user.entity.User;
 import com.sparta.projectblue.domain.user.repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -63,6 +64,9 @@ public class PerformanceAdminServiceTest {
 
     @Mock
     private PosterRepository posterRepository;
+
+    @Mock
+    private RoundRepository roundRepository;
 
     @Mock
     private AmazonS3 amazonS3;
@@ -382,7 +386,6 @@ public class PerformanceAdminServiceTest {
                 Category.CONCERT,
                 "수정 테스트코드",
                 1L,
-                100,
                 200,
                 new Long[] {1L, 2L}
         );
@@ -411,7 +414,6 @@ public class PerformanceAdminServiceTest {
                 Category.CONCERT,
                 "수정 테스트코드",
                 1L,
-                100,
                 200,
                 new Long[] {1L, 2L}
         );
@@ -444,7 +446,6 @@ public class PerformanceAdminServiceTest {
                 Category.CONCERT,
                 "수정 테스트코드",
                 1L,
-                100,
                 200,
                 new Long[] {1L, 2L}
         );
@@ -495,7 +496,6 @@ public class PerformanceAdminServiceTest {
                 Category.CONCERT,
                 "수정 테스트코드",
                 1L,
-                100,
                 200,
                 new Long[] {1L, 2L}
         );
