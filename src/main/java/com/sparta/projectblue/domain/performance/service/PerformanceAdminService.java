@@ -70,11 +70,12 @@ public class PerformanceAdminService {
         }
 
         LocalDateTime startDate = LocalDate.parse(request.getStartDate()).atStartOfDay();
-        LocalDateTime endDate = LocalDate.parse(request.getEndDate()).atTime(LocalTime.MAX);
 
         if (LocalDateTime.now().isAfter(startDate)) {
             throw new IllegalArgumentException("시작일이 현재보다 이전일 수 없습니다.");
         }
+
+        LocalDateTime endDate = LocalDate.parse(request.getEndDate()).atTime(LocalTime.MAX);
 
         if (LocalDateTime.now().isAfter(endDate)) {
             throw new IllegalArgumentException("종료일이 현재보다 이전일 수 없습니다.");
@@ -84,11 +85,11 @@ public class PerformanceAdminService {
             throw new IllegalArgumentException("종료일이 시작일보다 빠를 수 없습니다.");
         }
 
-        Category category = Category.of(request.getCategory());
-
         if (request.getDuration() == 0) {
             throw new IllegalArgumentException("공연시간을 입력해주세요.");
         }
+
+        Category category = Category.of(request.getCategory());
 
         Performance performance =
                 new Performance(
@@ -129,7 +130,6 @@ public class PerformanceAdminService {
             amazonS3.putObject(
                     new PutObjectRequest(bucket, posterName, inputStream, objectMetadata));
             log.info("File uploaded successfully.");
-
             posterUrl = amazonS3.getUrl(bucket, posterName).toString();
         } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다.");
@@ -206,11 +206,6 @@ public class PerformanceAdminService {
     }
 
     public void hasRole(AuthUser authUser) {
-
-        if (!authUser.hasRole(UserRole.ROLE_ADMIN)) {
-            throw new IllegalArgumentException("관리자만 접근할 수 있습니다.");
-        }
-
         // DB에서의 권한도 검증
         User user = userRepository.findById(authUser.getId()).orElseThrow(() ->
                 new IllegalArgumentException("존재하지 않는 유저입니다."));
@@ -218,7 +213,6 @@ public class PerformanceAdminService {
         if (!(user.getUserRole() == UserRole.ROLE_ADMIN)) {
             throw new IllegalArgumentException("관리자만 접근할 수 있습니다.");
         }
-
     }
 
     private void deletePerformerPerformance(Long performanceId) {
@@ -252,13 +246,13 @@ public class PerformanceAdminService {
     @Transactional
     public void addPerformer(Long performanceId, Long performerId) {
 
-        if (performanceRepository.findById(performanceId).isEmpty()) {
-            throw new IllegalArgumentException("공연을 찾을 수 없습니다");
-        }
+       performanceRepository.findById(performanceId).orElseThrow(() ->
+               new IllegalArgumentException("공연을 찾을 수 없습니다.")
+       );
 
-        if (performerRepository.findById(performerId).isEmpty()) {
-            throw new IllegalArgumentException("배우를 찾을 수 없습니다");
-        }
+        performerRepository.findById(performerId).orElseThrow(() ->
+            new IllegalArgumentException("배우를 찾을 수 없습니다.")
+        );
 
         if (performerPerformanceRepository.existsByPerformanceIdAndPerformerId(
                 performanceId, performerId)) {
@@ -274,13 +268,13 @@ public class PerformanceAdminService {
     @Transactional
     public void removePerformer(Long performanceId, Long performerId) {
 
-        if (performanceRepository.findById(performanceId).isEmpty()) {
-            throw new IllegalArgumentException("공연을 찾을 수 없습니다");
-        }
+        performanceRepository.findById(performanceId).orElseThrow(() ->
+                new IllegalArgumentException("공연을 찾을 수 없습니다.")
+        );
 
-        if (performerRepository.findById(performerId).isEmpty()) {
-            throw new IllegalArgumentException("배우를 찾을 수 없습니다");
-        }
+        performerRepository.findById(performerId).orElseThrow(() ->
+                new IllegalArgumentException("배우를 찾을 수 없습니다.")
+        );
 
         PerformerPerformance performerPerformance =
                 performerPerformanceRepository
