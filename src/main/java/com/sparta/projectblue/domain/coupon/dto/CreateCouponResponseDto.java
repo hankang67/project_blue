@@ -14,6 +14,8 @@ public class CreateCouponResponseDto {
     private final String code;
     private final CouponStatus status;
     private final CouponType type;
+    private final int maxQuantity;
+    private final int currentQuantity;
     private final Long discountValue;
     private final LocalDateTime startDate;
     private final LocalDateTime endDate;
@@ -24,6 +26,8 @@ public class CreateCouponResponseDto {
         this.code = coupon.getCouponCode();
         this.status = coupon.getStatus();
         this.type = coupon.getType();
+        this.maxQuantity = coupon.getMaxQuantity();
+        this.currentQuantity = coupon.getCurrentQuantity();
         this.discountValue = coupon.getDiscountValue();
         this.startDate = coupon.getStartDate();
         this.endDate = coupon.getEndDate();

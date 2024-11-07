@@ -56,7 +56,14 @@ public class CouponAdminServiceTest {
         CreateCouponResponseDto response = couponAdminService.create(authUser, createCouponRequestDto);
 
         // then
-        assertEquals(coupon, response);
+        assertEquals(coupon.getCouponCode(), response.getCode());
+        assertEquals(coupon.getType(), response.getType());
+        assertEquals(coupon.getStatus(), response.getStatus());
+        assertEquals(coupon.getDiscountValue(), response.getDiscountValue());
+        assertEquals(coupon.getMaxQuantity(), response.getMaxQuantity());
+        assertEquals(coupon.getCurrentQuantity(), response.getCurrentQuantity());
+        assertEquals(coupon.getStartDate(), response.getStartDate());
+        assertEquals(coupon.getEndDate(), response.getEndDate());
     }
 
     @Test

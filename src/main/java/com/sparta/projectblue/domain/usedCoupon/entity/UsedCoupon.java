@@ -1,15 +1,13 @@
 package com.sparta.projectblue.domain.usedCoupon.entity;
 
-import java.time.LocalDateTime;
-
+import com.sparta.projectblue.domain.common.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-
-import com.sparta.projectblue.domain.common.entity.BaseEntity;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -23,7 +21,7 @@ public class UsedCoupon extends BaseEntity {
     @Column(nullable = false, name = "user_id")
     private Long userId;
 
-    @Column(nullable = false, name = "reservation_id")
+    @Column(name = "reservation_id")
     private Long reservationId;
 
     @Column(nullable = false, name = "used_at")
@@ -32,17 +30,22 @@ public class UsedCoupon extends BaseEntity {
     @Column(nullable = false, name = "discount_amount")
     private Long discountAmount;
 
+    @Column(nullable = false, name = "issued_at")
+    private LocalDateTime issuedAt;
+
     public UsedCoupon(
             Long couponId,
             Long userId,
             Long reservationId,
             LocalDateTime usedAt,
-            Long discountAmount) {
+            Long discountAmount,
+            LocalDateTime issuedAt) {
 
         this.couponId = couponId;
         this.userId = userId;
         this.reservationId = reservationId;
         this.usedAt = usedAt;
         this.discountAmount = discountAmount;
+        this.issuedAt = issuedAt;
     }
 }
