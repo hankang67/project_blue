@@ -79,10 +79,34 @@ cloud:
 elastic:
   host: ${ES_URI}
 
-  logging:
-    level:
-      org.springframework.data.redis: DEBUG
-      org.springframework.cache: DEBUG
+logging:
+  level:
+    org.springframework.data.redis: DEBUG
+    org.springframework.cache: DEBUG
+    root: INFO # 기본 로그 레벨
+
+management:
+  endpoint:
+    health:
+      enabled: true
+      show-details: always # 헬스 정보 상세히 표시
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+    jvm:
+      enabled: true # JVM 모니터링 활성화
+    loggers:
+      enabled: true # 로거 모니터링 활성화
+
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus, jvm, loggers # 필요한 엔드포인트 노출
+
+  metrics:
+    tags:
+      application: ${spring.application.name}
 
 toss:
   basic:
