@@ -1,23 +1,20 @@
 package com.sparta.projectblue.domain.performer.service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import com.sparta.projectblue.config.CacheKey;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.sparta.projectblue.domain.performer.dto.GetPerformerResponseDto;
 import com.sparta.projectblue.domain.performer.dto.GetPerformersResponseDto;
 import com.sparta.projectblue.domain.performer.entity.Performer;
 import com.sparta.projectblue.domain.performer.repository.PerformerRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,14 +34,18 @@ public class PerformerService {
         return new GetPerformerResponseDto(performer);
     }
 
-    @Cacheable(value = CacheKey.PERFORMERS, key = "'all_performers'")
-    public GetPerformersResponseDto getPerformers() {
+    public GetPerformersResponseDto getPerformers(int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<Performer> performerPage = performerRepository.findAll(pageable);
 
-        List<GetPerformersResponseDto.PerformerInfo> performers =
-                performerRepository.findAll().stream()
-                        .map(GetPerformersResponseDto.PerformerInfo::new)
-                        .collect(Collectors.toList());
+        List<GetPerformersResponseDto.PerformerInfo> performerInfoList = performerPage
+                .map(GetPerformersResponseDto.PerformerInfo::new)
+                .getContent();
 
-        return new GetPerformersResponseDto(performers);
+        return new GetPerformersResponseDto(performerInfoList);
     }
+
+
+
+
 }

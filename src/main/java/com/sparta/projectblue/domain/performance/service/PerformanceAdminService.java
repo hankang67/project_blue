@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.sparta.projectblue.domain.common.enums.Category;
+import com.sparta.projectblue.domain.round.repository.RoundRepository;
 import com.sparta.projectblue.domain.user.entity.User;
 import com.sparta.projectblue.domain.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -53,6 +54,7 @@ public class PerformanceAdminService {
     private final PerformerPerformanceRepository performerPerformanceRepository;
     private final PosterRepository posterRepository;
     private final UserRepository userRepository;
+    private final RoundRepository roundRepository;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -189,6 +191,9 @@ public class PerformanceAdminService {
 
         performanceRepository.deleteAll(performances);
 
+        //관련 회차 삭제
+        roundRepository.deleteByPerformanceId(performanceId);
+
         // 공연, 출연자 테이블 연관데이터 삭제
         deletePerformerPerformance(performanceId);
 
@@ -283,5 +288,6 @@ public class PerformanceAdminService {
                                 () -> new IllegalArgumentException("해당 배우는 이 공연에 등록되어 있지 않습니다."));
 
         performerPerformanceRepository.delete(performerPerformance);
+
     }
 }

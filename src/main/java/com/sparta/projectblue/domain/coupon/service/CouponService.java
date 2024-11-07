@@ -32,6 +32,13 @@ public class CouponService {
 
         Coupon coupon = couponRepository.findByIdOrElseThrow(couponid);
 
+        if (usedCouponRepository.existsByCouponIdAndUserId(couponid, authUser.getId())) {
+            throw new IllegalArgumentException("이미 발급받은 쿠폰입니다.");
+        }
+        if (coupon.getCurrentQuantity() > coupon.getMaxQuantity()) {
+            throw new IllegalArgumentException("쿠폰이 모두 소진되었습니다.");
+        }
+
         // 현재 쿠폰 수량 증가
         coupon.incrementQuantity();
 

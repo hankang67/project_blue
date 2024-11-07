@@ -1,6 +1,5 @@
 package com.sparta.projectblue.aop;
 
-import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.common.enums.ReservationStatus;
 import com.sparta.projectblue.domain.hall.entity.Hall;
 import com.sparta.projectblue.domain.hall.repository.HallRepository;
@@ -80,8 +79,8 @@ public class SlackNotificationAspect {
             String title = "[티켓_예매완료]";
             String message =
                     String.format(
-                            " %s 고객님, %s 공연이 %s 공연장으로 예약되었습니다.",
-                            username, performance.getTitle(), hall.getName());
+                            " %s 고객님, %s 공연이 %s 공연장 %s좌석 으로 예약되었습니다.",
+                            username, performance.getTitle(), hall.getName(), result.getSeats());
 
             slackNotifier.sendMessage(title, message);
         }
