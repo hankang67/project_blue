@@ -83,3 +83,10 @@ elastic:
     level:
       org.springframework.data.redis: DEBUG
       org.springframework.cache: DEBUG
+
+toss:
+  basic:
+    url: https://api.tosspayments.com/v1/payments/
+  widget:
+    secret:
+      key: test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6
