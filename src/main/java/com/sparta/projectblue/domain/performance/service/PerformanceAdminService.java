@@ -8,6 +8,10 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 
+import com.sparta.projectblue.domain.common.enums.Category;
+import com.sparta.projectblue.domain.round.repository.RoundRepository;
+import com.sparta.projectblue.domain.user.entity.User;
+import com.sparta.projectblue.domain.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -49,6 +53,8 @@ public class PerformanceAdminService {
     private final PerformerRepository performerRepository;
     private final PerformerPerformanceRepository performerPerformanceRepository;
     private final PosterRepository posterRepository;
+    private final UserRepository userRepository;
+    private final RoundRepository roundRepository;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -68,8 +74,22 @@ public class PerformanceAdminService {
         LocalDateTime startDate = LocalDate.parse(request.getStartDate()).atStartOfDay();
         LocalDateTime endDate = LocalDate.parse(request.getEndDate()).atTime(LocalTime.MAX);
 
+        if (LocalDateTime.now().isAfter(startDate)) {
+            throw new IllegalArgumentException("시작일이 현재보다 이전일 수 없습니다.");
+        }
+
+        if (LocalDateTime.now().isAfter(endDate)) {
+            throw new IllegalArgumentException("종료일이 현재보다 이전일 수 없습니다.");
+        }
+
         if (startDate.isAfter(endDate)) {
             throw new IllegalArgumentException("종료일이 시작일보다 빠를 수 없습니다.");
+        }
+
+        Category category = Category.of(request.getCategory());
+
+        if (request.getDuration() == 0) {
+            throw new IllegalArgumentException("공연시간을 입력해주세요.");
         }
 
         Performance performance =
@@ -79,7 +99,7 @@ public class PerformanceAdminService {
                         startDate,
                         endDate,
                         request.getPrice(),
-                        request.getCategory(),
+                        category,
                         request.getDescription(),
                         request.getDuration());
 
@@ -123,7 +143,8 @@ public class PerformanceAdminService {
         posterRepository.save(poster);
 
         return new CreatePerformanceResponseDto(
-                savedPerformance.getId(), savedPerformance.getTitle());
+                savedPerformance.getId(), savedPerformance.getTitle(), savedPerformance.getStartDate(), savedPerformance.getEndDate(),
+                savedPerformance.getPrice(), savedPerformance.getCategory(), savedPerformance.getDescription(), savedPerformance.getDuration());
     }
 
     @Transactional
@@ -170,6 +191,9 @@ public class PerformanceAdminService {
 
         performanceRepository.deleteAll(performances);
 
+        //관련 회차 삭제
+        roundRepository.deleteByPerformanceId(performanceId);
+
         // 공연, 출연자 테이블 연관데이터 삭제
         deletePerformerPerformance(performanceId);
 
@@ -191,6 +215,15 @@ public class PerformanceAdminService {
         if (!authUser.hasRole(UserRole.ROLE_ADMIN)) {
             throw new IllegalArgumentException("관리자만 접근할 수 있습니다.");
         }
+
+        // DB에서의 권한도 검증
+        User user = userRepository.findById(authUser.getId()).orElseThrow(() ->
+                new IllegalArgumentException("존재하지 않는 유저입니다."));
+
+        if (!(user.getUserRole() == UserRole.ROLE_ADMIN)) {
+            throw new IllegalArgumentException("관리자만 접근할 수 있습니다.");
+        }
+
     }
 
     private void deletePerformerPerformance(Long performanceId) {
@@ -229,7 +262,7 @@ public class PerformanceAdminService {
         }
 
         if (performerRepository.findById(performerId).isEmpty()) {
-            throw new IllegalArgumentException("공연을 찾을 수 없습니다");
+            throw new IllegalArgumentException("배우를 찾을 수 없습니다");
         }
 
         if (performerPerformanceRepository.existsByPerformanceIdAndPerformerId(
@@ -251,7 +284,7 @@ public class PerformanceAdminService {
         }
 
         if (performerRepository.findById(performerId).isEmpty()) {
-            throw new IllegalArgumentException("공연을 찾을 수 없습니다");
+            throw new IllegalArgumentException("배우를 찾을 수 없습니다");
         }
 
         PerformerPerformance performerPerformance =
@@ -261,5 +294,6 @@ public class PerformanceAdminService {
                                 () -> new IllegalArgumentException("해당 배우는 이 공연에 등록되어 있지 않습니다."));
 
         performerPerformanceRepository.delete(performerPerformance);
+
     }
 }

@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.sparta.projectblue.config.CacheKey;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -45,6 +47,8 @@ public class PerformanceService {
         return performanceRepository.findByCondition(pageable, null, performanceDay, null);
     }
 
+    // 캐싱 적용 대상
+    @Cacheable(value = "performance", key = "#id")
     public GetPerformanceResponseDto getPerformance(Long id) {
         Performance performance =
                 performanceRepository
@@ -64,6 +68,8 @@ public class PerformanceService {
         return new GetPerformanceResponseDto(performance, hall, poster);
     }
 
+    // 캐싱 적용 대상
+    @Cacheable(value = "rounds", key = "#id")
     public GetPerformanceRoundsResponseDto getRounds(Long id) {
 
         // 공연 id값 검증
@@ -86,6 +92,9 @@ public class PerformanceService {
         return new GetPerformanceRoundsResponseDto(roundInfos);
     }
 
+
+    // 캐싱 적용 대상
+    @Cacheable(value = "reviews", key = "#id")
     public GetPerformanceReviewsResponseDto getReviews(Long id) {
 
         // 공연 id값 검증
@@ -106,6 +115,9 @@ public class PerformanceService {
         return new GetPerformanceReviewsResponseDto(reviewInfos);
     }
 
+
+    // 캐싱 적용 대상
+    @Cacheable(value = "performancePerformers", key = "#id")
     public GetPerformancePerformersResponseDto getPerformers(Long id) {
 
         if (performanceRepository.findById(id).isEmpty()) {
