@@ -3,6 +3,7 @@ package com.sparta.projectblue.domain.payment.service;
 import com.sparta.projectblue.domain.common.enums.PaymentStatus;
 import com.sparta.projectblue.domain.common.exception.PaymentException;
 import com.sparta.projectblue.domain.coupon.service.CouponService;
+import com.sparta.projectblue.domain.email.service.EmailCreateService;
 import com.sparta.projectblue.domain.payment.dto.PaymentResponseDto;
 import com.sparta.projectblue.domain.payment.entity.Payment;
 import com.sparta.projectblue.domain.payment.repository.PaymentRepository;
@@ -43,6 +44,7 @@ public class PaymentService {
     private final PerformanceRepository performanceRepository;
     private final UserRepository userRepository;
     private final CouponService couponService;
+    private final EmailCreateService emailCreateService;
 
     @Value("${toss.basic.url}")
     private String TOSS_BASIC_URL;
@@ -135,6 +137,8 @@ public class PaymentService {
                 (Long) jsonObject.get("vat"),
                 approvedAt.toLocalDateTime(),
                 (Long) jsonObject.get("totalAmount"));
+
+        emailCreateService.sendPaymentEmail(payment.getUserId(), payment);
 
         reservation.addPaymentId(payment.getId());
 
@@ -274,6 +278,8 @@ public class PaymentService {
         payment.addPaymentInfo(null, null, null, null, null, LocalDateTime.now(), 0L);
         reservation.addPaymentId(payment.getId());
         reservation.resCompleted();
+
+        emailCreateService.sendPaymentEmail(user.getId(), payment);
 
         return payment;
     }
