@@ -5,6 +5,7 @@ import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.common.enums.PaymentStatus;
 import com.sparta.projectblue.domain.common.enums.PerformanceStatus;
 import com.sparta.projectblue.domain.common.enums.ReservationStatus;
+import com.sparta.projectblue.domain.email.service.EmailCreateService;
 import com.sparta.projectblue.domain.hall.entity.Hall;
 import com.sparta.projectblue.domain.hall.repository.HallRepository;
 import com.sparta.projectblue.domain.payment.entity.Payment;
@@ -49,6 +50,7 @@ public class ReservationService {
     private final ReviewRepository reviewRepository;
     private final RoundRepository roundRepository;
     private final UserRepository userRepository;
+    private final EmailCreateService emailCreateService;
 
     private final PaymentService paymentService;
 
@@ -126,13 +128,19 @@ public class ReservationService {
                     new ReservedSeat(newReservation.getId(), newReservation.getRoundId(), i));
         }
 
-        return new CreateReservationResponseDto(
-                newReservation.getId(),
-                performance.getTitle(),
-                round.getDate(),
-                request.getSeats(),
-                newReservation.getPrice(),
-                ReservationStatus.PENDING);
+        CreateReservationResponseDto responseDto =
+                new CreateReservationResponseDto(
+                        newReservation.getId(),
+                        performance.getTitle(),
+                        round.getDate(),
+                        request.getSeats(),
+                        newReservation.getPrice(),
+                        ReservationStatus.PENDING);
+
+
+        emailCreateService.sendReservationEmail(id, responseDto);
+
+        return responseDto;
     }
 
     @Transactional

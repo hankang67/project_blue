@@ -11,18 +11,12 @@ import com.sparta.projectblue.domain.reservation.entity.Reservation;
 import com.sparta.projectblue.domain.reservation.repository.ReservationRepository;
 import com.sparta.projectblue.domain.user.entity.User;
 import com.sparta.projectblue.domain.user.repository.UserRepository;
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
-
-import java.time.format.DateTimeFormatter;
 
 @Aspect
 @Component
@@ -35,9 +29,7 @@ public class SlackNotificationAspect {
     private final PerformanceRepository performanceRepository;
     private final ReservationRepository reservationRepository;
     private final UserRepository userRepository;
-    private final JavaMailSender javaMailSender;
 
-    private final static String SENDER_EMAIL = "${MAIL_USERNAME}";
 
     @Pointcut(
             "execution(* com.sparta.projectblue.domain.reservation.service.ReservationService.create(..))")
@@ -87,29 +79,6 @@ public class SlackNotificationAspect {
 
             slackNotifier.sendMessage(title, message);
         }
-
-        // MAIL 발송
-        MimeMessage message = javaMailSender.createMimeMessage();
-
-        try {
-            String body = "";
-            body += "<h1> " + user.getName() + " 님의 예매 내역입니다. </h1>";
-            body += "<h3> 이름 : " + result.getPerformanceTitle() + " </h3>";
-            body += "<h3> 일시 : " + result.getRoundDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) + " </h3>";
-            body += "<h3> 좌석 : " + result.getSeats() + " </h3>";
-            body += "<h3> 총 가격 : " + result.getPrice() + " </h3>";
-
-            MimeMessageHelper helper = new MimeMessageHelper(message,true,"utf-8");
-            helper.setFrom(SENDER_EMAIL); // 보내는 사람
-            helper.setTo(user.getEmail()); // 받는 사람
-            helper.setSubject(username + "님의 예매 내역"); // 이메일 제목
-            helper.setText(body, true);
-        } catch (MessagingException e){
-            System.out.println(e);
-        }
-
-        javaMailSender.send(message);
-
     }
 
     @AfterReturning(pointcut = "deleteMessagePointcut()")
