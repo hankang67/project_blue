@@ -53,7 +53,7 @@ public class RedissonTest {
 
     @Test
     public void 쿠폰발급_분산락_테스트() throws InterruptedException {
-        int testCount = 2; // 100
+        int testCount = 1000;
 
         ExecutorService executorService = Executors.newFixedThreadPool(10);
         CountDownLatch countDownLatch = new CountDownLatch(testCount);
@@ -72,7 +72,7 @@ public class RedissonTest {
                             AuthUser authUser = new AuthUser(
                                     userId,
                                     "test" + UUID.randomUUID().toString() + "@test.com",
-                                    "name" + UUID.randomUUID().toString().substring(0, 5),
+                                    "name" + UUID.randomUUID().toString().substring(0, 4),
                                     UserRole.ROLE_USER
                             );
 
@@ -110,7 +110,7 @@ public class RedissonTest {
 
         System.out.println("최종 발급된 쿠폰 수량: " + coupon.getCurrentQuantity());
         System.out.println("성공한 발급 수량: " + atomicInteger.get());
-        System.out.println("낙관적 락 예외 발생" + atomicexception.get());
+        System.out.println("락 예외 발생" + atomicexception.get());
         System.out.println("테스트 실행 시간: " + durationInSeconds + "초");
     }
 }
