@@ -55,6 +55,7 @@ public class PaymentServiceTest {
     @InjectMocks
     @Spy
     private PaymentService paymentService;
+    private SavePaymentService savePaymentService;
 
     private MockWebServer mockWebServer;
 
@@ -153,7 +154,7 @@ public class PaymentServiceTest {
             paymentService.confirmPayment(jsonBody);
 
             // then
-            verify(paymentService, never()).savePayment(any(JSONObject.class));
+            verify(savePaymentService, never()).savePayment(any(JSONObject.class));
         }
 
         @Test

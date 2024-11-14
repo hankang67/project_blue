@@ -37,7 +37,7 @@
     </logger>
 
     <!-- 전체 애플리케이션 로깅 설정 -->
-    <root level="TRACE">
+    <root level="INFO">
         <appender-ref ref="CONSOLE" />  <!-- INFO레벨 이상 로그를 CONSOLE에 출력 -->
         <appender-ref ref="FILE" />  <!-- INFO레벨 이상 로그를 File에 기록 -->
     </root>
