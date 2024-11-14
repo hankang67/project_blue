@@ -1,11 +1,6 @@
 package com.sparta.projectblue.domain.auth.service;
 
-import java.time.LocalDateTime;
-
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
+import com.sparta.projectblue.aop.annotation.CouponLogstash;
 import com.sparta.projectblue.config.JwtUtil;
 import com.sparta.projectblue.domain.auth.dto.SigninRequestDto;
 import com.sparta.projectblue.domain.auth.dto.SigninResponseDto;
@@ -17,11 +12,14 @@ import com.sparta.projectblue.domain.common.enums.UserRole;
 import com.sparta.projectblue.domain.common.exception.AuthException;
 import com.sparta.projectblue.domain.coupon.entity.Coupon;
 import com.sparta.projectblue.domain.coupon.repository.CouponRepository;
-import com.sparta.projectblue.domain.usedCoupon.repository.UsedCouponRepository;
 import com.sparta.projectblue.domain.user.entity.User;
 import com.sparta.projectblue.domain.user.repository.UserRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -99,6 +97,7 @@ public class AuthService {
     }
 
     // 쿠폰 생성 메서드
+    @CouponLogstash
     private Coupon signupCoupon(Long userId) {
 
         Coupon coupon =

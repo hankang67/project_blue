@@ -1,5 +1,6 @@
 package com.sparta.projectblue.domain.coupon.service;
 
+import com.sparta.projectblue.aop.annotation.CouponLogstash;
 import com.sparta.projectblue.config.DistributedLock;
 import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.common.enums.CouponStatus;
@@ -63,6 +64,7 @@ public class CouponService {
     }
 
     @Transactional
+    @CouponLogstash
     public Long useCoupon(Long id, Long originPrice, Long userId, Long reservationId) {
 
         Coupon coupon = couponRepository.findByIdOrElseThrow(id);
