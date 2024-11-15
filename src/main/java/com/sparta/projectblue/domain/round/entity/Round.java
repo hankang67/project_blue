@@ -2,6 +2,7 @@ package com.sparta.projectblue.domain.round.entity;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
 import com.sparta.projectblue.domain.common.entity.BaseEntity;
@@ -9,16 +10,19 @@ import com.sparta.projectblue.domain.common.enums.PerformanceStatus;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @NoArgsConstructor
 @Entity
+@Setter
 @Table(name = "rounds")
 public class Round extends BaseEntity {
 
     @Column(nullable = false, name = "performance_id")
     private Long performanceId;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(nullable = false)
     private LocalDateTime date;
 
