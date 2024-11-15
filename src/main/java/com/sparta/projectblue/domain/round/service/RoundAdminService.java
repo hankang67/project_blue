@@ -67,16 +67,16 @@ public class RoundAdminService {
         }
 
         // 요청된 각 날짜에 대해 검증 수행
-        List<Round> newRounds = dates.stream()
-                .peek(date -> {
+        dates.forEach(date -> {
                     // 과거 날짜 확인
                     if (date.isBefore(now)) {
                         throw new IllegalArgumentException("과거의 날짜로 회차를 생성할 수 없습니다.");
                     }
 
                     // 기존 회차와 1시간 이상 차이 검증
-                    validateTimeDifferenceForNewRound(id, date);
-                })
+            validateTimeDifferenceForNewRound(id, date);
+        });
+        List<Round> newRounds = dates.stream()
                 .map(date -> new Round(id, date, PerformanceStatus.BEFORE_OPEN))
                 .collect(Collectors.toList());
 
