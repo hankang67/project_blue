@@ -1,5 +1,6 @@
 package com.sparta.projectblue.domain.reservation.service;
 
+import com.sparta.projectblue.aop.annotation.ReservationLogstash;
 import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.common.enums.PaymentStatus;
 import com.sparta.projectblue.domain.common.enums.PerformanceStatus;
@@ -59,6 +60,7 @@ public class ReservationService {
 
     @Transactional
 //    @DistributedLock(key = "#reservationId")
+    @ReservationLogstash
     public CreateReservationResponseDto create(Long id, CreateReservationRequestDto request) {
 
         // 회차 가져옴 (예매상태확인)
@@ -156,6 +158,7 @@ public class ReservationService {
     }
 
     @Transactional
+    @ReservationLogstash
     public void delete(Long id, DeleteReservationRequestDto request) throws Exception {
 
         // 예매내역이 있는지 확인
