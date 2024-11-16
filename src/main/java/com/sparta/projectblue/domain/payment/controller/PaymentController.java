@@ -1,5 +1,6 @@
 package com.sparta.projectblue.domain.payment.controller;
 
+import com.sparta.projectblue.domain.payment.entity.Payment;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -46,7 +47,7 @@ public class PaymentController {
     // 결제 금액이 0원인 경우 TossPayments 사용 불가능
     @PostMapping("/payments/{reservationId}")
     @ResponseBody
-    public ResponseEntity<ApiResponse<?>> payments(
+    public ResponseEntity<ApiResponse<Payment>> payments(
             @PathVariable Long reservationId, @RequestParam(required = false) Long couponId) {
         return ResponseEntity.ok(
                 ApiResponse.success(paymentService.freePay(reservationId, couponId)));

@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import com.sparta.projectblue.domain.common.enums.ReservationStatus;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,6 +31,7 @@ public class UserBookingDto {
     private Long maxPaymentAmount;
     private String searchReservationStatus;
 
+    @Builder
     public UserBookingDto(Long reservationId, String userName, Long userId, String performanceTitle,
                           LocalDateTime bookingDate, Long paymentAmount, ReservationStatus reservationStatus,
                           Long paymentId, LocalDateTime paymentDate) {

@@ -1,5 +1,6 @@
 package com.sparta.projectblue.domain.coupon.controller;
 
+import com.sparta.projectblue.domain.coupon.dto.CreateCouponResponseDto;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
@@ -26,7 +27,7 @@ public class CouponAdminController {
 
     @PostMapping
     @Operation(summary = "쿠폰 등록")
-    public ResponseEntity<ApiResponse<?>> create(
+    public ResponseEntity<ApiResponse<CreateCouponResponseDto>> create(
             @AuthenticationPrincipal AuthUser authUser,
             @Valid @RequestBody CreateCouponRequestDto requestDto) {
 
@@ -36,7 +37,7 @@ public class CouponAdminController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "쿠폰 삭제")
-    public ResponseEntity<ApiResponse<?>> delete(
+    public ResponseEntity<ApiResponse<Void>> delete(
             @AuthenticationPrincipal AuthUser authUser, @Valid @PathVariable("id") Long id) {
 
         couponAdminService.delete(authUser, id);

@@ -1,5 +1,7 @@
 package com.sparta.projectblue.domain.performer.controller;
 
+import com.sparta.projectblue.domain.performer.dto.CreatePerformerResponseDto;
+import com.sparta.projectblue.domain.performer.dto.UpdatePerformerResponseDto;
 import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
@@ -26,7 +28,7 @@ public class PerformerAdminController {
 
     @PostMapping
     @Operation(summary = "배우 등록", description = "새로운 배우를 등록합니다.")
-    public ResponseEntity<ApiResponse<?>> create(
+    public ResponseEntity<ApiResponse<CreatePerformerResponseDto>> create(
             @AuthenticationPrincipal AuthUser authUser,
             @Valid @RequestBody CreatePerformerRequestDto request) {
 
@@ -36,7 +38,7 @@ public class PerformerAdminController {
 
     @PutMapping("/{id}")
     @Operation(summary = "배우 정보 수정", description = "기존 배우 정보를 수정합니다.")
-    public ResponseEntity<ApiResponse<?>> update(
+    public ResponseEntity<ApiResponse<UpdatePerformerResponseDto>> update(
             @AuthenticationPrincipal AuthUser authUser,
             @PathVariable Long id,
             @Valid @RequestBody UpdatePerformerRequestDto request) {
@@ -47,7 +49,7 @@ public class PerformerAdminController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "배우 삭제", description = "기존 배우 정보를 삭제합니다.")
-    public ResponseEntity<ApiResponse<?>> delete(
+    public ResponseEntity<ApiResponse<Void>> delete(
             @AuthenticationPrincipal AuthUser authUser, @PathVariable Long id) {
 
         performerAdminService.delete(authUser, id);

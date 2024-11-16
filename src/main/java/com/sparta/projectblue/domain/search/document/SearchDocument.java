@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 
+import lombok.Builder;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
@@ -49,6 +50,7 @@ public class SearchDocument {
     @Field(type = FieldType.Object)
     private Hall hall;
 
+    @Builder
     public SearchDocument(
             Long performanceId,
             Long hallId,

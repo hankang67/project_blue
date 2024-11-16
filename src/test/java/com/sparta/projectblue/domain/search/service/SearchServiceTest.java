@@ -29,7 +29,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-public class SearchServiceTest {
+class SearchServiceTest {
     @Mock
     private PerformanceRepository performanceRepository;
 
@@ -100,10 +100,6 @@ public class SearchServiceTest {
         verify(elasticsearchRepository, times(1)).findByPerformanceTitleContainingOrPerformersPerformerIdInOrHallIdIn(
                 keyword, List.of(1L), List.of(1L));
 
-        System.out.println("검색 키워드: " + keyword);
-        System.out.println("Expected Performers Count: 1, Actual Performers Count: " + result.getPerformers().size());
-        System.out.println("Expected Halls Count: 1, Actual Halls Count: " + result.getHalls().size());
-        System.out.println("Expected Search Documents Count: 1, Actual Search Documents Count: " + result.getSearchDocuments().size());
     }
 
     @Test
@@ -119,9 +115,6 @@ public class SearchServiceTest {
         // then
         assertNull(emptyResult, "빈 키워드로 검색할 경우 null을 반환해야 합니다.");
         assertNull(nullResult, "null 키워드로 검색할 경우 null을 반환해야 합니다.");
-
-        System.out.println("빈 키워드로 검색 결과: " + emptyResult);
-        System.out.println("null 키워드로 검색 결과: " + nullResult);
     }
 
 
