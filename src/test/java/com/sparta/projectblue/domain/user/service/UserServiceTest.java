@@ -69,7 +69,7 @@ public class UserServiceTest {
             given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
 
             // when
-            DeleteUserRequestDto request = new DeleteUserRequestDto("pass123?!");
+            DeleteUserRequestDto request = new DeleteUserRequestDto(PASSWORD);
             IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
                     userService.delete(authUser, request));
 
@@ -87,7 +87,7 @@ public class UserServiceTest {
             given(passwordEncoder.matches(anyString(), anyString())).willReturn(false);
 
             // when
-            DeleteUserRequestDto request = new DeleteUserRequestDto("pass123?!");
+            DeleteUserRequestDto request = new DeleteUserRequestDto(PASSWORD);
             IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
                     userService.delete(authUser, request));
 
