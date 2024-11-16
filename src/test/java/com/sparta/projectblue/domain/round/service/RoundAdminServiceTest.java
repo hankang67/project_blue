@@ -28,7 +28,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class RoundAdminServiceTest {
@@ -313,6 +313,7 @@ public class RoundAdminServiceTest {
         roundAdminService.delete(authUser, roundId);
 
         // then
+        verify(roundRepository, times(1)).delete(existingRound);
         System.out.println("회차 삭제 완료, ID: " + roundId);
     }
 
