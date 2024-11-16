@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(SpringExtension.class)
-public class PerformerServiceTest {
+class PerformerServiceTest {
 
     @Mock
     private PerformerRepository performerRepository;
