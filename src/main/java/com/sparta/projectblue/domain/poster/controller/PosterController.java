@@ -1,5 +1,6 @@
 package com.sparta.projectblue.domain.poster.controller;
 
+import com.sparta.projectblue.domain.poster.dto.UpdatePosterResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class PosterController {
 
     @Operation(summary = "포스터 수정", description = "파일 첨부로 포스트맨에서 테스트합니다")
     @PutMapping("/admin/posters/{id}")
-    public ResponseEntity<ApiResponse<?>> update(
+    public ResponseEntity<ApiResponse<UpdatePosterResponseDto>> update(
             @AuthenticationPrincipal AuthUser authUser,
             @PathVariable Long id,
             @RequestPart("file") MultipartFile posterFile) {

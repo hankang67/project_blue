@@ -1,5 +1,7 @@
 package com.sparta.projectblue.domain.hall.controller;
 
+import com.sparta.projectblue.domain.hall.dto.CreateHallResponseDto;
+import com.sparta.projectblue.domain.hall.dto.UpdateHallResponseDto;
 import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
@@ -26,7 +28,7 @@ public class HallAdminController {
 
     @PostMapping
     @Operation(summary = "공연장 등록")
-    public ResponseEntity<ApiResponse<?>> create(
+    public ResponseEntity<ApiResponse<CreateHallResponseDto>> create(
             @AuthenticationPrincipal AuthUser authUser,
             @Valid @RequestBody CreateHallRequestDto request) {
 
@@ -35,7 +37,7 @@ public class HallAdminController {
 
     @PutMapping("/{id}")
     @Operation(summary = "공연장 수정")
-    public ResponseEntity<ApiResponse<?>> update(
+    public ResponseEntity<ApiResponse<UpdateHallResponseDto>> update(
             @AuthenticationPrincipal AuthUser authUser,
             @PathVariable("id") Long id,
             @Valid @RequestBody UpdateHallRequestDto request) {
@@ -46,7 +48,7 @@ public class HallAdminController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "공연장 삭제")
-    public ResponseEntity<ApiResponse<?>> delete(
+    public ResponseEntity<ApiResponse<Void>> delete(
             @AuthenticationPrincipal AuthUser authUser, @PathVariable("id") Long id) {
 
         hallAdminService.delete(authUser, id);

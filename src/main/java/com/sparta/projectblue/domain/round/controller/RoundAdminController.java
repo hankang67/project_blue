@@ -53,7 +53,7 @@ public class RoundAdminController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "회차 삭제", description = "특정 회차를 삭제합니다.")
-    public ResponseEntity<ApiResponse<?>> delete(@AuthenticationPrincipal AuthUser authUser, @PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@AuthenticationPrincipal AuthUser authUser, @PathVariable Long id) {
 
         roundService.delete(authUser,id);
         return ResponseEntity.ok(ApiResponse.successWithNoContent());

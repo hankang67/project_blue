@@ -49,7 +49,7 @@ public class PerformerAdminController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "배우 삭제", description = "기존 배우 정보를 삭제합니다.")
-    public ResponseEntity<ApiResponse<?>> delete(
+    public ResponseEntity<ApiResponse<Void>> delete(
             @AuthenticationPrincipal AuthUser authUser, @PathVariable Long id) {
 
         performerAdminService.delete(authUser, id);
