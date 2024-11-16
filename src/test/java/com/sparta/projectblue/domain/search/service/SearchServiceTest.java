@@ -29,7 +29,7 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-public class SearchServiceTest {
+class SearchServiceTest {
     @Mock
     private PerformanceRepository performanceRepository;
 
