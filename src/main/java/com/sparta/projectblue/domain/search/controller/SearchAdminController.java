@@ -1,7 +1,9 @@
 package com.sparta.projectblue.domain.search.controller;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+import com.sparta.projectblue.domain.search.document.UserBookingDocument;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +28,7 @@ public class SearchAdminController {
 
     @GetMapping
     @Operation(summary = "관리자 정보 검색", description = "다양한 조건을 이용해 정보를 검색합니다")
-    public ResponseEntity<?> searchBookings(
+    public ResponseEntity<List<UserBookingDocument>> searchBookings(
             @Parameter(example = "user0") @RequestParam(required = false) String userName,
             @Parameter(example = "Performance0") @RequestParam(required = false) String performanceTitle,
             @Parameter(example = "2024-10-26T22:00:00") @RequestParam(required = false) LocalDateTime bookingDateStart,
@@ -53,7 +55,7 @@ public class SearchAdminController {
                 searchReservationStatus // 검색 상태 문자열
         );
 
-        return ResponseEntity.ok(ApiResponse.success(searchService.searchBookings(dto)));
+        return ResponseEntity.ok(searchService.searchBookings(dto));
     }
 
     @PostMapping("/sync")
