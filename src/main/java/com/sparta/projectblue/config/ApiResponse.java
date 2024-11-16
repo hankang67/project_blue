@@ -34,7 +34,7 @@ public class ApiResponse<T> {
         return new ApiResponse<>(Status.SUCCESS, null, "요청이 성공적으로 처리되었습니다");
     }
 
-    public static ApiResponse<?> error(String message) {
+    public static ApiResponse<Void> error(String message) {
 
         return new ApiResponse<>(Status.ERROR, null, message);
     }
