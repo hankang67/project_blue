@@ -76,10 +76,12 @@ public class RoundAdminService {
                     // 기존 회차와 1시간 이상 차이 검증
             validateTimeDifferenceForNewRound(id, date);
         });
+        // Collectors.toList() -> toList()
         List<Round> newRounds = dates.stream()
                 .map(date -> new Round(id, date, PerformanceStatus.BEFORE_OPEN))
-                .collect(Collectors.toList());
+                .toList();
 
+        // Collectors.toList() -> toList()
         List<Round> savedRounds = roundRepository.saveAll(newRounds);
 
         return savedRounds.stream().map(CreateRoundResponseDto::new).collect(Collectors.toList());
