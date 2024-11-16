@@ -31,7 +31,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class RoundAdminServiceTest {
+class RoundAdminServiceTest {
 
     @Mock
     private RoundRepository roundRepository;
