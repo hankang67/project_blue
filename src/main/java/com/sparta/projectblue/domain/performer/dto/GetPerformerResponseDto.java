@@ -6,8 +6,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.sparta.projectblue.domain.performer.entity.Performer;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
-
 @Getter
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
 public class GetPerformerResponseDto {

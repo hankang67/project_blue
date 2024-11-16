@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class UserBookingSearchServiceTest {
+class UserBookingSearchServiceTest {
     @Mock
     private UserBookingEsRepository userBookingEsRepository;
 
