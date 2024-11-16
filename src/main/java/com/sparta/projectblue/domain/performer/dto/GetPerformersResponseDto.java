@@ -1,9 +1,6 @@
 package com.sparta.projectblue.domain.performer.dto;
 
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.sparta.projectblue.domain.performer.entity.Performer;
 
