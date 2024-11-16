@@ -24,6 +24,12 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 
+    private static final String EMAIL = "test@test.com";
+    private static final String NAME = "testUser";
+    private static final String PASSWORD = "abc132?!";
+    private static final String DELETE_USER_MESSAGE = "이미 탈퇴한 유저입니다.";
+    private static final String INCORRECT_PASSWORD_MESSAGE = "비밀번호가 일치하지 않습니다.";
+
     @Mock
     private UserRepository userRepository;
 
@@ -38,19 +44,15 @@ public class UserServiceTest {
 
         @Test
         void 탈퇴_정상_동작() {
-
             // given
-            AuthUser authUser = new AuthUser(1L, "test@test.com", "testUser", UserRole.ROLE_USER);
-
-            User user = new User(authUser.getEmail(), authUser.getName(), "abc132?!", UserRole.ROLE_USER);
+            AuthUser authUser = new AuthUser(1L, EMAIL, NAME, UserRole.ROLE_USER);
+            User user = new User(authUser.getEmail(), authUser.getName(), PASSWORD, UserRole.ROLE_USER);
 
             given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
-
             given(passwordEncoder.matches(anyString(), anyString())).willReturn(true);
 
             // when
             DeleteUserRequestDto request = new DeleteUserRequestDto("pass123?!");
-
             userService.delete(authUser, request);
 
             // then
@@ -59,45 +61,38 @@ public class UserServiceTest {
 
         @Test
         void 이미_탈퇴한_유저_오류() {
-
             // given
-            AuthUser authUser = new AuthUser(1L, "test@test.com", "testUser", UserRole.ROLE_USER);
-
-            User user = new User(authUser.getEmail(), authUser.getName(), "abc132?!", UserRole.ROLE_USER);
+            AuthUser authUser = new AuthUser(1L, EMAIL, NAME, UserRole.ROLE_USER);
+            User user = new User(authUser.getEmail(), authUser.getName(), PASSWORD, UserRole.ROLE_USER);
             ReflectionTestUtils.setField(user, "isDeleted", true);
 
             given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
 
             // when
             DeleteUserRequestDto request = new DeleteUserRequestDto("pass123?!");
-
             IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
                     userService.delete(authUser, request));
 
             // then
-            assertEquals(exception.getMessage(), "이미 탈퇴한 유저입니다.");
+            assertEquals(exception.getMessage(), DELETE_USER_MESSAGE);
         }
 
         @Test
         void 잘못된_비밀번호_오류() {
-
             // given
-            AuthUser authUser = new AuthUser(1L, "test@test.com", "testUser", UserRole.ROLE_USER);
-
-            User user = new User(authUser.getEmail(), authUser.getName(), "abc132?!", UserRole.ROLE_USER);
+            AuthUser authUser = new AuthUser(1L, EMAIL, NAME, UserRole.ROLE_USER);
+            User user = new User(authUser.getEmail(), authUser.getName(), PASSWORD, UserRole.ROLE_USER);
 
             given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
-
             given(passwordEncoder.matches(anyString(), anyString())).willReturn(false);
 
             // when
             DeleteUserRequestDto request = new DeleteUserRequestDto("pass123?!");
-
             IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
                     userService.delete(authUser, request));
 
             // then
-            assertEquals(exception.getMessage(), "비밀번호가 일치하지 않습니다.");
+            assertEquals(exception.getMessage(), INCORRECT_PASSWORD_MESSAGE);
         }
     }
 }
