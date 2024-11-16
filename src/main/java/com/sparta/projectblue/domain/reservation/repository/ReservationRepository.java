@@ -3,6 +3,8 @@ package com.sparta.projectblue.domain.reservation.repository;
 import java.util.List;
 
 import com.sparta.projectblue.domain.search.dto.UserBookingDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.sparta.projectblue.domain.reservation.entity.Reservation;
@@ -11,6 +13,8 @@ import org.springframework.data.jpa.repository.Query;
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
     List<Reservation> findByUserId(Long userId);
+
+    Page<Reservation> findByUserId(Long userId, Pageable pageable);
 
     @Query("""
         SELECT new com.sparta.projectblue.domain.search.dto.UserBookingDto(

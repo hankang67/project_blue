@@ -50,10 +50,12 @@ public class ReservationController {
     @GetMapping
     @Operation(summary = "예매 다건 조회", description = "authUser가 예매한 내역 다건")
     public ResponseEntity<ApiResponse<?>> getReservations(
-            @AuthenticationPrincipal AuthUser authUser) {
+            @AuthenticationPrincipal AuthUser authUser,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size) {
 
         return ResponseEntity.ok(
-                ApiResponse.success(reservationService.getReservations(authUser.getId())));
+                ApiResponse.success(reservationService.getReservations(authUser.getId(), page, size)));
     }
 
     @GetMapping("/{id}")
