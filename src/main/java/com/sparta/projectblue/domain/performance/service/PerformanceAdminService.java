@@ -251,13 +251,13 @@ public class PerformanceAdminService {
     @Transactional
     public void addPerformer(Long performanceId, Long performerId) {
 
-       performanceRepository.findById(performanceId).orElseThrow(() ->
-               new IllegalArgumentException("공연을 찾을 수 없습니다.")
-       );
+       if(performanceRepository.existsById(performanceId)) {
+           throw new IllegalArgumentException("공연을 찾을 수 없습니다.");
+       }
 
-        performerRepository.findById(performerId).orElseThrow(() ->
-            new IllegalArgumentException("배우를 찾을 수 없습니다.")
-        );
+        if(performerRepository.existsById(performerId)) {
+            throw new IllegalArgumentException("배우를 찾을 수 없습니다.");
+        }
 
         if (performerPerformanceRepository.existsByPerformanceIdAndPerformerId(
                 performanceId, performerId)) {
@@ -273,13 +273,13 @@ public class PerformanceAdminService {
     @Transactional
     public void removePerformer(Long performanceId, Long performerId) {
 
-        performanceRepository.findById(performanceId).orElseThrow(() ->
-                new IllegalArgumentException("공연을 찾을 수 없습니다.")
-        );
+        if(performanceRepository.existsById(performanceId)) {
+            throw new IllegalArgumentException("공연을 찾을 수 없습니다.");
+        }
 
-        performerRepository.findById(performerId).orElseThrow(() ->
-                new IllegalArgumentException("배우를 찾을 수 없습니다.")
-        );
+        if(performerRepository.existsById(performerId)) {
+            throw new IllegalArgumentException("배우를 찾을 수 없습니다.");
+        }
 
         PerformerPerformance performerPerformance =
                 performerPerformanceRepository
