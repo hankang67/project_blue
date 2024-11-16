@@ -3,11 +3,13 @@ package com.sparta.projectblue.domain.email.service;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EmailService {
@@ -28,7 +30,7 @@ public class EmailService {
             helper.setText(text, true);
         } catch (
                 MessagingException e) {
-            System.out.println(e);
+            log.error("메일 발송 실패 : {}", e.getMessage());
         }
 
         javaMailSender.send(message);

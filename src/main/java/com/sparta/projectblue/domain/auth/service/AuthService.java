@@ -57,7 +57,7 @@ public class AuthService {
                 jwtUtil.createToken(
                         savedUser.getId(), savedUser.getEmail(), savedUser.getName(), userRole);
 
-        Coupon coupon = signupCoupon(savedUser.getId()); // 쿠폰 생성
+        Coupon coupon = signupCoupon(); // 쿠폰 생성
 
         return new SignupResponseDto(bearerToken, coupon); // 응답시 쿠폰 정보 포함
     }
@@ -98,7 +98,7 @@ public class AuthService {
 
     // 쿠폰 생성 메서드
     @CouponLogstash
-    private Coupon signupCoupon(Long userId) {
+    private Coupon signupCoupon() {
 
         Coupon coupon =
                 new Coupon(
