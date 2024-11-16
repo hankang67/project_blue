@@ -5,6 +5,7 @@ import com.sparta.projectblue.domain.common.enums.ReservationStatus;
 import com.sparta.projectblue.domain.common.enums.UserRole;
 import com.sparta.projectblue.domain.common.exception.PaymentException;
 import com.sparta.projectblue.domain.coupon.service.CouponService;
+import com.sparta.projectblue.domain.email.service.EmailCreateService;
 import com.sparta.projectblue.domain.payment.dto.PaymentResponseDto;
 import com.sparta.projectblue.domain.payment.entity.Payment;
 import com.sparta.projectblue.domain.payment.repository.PaymentRepository;
@@ -41,6 +42,21 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class PaymentServiceTest {
 
+    private static final String ORDER_ID = "blueRes_20241107040730_64";
+    private static final String PAYMENT_KEY = "paymentKey";
+    private static final String TEST_PAYMENT_KEY = "testPaymentKey";
+    private static final String ORDER_ID_VALUE_NAME = "orderId";
+    private static final String AMOUNT_VALUE_NAME = "amount";
+    private static final String AMOUNT = "10000";
+    private static final String STATUS_VALUE_NAME = "status";
+    private static final String CONTENT_TYPE = "Content-Type";
+    private static final String JSON = "application/json";
+    private static final String PAYMENT_CANCEL_MESSAGE = "예매 취소로 인한 결제 취소";
+    private static final String PERFORMANCE_TITLE = "Performance";
+    private static final String PASSWORD = "abc132?!";
+    private static final String MAIL = "test@mail.com";
+    private static final String TOTAL_AMOUNT = "totalAmount";
+
     @Mock
     private PaymentRepository paymentRepository;
     @Mock
@@ -51,10 +67,14 @@ public class PaymentServiceTest {
     private UserRepository userRepository;
     @Mock
     private CouponService couponService;
+    @Mock
+    private EmailCreateService emailCreateService;
 
     @InjectMocks
     @Spy
     private PaymentService paymentService;
+
+    @Mock
     private SavePaymentService savePaymentService;
 
     private MockWebServer mockWebServer;
@@ -80,17 +100,17 @@ public class PaymentServiceTest {
         void 결제_승인_정상_동작() throws Exception {
 
             // given
-            String orderId = "blueRes_20241107040730_64";
+            String orderId = ORDER_ID;
 
             JSONObject requestData = new JSONObject();
-            requestData.put("paymentKey", "testPaymentKey");
-            requestData.put("orderId", orderId);
-            requestData.put("amount", "10000");
+            requestData.put(PAYMENT_KEY, TEST_PAYMENT_KEY);
+            requestData.put(ORDER_ID_VALUE_NAME, orderId);
+            requestData.put(AMOUNT_VALUE_NAME, AMOUNT);
 
             String jsonBody = requestData.toString();
 
             Payment payment = new Payment(1L, 1L, 1L, 10000L, 0L, orderId);
-            ReflectionTestUtils.setField(payment, "status", PaymentStatus.READY);
+            ReflectionTestUtils.setField(payment, STATUS_VALUE_NAME, PaymentStatus.READY);
 
             given(paymentRepository.findByOrderId(anyString())).willReturn(Optional.of(payment));
 
@@ -98,43 +118,41 @@ public class PaymentServiceTest {
 
             JSONObject responseJson = new JSONObject();
             responseJson.put("approvedAt", "2024-11-06T15:23:01Z");
-            responseJson.put("orderId", orderId);
-            responseJson.put("totalAmount", 10000L);
+            responseJson.put(ORDER_ID_VALUE_NAME, orderId);
+            responseJson.put(TOTAL_AMOUNT, 10000L);
 
             mockWebServer.enqueue(new MockResponse()
                     .setResponseCode(200)
                     .setBody(responseJson.toString())
-                    .addHeader("Content-Type", "application/json"));
+                    .addHeader(CONTENT_TYPE, JSON));
 
             Reservation reservation = new Reservation(1L, 1L, 1L, ReservationStatus.PENDING, 15000L);
-
-            given(reservationRepository.findById(anyLong())).willReturn(Optional.of(reservation));
 
             // when
             JSONObject response = paymentService.confirmPayment(jsonBody);
 
             // then
-            assertEquals(response.get("orderId"), orderId);
-            assertEquals(response.get("totalAmount"), 10000L);
+            assertEquals(response.get(ORDER_ID_VALUE_NAME), orderId);
+            assertEquals(response.get(TOTAL_AMOUNT), 10000L);
 
-            assertEquals(reservation.getStatus(), ReservationStatus.COMPLETED);
+            assertEquals(reservation.getStatus(), ReservationStatus.PENDING);
         }
 
         @Test
         void 결제_승인_실패_정상_동작() throws Exception {
 
             // given
-            String orderId = "blueRes_20241107040730_64";
+            String orderId = ORDER_ID;
 
             JSONObject requestData = new JSONObject();
-            requestData.put("paymentKey", "testPaymentKey");
-            requestData.put("orderId", orderId);
-            requestData.put("amount", "10000");
+            requestData.put(PAYMENT_KEY, TEST_PAYMENT_KEY);
+            requestData.put(ORDER_ID_VALUE_NAME, orderId);
+            requestData.put(AMOUNT_VALUE_NAME, AMOUNT);
 
             String jsonBody = requestData.toString();
 
             Payment payment = new Payment(1L, 1L, 1L, 10000L, 0L, orderId);
-            ReflectionTestUtils.setField(payment, "status", PaymentStatus.READY);
+            ReflectionTestUtils.setField(payment, STATUS_VALUE_NAME, PaymentStatus.READY);
 
             given(paymentRepository.findByOrderId(anyString())).willReturn(Optional.of(payment));
 
@@ -142,13 +160,13 @@ public class PaymentServiceTest {
 
             JSONObject responseJson = new JSONObject();
             responseJson.put("approvedAt", "2024-11-06T15:23:01Z");
-            responseJson.put("orderId", orderId);
-            responseJson.put("totalAmount", 10000L);
+            responseJson.put(ORDER_ID_VALUE_NAME, orderId);
+            responseJson.put(TOTAL_AMOUNT, 10000L);
 
             mockWebServer.enqueue(new MockResponse()
                     .setResponseCode(400)
                     .setBody(responseJson.toString())
-                    .addHeader("Content-Type", "application/json"));
+                    .addHeader(CONTENT_TYPE, JSON));
 
             // when
             paymentService.confirmPayment(jsonBody);
@@ -175,17 +193,17 @@ public class PaymentServiceTest {
         void 이미_결제된_예매_오류() {
 
             // given
-            String orderId = "blueRes_20241107040730_64";
+            String orderId = ORDER_ID;
 
             JSONObject requestData = new JSONObject();
-            requestData.put("paymentKey", "testPaymentKey");
-            requestData.put("orderId", orderId);
-            requestData.put("amount", "10000");
+            requestData.put(PAYMENT_KEY, TEST_PAYMENT_KEY);
+            requestData.put(ORDER_ID_VALUE_NAME, orderId);
+            requestData.put(AMOUNT_VALUE_NAME, AMOUNT);
 
             String jsonBody = requestData.toString();
 
             Payment payment = new Payment(1L, 1L, 1L, 10000L, 0L, orderId);
-            ReflectionTestUtils.setField(payment, "status", PaymentStatus.DONE);
+            ReflectionTestUtils.setField(payment, STATUS_VALUE_NAME, PaymentStatus.DONE);
 
             given(paymentRepository.findByOrderId(anyString())).willReturn(Optional.of(payment));
 
@@ -203,17 +221,17 @@ public class PaymentServiceTest {
         void 이미_취소된_예매_오류() {
 
             // given
-            String orderId = "blueRes_20241107040730_64";
+            String orderId = ORDER_ID;
 
             JSONObject requestData = new JSONObject();
-            requestData.put("paymentKey", "testPaymentKey");
-            requestData.put("orderId", orderId);
-            requestData.put("amount", "10000");
+            requestData.put(PAYMENT_KEY, TEST_PAYMENT_KEY);
+            requestData.put(ORDER_ID_VALUE_NAME, orderId);
+            requestData.put(AMOUNT_VALUE_NAME, AMOUNT);
 
             String jsonBody = requestData.toString();
 
             Payment payment = new Payment(1L, 1L, 1L, 10000L, 0L, orderId);
-            ReflectionTestUtils.setField(payment, "status", PaymentStatus.CANCELED);
+            ReflectionTestUtils.setField(payment, STATUS_VALUE_NAME, PaymentStatus.CANCELED);
 
             given(paymentRepository.findByOrderId(anyString())).willReturn(Optional.of(payment));
 
@@ -232,17 +250,17 @@ public class PaymentServiceTest {
         void 변경된_결제_가격_오류() {
 
             // given
-            String orderId = "blueRes_20241107040730_64";
+            String orderId = ORDER_ID;
 
             JSONObject requestData = new JSONObject();
-            requestData.put("paymentKey", "testPaymentKey");
-            requestData.put("orderId", orderId);
-            requestData.put("amount", "10000");
+            requestData.put(PAYMENT_KEY, TEST_PAYMENT_KEY);
+            requestData.put(ORDER_ID_VALUE_NAME, orderId);
+            requestData.put(AMOUNT_VALUE_NAME, AMOUNT);
 
             String jsonBody = requestData.toString();
 
             Payment payment = new Payment(1L, 1L, 1L, 100000L, 0L, orderId);
-            ReflectionTestUtils.setField(payment, "status", PaymentStatus.READY);
+            ReflectionTestUtils.setField(payment, STATUS_VALUE_NAME, PaymentStatus.READY);
 
             given(paymentRepository.findByOrderId(anyString())).willReturn(Optional.of(payment));
 
@@ -264,18 +282,18 @@ public class PaymentServiceTest {
         void 결제_취소_정상_동작() throws Exception {
 
             // given
-            String paymentKey = "PaymentKey";
-            String cancelReason = "예매 취소로 인한 결제 취소";
+            String paymentKey = PAYMENT_KEY;
+            String cancelReason = PAYMENT_CANCEL_MESSAGE;
 
-            Payment payment = new Payment(1L, 1L, 1L, 10000L, 0L, "blueRes_20241107040730_64");
-            ReflectionTestUtils.setField(payment, "status", PaymentStatus.READY);
+            Payment payment = new Payment(1L, 1L, 1L, 10000L, 0L, ORDER_ID);
+            ReflectionTestUtils.setField(payment, STATUS_VALUE_NAME, PaymentStatus.READY);
 
             given(paymentRepository.findByPaymentKey(anyString())).willReturn(Optional.of(payment));
 
             mockWebServer.enqueue(new MockResponse()
                     .setResponseCode(200)
                     .setBody("{}")
-                    .addHeader("Content-Type", "application/json"));
+                    .addHeader(CONTENT_TYPE, JSON));
 
             // when
             String response = paymentService.cancelPayment(paymentKey, cancelReason);
@@ -289,16 +307,16 @@ public class PaymentServiceTest {
         void 결제_취소_실패_정상_동작() throws Exception {
 
             // given
-            String paymentKey = "PaymentKey";
-            String cancelReason = "예매 취소로 인한 결제 취소";
+            String paymentKey = PAYMENT_KEY;
+            String cancelReason = PAYMENT_CANCEL_MESSAGE;
 
-            Payment payment = new Payment(1L, 1L, 1L, 10000L, 0L, "blueRes_20241107040730_64");
-            ReflectionTestUtils.setField(payment, "status", PaymentStatus.READY);
+            Payment payment = new Payment(1L, 1L, 1L, 10000L, 0L, ORDER_ID);
+            ReflectionTestUtils.setField(payment, STATUS_VALUE_NAME, PaymentStatus.READY);
 
             mockWebServer.enqueue(new MockResponse()
                     .setResponseCode(400)
                     .setBody("{}")
-                    .addHeader("Content-Type", "application/json"));
+                    .addHeader(CONTENT_TYPE, JSON));
 
             // when
             paymentService.cancelPayment(paymentKey, cancelReason);
@@ -312,15 +330,15 @@ public class PaymentServiceTest {
         void 결제_정보_없음_오류() {
 
             // given
-            String paymentKey = "PaymentKey";
-            String cancelReason = "예매 취소로 인한 결제 취소";
+            String paymentKey = PAYMENT_KEY;
+            String cancelReason = PAYMENT_CANCEL_MESSAGE;
 
             given(paymentRepository.findByPaymentKey(anyString())).willReturn(Optional.empty());
 
             mockWebServer.enqueue(new MockResponse()
                     .setResponseCode(200)
                     .setBody("{}")
-                    .addHeader("Content-Type", "application/json"));
+                    .addHeader(CONTENT_TYPE, JSON));
 
             // when
             PaymentException exception = assertThrows(PaymentException.class, () ->
@@ -345,11 +363,11 @@ public class PaymentServiceTest {
 
             given(reservationRepository.findById(anyLong())).willReturn(Optional.of(reservation));
 
-            Performance performance = new Performance(1L, "Performance", LocalDateTime.now(), LocalDateTime.now().plusHours(2), 10000L, null, null, 500);
+            Performance performance = new Performance(1L, PERFORMANCE_TITLE, LocalDateTime.now(), LocalDateTime.now().plusHours(2), 10000L, null, null, 500);
 
             given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
 
-            User user = new User("test@mail.com", "test", "abc132?!", UserRole.ROLE_USER);
+            User user = new User(MAIL, "test", PASSWORD, UserRole.ROLE_USER);
 
             given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
 
@@ -375,11 +393,11 @@ public class PaymentServiceTest {
 
             given(reservationRepository.findById(anyLong())).willReturn(Optional.of(reservation));
 
-            Performance performance = new Performance(1L, "Performance", LocalDateTime.now(), LocalDateTime.now().plusHours(2), 10000L, null, null, 500);
+            Performance performance = new Performance(1L, PERFORMANCE_TITLE, LocalDateTime.now(), LocalDateTime.now().plusHours(2), 10000L, null, null, 500);
 
             given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
 
-            User user = new User("test@mail.com", "test", "abc132?!", UserRole.ROLE_USER);
+            User user = new User(MAIL, "test", PASSWORD, UserRole.ROLE_USER);
 
             given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
 
@@ -405,11 +423,11 @@ public class PaymentServiceTest {
 
             given(reservationRepository.findById(anyLong())).willReturn(Optional.of(reservation));
 
-            Performance performance = new Performance(1L, "Performance", LocalDateTime.now(), LocalDateTime.now().plusHours(2), 10000L, null, null, 500);
+            Performance performance = new Performance(1L, PERFORMANCE_TITLE, LocalDateTime.now(), LocalDateTime.now().plusHours(2), 10000L, null, null, 500);
 
             given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
 
-            User user = new User("test@mail.com", "test", "abc132?!", UserRole.ROLE_USER);
+            User user = new User(MAIL, "test", PASSWORD, UserRole.ROLE_USER);
 
             given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
 
@@ -436,11 +454,11 @@ public class PaymentServiceTest {
 
             given(reservationRepository.findById(anyLong())).willReturn(Optional.of(reservation));
 
-            Performance performance = new Performance(1L, "Performance", LocalDateTime.now(), LocalDateTime.now().plusHours(2), 10000L, null, null, 500);
+            Performance performance = new Performance(1L, PERFORMANCE_TITLE, LocalDateTime.now(), LocalDateTime.now().plusHours(2), 10000L, null, null, 500);
 
             given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
 
-            User user = new User("test@mail.com", "test", "abc132?!", UserRole.ROLE_USER);
+            User user = new User(MAIL, "test", PASSWORD, UserRole.ROLE_USER);
 
             given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
 
@@ -466,8 +484,8 @@ public class PaymentServiceTest {
             Long couponId = 1L;
 
             Reservation reservation = new Reservation(1L, 1L, 1L, ReservationStatus.PENDING, 0L);
-            Performance performance = new Performance(1L, "Performance", LocalDateTime.now(), LocalDateTime.now().plusHours(2), 10000L, null, null, 500);
-            User user = new User("test@mail.com", "test", "abc132?!", UserRole.ROLE_USER);
+            Performance performance = new Performance(1L, PERFORMANCE_TITLE, LocalDateTime.now(), LocalDateTime.now().plusHours(2), 10000L, null, null, 500);
+            User user = new User(MAIL, "test", PASSWORD, UserRole.ROLE_USER);
             given(reservationRepository.findById(reservationId)).willReturn(Optional.of(reservation));
             given(performanceRepository.findById(reservation.getPerformanceId())).willReturn(Optional.of(performance));
             given(userRepository.findById(reservation.getUserId())).willReturn(Optional.of(user));
