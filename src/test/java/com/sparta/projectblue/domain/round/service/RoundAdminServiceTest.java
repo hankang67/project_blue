@@ -76,13 +76,6 @@ class RoundAdminServiceTest {
         assertEquals(futureDate, response.get(0).getDate());
         assertEquals(PerformanceStatus.BEFORE_OPEN, response.get(0).getStatus());
 
-        System.out.println("생성된 회차 리스트:");
-        response.forEach(roundDto -> {
-            System.out.println("회차 ID: " + roundDto.getId());
-            System.out.println("공연 ID: " + roundDto.getPerformanceId());
-            System.out.println("날짜: " + roundDto.getDate());
-            System.out.println("상태: " + roundDto.getStatus());
-        });
     }
 
     @Test
@@ -103,7 +96,6 @@ class RoundAdminServiceTest {
 
         // when & then
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> roundAdminService.create(authUser, performanceId, request));
-        System.out.println("예외 메시지: " + exception.getMessage());
         assertEquals("공연을 찾을 수 없습니다", exception.getMessage());
     }
 
@@ -127,7 +119,6 @@ class RoundAdminServiceTest {
 
         // when & then
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> roundAdminService.create(authUser, performanceId, request));
-        System.out.println("예외 메시지: " + exception.getMessage());
         assertEquals("과거의 날짜로 회차를 생성할 수 없습니다.", exception.getMessage());
     }
 
@@ -150,7 +141,6 @@ class RoundAdminServiceTest {
 
         // when & then
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> roundAdminService.update(authUser, roundId, request));
-        System.out.println("예외 메시지: " + exception.getMessage());
         assertEquals("회차를 찾을 수 없습니다.", exception.getMessage());
     }
 
@@ -173,7 +163,6 @@ class RoundAdminServiceTest {
 
         // when & then
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> roundAdminService.update(authUser, roundId, request));
-        System.out.println("예외 메시지: " + exception.getMessage());
         assertEquals("과거의 날짜로 회차를 수정할 수 없습니다.", exception.getMessage());
     }
 
@@ -199,7 +188,6 @@ class RoundAdminServiceTest {
         // then
         assertEquals(newDate, response.getDate());
         assertEquals(existingRound.getStatus(), response.getStatus());
-        System.out.println("date만 제공된 경우 업데이트 완료. 새로운 날짜: " + response.getDate());
     }
 
     @Test
@@ -224,7 +212,6 @@ class RoundAdminServiceTest {
         // then
         assertEquals(existingRound.getDate(), response.getDate());
         assertEquals(newStatus, response.getStatus());
-        System.out.println("status만 제공된 경우 업데이트 완료. 새로운 상태: " + response.getStatus());
     }
 
     @Test
@@ -250,9 +237,6 @@ class RoundAdminServiceTest {
         // then
         assertEquals(newDate, response.getDate());
         assertEquals(newStatus, response.getStatus());
-        System.out.println("date와 status 모두 제공된 경우 업데이트 완료.");
-        System.out.println("새로운 날짜: " + response.getDate());
-        System.out.println("새로운 상태: " + response.getStatus());
     }
 
     @Test
@@ -276,7 +260,6 @@ class RoundAdminServiceTest {
         // then
         assertEquals(existingRound.getDate(), response.getDate());
         assertEquals(existingRound.getStatus(), response.getStatus());
-        System.out.println("date와 status가 null인 경우 기존값 유지 확인.");
     }
 
     @Test
@@ -292,7 +275,6 @@ class RoundAdminServiceTest {
 
         // when & then
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> roundAdminService.delete(authUser, roundId));
-        System.out.println("예외 메시지: " + exception.getMessage());
         assertEquals("회차를 찾을 수 없습니다.", exception.getMessage());
     }
 
@@ -314,7 +296,6 @@ class RoundAdminServiceTest {
 
         // then
         verify(roundRepository, times(1)).delete(existingRound);
-        System.out.println("회차 삭제 완료, ID: " + roundId);
     }
 
     @Test
@@ -333,7 +314,6 @@ class RoundAdminServiceTest {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> roundAdminService.create(authUser, 1L, request));
         assertEquals("요청 내 날짜들이 중복될 수 없습니다.", exception.getMessage());
-        System.out.println("예외 메시지: " + exception.getMessage());
     }
 
     @Test
@@ -365,7 +345,6 @@ class RoundAdminServiceTest {
         // then
         assertEquals(1, response.size());
         assertEquals(newDate, response.get(0).getDate());
-        System.out.println("정상적으로 회차 생성 완료. 생성된 회차 날짜: " + response.get(0).getDate());
     }
 
     @Test
@@ -393,7 +372,6 @@ class RoundAdminServiceTest {
         // when & then
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> roundAdminService.create(authUser, performanceId, request));
-        System.out.println("예외 메시지: " + exception.getMessage());
         assertEquals("기존 회차와 1시간 이상 차이가 나야 합니다.", exception.getMessage());
     }
 
