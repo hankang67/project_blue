@@ -55,6 +55,7 @@ public class PaymentServiceTest {
     private static final String PERFORMANCE_TITLE = "Performance";
     private static final String PASSWORD = "abc132?!";
     private static final String MAIL = "test@mail.com";
+    private static final String TOTAL_AMOUNT = "totalAmount";
 
     @Mock
     private PaymentRepository paymentRepository;
@@ -99,17 +100,17 @@ public class PaymentServiceTest {
         void 결제_승인_정상_동작() throws Exception {
 
             // given
-            String orderId = "blueRes_20241107040730_64";
+            String orderId = ORDER_ID;
 
             JSONObject requestData = new JSONObject();
-            requestData.put("paymentKey", "testPaymentKey");
-            requestData.put("orderId", orderId);
-            requestData.put("amount", "10000");
+            requestData.put(PAYMENT_KEY, TEST_PAYMENT_KEY);
+            requestData.put(ORDER_ID_VALUE_NAME, orderId);
+            requestData.put(AMOUNT_VALUE_NAME, AMOUNT);
 
             String jsonBody = requestData.toString();
 
             Payment payment = new Payment(1L, 1L, 1L, 10000L, 0L, orderId);
-            ReflectionTestUtils.setField(payment, "status", PaymentStatus.READY);
+            ReflectionTestUtils.setField(payment, STATUS_VALUE_NAME, PaymentStatus.READY);
 
             given(paymentRepository.findByOrderId(anyString())).willReturn(Optional.of(payment));
 
@@ -117,13 +118,13 @@ public class PaymentServiceTest {
 
             JSONObject responseJson = new JSONObject();
             responseJson.put("approvedAt", "2024-11-06T15:23:01Z");
-            responseJson.put("orderId", orderId);
-            responseJson.put("totalAmount", 10000L);
+            responseJson.put(ORDER_ID_VALUE_NAME, orderId);
+            responseJson.put(TOTAL_AMOUNT, 10000L);
 
             mockWebServer.enqueue(new MockResponse()
                     .setResponseCode(200)
                     .setBody(responseJson.toString())
-                    .addHeader("Content-Type", "application/json"));
+                    .addHeader(CONTENT_TYPE, JSON));
 
             Reservation reservation = new Reservation(1L, 1L, 1L, ReservationStatus.PENDING, 15000L);
 
@@ -131,8 +132,8 @@ public class PaymentServiceTest {
             JSONObject response = paymentService.confirmPayment(jsonBody);
 
             // then
-            assertEquals(response.get("orderId"), orderId);
-            assertEquals(response.get("totalAmount"), 10000L);
+            assertEquals(response.get(ORDER_ID_VALUE_NAME), orderId);
+            assertEquals(response.get(TOTAL_AMOUNT), 10000L);
 
             assertEquals(reservation.getStatus(), ReservationStatus.PENDING);
         }
@@ -160,7 +161,7 @@ public class PaymentServiceTest {
             JSONObject responseJson = new JSONObject();
             responseJson.put("approvedAt", "2024-11-06T15:23:01Z");
             responseJson.put(ORDER_ID_VALUE_NAME, orderId);
-            responseJson.put("totalAmount", 10000L);
+            responseJson.put(TOTAL_AMOUNT, 10000L);
 
             mockWebServer.enqueue(new MockResponse()
                     .setResponseCode(400)
