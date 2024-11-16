@@ -1,5 +1,8 @@
 package com.sparta.projectblue.domain.search.controller;
 
+import com.sparta.projectblue.domain.performance.dto.GetPerformancesResponseDto;
+import com.sparta.projectblue.domain.search.dto.KeywordSearchResponseDto;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +23,7 @@ public class SearchController {
 
     @GetMapping("/filter")
     @Operation(summary = "공연리스트 필터 조회", description = "현재 진행중인 공연 리스트 조건에 따라 출력")
-    public ResponseEntity<ApiResponse<?>> searchFilter(
+    public ResponseEntity<ApiResponse<Page<GetPerformancesResponseDto>>> searchFilter(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String performanceNm,
@@ -35,7 +38,7 @@ public class SearchController {
 
     @GetMapping("/keyword")
     @Operation(summary = "키워드검색", description = "키워드를 검색하면 배우, 공연장, 공연에 대한 결과가 조회됩니다")
-    public ResponseEntity<ApiResponse<?>> searchKeyword(@RequestParam(required = false) String keyword) {
+    public ResponseEntity<ApiResponse<KeywordSearchResponseDto>> searchKeyword(@RequestParam(required = false) String keyword) {
         return ResponseEntity.ok(ApiResponse.success(searchService.searchKeyword(keyword)));
     }
 
