@@ -1,9 +1,6 @@
 package com.sparta.projectblue.domain.performer.controller;
 
 import com.sparta.projectblue.domain.performer.dto.GetPerformersResponseDto;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpHeaders;
