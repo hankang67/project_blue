@@ -44,7 +44,7 @@ public class SearchController {
 
     @PostMapping("/sync")
     @Operation(summary = "기존 데이터를 동기화", description = "기존 MySQL 데이터베이스의 모든 데이터를 Elasticsearch로 동기화")
-    public ResponseEntity<ApiResponse<?>> sync() {
+    public ResponseEntity<ApiResponse<Void>> sync() {
 
         searchService.syncDocumentScheduled();
         return ResponseEntity.ok(ApiResponse.successWithNoContent());
