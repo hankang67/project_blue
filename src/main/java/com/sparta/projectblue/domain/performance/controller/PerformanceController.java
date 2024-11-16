@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 public class PerformanceController {
 
     private final PerformanceService performanceService;
+    private static final String NO_STORE = "no-store";
 
     @GetMapping
     @Operation(summary = "전체 공연리스트 조회", description = "현재 진행중인 공연 리스트 전체 출력")
@@ -36,7 +37,7 @@ public class PerformanceController {
     public ResponseEntity<ApiResponse<GetPerformanceResponseDto>> getPerformance(@PathVariable Long id) {
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setCacheControl("no-store");
+        headers.setCacheControl(NO_STORE);
 
         return ResponseEntity.ok(ApiResponse.success(performanceService.getPerformance(id)));
     }
@@ -47,7 +48,7 @@ public class PerformanceController {
     public ResponseEntity<ApiResponse<GetPerformanceRoundsResponseDto>> getRounds(@PathVariable Long id) {
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setCacheControl("no-store");
+        headers.setCacheControl(NO_STORE);
 
         return ResponseEntity.ok(ApiResponse.success(performanceService.getRounds(id)));
     }
@@ -58,7 +59,7 @@ public class PerformanceController {
     public ResponseEntity<ApiResponse<GetPerformanceReviewsResponseDto>> getReviews(@PathVariable Long id) {
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setCacheControl("no-store");
+        headers.setCacheControl(NO_STORE);
 
         return ResponseEntity.ok(ApiResponse.success(performanceService.getReviews(id)));
     }
@@ -69,7 +70,7 @@ public class PerformanceController {
     public ResponseEntity<ApiResponse<GetPerformancePerformersResponseDto>> getPerformers(@PathVariable Long id) {
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setCacheControl("no-store");
+        headers.setCacheControl(NO_STORE);
 
         return ResponseEntity.ok(ApiResponse.success(performanceService.getPerformers(id)));
     }

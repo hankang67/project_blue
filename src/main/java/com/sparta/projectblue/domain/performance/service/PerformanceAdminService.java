@@ -183,8 +183,6 @@ public class PerformanceAdminService {
 
         List<Performance> performances = performanceRepository.findAllById(performanceId);
 
-        System.out.println("List size : " + performances.size());
-
         if (performances.isEmpty()) {
             throw new IllegalArgumentException("해당 공연이 존재하지 않습니다.");
         }
@@ -215,7 +213,7 @@ public class PerformanceAdminService {
         User user = userRepository.findById(authUser.getId()).orElseThrow(() ->
                 new IllegalArgumentException("존재하지 않는 유저입니다."));
 
-        if (!(user.getUserRole() == UserRole.ROLE_ADMIN)) {
+        if (user.getUserRole() != UserRole.ROLE_ADMIN) {
             throw new IllegalArgumentException("관리자만 접근할 수 있습니다.");
         }
     }

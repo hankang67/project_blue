@@ -35,6 +35,8 @@ public class PerformanceService {
     private final RoundRepository roundRepository;
     private final PosterRepository posterRepository;
 
+    private static final String NO_FOUND_PERFORMANCE = "공연을 찾을 수 없습니다.";
+
     public Page<GetPerformancesResponseDto> getPerformances(int page, int size) {
 
         Pageable pageable = PageRequest.of(page - 1, size);
@@ -50,7 +52,7 @@ public class PerformanceService {
         Performance performance =
                 performanceRepository
                         .findById(id)
-                        .orElseThrow(() -> new IllegalArgumentException("해당 공연 정보를 찾을 수 없습니다"));
+                        .orElseThrow(() -> new IllegalArgumentException(NO_FOUND_PERFORMANCE));
 
         Hall hall =
                 hallRepository
@@ -71,7 +73,7 @@ public class PerformanceService {
 
         // 공연 id값 검증
         if (performanceRepository.findById(id).isEmpty()) {
-            throw new IllegalArgumentException("공연을 찾을 수 없습니다");
+            throw new IllegalArgumentException(NO_FOUND_PERFORMANCE);
         }
 
         // 회차 전체 조회
@@ -96,7 +98,7 @@ public class PerformanceService {
 
         // 공연 id값 검증
         if (performanceRepository.findById(id).isEmpty()) {
-            throw new IllegalArgumentException("공연을 찾을 수 없습니다");
+            throw new IllegalArgumentException(NO_FOUND_PERFORMANCE);
         }
 
         List<Review> reviews = reviewRepository.findByPerformanceId(id).stream().toList();
@@ -118,7 +120,7 @@ public class PerformanceService {
     public GetPerformancePerformersResponseDto getPerformers(Long id) {
 
         if (performanceRepository.findById(id).isEmpty()) {
-            throw new IllegalArgumentException("공연을 찾을 수 없습니다");
+            throw new IllegalArgumentException(NO_FOUND_PERFORMANCE);
         }
 
         List<GetPerformancePerformersResponseDto.PerformerInfo> performers =
