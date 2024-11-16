@@ -1,5 +1,6 @@
 package com.sparta.projectblue.domain.round.controller;
 
+import com.sparta.projectblue.domain.round.dto.GetRoundAvailableSeatsResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.sparta.projectblue.config.ApiResponse;
@@ -19,7 +20,7 @@ public class RoundController {
 
     @GetMapping("/{id}")
     @Operation(summary = "예매가능 좌석 조회", description = "입력 회차의 예매 가능 좌석을 모두 출력")
-    public ResponseEntity<ApiResponse<?>> getAvailableSeats(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<GetRoundAvailableSeatsResponseDto>> getAvailableSeats(@PathVariable Long id) {
 
         return ResponseEntity.ok(ApiResponse.success(roundService.getAvailableSeats(id)));
     }
