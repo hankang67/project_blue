@@ -1,4 +1,4 @@
-package com.sparta.projectblue.domain.hall;
+package com.sparta.projectblue.domain.hall.Service;
 
 import com.sparta.projectblue.domain.hall.dto.GetHallResponseDto;
 import com.sparta.projectblue.domain.hall.dto.GetHallsResponseDto;
