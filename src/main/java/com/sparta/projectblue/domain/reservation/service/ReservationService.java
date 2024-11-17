@@ -38,7 +38,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -257,10 +256,10 @@ public class ReservationService {
             throw new IllegalArgumentException("ReservedSeat does not exist");
         }
 
-        List<Integer> seats =
-                reservedSeats.stream()
-                        .map(ReservedSeat::getSeatNumber)
-                        .collect(Collectors.toList());
+        List<Integer> seats = new ArrayList<>();
+        for (ReservedSeat reservedSeat : reservedSeats) {
+            seats.add(reservedSeat.getSeatNumber());
+        }
 
         Payment payment = null;
         if (Objects.nonNull(reservation.getPaymentId())) {

@@ -284,6 +284,5 @@ public class PerformanceAdminService {
                                 () -> new IllegalArgumentException("해당 배우는 이 공연에 등록되어 있지 않습니다."));
 
         performerPerformanceRepository.delete(performerPerformance);
-
     }
 }

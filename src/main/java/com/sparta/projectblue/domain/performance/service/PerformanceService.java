@@ -20,8 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -49,20 +49,11 @@ public class PerformanceService {
     // 캐싱 적용 대상
     @Cacheable(value = "performance", key = "#id")
     public GetPerformanceResponseDto getPerformance(Long id) {
-        Performance performance =
-                performanceRepository
-                        .findById(id)
-                        .orElseThrow(() -> new IllegalArgumentException(NO_FOUND_PERFORMANCE));
+        Performance performance = performanceRepository.findById(id).orElseThrow(() -> new IllegalArgumentException(NO_FOUND_PERFORMANCE));
 
-        Hall hall =
-                hallRepository
-                        .findById(performance.getHallId())
-                        .orElseThrow(() -> new IllegalArgumentException("공연장의 정보가 없습니다."));
+        Hall hall = hallRepository.findById(performance.getHallId()).orElseThrow(() -> new IllegalArgumentException("공연장의 정보가 없습니다."));
 
-        Poster poster =
-                posterRepository
-                        .findByPerformanceId(performance.getId())
-                        .orElseThrow(() -> new IllegalArgumentException("포스터 정보가 없습니다."));
+        Poster poster = posterRepository.findByPerformanceId(performance.getId()).orElseThrow(() -> new IllegalArgumentException("포스터 정보가 없습니다."));
 
         return new GetPerformanceResponseDto(performance, hall, poster);
     }
@@ -77,20 +68,17 @@ public class PerformanceService {
         }
 
         // 회차 전체 조회
-        List<Round> rounds = roundRepository.findByPerformanceId(id).stream().toList();
+        List<Round> rounds = new ArrayList<>(roundRepository.findByPerformanceId(id));
 
         // 회차 날짜정보, 예매 상태만 분리
-        List<GetPerformanceRoundsResponseDto.RoundInfo> roundInfos =
-                rounds.stream()
-                        .map(
-                                round ->
-                                        new GetPerformanceRoundsResponseDto.RoundInfo(
-                                                round.getDate(), round.getStatus()))
-                        .collect(Collectors.toList());
+        List<GetPerformanceRoundsResponseDto.RoundInfo> roundInfos = new ArrayList<>();
+        for (Round round : rounds) {
+            roundInfos.add(new GetPerformanceRoundsResponseDto.RoundInfo(round.getDate(), round.getStatus()));
+        }
+
 
         return new GetPerformanceRoundsResponseDto(roundInfos);
     }
-
 
     // 캐싱 적용 대상
     @Cacheable(value = "reviews", key = "#id")
@@ -101,19 +89,17 @@ public class PerformanceService {
             throw new IllegalArgumentException(NO_FOUND_PERFORMANCE);
         }
 
-        List<Review> reviews = reviewRepository.findByPerformanceId(id).stream().toList();
+        // 리뷰 전체 조회
+        List<Review> reviews = new ArrayList<>(reviewRepository.findByPerformanceId(id));
 
-        List<GetPerformanceReviewsResponseDto.ReviewInfo> reviewInfos =
-                reviews.stream()
-                        .map(
-                                review ->
-                                        new GetPerformanceReviewsResponseDto.ReviewInfo(
-                                                review.getReviewRate(), review.getContent()))
-                        .collect(Collectors.toList());
+        // 리뷰 정보 분리
+        List<GetPerformanceReviewsResponseDto.ReviewInfo> reviewInfos = new ArrayList<>();
+        for (Review review : reviews) {
+            reviewInfos.add(new GetPerformanceReviewsResponseDto.ReviewInfo(review.getReviewRate(), review.getContent()));
+        }
 
         return new GetPerformanceReviewsResponseDto(reviewInfos);
     }
-
 
     // 캐싱 적용 대상
     @Cacheable(value = "performancePerformers", key = "#id")
@@ -123,8 +109,7 @@ public class PerformanceService {
             throw new IllegalArgumentException(NO_FOUND_PERFORMANCE);
         }
 
-        List<GetPerformancePerformersResponseDto.PerformerInfo> performers =
-                performanceRepository.findPerformersByPerformanceId(id);
+        List<GetPerformancePerformersResponseDto.PerformerInfo> performers = performanceRepository.findPerformersByPerformanceId(id);
 
         return new GetPerformancePerformersResponseDto(performers);
     }

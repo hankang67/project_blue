@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -38,7 +39,7 @@ public class RoundService {
                         .findById(id)
                         .orElseThrow(() -> new IllegalArgumentException("회차를 찾을 수 없습니다."));
 
-        // 오픈전
+        // 오픈 전
         if (round.getStatus().equals(PerformanceStatus.BEFORE_OPEN)) {
             throw new IllegalArgumentException("예약이 아직 시작되지 않았습니다.");
         }
@@ -62,8 +63,10 @@ public class RoundService {
 
         // 예약된 좌석 가져옴
         List<ReservedSeat> reservedSeats = reservedSeatRepository.findByRoundId(round.getId());
-        Set<Integer> reservedSeatNumbers =
-                reservedSeats.stream().map(ReservedSeat::getSeatNumber).collect(Collectors.toSet());
+        Set<Integer> reservedSeatNumbers = new HashSet<>();
+        for (ReservedSeat reservedSeat : reservedSeats) {
+            reservedSeatNumbers.add(reservedSeat.getSeatNumber());
+        }
 
         // 전체 좌석수 가져옴
         int totalSeats = hall.getSeats();
@@ -79,4 +82,5 @@ public class RoundService {
         return new GetRoundAvailableSeatsResponseDto(
                 performance.getTitle(), round.getDate(), availableSeats);
     }
+
 }

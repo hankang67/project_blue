@@ -3,6 +3,7 @@ package com.sparta.projectblue.domain.performance.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.sparta.projectblue.domain.common.enums.PerformanceStatus;
 
@@ -26,6 +27,7 @@ public class GetPerformanceRoundsResponseDto {
     @Getter
     public static class RoundInfo {
 
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime date;
         private PerformanceStatus status;
 

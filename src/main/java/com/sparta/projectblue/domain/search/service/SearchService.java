@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -66,11 +67,17 @@ public class SearchService {
 
         Page<Performer> performers = performerRepository.findAllByName(keyword, pageRequest);
 
-        List<Long> performerIds = performers.stream().map(Performer::getId).toList();
+        List<Long> performerIds = new ArrayList<>();
+        for (Performer performer : performers) {
+            performerIds.add(performer.getId());
+        }
 
         Page<Hall> halls = hallRepository.findByNameContaining(keyword, pageRequest);
 
-        List<Long> hallIds = halls.stream().map(Hall::getId).toList();
+        List<Long> hallIds = new ArrayList<>();
+        for (Hall hall : halls) {
+            hallIds.add(hall.getId());
+        }
 
         Page<SearchDocument> searchDocuments =
                 elasticsearchRepository
@@ -79,6 +86,7 @@ public class SearchService {
 
         return new KeywordSearchResponseDto(performers, searchDocuments, halls);
     }
+
 
     @Scheduled(cron = "0 0 0 * * ?")
     public void syncDocumentScheduled() {
@@ -101,19 +109,24 @@ public class SearchService {
 
         Page<Performer> performers = performerRepository.findAllByName(keyword, pageRequest);
 
-        List<Long> performerIds = performers.stream().map(Performer::getId).toList();
+        List<Long> performerIds = new ArrayList<>();
+        for (Performer performer : performers) {
+            performerIds.add(performer.getId());
+        }
 
         Page<Hall> halls = hallRepository.findByNameContaining(keyword, pageRequest);
 
-        List<Long> hallIds = halls.stream().map(Hall::getId).toList();
+        List<Long> hallIds = new ArrayList<>();
+        for (Hall hall : halls) {
+            hallIds.add(hall.getId());
+        }
 
-        List<PerformerPerformance> performerPerformances = List.of();
-
-        for(Long performerId : performerIds) {
+        List<PerformerPerformance> performerPerformances = new ArrayList<>();
+        for (Long performerId : performerIds) {
             performerPerformances.addAll(performerPerformanceRepository.findAllByPerformerId(performerId));
         }
 
-        List<Performance> performances1 = performanceRepository.findByHallIdIn(hallIds);
+        performanceRepository.findByHallIdIn(hallIds);
 
         Page<Performance> performances = performanceRepository.findByTitleContaining(keyword, pageRequest);
 
