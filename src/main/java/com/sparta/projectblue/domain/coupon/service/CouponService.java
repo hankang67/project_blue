@@ -1,5 +1,6 @@
 package com.sparta.projectblue.domain.coupon.service;
 
+import com.sparta.projectblue.aop.annotation.CouponLogstash;
 import com.sparta.projectblue.config.DistributedLock;
 import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.common.enums.CouponStatus;
@@ -7,8 +8,8 @@ import com.sparta.projectblue.domain.common.enums.CouponType;
 import com.sparta.projectblue.domain.coupon.dto.GetCouponResponseDto;
 import com.sparta.projectblue.domain.coupon.entity.Coupon;
 import com.sparta.projectblue.domain.coupon.repository.CouponRepository;
-import com.sparta.projectblue.domain.usedCoupon.entity.UsedCoupon;
-import com.sparta.projectblue.domain.usedCoupon.repository.UsedCouponRepository;
+import com.sparta.projectblue.domain.usedcoupon.entity.UsedCoupon;
+import com.sparta.projectblue.domain.usedcoupon.repository.UsedCouponRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -63,6 +64,7 @@ public class CouponService {
     }
 
     @Transactional
+    @CouponLogstash
     public Long useCoupon(Long id, Long originPrice, Long userId, Long reservationId) {
 
         Coupon coupon = couponRepository.findByIdOrElseThrow(id);

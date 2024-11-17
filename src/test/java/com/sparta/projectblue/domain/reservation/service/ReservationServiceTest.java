@@ -44,6 +44,16 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class ReservationServiceTest {
 
+    private static final String DESCRIPTION = "description";
+    private static final String HALL_NAME = "Best Hall";
+    private static final String ADDRESS = "Address 465-648";
+    private static final String PERFORMANCE_TITLE = "Minions";
+    private static final String PAYMENT_ID = "paymentId";
+    private static final String PASSWORD = "abc132?!";
+    private static final String CONCERT_TITLE_1 = "Concert 1";
+    private static final String CONCERT_TITLE_2 = "Concert 2";
+    private static final String CONCERT_TITLE_3 = "Concert 3";
+
     @Mock
     private ReservationRepository reservationRepository;
 
@@ -97,11 +107,11 @@ public class ReservationServiceTest {
 
             given(roundRepository.findById(anyLong())).willReturn(Optional.of(round));
 
-            Performance performance = new Performance(1L, performanceTitle, LocalDateTime.now(), LocalDateTime.now(), price, Category.CONCERT, "description", 150);
+            Performance performance = new Performance(1L, performanceTitle, LocalDateTime.now(), LocalDateTime.now(), price, Category.CONCERT, DESCRIPTION, 150);
 
             given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
 
-            Hall hall = new Hall("Best Hall", "Address 465-648", 35000);
+            Hall hall = new Hall(HALL_NAME, ADDRESS, 35000);
 
             given(hallRepository.findById(anyLong())).willReturn(Optional.of(hall));
 
@@ -129,7 +139,7 @@ public class ReservationServiceTest {
 
             given(roundRepository.findById(anyLong())).willReturn(Optional.of(round));
 
-            Performance performance = new Performance(1L, "Minions", LocalDateTime.now(), LocalDateTime.now(), 156000L, Category.CONCERT, "description", 150);
+            Performance performance = new Performance(1L, PERFORMANCE_TITLE, LocalDateTime.now(), LocalDateTime.now(), 156000L, Category.CONCERT, DESCRIPTION, 150);
 
             given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
 
@@ -151,7 +161,7 @@ public class ReservationServiceTest {
 
             given(roundRepository.findById(anyLong())).willReturn(Optional.of(round));
 
-            Performance performance = new Performance(1L, "Minions", LocalDateTime.now(), LocalDateTime.now(), 156000L, Category.CONCERT, "description", 150);
+            Performance performance = new Performance(1L, PERFORMANCE_TITLE, LocalDateTime.now(), LocalDateTime.now(), 156000L, Category.CONCERT, DESCRIPTION, 150);
 
             given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
 
@@ -173,11 +183,11 @@ public class ReservationServiceTest {
 
             given(roundRepository.findById(anyLong())).willReturn(Optional.of(round));
 
-            Performance performance = new Performance(1L, "Minions", LocalDateTime.now(), LocalDateTime.now(), 156000L, Category.CONCERT, "description", 150);
+            Performance performance = new Performance(1L, PERFORMANCE_TITLE, LocalDateTime.now(), LocalDateTime.now(), 156000L, Category.CONCERT, DESCRIPTION, 150);
 
             given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
 
-            Hall hall = new Hall("Best Hall", "Address 465-648", 35000);
+            Hall hall = new Hall(HALL_NAME, ADDRESS, 35000);
 
             given(hallRepository.findById(anyLong())).willReturn(Optional.of(hall));
 
@@ -199,11 +209,11 @@ public class ReservationServiceTest {
 
             given(roundRepository.findById(anyLong())).willReturn(Optional.of(round));
 
-            Performance performance = new Performance(1L, "Minions", LocalDateTime.now(), LocalDateTime.now(), 156000L, Category.CONCERT, "description", 150);
+            Performance performance = new Performance(1L, PERFORMANCE_TITLE, LocalDateTime.now(), LocalDateTime.now(), 156000L, Category.CONCERT, DESCRIPTION, 150);
 
             given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
 
-            Hall hall = new Hall("Best Hall", "Address 465-648", 10);
+            Hall hall = new Hall(HALL_NAME, ADDRESS, 10);
 
             given(hallRepository.findById(anyLong())).willReturn(Optional.of(hall));
 
@@ -225,11 +235,11 @@ public class ReservationServiceTest {
 
             given(roundRepository.findById(anyLong())).willReturn(Optional.of(round));
 
-            Performance performance = new Performance(1L, "Minions", LocalDateTime.now(), LocalDateTime.now(), 156000L, Category.CONCERT, "description", 150);
+            Performance performance = new Performance(1L, PERFORMANCE_TITLE, LocalDateTime.now(), LocalDateTime.now(), 156000L, Category.CONCERT, DESCRIPTION, 150);
 
             given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
 
-            Hall hall = new Hall("Best Hall", "Address 465-648", 150);
+            Hall hall = new Hall(HALL_NAME, ADDRESS, 150);
 
             given(hallRepository.findById(anyLong())).willReturn(Optional.of(hall));
 
@@ -256,17 +266,17 @@ public class ReservationServiceTest {
             Reservation reservation = new Reservation(authUser.getId(), 1L, 1L, ReservationStatus.COMPLETED, 15000L);
 
             ReflectionTestUtils.setField(reservation, "id", 1L);
-            ReflectionTestUtils.setField(reservation, "paymentId", 1L);
+            ReflectionTestUtils.setField(reservation, PAYMENT_ID, 1L);
 
             given(reservationRepository.findById(anyLong())).willReturn(Optional.of(reservation));
 
-            User user = new User(authUser.getEmail(), authUser.getName(), "abc132?!", UserRole.ROLE_USER);
+            User user = new User(authUser.getEmail(), authUser.getName(), PASSWORD, UserRole.ROLE_USER);
 
             ReflectionTestUtils.setField(user, "id", authUser.getId());
 
             given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
 
-            Performance performance = new Performance(1L, "Minions", LocalDateTime.now(), LocalDateTime.now(), 156000L, Category.CONCERT, "description", 150);
+            Performance performance = new Performance(1L, PERFORMANCE_TITLE, LocalDateTime.now(), LocalDateTime.now(), 156000L, Category.CONCERT, DESCRIPTION, 150);
 
             given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
 
@@ -287,7 +297,7 @@ public class ReservationServiceTest {
             given(paymentRepository.findById(any())).willReturn(Optional.of(payment));
 
             // when
-            DeleteReservationRequestDto request = new DeleteReservationRequestDto(1L, "abc132?!");
+            DeleteReservationRequestDto request = new DeleteReservationRequestDto(1L, PASSWORD);
 
             reservationService.delete(authUser.getId(), request);
 
@@ -304,18 +314,18 @@ public class ReservationServiceTest {
             Reservation reservation = new Reservation(authUser.getId(), 1L, 1L, ReservationStatus.COMPLETED, 15000L);
 
             ReflectionTestUtils.setField(reservation, "id", 1L);
-            ReflectionTestUtils.setField(reservation, "paymentId", null);
+            ReflectionTestUtils.setField(reservation, PAYMENT_ID, null);
 
             given(reservationRepository.findById(anyLong())).willReturn(Optional.of(reservation));
 
-            User user = new User(authUser.getEmail(), authUser.getName(), "abc132?!", UserRole.ROLE_USER);
+            User user = new User(authUser.getEmail(), authUser.getName(), PASSWORD, UserRole.ROLE_USER);
 
             ReflectionTestUtils.setField(user, "id", authUser.getId());
 
             given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
 
 
-            Performance performance = new Performance(1L, "Minions", LocalDateTime.now(), LocalDateTime.now(), 156000L, Category.CONCERT, "description", 150);
+            Performance performance = new Performance(1L, PERFORMANCE_TITLE, LocalDateTime.now(), LocalDateTime.now(), 156000L, Category.CONCERT, DESCRIPTION, 150);
 
             given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
 
@@ -331,7 +341,7 @@ public class ReservationServiceTest {
 
 
             // when
-            DeleteReservationRequestDto request = new DeleteReservationRequestDto(1L, "abc132?!");
+            DeleteReservationRequestDto request = new DeleteReservationRequestDto(1L, PASSWORD);
 
             reservationService.delete(authUser.getId(), request);
 
@@ -348,23 +358,23 @@ public class ReservationServiceTest {
             Reservation reservation = new Reservation(authUser.getId(), 1L, 1L, ReservationStatus.COMPLETED, 15000L);
 
             ReflectionTestUtils.setField(reservation, "id", 1L);
-            ReflectionTestUtils.setField(reservation, "paymentId", 1L);
+            ReflectionTestUtils.setField(reservation, PAYMENT_ID, 1L);
 
             given(reservationRepository.findById(anyLong())).willReturn(Optional.of(reservation));
 
-            User user = new User(authUser.getEmail(), authUser.getName(), "abc132?!", UserRole.ROLE_USER);
+            User user = new User(authUser.getEmail(), authUser.getName(), PASSWORD, UserRole.ROLE_USER);
 
             ReflectionTestUtils.setField(user, "id", authUser.getId() + 1L);
 
             given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
 
 
-            Performance performance = new Performance(1L, "Minions", LocalDateTime.now(), LocalDateTime.now(), 156000L, Category.CONCERT, "description", 150);
+            Performance performance = new Performance(1L, PERFORMANCE_TITLE, LocalDateTime.now(), LocalDateTime.now(), 156000L, Category.CONCERT, DESCRIPTION, 150);
 
             given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
 
             // when
-            DeleteReservationRequestDto request = new DeleteReservationRequestDto(1L, "abc132?!");
+            DeleteReservationRequestDto request = new DeleteReservationRequestDto(1L, PASSWORD);
 
             IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
                     reservationService.delete(authUser.getId(), request));
@@ -380,7 +390,7 @@ public class ReservationServiceTest {
             Reservation reservation = new Reservation(authUser.getId(), 1L, 1L, ReservationStatus.COMPLETED, 15000L);
 
             ReflectionTestUtils.setField(reservation, "id", 1L);
-            ReflectionTestUtils.setField(reservation, "paymentId", 1L);
+            ReflectionTestUtils.setField(reservation, PAYMENT_ID, 1L);
 
             given(reservationRepository.findById(anyLong())).willReturn(Optional.of(reservation));
 
@@ -391,13 +401,13 @@ public class ReservationServiceTest {
             given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
 
 
-            Performance performance = new Performance(1L, "Minions", LocalDateTime.now(), LocalDateTime.now(), 156000L, Category.CONCERT, "description", 150);
+            Performance performance = new Performance(1L, PERFORMANCE_TITLE, LocalDateTime.now(), LocalDateTime.now(), 156000L, Category.CONCERT, DESCRIPTION, 150);
 
             given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
 
 
             // when
-            DeleteReservationRequestDto request = new DeleteReservationRequestDto(1L, "abc132?!");
+            DeleteReservationRequestDto request = new DeleteReservationRequestDto(1L, PASSWORD);
 
             IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
                     reservationService.delete(authUser.getId(), request));
@@ -413,25 +423,25 @@ public class ReservationServiceTest {
             Reservation reservation = new Reservation(authUser.getId(), 1L, 1L, ReservationStatus.CANCELED, 15000L);
 
             ReflectionTestUtils.setField(reservation, "id", 1L);
-            ReflectionTestUtils.setField(reservation, "paymentId", 1L);
+            ReflectionTestUtils.setField(reservation, PAYMENT_ID, 1L);
 
             given(reservationRepository.findById(anyLong())).willReturn(Optional.of(reservation));
 
-            User user = new User(authUser.getEmail(), authUser.getName(), "abc132?!", UserRole.ROLE_USER);
+            User user = new User(authUser.getEmail(), authUser.getName(), PASSWORD, UserRole.ROLE_USER);
 
             ReflectionTestUtils.setField(user, "id", authUser.getId());
 
             given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
 
 
-            Performance performance = new Performance(1L, "Minions", LocalDateTime.now(), LocalDateTime.now(), 156000L, Category.CONCERT, "description", 150);
+            Performance performance = new Performance(1L, PERFORMANCE_TITLE, LocalDateTime.now(), LocalDateTime.now(), 156000L, Category.CONCERT, DESCRIPTION, 150);
 
             given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
 
             given(passwordEncoder.matches(anyString(), anyString())).willReturn(true);
 
             // when
-            DeleteReservationRequestDto request = new DeleteReservationRequestDto(1L, "abc132?!");
+            DeleteReservationRequestDto request = new DeleteReservationRequestDto(1L, PASSWORD);
 
             IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
                     reservationService.delete(authUser.getId(), request));
@@ -447,17 +457,17 @@ public class ReservationServiceTest {
             Reservation reservation = new Reservation(authUser.getId(), 1L, 1L, ReservationStatus.COMPLETED, 15000L);
 
             ReflectionTestUtils.setField(reservation, "id", 1L);
-            ReflectionTestUtils.setField(reservation, "paymentId", 1L);
+            ReflectionTestUtils.setField(reservation, PAYMENT_ID, 1L);
 
             given(reservationRepository.findById(anyLong())).willReturn(Optional.of(reservation));
 
-            User user = new User(authUser.getEmail(), authUser.getName(), "abc132?!", UserRole.ROLE_USER);
+            User user = new User(authUser.getEmail(), authUser.getName(), PASSWORD, UserRole.ROLE_USER);
 
             ReflectionTestUtils.setField(user, "id", authUser.getId());
 
             given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
 
-            Performance performance = new Performance(1L, "Minions", LocalDateTime.now(), LocalDateTime.now(), 156000L, Category.CONCERT, "description", 150);
+            Performance performance = new Performance(1L, PERFORMANCE_TITLE, LocalDateTime.now(), LocalDateTime.now(), 156000L, Category.CONCERT, DESCRIPTION, 150);
 
             given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
 
@@ -468,7 +478,7 @@ public class ReservationServiceTest {
             given(reservedSeatRepository.findByReservationId(any())).willReturn(reservedSeats);
 
             // when
-            DeleteReservationRequestDto request = new DeleteReservationRequestDto(1L, "abc132?!");
+            DeleteReservationRequestDto request = new DeleteReservationRequestDto(1L, PASSWORD);
 
             IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
                     reservationService.delete(authUser.getId(), request));
@@ -491,12 +501,12 @@ public class ReservationServiceTest {
 
             Reservation reservation = new Reservation(authUser.getId(), 1L, 1L, ReservationStatus.COMPLETED, 15000L);
             ReflectionTestUtils.setField(reservation, "id", 1L);
-            ReflectionTestUtils.setField(reservation, "paymentId", 1L);
+            ReflectionTestUtils.setField(reservation, PAYMENT_ID, 1L);
             ReflectionTestUtils.setField(reservation, "createdAt", reservationDate);
 
             given(reservationRepository.findById(anyLong())).willReturn(Optional.of(reservation));
 
-            Performance performance = new Performance(1L, "Concert", LocalDateTime.now(), LocalDateTime.now(), 15000L, category, "description", 150);
+            Performance performance = new Performance(1L, CONCERT_TITLE_1, LocalDateTime.now(), LocalDateTime.now(), 15000L, category, DESCRIPTION, 150);
             given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
 
             Round round = new Round(1L, LocalDateTime.now(), PerformanceStatus.AVAILABLE);
@@ -548,7 +558,7 @@ public class ReservationServiceTest {
 
             given(reservationRepository.findById(anyLong())).willReturn(Optional.of(reservation));
 
-            Performance performance = new Performance(1L, "Concert", LocalDateTime.now(), LocalDateTime.now(), 15000L, Category.CONCERT, "description", 150);
+            Performance performance = new Performance(1L, CONCERT_TITLE_1, LocalDateTime.now(), LocalDateTime.now(), 15000L, Category.CONCERT, DESCRIPTION, 150);
             given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
 
             Round round = new Round(1L, LocalDateTime.now(), PerformanceStatus.AVAILABLE);
@@ -570,11 +580,11 @@ public class ReservationServiceTest {
             // given
             Reservation reservation = new Reservation(authUser.getId(), 1L, 1L, ReservationStatus.COMPLETED, 15000L);
             ReflectionTestUtils.setField(reservation, "id", 1L);
-            ReflectionTestUtils.setField(reservation, "paymentId", 1L);
+            ReflectionTestUtils.setField(reservation, PAYMENT_ID, 1L);
 
             given(reservationRepository.findById(anyLong())).willReturn(Optional.of(reservation));
 
-            Performance performance = new Performance(1L, "Concert", LocalDateTime.now(), LocalDateTime.now(), 15000L, Category.CONCERT, "description", 150);
+            Performance performance = new Performance(1L, CONCERT_TITLE_1, LocalDateTime.now(), LocalDateTime.now(), 15000L, Category.CONCERT, DESCRIPTION, 150);
             given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
 
             Round round = new Round(1L, LocalDateTime.now(), PerformanceStatus.AVAILABLE);
@@ -610,8 +620,8 @@ public class ReservationServiceTest {
 
             given(reservationRepository.findByUserId(userId)).willReturn(List.of(reservation1, reservation2));
 
-            Performance performance1 = new Performance(1L, "Concert1", LocalDateTime.now(), LocalDateTime.now(), 15000L, Category.CONCERT, "description", 150);
-            Performance performance2 = new Performance(2L, "Concert2", LocalDateTime.now(), LocalDateTime.now(), 20000L, Category.CONCERT, "description", 200);
+            Performance performance1 = new Performance(1L, CONCERT_TITLE_3, LocalDateTime.now(), LocalDateTime.now(), 15000L, Category.CONCERT, DESCRIPTION, 150);
+            Performance performance2 = new Performance(2L, CONCERT_TITLE_2, LocalDateTime.now(), LocalDateTime.now(), 20000L, Category.CONCERT, DESCRIPTION, 200);
 
             given(performanceRepository.findById(reservation1.getPerformanceId())).willReturn(Optional.of(performance1));
             given(performanceRepository.findById(reservation2.getPerformanceId())).willReturn(Optional.of(performance2));
@@ -641,7 +651,7 @@ public class ReservationServiceTest {
             assertEquals(2, responseList.size());
 
             GetReservationsResponseDto response1 = responseList.get(0);
-            assertEquals("Concert1", response1.getPerformanceTitle());
+            assertEquals(CONCERT_TITLE_3, response1.getPerformanceTitle());
             assertEquals(2, response1.getTickets());
             assertEquals(reservation1.getId(), response1.getReservationId());
             assertEquals(hall1.getName(), response1.getHallName());
@@ -649,7 +659,7 @@ public class ReservationServiceTest {
             assertEquals(reservation1.getStatus(), response1.getStatus());
 
             GetReservationsResponseDto response2 = responseList.get(1);
-            assertEquals("Concert2", response2.getPerformanceTitle());
+            assertEquals(CONCERT_TITLE_2, response2.getPerformanceTitle());
             assertEquals(1, response2.getTickets());
             assertEquals(reservation2.getId(), response2.getReservationId());
             assertEquals(hall2.getName(), response2.getHallName());
@@ -685,7 +695,7 @@ public class ReservationServiceTest {
 
             given(reservationRepository.findByUserId(userId)).willReturn(List.of(reservation));
 
-            Performance performance = new Performance(1L, "Concert1", LocalDateTime.now(), LocalDateTime.now(), 15000L, Category.CONCERT, "description", 150);
+            Performance performance = new Performance(1L, CONCERT_TITLE_3, LocalDateTime.now(), LocalDateTime.now(), 15000L, Category.CONCERT, DESCRIPTION, 150);
             given(performanceRepository.findById(reservation.getPerformanceId())).willReturn(Optional.of(performance));
 
             given(hallRepository.findById(performance.getHallId())).willReturn(Optional.empty());
@@ -707,7 +717,7 @@ public class ReservationServiceTest {
 
             given(reservationRepository.findByUserId(userId)).willReturn(List.of(reservation));
 
-            Performance performance = new Performance(1L, "Concert1", LocalDateTime.now(), LocalDateTime.now(), 15000L, Category.CONCERT, "description", 150);
+            Performance performance = new Performance(1L, CONCERT_TITLE_3, LocalDateTime.now(), LocalDateTime.now(), 15000L, Category.CONCERT, DESCRIPTION, 150);
             given(performanceRepository.findById(reservation.getPerformanceId())).willReturn(Optional.of(performance));
 
             Hall hall = new Hall("Main Hall", "Address 123", 300);

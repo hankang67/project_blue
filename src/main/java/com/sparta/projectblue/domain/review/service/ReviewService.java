@@ -1,8 +1,5 @@
 package com.sparta.projectblue.domain.review.service;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.sparta.projectblue.domain.common.enums.ReservationStatus;
 import com.sparta.projectblue.domain.reservation.entity.Reservation;
 import com.sparta.projectblue.domain.reservation.repository.ReservationRepository;
@@ -12,8 +9,9 @@ import com.sparta.projectblue.domain.review.dto.UpdateReviewRequestDto;
 import com.sparta.projectblue.domain.review.dto.UpdateReviewResponseDto;
 import com.sparta.projectblue.domain.review.entity.Review;
 import com.sparta.projectblue.domain.review.repository.ReviewRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,13 +22,16 @@ public class ReviewService {
 
     private final ReservationRepository reservationRepository;
 
+    private static final String RESERVATION_NOT_FOUND = "해당 예매를 찾을 수 없습니다.";
+
+
     @Transactional
     public CreateReviewResponseDto create(Long userId, CreateReviewRequestDto request) {
 
         Reservation reservation =
                 reservationRepository
                         .findById(request.getReservationId())
-                        .orElseThrow(() -> new IllegalArgumentException("해당 예매를 찾을 수 없습니다."));
+                        .orElseThrow(() -> new IllegalArgumentException(RESERVATION_NOT_FOUND));
 
         if (!reservation.getUserId().equals(userId)) {
             throw new IllegalArgumentException("리뷰 작성 권한이 없습니다");

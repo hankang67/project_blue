@@ -13,12 +13,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
-public class PerformerAdminServiceTest {
+class PerformerAdminServiceTest {
     @Mock
     private PerformerRepository performerRepository;
 
@@ -45,12 +45,6 @@ public class PerformerAdminServiceTest {
         assertEquals("KOREA", response.getNation());
         assertTrue(authUser.getAuthorities().stream()
                 .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN")));
-
-
-        System.out.println("Created Performer:");
-        System.out.println("Name: " + response.getName());
-        System.out.println("Birth: " + response.getBirth());
-        System.out.println("Nation: " + response.getNation());
     }
 
     @Test
@@ -67,7 +61,6 @@ public class PerformerAdminServiceTest {
 
         // then
         assertEquals("관리자만 접근할 수 있습니다.", exception.getMessage());
-        System.out.println("예외 메시지: " + exception.getMessage());
     }
 
     @Test
@@ -80,7 +73,6 @@ public class PerformerAdminServiceTest {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> performerAdminService.create(authUser, request));
         assertEquals("생일은 yyyy-MM-dd 형식이어야 합니다.", exception.getMessage());
-        System.out.println("예외 메시지: " + exception.getMessage());
     }
     @Test
     void 생일이_유효하지_않은_날짜일_때_예외처리() {
@@ -92,7 +84,6 @@ public class PerformerAdminServiceTest {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> performerAdminService.create(authUser, request));
         assertEquals("생일은 현재 날짜보다 이전이거나 1900년도 이후의 날짜여야 합니다.", exception.getMessage());
-        System.out.println("예외 메시지: " + exception.getMessage());
     }
 
     @Test
@@ -105,7 +96,6 @@ public class PerformerAdminServiceTest {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> performerAdminService.update(authUser, 1L, request));
         assertEquals("관리자만 접근할 수 있습니다.", exception.getMessage());
-        System.out.println("예외 메시지: " + exception.getMessage());
     }
 
     @Test
@@ -120,7 +110,6 @@ public class PerformerAdminServiceTest {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> performerAdminService.update(authUser, 1L, request));
         assertEquals("배우를 찾을 수 없습니다.", exception.getMessage());
-        System.out.println("예외 메시지: " + exception.getMessage());
     }
 
     @Test
@@ -132,7 +121,6 @@ public class PerformerAdminServiceTest {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> performerAdminService.delete(authUser, 1L));
         assertEquals("관리자만 접근할 수 있습니다.", exception.getMessage());
-        System.out.println("예외 메시지: " + exception.getMessage());
     }
 
     @Test
@@ -146,6 +134,5 @@ public class PerformerAdminServiceTest {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> performerAdminService.delete(authUser, 1L));
         assertEquals("해당 배우를 찾을 수 없습니다.", exception.getMessage());
-        System.out.println("예외 메시지: " + exception.getMessage());
     }
 }

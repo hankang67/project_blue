@@ -1,20 +1,18 @@
 package com.sparta.projectblue.domain.reservation.controller;
 
+import com.sparta.projectblue.config.ApiResponse;
+import com.sparta.projectblue.domain.common.dto.AuthUser;
+import com.sparta.projectblue.domain.reservation.dto.*;
+import com.sparta.projectblue.domain.reservation.service.ReservationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import com.sparta.projectblue.config.ApiResponse;
-import com.sparta.projectblue.domain.common.dto.AuthUser;
-import com.sparta.projectblue.domain.reservation.dto.CreateReservationRequestDto;
-import com.sparta.projectblue.domain.reservation.dto.DeleteReservationRequestDto;
-import com.sparta.projectblue.domain.reservation.service.ReservationService;
-
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
 @RestController
 @RequestMapping("/reservations")
@@ -26,7 +24,7 @@ public class ReservationController {
 
     @PostMapping
     @Operation(summary = "공연 예매")
-    public ResponseEntity<ApiResponse<?>> create(
+    public ResponseEntity<ApiResponse<CreateReservationResponseDto>> create(
             @AuthenticationPrincipal AuthUser authUser,
             @Valid @RequestBody CreateReservationRequestDto request)
             throws InterruptedException {
@@ -37,7 +35,7 @@ public class ReservationController {
 
     @DeleteMapping
     @Operation(summary = "예매 취소", description = "예매 취소 api, 비밀번호 입력 필수")
-    public ResponseEntity<ApiResponse<?>> delete(
+    public ResponseEntity<ApiResponse<Void>> delete(
             @AuthenticationPrincipal AuthUser authUser,
             @Valid @RequestBody DeleteReservationRequestDto request)
             throws Exception {
@@ -49,7 +47,7 @@ public class ReservationController {
 
     @GetMapping
     @Operation(summary = "예매 다건 조회", description = "authUser가 예매한 내역 다건")
-    public ResponseEntity<ApiResponse<?>> getReservations(
+    public ResponseEntity<ApiResponse<List<GetReservationsResponseDto>>> getReservations(
             @AuthenticationPrincipal AuthUser authUser,
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size) {
@@ -60,7 +58,7 @@ public class ReservationController {
 
     @GetMapping("/{id}")
     @Operation(summary = "예매 단건 조회", description = "authUser가 예매한 내역 단건")
-    public ResponseEntity<ApiResponse<?>> getReservation(
+    public ResponseEntity<ApiResponse<GetReservationResponseDto>> getReservation(
             @AuthenticationPrincipal AuthUser authUser, @PathVariable Long id) {
 
         return ResponseEntity.ok(

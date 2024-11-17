@@ -1,5 +1,6 @@
 package com.sparta.projectblue.domain.payment.service;
 
+import com.sparta.projectblue.aop.annotation.PaymentLogstash;
 import com.sparta.projectblue.domain.common.enums.PaymentStatus;
 import com.sparta.projectblue.domain.common.exception.PaymentException;
 import com.sparta.projectblue.domain.coupon.service.CouponService;
@@ -29,7 +30,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Objects;
@@ -45,6 +45,7 @@ public class PaymentService {
     private final UserRepository userRepository;
     private final CouponService couponService;
     private final EmailCreateService emailCreateService;
+    private final SavePaymentService savePaymentService;
 
     @Value("${toss.basic.url}")
     private String TOSS_BASIC_URL;
@@ -104,48 +105,14 @@ public class PaymentService {
 
         if (isSuccess) {
             // 결제 승인 후 처리
-            savePayment(jsonObject);
+            savePaymentService.savePayment(jsonObject);
         }
 
         return jsonObject;
     }
 
     @Transactional
-    public void savePayment(JSONObject jsonObject) {
-
-        String orderId = (String) jsonObject.get("orderId");
-
-        Long reservationId = Long.parseLong(orderId.substring(23));
-
-        Reservation reservation =
-                reservationRepository
-                        .findById(reservationId)
-                        .orElseThrow(() -> new IllegalArgumentException("예매 정보를 찾을 수 없습니다"));
-
-        OffsetDateTime approvedAt = OffsetDateTime.parse((String) jsonObject.get("approvedAt"));
-
-        Payment payment =
-                paymentRepository
-                        .findByOrderId(orderId)
-                        .orElseThrow(() -> new PaymentException("결제 정보를 찾을 수 없습니다"));
-
-        payment.addPaymentInfo(
-                (String) jsonObject.get("paymentKey"),
-                (String) jsonObject.get("type"),
-                (String) jsonObject.get("method"),
-                (Long) jsonObject.get("suppliedAmount"),
-                (Long) jsonObject.get("vat"),
-                approvedAt.toLocalDateTime(),
-                (Long) jsonObject.get("totalAmount"));
-
-        emailCreateService.sendPaymentEmail(payment.getUserId(), payment);
-
-        reservation.addPaymentId(payment.getId());
-
-        reservation.resCompleted();
-    }
-
-    @Transactional
+    @PaymentLogstash
     public String cancelPayment(String paymentKey, String cancelReason) throws Exception {
 
         // 취소 API 호출
@@ -239,6 +206,7 @@ public class PaymentService {
     }
 
     @Transactional
+    @PaymentLogstash
     public Payment freePay(Long reservationId, Long couponId) {
         Reservation reservation =
                 reservationRepository

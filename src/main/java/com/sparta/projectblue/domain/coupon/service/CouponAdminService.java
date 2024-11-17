@@ -1,5 +1,6 @@
 package com.sparta.projectblue.domain.coupon.service;
 
+import com.sparta.projectblue.aop.annotation.CouponLogstash;
 import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.coupon.dto.CreateCouponRequestDto;
 import com.sparta.projectblue.domain.coupon.dto.CreateCouponResponseDto;
@@ -18,6 +19,7 @@ public class CouponAdminService {
     private final CouponRepository couponRepository;
 
     @Transactional
+    @CouponLogstash
     public CreateCouponResponseDto create(AuthUser authUser, @Valid CreateCouponRequestDto requestDto) {
 
         if (requestDto.getStartDate().isAfter(requestDto.getEndDate())) {
@@ -36,12 +38,13 @@ public class CouponAdminService {
                         requestDto.getStartDate(),
                         requestDto.getEndDate());
 
-        Coupon savedCoupon = couponRepository.save(coupon);
+        couponRepository.save(coupon);
 
         return new CreateCouponResponseDto(coupon);
     }
 
     @Transactional
+    @CouponLogstash
     public void delete(AuthUser authUser, Long id) {
 
         Coupon coupon = couponRepository.findByIdOrElseThrow(id);

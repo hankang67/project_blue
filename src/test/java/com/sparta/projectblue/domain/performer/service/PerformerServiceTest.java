@@ -19,11 +19,11 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
-public class PerformerServiceTest {
+class PerformerServiceTest {
 
     @Mock
     private PerformerRepository performerRepository;
@@ -72,12 +72,6 @@ public class PerformerServiceTest {
         assertEquals("배두훈", result.getPerformers().get(0).getName());
         assertEquals("김태희", result.getPerformers().get(1).getName());
 
-        System.out.println("조회된 배우 리스트:");
-        result.getPerformers().forEach(performerInfo -> {
-            System.out.println("이름: " + performerInfo.getName());
-            System.out.println("생년월일: " + performerInfo.getBirth());
-            System.out.println("--------------");
-        });
     }
 
     @Test
@@ -95,7 +89,6 @@ public class PerformerServiceTest {
                 "예외가 발생해야 합니다."
         );
         assertEquals("배우를 찾을 수 없습니다.", exception.getMessage());
-        System.out.println("예외 메시지: " + exception.getMessage());
     }
 
 

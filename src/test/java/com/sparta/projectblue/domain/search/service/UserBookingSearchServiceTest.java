@@ -1,8 +1,8 @@
 package com.sparta.projectblue.domain.search.service;
 
+import com.sparta.projectblue.domain.common.enums.ReservationStatus;
 import com.sparta.projectblue.domain.reservation.repository.ReservationRepository;
 import com.sparta.projectblue.domain.search.document.UserBookingDocument;
-import com.sparta.projectblue.domain.common.enums.ReservationStatus;
 import com.sparta.projectblue.domain.search.dto.UserBookingDto;
 import com.sparta.projectblue.domain.search.repository.UserBookingEsRepository;
 import org.junit.jupiter.api.Test;
@@ -17,10 +17,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class UserBookingSearchServiceTest {
+class UserBookingSearchServiceTest {
     @Mock
     private UserBookingEsRepository userBookingEsRepository;
 
@@ -64,15 +65,6 @@ public class UserBookingSearchServiceTest {
         assertEquals(1, results.size());
         assertEquals(document, results.get(0));
 
-        // 결과 출력
-        System.out.println("검색 결과: 사용자 이름 = " + searchCriteria.getUserName());
-        results.forEach(result -> {
-            System.out.printf("예매 내역: reservationId=%d, userName=%s, userId=%d, performanceTitle=%s, bookingDate=%s, paymentAmount=%d, reservationStatus=%s, paymentId=%d, paymentDate=%s%n",
-                    result.getReservationId(), result.getUserName(), result.getUserId(),
-                    result.getPerformanceTitle(), result.getBookingDate(),
-                    result.getPaymentAmount(), result.getReservationStatus(),
-                    result.getPaymentId(), result.getPaymentDate());
-        });
     }
 
     @Test
@@ -94,13 +86,6 @@ public class UserBookingSearchServiceTest {
         // then
         assertEquals(1, results.size());
         assertEquals(document, results.get(0));
-        System.out.println("검색 조건: 공연 제목 = " + searchCriteria.getPerformanceTitle());
-        results.forEach(result -> System.out.printf(
-                "검색 결과: 예매 내역 [reservationId=%d, userName=%s, userId=%d, performanceTitle=%s, bookingDate=%s, paymentAmount=%d, reservationStatus=%s, paymentId=%d, paymentDate=%s]%n",
-                result.getReservationId(), result.getUserName(), result.getUserId(), result.getPerformanceTitle(),
-                result.getBookingDate(), result.getPaymentAmount(), result.getReservationStatus(),
-                result.getPaymentId(), result.getPaymentDate()
-        ));
     }
 
     @Test
@@ -123,13 +108,6 @@ public class UserBookingSearchServiceTest {
         // then
         assertEquals(1, results.size());
         assertEquals(document, results.get(0));
-        System.out.println("검색 조건: 예약 날짜 범위 = " + searchCriteria.getBookingDateStart() + " ~ " + searchCriteria.getBookingDateEnd());
-        results.forEach(result -> System.out.printf(
-                "검색 결과: 예매 내역 [reservationId=%d, userName=%s, userId=%d, performanceTitle=%s, bookingDate=%s, paymentAmount=%d, reservationStatus=%s, paymentId=%d, paymentDate=%s]%n",
-                result.getReservationId(), result.getUserName(), result.getUserId(), result.getPerformanceTitle(),
-                result.getBookingDate(), result.getPaymentAmount(), result.getReservationStatus(),
-                result.getPaymentId(), result.getPaymentDate()
-        ));
     }
 
     @Test
@@ -152,13 +130,6 @@ public class UserBookingSearchServiceTest {
         // then
         assertEquals(1, results.size());
         assertEquals(document, results.get(0));
-        System.out.println("검색 조건: 결제 금액 범위 = " + searchCriteria.getMinPaymentAmount() + " ~ " + searchCriteria.getMaxPaymentAmount());
-        results.forEach(result -> System.out.printf(
-                "검색 결과: 예매 내역 [reservationId=%d, userName=%s, userId=%d, performanceTitle=%s, bookingDate=%s, paymentAmount=%d, reservationStatus=%s, paymentId=%d, paymentDate=%s]%n",
-                result.getReservationId(), result.getUserName(), result.getUserId(), result.getPerformanceTitle(),
-                result.getBookingDate(), result.getPaymentAmount(), result.getReservationStatus(),
-                result.getPaymentId(), result.getPaymentDate()
-        ));
     }
 
     @Test
@@ -180,13 +151,6 @@ public class UserBookingSearchServiceTest {
         // then
         assertEquals(1, results.size());
         assertEquals(document, results.get(0));
-        System.out.println("검색 조건: 예약 상태 = " + searchCriteria.getSearchReservationStatus());
-        results.forEach(result -> System.out.printf(
-                "검색 결과: 예매 내역 [reservationId=%d, userName=%s, userId=%d, performanceTitle=%s, bookingDate=%s, paymentAmount=%d, reservationStatus=%s, paymentId=%d, paymentDate=%s]%n",
-                result.getReservationId(), result.getUserName(), result.getUserId(), result.getPerformanceTitle(),
-                result.getBookingDate(), result.getPaymentAmount(), result.getReservationStatus(),
-                result.getPaymentId(), result.getPaymentDate()
-        ));
     }
 
     @Test
@@ -209,12 +173,6 @@ public class UserBookingSearchServiceTest {
         assertEquals(1, results.size());
         assertEquals(document, results.get(0));
 
-        // 검색 조건 및 결과 출력
-        System.out.println("검색 조건: 최소 예약 날짜 = " + searchCriteria.getBookingDateStart());
-        results.forEach(result -> System.out.printf(
-                "검색 결과: 예매 내역 [reservationId=%d, userName=%s, bookingDate=%s]%n",
-                result.getReservationId(), result.getUserName(), result.getBookingDate()
-        ));
     }
 
     @Test
@@ -237,12 +195,6 @@ public class UserBookingSearchServiceTest {
         assertEquals(1, results.size());
         assertEquals(document, results.get(0));
 
-        // 검색 조건 및 결과 출력
-        System.out.println("검색 조건: 최대 예약 날짜 = " + searchCriteria.getBookingDateEnd());
-        results.forEach(result -> System.out.printf(
-                "검색 결과: 예매 내역 [reservationId=%d, userName=%s, bookingDate=%s]%n",
-                result.getReservationId(), result.getUserName(), result.getBookingDate()
-        ));
     }
 
     @Test
@@ -265,12 +217,6 @@ public class UserBookingSearchServiceTest {
         assertEquals(1, results.size());
         assertEquals(document, results.get(0));
 
-        // 검색 조건 및 결과 출력
-        System.out.println("검색 조건: 최소 결제 금액 = " + searchCriteria.getMinPaymentAmount());
-        results.forEach(result -> System.out.printf(
-                "검색 결과: 예매 내역 [reservationId=%d, userName=%s, paymentAmount=%d]%n",
-                result.getReservationId(), result.getUserName(), result.getPaymentAmount()
-        ));
     }
 
     @Test
@@ -293,12 +239,6 @@ public class UserBookingSearchServiceTest {
         assertEquals(1, results.size());
         assertEquals(document, results.get(0));
 
-        // 검색 조건 및 결과 출력
-        System.out.println("검색 조건: 최대 결제 금액 = " + searchCriteria.getMaxPaymentAmount());
-        results.forEach(result -> System.out.printf(
-                "검색 결과: 예매 내역 [reservationId=%d, userName=%s, paymentAmount=%d]%n",
-                result.getReservationId(), result.getUserName(), result.getPaymentAmount()
-        ));
     }
 
     @Test

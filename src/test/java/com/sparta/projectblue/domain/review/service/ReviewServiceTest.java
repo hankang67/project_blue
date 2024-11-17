@@ -49,7 +49,7 @@ public class ReviewServiceTest {
 
 
     @Test
-    public void createReviewTest() {
+    void createReviewTest() {
         CreateReviewRequestDto request = new CreateReviewRequestDto(reservationId, FOUR, "별로");
 
         Long reservationId = request.getReservationId();
@@ -76,7 +76,7 @@ public class ReviewServiceTest {
     }
 
     @Test
-    public void createReviewFailsWhenNoReservation() {
+    void createReviewFailsWhenNoReservation() {
         CreateReviewRequestDto request = new CreateReviewRequestDto(reservationId, ReviewRate.FOUR, "별로");
 
         // when
@@ -86,7 +86,7 @@ public class ReviewServiceTest {
     }
 
     @Test
-    public void createReviewFailsWhenNoUser() {
+    void createReviewFailsWhenNoUser() {
         CreateReviewRequestDto request = new CreateReviewRequestDto(reservationId, ReviewRate.FOUR, "별로");
         reservation = new Reservation(2L, performanceId, reservationId, ReservationStatus.COMPLETED, 10000L);
         when(reservationRepository.findById(reservationId)).thenReturn(Optional.of(reservation));
@@ -96,7 +96,7 @@ public class ReviewServiceTest {
     }
 
     @Test
-    public void updateReviewTest() {
+    void updateReviewTest() {
         UpdateReviewRequestDto request = new UpdateReviewRequestDto(ReviewRate.FIVE, "별로인데 좀 괜찮아짐");
 
         Review review = new Review(performanceId, reservationId, ReviewRate.FIVE, "별로인데 좀 괜찮아짐");
@@ -117,7 +117,7 @@ public class ReviewServiceTest {
     }
 
     @Test
-    public void updateReviewFailsWhenNoUser(){
+    void updateReviewFailsWhenNoUser() {
         UpdateReviewRequestDto request = new UpdateReviewRequestDto(ReviewRate.FIVE, "별로인데 좀 괜찮아짐");
         Review review = new Review(performanceId, reservationId, ReviewRate.FIVE, "별로인데 좀 괜찮아짐");
         Reservation reservation = new Reservation(2L, performanceId, reservationId, ReservationStatus.COMPLETED, 10000L);
@@ -130,7 +130,7 @@ public class ReviewServiceTest {
     }
 
     @Test
-    public void deleteReviewTest(){
+    void deleteReviewTest() {
         Review review = new Review(performanceId, reservationId, ReviewRate.FIVE, "별로인데 좀 괜찮아짐");
         Reservation reservation = new Reservation(2L, performanceId, reservationId, ReservationStatus.COMPLETED, 10000L);
 
@@ -142,7 +142,7 @@ public class ReviewServiceTest {
     }
 
     @Test
-    public void deleteReviewFailsWhenReviewNotFound() {
+    void deleteReviewFailsWhenReviewNotFound() {
         // given
         when(reviewRepository.findById(reviewId)).thenReturn(Optional.empty());
 
@@ -151,7 +151,7 @@ public class ReviewServiceTest {
     }
 
     @Test
-    public void deleteReviewFailsWhenReservationNotFound() {
+    void deleteReviewFailsWhenReservationNotFound() {
         // given
         Review review = new Review(performanceId, reservationId, ReviewRate.FOUR, "Good");
         when(reviewRepository.findById(reviewId)).thenReturn(Optional.of(review));
@@ -162,7 +162,7 @@ public class ReviewServiceTest {
     }
 
     @Test
-    public void deleteReviewFailsWhenUserNotAuthorized() {
+    void deleteReviewFailsWhenUserNotAuthorized() {
         // given
         Review review = new Review(performanceId, reservationId, ReviewRate.FOUR, "Good");
         reservation = new Reservation(2L, performanceId, reservationId, ReservationStatus.COMPLETED, 10000L);

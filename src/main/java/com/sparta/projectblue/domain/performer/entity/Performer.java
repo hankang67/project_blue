@@ -1,13 +1,10 @@
 package com.sparta.projectblue.domain.performer.entity;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.sparta.projectblue.domain.common.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
-
-import com.sparta.projectblue.domain.common.entity.BaseEntity;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
