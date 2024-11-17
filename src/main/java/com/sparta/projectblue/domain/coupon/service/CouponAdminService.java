@@ -38,7 +38,7 @@ public class CouponAdminService {
                         requestDto.getStartDate(),
                         requestDto.getEndDate());
 
-        Coupon savedCoupon = couponRepository.save(coupon);
+        couponRepository.save(coupon);
 
         return new CreateCouponResponseDto(coupon);
     }

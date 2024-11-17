@@ -34,14 +34,14 @@ public class RedissonTest {
     private Long couponId;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         // 쿠폰 생성 및 저장
         Coupon coupon =
                 new Coupon(
                         "쿠폰코드",
                         CouponType.AMOUNT,
                         CouponStatus.ACTIVE,
-                        5000,
+                        15000,
                         0,
                         2000L,
                         LocalDateTime.now(),
@@ -52,10 +52,10 @@ public class RedissonTest {
     }
 
     @Test
-    public void 쿠폰발급_분산락_테스트() throws InterruptedException {
-        int testCount = 1000;
+    void 쿠폰발급_분산락_테스트() throws InterruptedException {
+        int testCount = 10000;
 
-        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        ExecutorService executorService = Executors.newFixedThreadPool(7);
         CountDownLatch countDownLatch = new CountDownLatch(testCount);
         AtomicInteger atomicInteger = new AtomicInteger(0);
         AtomicInteger atomicexception = new AtomicInteger(0);

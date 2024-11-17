@@ -7,7 +7,7 @@ import com.sparta.projectblue.domain.common.enums.UserRole;
 import com.sparta.projectblue.domain.coupon.dto.GetCouponResponseDto;
 import com.sparta.projectblue.domain.coupon.entity.Coupon;
 import com.sparta.projectblue.domain.coupon.repository.CouponRepository;
-import com.sparta.projectblue.domain.usedCoupon.repository.UsedCouponRepository;
+import com.sparta.projectblue.domain.usedcoupon.repository.UsedCouponRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -39,7 +39,7 @@ public class CouponServiceTest {
     private CouponService couponService;
 
     @Test
-    public void 쿠폰_선착순_발행_성공() {
+    void 쿠폰_선착순_발행_성공() {
         // given
         Coupon coupon  = new Coupon("couponCode", CouponType.AMOUNT, CouponStatus.ACTIVE,
                 10, 0, 1000L, LocalDateTime.now(), LocalDateTime.now().plusDays(1));
@@ -63,7 +63,7 @@ public class CouponServiceTest {
     }
 
     @Test
-    public void 이미_발급받은_쿠폰(){
+    void 이미_발급받은_쿠폰(){
         // given
         Coupon coupon  = new Coupon("couponCode", CouponType.AMOUNT, CouponStatus.ACTIVE,
                 10, 0, 1000L, LocalDateTime.now(), LocalDateTime.now().plusDays(1));
@@ -82,7 +82,7 @@ public class CouponServiceTest {
     }
 
     @Test
-    public void 쿠폰_소진(){
+    void 쿠폰_소진(){
         // given
         Coupon coupon  = new Coupon("couponCode", CouponType.AMOUNT, CouponStatus.ACTIVE,
                 2, 2, 1000L, LocalDateTime.now(), LocalDateTime.now().plusDays(1));
@@ -101,7 +101,7 @@ public class CouponServiceTest {
     }
 
     @Test
-    public void 쿠폰_단건_조회(){
+    void 쿠폰_단건_조회(){
         // given
         Coupon coupon  = new Coupon("couponCode", CouponType.AMOUNT, CouponStatus.ACTIVE,
                 1, 0, 1000L, LocalDateTime.now(), LocalDateTime.now().plusDays(1));
@@ -122,7 +122,7 @@ public class CouponServiceTest {
     }
 
     @Test
-    public void 쿠폰_페이징_조회(){
+    void 쿠폰_페이징_조회(){
         // given
         List<Coupon>  coupons = List.of(
                 new Coupon("couponCode", CouponType.AMOUNT, CouponStatus.ACTIVE,
@@ -147,7 +147,7 @@ public class CouponServiceTest {
     }
 
     @Test
-    public void 쿠폰_사용_성공(){
+    void 쿠폰_사용_성공(){
         // given
         Long couponId = 1L;
         Long originPrice = 10000L;
@@ -170,7 +170,7 @@ public class CouponServiceTest {
     }
 
     @Test
-    public void 이미_사용된_쿠폰(){
+    void 이미_사용된_쿠폰(){
         // given
         Long couponId = 1L;
         Long originPrice = 10000L;
@@ -188,7 +188,7 @@ public class CouponServiceTest {
     }
 
     @Test
-    public void 기간_만료된_쿠폰(){
+    void 기간_만료된_쿠폰(){
         // given
         Long couponId = 1L;
         Long originPrice = 10000L;
@@ -206,7 +206,7 @@ public class CouponServiceTest {
     }
 
     @Test
-    public void 이미_사용한_쿠폰(){
+    void 이미_사용한_쿠폰(){
         // given
         Long couponId = 1L;
         Long originPrice = 10000L;
