@@ -1,16 +1,16 @@
 package com.sparta.projectblue.domain.search.document;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.List;
-
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -49,6 +49,7 @@ public class SearchDocument {
     @Field(type = FieldType.Object)
     private Hall hall;
 
+    @Builder
     public SearchDocument(
             Long performanceId,
             Long hallId,

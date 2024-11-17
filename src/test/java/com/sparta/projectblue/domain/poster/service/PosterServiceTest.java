@@ -31,7 +31,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-public class PosterServiceTest {
+class PosterServiceTest {
     @Mock
     private PosterRepository posterRepository;
 
@@ -68,8 +68,8 @@ public class PosterServiceTest {
     }
 
     @Test
-    public void updatePosterTest() throws IOException {
-        //given
+    void updatePosterTest() throws IOException {
+        // given
         when(performanceAdminService.createFileName(anyString())).thenReturn("newPoster.jpg");
         when(multipartFile.getOriginalFilename()).thenReturn("newPoster.jpg");
         when(multipartFile.getContentType()).thenReturn("image/jpeg");
@@ -103,18 +103,18 @@ public class PosterServiceTest {
     }
 
     @Test
-    public void updatePosterWhenPosterNotFound() throws IOException {
+    void updatePosterWhenPosterNotFound() {
         // given
         when(posterRepository.findById(posterId)).thenReturn(Optional.empty());
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> posterService.update(authUser, posterId, multipartFile));
 
         assertEquals("존재하지 않는 포스터입니다.", exception.getMessage());
-        verify(posterRepository,times(1)).findById(posterId);
+        verify(posterRepository, times(1)).findById(posterId);
     }
 
     @Test
-    public void updatePosterWhenS3UploadFails() throws IOException {
+    void updatePosterWhenS3UploadFails() throws IOException {
         when(performanceAdminService.createFileName(anyString())).thenReturn("newPoster.jpg");
         when(multipartFile.getOriginalFilename()).thenReturn("newPoster.jpg");
         when(multipartFile.getContentType()).thenReturn("image/jpeg");
@@ -132,13 +132,13 @@ public class PosterServiceTest {
     }
 
     @Test
-    public void updatePosterWhenUserNotAuthorized() throws IOException{
+    void updatePosterWhenUserNotAuthorized() {
         doThrow(new IllegalStateException("권한이 없습니다.")).when(performanceAdminService).hasRole(authUser);
 
         Exception exception = assertThrows(IllegalStateException.class, () -> posterService.update(authUser, posterId, multipartFile));
 
         assertEquals("권한이 없습니다.", exception.getMessage());
-        verify(performanceAdminService,times(1)).hasRole(authUser);
+        verify(performanceAdminService, times(1)).hasRole(authUser);
         verifyNoInteractions(amazonS3);
     }
 }

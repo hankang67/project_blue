@@ -3,9 +3,9 @@ package com.sparta.projectblue.domain.round.service;
 
 import com.sparta.projectblue.domain.common.enums.Category;
 import com.sparta.projectblue.domain.common.enums.PerformanceStatus;
+import com.sparta.projectblue.domain.hall.entity.Hall;
 import com.sparta.projectblue.domain.hall.repository.HallRepository;
 import com.sparta.projectblue.domain.performance.entity.Performance;
-import com.sparta.projectblue.domain.hall.entity.Hall;
 import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
 import com.sparta.projectblue.domain.reservedSeat.entity.ReservedSeat;
 import com.sparta.projectblue.domain.reservedSeat.repository.ReservedSeatRepository;
@@ -28,7 +28,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class RoundServiceTest {
+class RoundServiceTest {
 
     @Mock
     private RoundRepository roundRepository;
@@ -89,11 +89,6 @@ public class RoundServiceTest {
         List<Integer> expectedAvailableSeats = List.of(1, 2, 4, 6, 7, 8, 9, 10);
         assertEquals(expectedAvailableSeats, result.getSeats());
 
-        System.out.println("조회된 Round ID: " + roundId);
-        System.out.println("조회된 Performance Title: " + result.getPerformanceTitle());
-        System.out.println("조회된 사용 가능한 좌석 리스트:");
-        result.getSeats().forEach(seat -> System.out.println("좌석 번호: " + seat));
-
 
     }
 
@@ -109,7 +104,7 @@ public class RoundServiceTest {
             roundService.getAvailableSeats(roundId);
         });
 
-        System.out.println("예외 메시지: " + exception.getMessage());
+
         assertEquals("회차를 찾을 수 없습니다.", exception.getMessage());
     }
 
@@ -125,7 +120,6 @@ public class RoundServiceTest {
             roundService.getAvailableSeats(roundId);
         });
 
-        System.out.println("예외 메시지: " + exception.getMessage());
         assertEquals("예약이 아직 시작되지 않았습니다.", exception.getMessage());
     }
 
@@ -141,7 +135,6 @@ public class RoundServiceTest {
             roundService.getAvailableSeats(roundId);
         });
 
-        System.out.println("예외 메시지: " + exception.getMessage());
         assertEquals("이미 매진되었습니다.", exception.getMessage());
     }
 
@@ -158,7 +151,6 @@ public class RoundServiceTest {
             roundService.getAvailableSeats(roundId);
         });
 
-        System.out.println("예외 메시지: " + exception.getMessage());
         assertEquals("공연을 찾을 수 없습니다.", exception.getMessage());
     }
 
@@ -192,7 +184,6 @@ public class RoundServiceTest {
             roundService.getAvailableSeats(roundId);
         });
 
-        System.out.println("예외 메시지: " + exception.getMessage());
         assertEquals("공연장을 찾을 수 없습니다.", exception.getMessage());
     }
 
