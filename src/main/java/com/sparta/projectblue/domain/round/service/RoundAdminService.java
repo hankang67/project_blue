@@ -47,7 +47,6 @@ public class RoundAdminService {
         }
     }
 
-
     @Transactional
     public List<CreateRoundResponseDto> create(AuthUser authUser, Long id, CreateRoundRequestDto request) {
         // 권한 확인

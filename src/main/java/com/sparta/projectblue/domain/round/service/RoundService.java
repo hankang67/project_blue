@@ -79,6 +79,4 @@ public class RoundService {
         return new GetRoundAvailableSeatsResponseDto(
                 performance.getTitle(), round.getDate(), availableSeats);
     }
-
-
 }

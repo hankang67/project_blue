@@ -8,6 +8,7 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 import java.util.List;
 
 public interface ESRepository extends ElasticsearchRepository<SearchDocument, Long> {
+
     Page<SearchDocument> findByPerformanceTitleContainingOrPerformersPerformerIdInOrHallIdIn(
             String title, List<Long> performerIds, List<Long> hallIds, Pageable pageable);
 }
