@@ -11,7 +11,7 @@
     <!-- 로컬 파일에 로그 저장 설정 -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>C:\Users\m0nsi\Desktop\newfolder7\project-blue\logstash\logs/app-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>C:/Users/kang/Desktop/blue/aws_db_ppm/logstash/logs/app-%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>14</maxHistory>
         </rollingPolicy>
         <encoder>
@@ -21,7 +21,7 @@
 
     <!--  logstash setting  -->
     <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-        <destination>localhost:5000</destination>
+        <destination> ${LOGSTASH_DESTINATION} </destination>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
     </appender>
 

@@ -1,17 +1,15 @@
 package com.sparta.projectblue.domain.search.controller;
 
+import com.sparta.projectblue.config.ApiResponse;
 import com.sparta.projectblue.domain.performance.dto.GetPerformancesResponseDto;
 import com.sparta.projectblue.domain.search.dto.KeywordSearchResponseDto;
-import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import com.sparta.projectblue.config.ApiResponse;
 import com.sparta.projectblue.domain.search.service.SearchService;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor

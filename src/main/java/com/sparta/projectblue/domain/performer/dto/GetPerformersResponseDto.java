@@ -1,10 +1,10 @@
 package com.sparta.projectblue.domain.performer.dto;
 
-import java.util.List;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.sparta.projectblue.domain.performer.entity.Performer;
-
 import lombok.Getter;
+
+import java.util.List;
 
 @Getter
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")

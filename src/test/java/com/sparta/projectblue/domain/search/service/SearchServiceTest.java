@@ -6,10 +6,9 @@ import com.sparta.projectblue.domain.performance.dto.GetPerformancesResponseDto;
 import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
 import com.sparta.projectblue.domain.performer.entity.Performer;
 import com.sparta.projectblue.domain.performer.repository.PerformerRepository;
+import com.sparta.projectblue.domain.search.document.SearchDocument;
 import com.sparta.projectblue.domain.search.dto.KeywordSearchResponseDto;
 import com.sparta.projectblue.domain.search.repository.ESRepository;
-
-import com.sparta.projectblue.domain.search.document.SearchDocument;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

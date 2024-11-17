@@ -1,22 +1,19 @@
 package com.sparta.projectblue.domain.performer.controller;
 
-import com.sparta.projectblue.domain.performer.dto.CreatePerformerResponseDto;
-import com.sparta.projectblue.domain.performer.dto.UpdatePerformerResponseDto;
-import jakarta.validation.Valid;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
-
 import com.sparta.projectblue.config.ApiResponse;
 import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.performer.dto.CreatePerformerRequestDto;
+import com.sparta.projectblue.domain.performer.dto.CreatePerformerResponseDto;
 import com.sparta.projectblue.domain.performer.dto.UpdatePerformerRequestDto;
+import com.sparta.projectblue.domain.performer.dto.UpdatePerformerResponseDto;
 import com.sparta.projectblue.domain.performer.service.PerformerAdminService;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/admin/performers")

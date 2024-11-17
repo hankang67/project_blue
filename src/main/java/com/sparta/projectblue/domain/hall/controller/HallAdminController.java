@@ -1,22 +1,19 @@
 package com.sparta.projectblue.domain.hall.controller;
 
-import com.sparta.projectblue.domain.hall.dto.CreateHallResponseDto;
-import com.sparta.projectblue.domain.hall.dto.UpdateHallResponseDto;
-import jakarta.validation.Valid;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
-
 import com.sparta.projectblue.config.ApiResponse;
 import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.hall.dto.CreateHallRequestDto;
+import com.sparta.projectblue.domain.hall.dto.CreateHallResponseDto;
 import com.sparta.projectblue.domain.hall.dto.UpdateHallRequestDto;
+import com.sparta.projectblue.domain.hall.dto.UpdateHallResponseDto;
 import com.sparta.projectblue.domain.hall.service.HallAdminService;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/admin/halls")

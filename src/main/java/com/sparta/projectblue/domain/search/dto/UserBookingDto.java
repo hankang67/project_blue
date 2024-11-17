@@ -1,13 +1,12 @@
 package com.sparta.projectblue.domain.search.dto;
 
-import java.time.LocalDateTime;
-
 import com.sparta.projectblue.domain.common.enums.ReservationStatus;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor

@@ -1,16 +1,15 @@
 package com.sparta.projectblue.domain.coupon.entity;
 
-import java.time.LocalDateTime;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.*;
-
 import com.sparta.projectblue.domain.common.entity.BaseEntity;
 import com.sparta.projectblue.domain.common.enums.CouponStatus;
 import com.sparta.projectblue.domain.common.enums.CouponType;
-
+import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -46,6 +45,7 @@ public class Coupon extends BaseEntity {
     @Column(nullable = false, name = "end_date")
     private LocalDateTime endDate;
 
+    @Builder
     public Coupon(
             String couponCode,
             CouponType type,

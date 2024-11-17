@@ -1,21 +1,18 @@
 package com.sparta.projectblue.domain.search.controller;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
+import com.sparta.projectblue.config.ApiResponse;
 import com.sparta.projectblue.domain.search.document.UserBookingDocument;
+import com.sparta.projectblue.domain.search.dto.UserBookingDto;
+import com.sparta.projectblue.domain.search.service.UserBookingSearchService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.sparta.projectblue.config.ApiResponse;
-import com.sparta.projectblue.domain.search.dto.UserBookingDto;
-import com.sparta.projectblue.domain.search.service.UserBookingSearchService;
-
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
-
-import io.swagger.v3.oas.annotations.Parameter;
+import java.time.LocalDateTime;
+import java.util.List;
 
 
 @RestController
