@@ -2,6 +2,7 @@ package com.sparta.projectblue.domain.search.controller;
 
 import com.sparta.projectblue.config.ApiResponse;
 import com.sparta.projectblue.domain.performance.dto.GetPerformancesResponseDto;
+import com.sparta.projectblue.domain.search.dto.KeywordSearchJPAResponseDto;
 import com.sparta.projectblue.domain.search.dto.KeywordSearchResponseDto;
 import com.sparta.projectblue.domain.search.service.SearchService;
 import io.swagger.v3.oas.annotations.Operation;

@@ -91,7 +91,7 @@ public class SearchService {
         }
     }
 
-    public Object searchKeywordJpa(String keyword, int page, int size) {
+    public KeywordSearchJPAResponseDto searchKeywordJpa(String keyword, int page, int size) {
 
         PageRequest pageRequest = PageRequest.of(page, size);
 
