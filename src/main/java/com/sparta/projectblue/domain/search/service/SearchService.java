@@ -1,12 +1,19 @@
 package com.sparta.projectblue.domain.search.service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-
+import com.sparta.projectblue.domain.hall.entity.Hall;
+import com.sparta.projectblue.domain.hall.repository.HallRepository;
+import com.sparta.projectblue.domain.performance.dto.GetPerformancesResponseDto;
+import com.sparta.projectblue.domain.performance.entity.Performance;
+import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
+import com.sparta.projectblue.domain.performer.entity.Performer;
+import com.sparta.projectblue.domain.performer.repository.PerformerRepository;
+import com.sparta.projectblue.domain.performerPerformance.entity.PerformerPerformance;
+import com.sparta.projectblue.domain.performerPerformance.repository.PerformerPerformanceRepository;
+import com.sparta.projectblue.domain.search.document.SearchDocument;
+import com.sparta.projectblue.domain.search.dto.KeywordSearchJPAResponseDto;
+import com.sparta.projectblue.domain.search.dto.KeywordSearchResponseDto;
+import com.sparta.projectblue.domain.search.repository.ESRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,17 +22,11 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sparta.projectblue.domain.hall.entity.Hall;
-import com.sparta.projectblue.domain.hall.repository.HallRepository;
-import com.sparta.projectblue.domain.performance.dto.GetPerformancesResponseDto;
-import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
-import com.sparta.projectblue.domain.performer.entity.Performer;
-import com.sparta.projectblue.domain.performer.repository.PerformerRepository;
-import com.sparta.projectblue.domain.search.document.SearchDocument;
-import com.sparta.projectblue.domain.search.dto.KeywordSearchResponseDto;
-import com.sparta.projectblue.domain.search.repository.ESRepository;
-
-import lombok.RequiredArgsConstructor;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -38,6 +39,8 @@ public class SearchService {
 
     private final HallRepository hallRepository;
     private final PerformerRepository performerRepository;
+
+    private final PerformerPerformanceRepository performerPerformanceRepository;
 
     public Page<GetPerformancesResponseDto> searchFilter(
             int page, int size, String performanceNm, String userSelectDay, String performer) {
@@ -53,24 +56,26 @@ public class SearchService {
                 pageable, performanceNm, performanceDay, performer);
     }
 
-    public KeywordSearchResponseDto searchKeyword(String keyword) {
+    public KeywordSearchResponseDto searchKeyword(String keyword, int page, int size) {
+
+        PageRequest pageRequest = PageRequest.of(page, size);
 
         if (Objects.isNull(keyword) || keyword.trim().isEmpty()) {
             return null;
         }
 
-        List<Performer> performers = performerRepository.findAllByName(keyword);
+        Page<Performer> performers = performerRepository.findAllByName(keyword, pageRequest);
 
         List<Long> performerIds = performers.stream().map(Performer::getId).toList();
 
-        List<Hall> halls = hallRepository.findByNameContaining(keyword);
+        Page<Hall> halls = hallRepository.findByNameContaining(keyword, pageRequest);
 
         List<Long> hallIds = halls.stream().map(Hall::getId).toList();
 
-        List<SearchDocument> searchDocuments =
+        Page<SearchDocument> searchDocuments =
                 elasticsearchRepository
                         .findByPerformanceTitleContainingOrPerformersPerformerIdInOrHallIdIn(
-                                keyword, performerIds, hallIds);
+                                keyword, performerIds, hallIds, pageRequest);
 
         return new KeywordSearchResponseDto(performers, searchDocuments, halls);
     }
@@ -86,4 +91,32 @@ public class SearchService {
         }
     }
 
+    public Object searchKeywordJpa(String keyword, int page, int size) {
+
+        PageRequest pageRequest = PageRequest.of(page, size);
+
+        if (Objects.isNull(keyword) || keyword.trim().isEmpty()) {
+            return null;
+        }
+
+        Page<Performer> performers = performerRepository.findAllByName(keyword, pageRequest);
+
+        List<Long> performerIds = performers.stream().map(Performer::getId).toList();
+
+        Page<Hall> halls = hallRepository.findByNameContaining(keyword, pageRequest);
+
+        List<Long> hallIds = halls.stream().map(Hall::getId).toList();
+
+        List<PerformerPerformance> performerPerformances = List.of();
+
+        for(Long performerId : performerIds) {
+            performerPerformances.addAll(performerPerformanceRepository.findAllByPerformerId(performerId));
+        }
+
+        List<Performance> performances1 = performanceRepository.findByHallIdIn(hallIds);
+
+        Page<Performance> performances = performanceRepository.findByTitleContaining(keyword, pageRequest);
+
+        return new KeywordSearchJPAResponseDto(performers, performances, halls);
+    }
 }
