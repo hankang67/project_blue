@@ -144,7 +144,7 @@ public class ReservationService {
                         newReservation.getPrice(),
                         ReservationStatus.PENDING);
 
-//        emailCreateService.sendReservationEmail(id, responseDto);
+        emailCreateService.sendReservationEmail(id, responseDto);
 
         // 예매 성공 알림 (SSE 전송)
         String title = "[티켓 예매 완료]";
