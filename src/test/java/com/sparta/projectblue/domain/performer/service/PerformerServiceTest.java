@@ -80,7 +80,6 @@ class PerformerServiceTest {
         Long performerId = 1000L;
 
         when(performerRepository.findById(performerId)).thenReturn(Optional.empty());
-        System.out.println("performerRepository.findById 결과: " + performerRepository.findById(performerId));
 
         // 예외처리가 발생하지 않고 성공한다면, 예외가 발생해야 합니다라고 출력됨
         IllegalArgumentException exception = assertThrows(

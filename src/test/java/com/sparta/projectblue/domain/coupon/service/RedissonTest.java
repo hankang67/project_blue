@@ -48,7 +48,6 @@ public class RedissonTest {
                         LocalDateTime.now().plusDays(3));
         Coupon savedCoupon = couponRepository.save(coupon);
         couponId = savedCoupon.getId();
-        System.out.println("쿠폰Id: " + couponId);
     }
 
     @Test
@@ -81,7 +80,6 @@ public class RedissonTest {
                             atomicInteger.incrementAndGet(); // 쿠폰 발급 성공 수 증가
                         } catch (Exception e) {
                             atomicexception.incrementAndGet(); // 예외 발생 수 증가
-                            System.out.println("예외발생: " + e.getMessage());
                         } finally {
                             countDownLatch.countDown(); // 작업 완료 시 카운트 감소
                         }
@@ -107,10 +105,5 @@ public class RedissonTest {
                         + coupon.getCurrentQuantity()
                         + "/최대수량"
                         + coupon.getMaxQuantity());
-
-        System.out.println("최종 발급된 쿠폰 수량: " + coupon.getCurrentQuantity());
-        System.out.println("성공한 발급 수량: " + atomicInteger.get());
-        System.out.println("락 예외 발생" + atomicexception.get());
-        System.out.println("테스트 실행 시간: " + durationInSeconds + "초");
     }
 }
