@@ -59,6 +59,8 @@ public class ReservationService {
     private final EmailCreateService emailCreateService;
     private final NotificationService notificationService;
 
+    private final ReservationAsyncService reservationAsyncService;
+
     private final PaymentService paymentService;
 
     private final PasswordEncoder passwordEncoder;
@@ -148,17 +150,18 @@ public class ReservationService {
 
         // 예매 성공 알림 (SSE 전송)
         String title = "[티켓 예매 완료]";
-        String message =
-                String.format(
-                        "%s 고객님, 예매가 완료되었습니다.\n"
-                                + "상품정보: %s 공연, %s 회차, %s 공연장, %s 좌석\n"
-                                + "일시: %s로 예약되었습니다.",
-                        id,
-                        performance.getTitle(),
-                        request.getRoundId(),
-                        hall.getName(),
-                        request.getSeats(),
-                        round.getDate());
+        String message = String.format("""
+                        %s 고객님, 예매가 완료되었습니다.
+                        상품정보: %s 공연, %s 회차, %s 공연장, %s 좌석
+                        일시: %s로 예약되었습니다.
+                        """,
+                id,
+                performance.getTitle(),
+                request.getRoundId(),
+                hall.getName(),
+                request.getSeats(),
+                round.getDate());
+
 
         notificationService.notify(String.valueOf(id), title, message);
 
@@ -168,19 +171,10 @@ public class ReservationService {
     @Transactional
     @ReservationLogstash
     public void delete(Long id, DeleteReservationRequestDto request) throws Exception {
-        // 예매내역 확인
-        Reservation reservation =
-                reservationRepository
-                        .findById(request.getReservationId())
-                        .orElseThrow(() -> new IllegalArgumentException("reservation not found"));
+        Reservation reservation = reservationRepository.findById(request.getReservationId())
+                .orElseThrow(() -> new IllegalArgumentException("reservation not found"));
+        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-        // 사용자 확인
-        User user =
-                userRepository
-                        .findById(id)
-                        .orElseThrow(() -> new IllegalArgumentException("User not found"));
-
-        // 예매자 확인 및 상태 검사
         if (!reservation.getUserId().equals(user.getId())) {
             throw new IllegalArgumentException("예매자가 아닙니다");
         }
@@ -189,55 +183,14 @@ public class ReservationService {
             throw new IllegalArgumentException("Incorrect password");
         }
 
-        if (reservation.getStatus().equals(ReservationStatus.CANCELED)) {
-            throw new IllegalArgumentException("Reservation already cancelled.");
-        }
-
-        deleteReservationSeats(reservation.getId());
+        reservationAsyncService.deleteReservationSeats(reservation.getId());
 
         if (Objects.nonNull(reservation.getPaymentId())) {
-            deleteReservationPayment(reservation.getPaymentId());
+            reservationAsyncService.deleteReservationPayment(reservation.getPaymentId());
         }
 
-        // 예약 상태 업데이트
         reservation.resCanceled();
-
-        // 알림 전송을 비동기로 처리
-        deleteReservationSlack(user.getName(), reservation.getPerformanceId());
-    }
-
-    // 비동기 좌석 삭제 메서드
-    @Async("mailExecutor")
-    public void deleteReservationSeats(Long reservationId) {
-        List<ReservedSeat> reservedSeats =
-                reservedSeatRepository.findByReservationId(reservationId);
-
-        reservedSeatRepository.deleteAll(reservedSeats);
-    }
-
-    // 비동기 결제 취소 메서드
-    @Async("mailExecutor")
-    public void deleteReservationPayment(Long paymentId) throws Exception {
-
-        Payment payment = paymentRepository.findById(paymentId).orElse(null);
-
-        if (Objects.nonNull(payment) && !payment.getStatus().equals(PaymentStatus.CANCELED)) {
-            paymentService.cancelPayment(payment.getPaymentKey(), "예매를 취소합니다");
-        }
-    }
-
-    // 비동기 알림 전송 메서드
-    @Async("mailExecutor")
-    public void deleteReservationSlack(String userName, Long performanceId) {
-        // 공연 정보 조회
-        Performance performance = performanceRepository.findById(performanceId).orElse(null);
-
-        if (Objects.nonNull(performance)) {
-            String title = "[티켓_예매취소완료]";
-            String message =
-                    String.format("%s 고객님, %s 공연의 예약이 취소 되었습니다.", userName, performance.getTitle());
-            notificationService.notify(userName, title, message);
-        }
+        reservationAsyncService.deleteReservationSlack(user.getName(), reservation.getPerformanceId());
     }
 
     public GetReservationResponseDto getReservation(AuthUser user, Long reservationId) {

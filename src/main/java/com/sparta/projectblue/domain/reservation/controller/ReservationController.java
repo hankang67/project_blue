@@ -28,8 +28,7 @@ public class ReservationController {
     @Operation(summary = "공연 예매")
     public ResponseEntity<ApiResponse<CreateReservationResponseDto>> create(
             @AuthenticationPrincipal AuthUser authUser,
-            @Valid @RequestBody CreateReservationRequestDto request)
-            throws InterruptedException {
+            @Valid @RequestBody CreateReservationRequestDto request) {
 
         return ResponseEntity.ok(
                 ApiResponse.success(reservationService.create(authUser.getId(), request)));
