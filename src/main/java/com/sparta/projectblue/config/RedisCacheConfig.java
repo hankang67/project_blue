@@ -60,9 +60,6 @@ public class RedisCacheConfig {
         // Single 모드
         RedisStandaloneConfiguration conf = new RedisStandaloneConfiguration();
 
-        // Cluster 모드
-        // RedisClusterConfiguration conf = new RedisClusterConfiguration();
-
         conf.setHostName(host);
         conf.setPort(port);
 
