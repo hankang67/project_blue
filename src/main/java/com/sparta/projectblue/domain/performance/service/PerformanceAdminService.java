@@ -30,8 +30,8 @@ import com.sparta.projectblue.domain.performance.dto.UpdatePerformanceResponseDt
 import com.sparta.projectblue.domain.performance.entity.Performance;
 import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
 import com.sparta.projectblue.domain.performer.repository.PerformerRepository;
-import com.sparta.projectblue.domain.performerPerformance.entity.PerformerPerformance;
-import com.sparta.projectblue.domain.performerPerformance.repository.PerformerPerformanceRepository;
+import com.sparta.projectblue.domain.performerperformance.entity.PerformerPerformance;
+import com.sparta.projectblue.domain.performerperformance.repository.PerformerPerformanceRepository;
 import com.sparta.projectblue.domain.poster.entity.Poster;
 import com.sparta.projectblue.domain.poster.repository.PosterRepository;
 import com.sparta.projectblue.domain.round.repository.RoundRepository;

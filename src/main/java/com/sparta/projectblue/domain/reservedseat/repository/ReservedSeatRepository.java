@@ -1,11 +1,11 @@
-package com.sparta.projectblue.domain.reservedSeat.repository;
+package com.sparta.projectblue.domain.reservedseat.repository;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.sparta.projectblue.domain.reservedSeat.entity.ReservedSeat;
+import com.sparta.projectblue.domain.reservedseat.entity.ReservedSeat;
 
 public interface ReservedSeatRepository extends JpaRepository<ReservedSeat, Long> {
 

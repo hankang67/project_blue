@@ -1,11 +1,11 @@
-package com.sparta.projectblue.domain.performerPerformance.repository;
+package com.sparta.projectblue.domain.performerperformance.repository;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.sparta.projectblue.domain.performerPerformance.entity.PerformerPerformance;
+import com.sparta.projectblue.domain.performerperformance.entity.PerformerPerformance;
 
 public interface PerformerPerformanceRepository extends JpaRepository<PerformerPerformance, Long> {
 

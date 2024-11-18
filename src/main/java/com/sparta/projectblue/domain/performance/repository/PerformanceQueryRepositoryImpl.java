@@ -3,7 +3,7 @@ package com.sparta.projectblue.domain.performance.repository;
 import static com.sparta.projectblue.domain.hall.entity.QHall.hall;
 import static com.sparta.projectblue.domain.performance.entity.QPerformance.performance;
 import static com.sparta.projectblue.domain.performer.entity.QPerformer.performer;
-import static com.sparta.projectblue.domain.performerPerformance.entity.QPerformerPerformance.performerPerformance;
+import static com.sparta.projectblue.domain.performerperformance.entity.QPerformerPerformance.performerPerformance;
 
 import java.time.LocalDateTime;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.sparta.projectblue.domain.reservedSeat.entity;
+package com.sparta.projectblue.domain.reservedseat.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

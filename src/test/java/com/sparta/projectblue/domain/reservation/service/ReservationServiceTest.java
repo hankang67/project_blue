@@ -33,8 +33,8 @@ import com.sparta.projectblue.domain.performance.repository.PerformanceRepositor
 import com.sparta.projectblue.domain.reservation.dto.*;
 import com.sparta.projectblue.domain.reservation.entity.Reservation;
 import com.sparta.projectblue.domain.reservation.repository.ReservationRepository;
-import com.sparta.projectblue.domain.reservedSeat.entity.ReservedSeat;
-import com.sparta.projectblue.domain.reservedSeat.repository.ReservedSeatRepository;
+import com.sparta.projectblue.domain.reservedseat.entity.ReservedSeat;
+import com.sparta.projectblue.domain.reservedseat.repository.ReservedSeatRepository;
 import com.sparta.projectblue.domain.review.repository.ReviewRepository;
 import com.sparta.projectblue.domain.round.entity.Round;
 import com.sparta.projectblue.domain.round.repository.RoundRepository;

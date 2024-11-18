@@ -1,4 +1,4 @@
-package com.sparta.projectblue.domain.performerPerformance.entity;
+package com.sparta.projectblue.domain.performerperformance.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
