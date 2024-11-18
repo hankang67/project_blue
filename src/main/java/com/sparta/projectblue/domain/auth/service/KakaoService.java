@@ -31,17 +31,17 @@ public class KakaoService {
     private final UserRepository userRepository;
 
     @Value("${KAKAO_CLIENT_ID}")
-    private String client_id;
+    private String clientId;
 
     @Value("${KAKAO_REDIRECT_URI}")
-    private String redirect_uri;
+    private String redirectUri;
 
     public String kakaoLogin() {
 
         return UriComponentsBuilder.fromUriString("https://kauth.kakao.com")
                 .path("/oauth/authorize")
-                .queryParam("client_id", client_id)
-                .queryParam("redirect_uri", redirect_uri)
+                .queryParam("client_id", clientId)
+                .queryParam("redirect_uri", redirectUri)
                 .queryParam("response_type", "code")
                 .build()
                 .toString();
@@ -60,8 +60,8 @@ public class KakaoService {
 
             MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
             params.add("grant_type", "authorization_code");
-            params.add("client_id", client_id);
-            params.add("redirect_uri", redirect_uri);
+            params.add("client_id", clientId);
+            params.add("redirect_uri", redirectUri);
             params.add("code", code);
 
             RestTemplate restTemplate = new RestTemplate();
