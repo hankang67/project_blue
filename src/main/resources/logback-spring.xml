@@ -11,7 +11,7 @@
     <!-- 로컬 파일에 로그 저장 설정 -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>C:\Users\m0nsi\Desktop\newfolder7\project-blue\logstash\logs/app-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern> ${SAVE_FILE_PATH} </fileNamePattern>
             <maxHistory>14</maxHistory>
         </rollingPolicy>
         <encoder>

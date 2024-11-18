@@ -41,9 +41,7 @@ public class PerformanceService {
 
         Pageable pageable = PageRequest.of(page - 1, size);
 
-        LocalDateTime performanceDay = LocalDateTime.now();
-
-        return performanceRepository.findByCondition(pageable, null, performanceDay, null);
+        return performanceRepository.findAllPerformance(pageable);
     }
 
     // 캐싱 적용 대상

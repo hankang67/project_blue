@@ -224,7 +224,7 @@ public class PerformanceAdminService {
                 performerPerformanceRepository.findAllByPerformanceId(performanceId);
 
         if (performerPerformances.isEmpty()) {
-            throw new IllegalArgumentException("출연자가 존재하지 않습니다.");
+            return;
         }
 
         performerPerformanceRepository.deleteAll(performerPerformances);
@@ -249,11 +249,11 @@ public class PerformanceAdminService {
     @Transactional
     public void addPerformer(Long performanceId, Long performerId) {
 
-       if(performanceRepository.existsById(performanceId)) {
+       if(!performanceRepository.existsById(performanceId)) {
            throw new IllegalArgumentException("공연을 찾을 수 없습니다.");
        }
 
-        if(performerRepository.existsById(performerId)) {
+        if(!performerRepository.existsById(performerId)) {
             throw new IllegalArgumentException("배우를 찾을 수 없습니다.");
         }
 
@@ -271,11 +271,11 @@ public class PerformanceAdminService {
     @Transactional
     public void removePerformer(Long performanceId, Long performerId) {
 
-        if(performanceRepository.existsById(performanceId)) {
+        if(!performanceRepository.existsById(performanceId)) {
             throw new IllegalArgumentException("공연을 찾을 수 없습니다.");
         }
 
-        if(performerRepository.existsById(performerId)) {
+        if(!performerRepository.existsById(performerId)) {
             throw new IllegalArgumentException("배우를 찾을 수 없습니다.");
         }
 
