@@ -50,10 +50,9 @@ public class LogstashAspect {
         }
 
         // 예매 완료
-        if (result instanceof CreateReservationResponseDto) {
-            CreateReservationResponseDto reservation = (CreateReservationResponseDto) result;
-            log.info(
-                    "ReservationEvent: 예매 완료 - 예매 ID: {}, 공연명: {}, 날짜: {}, 좌석: {}, 총 가격: {}, 예약상태: {}",
+        // 패턴 매칭을 적용한 코드
+        if (result instanceof CreateReservationResponseDto reservation) {
+            log.info("ReservationEvent: 예매 완료 - 예매 ID: {}, 공연명: {}, 날짜: {}, 좌석: {}, 총 가격: {}, 예약상태: {}",
                     reservation.getId(),
                     reservation.getPerformanceTitle(),
                     reservation.getRoundDate(),
@@ -61,6 +60,7 @@ public class LogstashAspect {
                     reservation.getPrice(),
                     reservation.getStatus());
         }
+
         // 예매 취소
         else if ("delete".equals(joinPoint.getSignature().getName())) {
             Object[] args = joinPoint.getArgs();
@@ -163,11 +163,8 @@ public class LogstashAspect {
         }
 
         // 쿠폰 생성
-        if ("create".equals(joinPoint.getSignature().getName())) {
-            CreateCouponResponseDto responseDto = (CreateCouponResponseDto) result;
-
-            log.info(
-                    "CouponEvent: 생성 완료 - 쿠폰 ID: {}, 수량: {}, 타입: {}, 할인금액: {}, 유효기간 : {} ~ {}",
+        if (result instanceof CreateCouponResponseDto responseDto) {
+            log.info("CouponEvent: 생성 완료 - 쿠폰 ID: {}, 수량: {}, 타입: {}, 할인금액: {}, 유효기간 : {} ~ {}",
                     responseDto.getId(),
                     responseDto.getCurrentQuantity(),
                     responseDto.getType(),
