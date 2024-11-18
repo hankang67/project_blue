@@ -1,15 +1,16 @@
 package com.sparta.projectblue.config;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
-
 import com.sparta.projectblue.domain.common.dto.AuthUser;
 
-public class JwtAuthenticationToken extends AbstractAuthenticationToken {
+import java.io.Serializable;
 
-    private final AuthUser authUser;
+public class JwtAuthenticationToken extends AbstractAuthenticationToken implements Serializable {
+
+    private static final long serialVersionUID = 1L; // 직렬화 버전 ID 추가
+    private final transient AuthUser authUser; // `transient` 키워드 추가
 
     public JwtAuthenticationToken(AuthUser authUser) {
-
         super(authUser.getAuthorities());
         this.authUser = authUser;
         setAuthenticated(true);
@@ -17,13 +18,11 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
     @Override
     public Object getCredentials() {
-
         return null;
     }
 
     @Override
     public Object getPrincipal() {
-
         return authUser;
     }
 }
