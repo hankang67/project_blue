@@ -71,8 +71,8 @@ public class PerformanceAdminServiceTest {
         CreatePerformanceRequestDto requestDto =
                 new CreatePerformanceRequestDto(
                         "공연 Test",
-                        "2024-11-10",
-                        "2024-11-15",
+                        "2025-11-10",
+                        "2025-11-15",
                         5000L,
                         "CONCERT",
                         "공연 생성 테스트",
@@ -127,8 +127,8 @@ public class PerformanceAdminServiceTest {
         CreatePerformanceRequestDto requestDto =
                 new CreatePerformanceRequestDto(
                         "공연 Test",
-                        "2024-11-10",
-                        "2024-11-15",
+                        "2025-11-10",
+                        "2025-11-15",
                         5000L,
                         "CONCERT",
                         "공연 생성 테스트",
@@ -253,7 +253,7 @@ public class PerformanceAdminServiceTest {
         User user = new User();
         ReflectionTestUtils.setField(user, "userRole", UserRole.ROLE_ADMIN);
         CreatePerformanceRequestDto requestDto = new CreatePerformanceRequestDto();
-        ReflectionTestUtils.setField(requestDto, "startDate", "2024-11-10");
+        ReflectionTestUtils.setField(requestDto, "startDate", "2025-11-10");
         ReflectionTestUtils.setField(requestDto, "endDate", "2023-11-01");
         // When
         when(hallRepository.existsById((any()))).thenReturn(true);
@@ -277,8 +277,8 @@ public class PerformanceAdminServiceTest {
         User user = new User();
         ReflectionTestUtils.setField(user, "userRole", UserRole.ROLE_ADMIN);
         CreatePerformanceRequestDto requestDto = new CreatePerformanceRequestDto();
-        ReflectionTestUtils.setField(requestDto, "startDate", "2024-11-15");
-        ReflectionTestUtils.setField(requestDto, "endDate", "2024-11-14");
+        ReflectionTestUtils.setField(requestDto, "startDate", "2025-11-15");
+        ReflectionTestUtils.setField(requestDto, "endDate", "2025-11-14");
 
         // When
         when(hallRepository.existsById((any()))).thenReturn(true);
@@ -302,8 +302,8 @@ public class PerformanceAdminServiceTest {
         User user = new User();
         ReflectionTestUtils.setField(user, "userRole", UserRole.ROLE_ADMIN);
         CreatePerformanceRequestDto requestDto = new CreatePerformanceRequestDto();
-        ReflectionTestUtils.setField(requestDto, "startDate", "2024-11-15");
-        ReflectionTestUtils.setField(requestDto, "endDate", "2024-11-24");
+        ReflectionTestUtils.setField(requestDto, "startDate", "2025-11-15");
+        ReflectionTestUtils.setField(requestDto, "endDate", "2025-11-24");
         ReflectionTestUtils.setField(requestDto, "duration", 0);
         // When
         when(hallRepository.existsById((any()))).thenReturn(true);
@@ -341,8 +341,8 @@ public class PerformanceAdminServiceTest {
         CreatePerformanceRequestDto requestDto =
                 new CreatePerformanceRequestDto(
                         "공연 Test",
-                        "2024-11-10",
-                        "2024-11-15",
+                        "2025-11-10",
+                        "2025-11-15",
                         5000L,
                         "CONCERT",
                         "공연 생성 테스트",
@@ -478,7 +478,7 @@ public class PerformanceAdminServiceTest {
                             performanceAdminService.update(authUser, performanceId, requestDto);
                         });
 
-        assertEquals("출연자가 존재하지 않습니다.", exception.getMessage());
+        assertEquals("존재하지 않는 출연자입니다.", exception.getMessage());
     }
 
     @Test
