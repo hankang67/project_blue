@@ -1,5 +1,19 @@
 package com.sparta.projectblue.domain.search.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.sparta.projectblue.domain.hall.entity.Hall;
 import com.sparta.projectblue.domain.hall.repository.HallRepository;
 import com.sparta.projectblue.domain.performance.dto.GetPerformancesResponseDto;
@@ -13,21 +27,9 @@ import com.sparta.projectblue.domain.search.document.SearchDocument;
 import com.sparta.projectblue.domain.search.dto.KeywordSearchJPAResponseDto;
 import com.sparta.projectblue.domain.search.dto.KeywordSearchResponseDto;
 import com.sparta.projectblue.domain.search.repository.ESRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @Service
@@ -87,13 +89,14 @@ public class SearchService {
         return new KeywordSearchResponseDto(performers, searchDocuments, halls);
     }
 
-
     @Scheduled(cron = "0 0 0 * * ?")
     public void syncDocumentScheduled() {
         try {
             List<SearchDocument> documents = performanceRepository.findForESDocument();
             elasticsearchRepository.saveAll(documents);
-            log.info("Elasticsearch sync completed successfully every 10 minutes with {} documents synced.", documents.size());
+            log.info(
+                    "Elasticsearch sync completed successfully every 10 minutes with {} documents synced.",
+                    documents.size());
         } catch (Exception e) {
             log.error("Elasticsearch sync failed", e);
         }
@@ -123,12 +126,14 @@ public class SearchService {
 
         List<PerformerPerformance> performerPerformances = new ArrayList<>();
         for (Long performerId : performerIds) {
-            performerPerformances.addAll(performerPerformanceRepository.findAllByPerformerId(performerId));
+            performerPerformances.addAll(
+                    performerPerformanceRepository.findAllByPerformerId(performerId));
         }
 
         performanceRepository.findByHallIdIn(hallIds);
 
-        Page<Performance> performances = performanceRepository.findByTitleContaining(keyword, pageRequest);
+        Page<Performance> performances =
+                performanceRepository.findByTitleContaining(keyword, pageRequest);
 
         return new KeywordSearchJPAResponseDto(performers, performances, halls);
     }

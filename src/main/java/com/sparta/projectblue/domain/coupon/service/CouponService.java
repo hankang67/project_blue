@@ -1,5 +1,13 @@
 package com.sparta.projectblue.domain.coupon.service;
 
+import java.time.LocalDateTime;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.sparta.projectblue.aop.annotation.CouponLogstash;
 import com.sparta.projectblue.config.DistributedLock;
 import com.sparta.projectblue.domain.common.dto.AuthUser;
@@ -10,14 +18,8 @@ import com.sparta.projectblue.domain.coupon.entity.Coupon;
 import com.sparta.projectblue.domain.coupon.repository.CouponRepository;
 import com.sparta.projectblue.domain.usedcoupon.entity.UsedCoupon;
 import com.sparta.projectblue.domain.usedcoupon.repository.UsedCouponRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @Transactional(readOnly = true)
@@ -91,7 +93,12 @@ public class CouponService {
         // UsedCoupon DB 저장
         UsedCoupon usedCoupon =
                 new UsedCoupon(
-                        coupon.getId(), userId, reservationId, LocalDateTime.now(), discountAmount, LocalDateTime.now());
+                        coupon.getId(),
+                        userId,
+                        reservationId,
+                        LocalDateTime.now(),
+                        discountAmount,
+                        LocalDateTime.now());
         usedCouponRepository.save(usedCoupon);
 
         return discountAmount;
@@ -99,13 +106,13 @@ public class CouponService {
 
     public void saveUsedCoupon(Long couponId, AuthUser authUser) {
         // 발급된 쿠폰 기록 저장
-        UsedCoupon usedCoupon = new UsedCoupon(
-                couponId,
-                authUser.getId(),
-                null,
-                LocalDateTime.now(),
-                getCoupon(couponId).getDiscountValue(),
-                LocalDateTime.now()
-        );
+        UsedCoupon usedCoupon =
+                new UsedCoupon(
+                        couponId,
+                        authUser.getId(),
+                        null,
+                        LocalDateTime.now(),
+                        getCoupon(couponId).getDiscountValue(),
+                        LocalDateTime.now());
     }
 }

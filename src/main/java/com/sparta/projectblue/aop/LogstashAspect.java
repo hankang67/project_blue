@@ -1,12 +1,8 @@
 package com.sparta.projectblue.aop;
 
-import com.sparta.projectblue.domain.common.exception.PaymentException;
-import com.sparta.projectblue.domain.coupon.dto.CreateCouponResponseDto;
-import com.sparta.projectblue.domain.payment.entity.Payment;
-import com.sparta.projectblue.domain.payment.repository.PaymentRepository;
-import com.sparta.projectblue.domain.reservation.dto.CreateReservationResponseDto;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -14,8 +10,14 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
+import com.sparta.projectblue.domain.common.exception.PaymentException;
+import com.sparta.projectblue.domain.coupon.dto.CreateCouponResponseDto;
+import com.sparta.projectblue.domain.payment.entity.Payment;
+import com.sparta.projectblue.domain.payment.repository.PaymentRepository;
+import com.sparta.projectblue.domain.reservation.dto.CreateReservationResponseDto;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Aspect
@@ -40,14 +42,18 @@ public class LogstashAspect {
         try {
             result = joinPoint.proceed();
         } catch (Exception e) {
-            log.error("ReservationEvent: 예매 실패 - 메서드: {}, 이유: {}", joinPoint.getSignature().getName(), e.getMessage());
+            log.error(
+                    "ReservationEvent: 예매 실패 - 메서드: {}, 이유: {}",
+                    joinPoint.getSignature().getName(),
+                    e.getMessage());
             throw e;
         }
 
         // 예매 완료
         if (result instanceof CreateReservationResponseDto) {
             CreateReservationResponseDto reservation = (CreateReservationResponseDto) result;
-            log.info("ReservationEvent: 예매 완료 - 예매 ID: {}, 공연명: {}, 날짜: {}, 좌석: {}, 총 가격: {}, 예약상태: {}",
+            log.info(
+                    "ReservationEvent: 예매 완료 - 예매 ID: {}, 공연명: {}, 날짜: {}, 좌석: {}, 총 가격: {}, 예약상태: {}",
                     reservation.getId(),
                     reservation.getPerformanceTitle(),
                     reservation.getRoundDate(),
@@ -70,28 +76,33 @@ public class LogstashAspect {
     @Around("paymentLog()")
     public Object paymentLogstash(ProceedingJoinPoint joinPoint) throws Throwable {
         Object result;
-        try{
+        try {
             result = joinPoint.proceed();
         } catch (Exception e) {
-            log.error("PaymentEvent: 결제 실패 - 메서드: {}, 이유: {}", joinPoint.getSignature().getName(), e.getMessage());
+            log.error(
+                    "PaymentEvent: 결제 실패 - 메서드: {}, 이유: {}",
+                    joinPoint.getSignature().getName(),
+                    e.getMessage());
             throw e;
         }
 
         // 결제 성공
-        if("savePayment".equals(joinPoint.getSignature().getName()) ||
-                "freePay".equals(joinPoint.getSignature().getName())) {
+        if ("savePayment".equals(joinPoint.getSignature().getName())
+                || "freePay".equals(joinPoint.getSignature().getName())) {
 
             Long reservationId;
             String paymentMethod;
             LocalDateTime approvedAt;
             String paymentKey;
 
-            if("savePayment".equals(joinPoint.getSignature().getName())) {
+            if ("savePayment".equals(joinPoint.getSignature().getName())) {
                 JSONObject jsonObject = (JSONObject) joinPoint.getArgs()[0];
                 String orderId = (String) jsonObject.get("orderId");
                 reservationId = Long.parseLong(orderId.substring(23));
                 paymentMethod = (String) jsonObject.get("method");
-                approvedAt = OffsetDateTime.parse((String) jsonObject.get("approvedAt")).toLocalDateTime();
+                approvedAt =
+                        OffsetDateTime.parse((String) jsonObject.get("approvedAt"))
+                                .toLocalDateTime();
                 paymentKey = (String) jsonObject.get("paymentKey");
             } else {
                 reservationId = (Long) joinPoint.getArgs()[0];
@@ -105,7 +116,8 @@ public class LogstashAspect {
                             .findByReservationId(reservationId)
                             .orElseThrow(() -> new PaymentException("결제 정보를 찾을 수 없습니다"));
 
-            log.info("PaymentEvent: 결제 완료 - 예매 ID: {}, 결제 수단: {}, 가격: {}, 승인 시간: {}, 결제 키: {}",
+            log.info(
+                    "PaymentEvent: 결제 완료 - 예매 ID: {}, 결제 수단: {}, 가격: {}, 승인 시간: {}, 결제 키: {}",
                     reservationId,
                     paymentMethod,
                     payment.getOriginAmount(),
@@ -113,16 +125,18 @@ public class LogstashAspect {
                     paymentKey);
         }
         // 결제 취소
-        else if("cancelPayment".equals(joinPoint.getSignature().getName())) {
+        else if ("cancelPayment".equals(joinPoint.getSignature().getName())) {
 
             String paymentKey = (String) joinPoint.getArgs()[0];
             String cancelReason = (String) joinPoint.getArgs()[1];
 
-            Payment payment = paymentRepository
-                    .findByPaymentKey(paymentKey)
-                    .orElseThrow(() -> new PaymentException("결제 정보를 찾을 수 없습니다."));
+            Payment payment =
+                    paymentRepository
+                            .findByPaymentKey(paymentKey)
+                            .orElseThrow(() -> new PaymentException("결제 정보를 찾을 수 없습니다."));
 
-            log.info("PaymentEvent: 결제 취소 - 결제 ID: {}, 예매 ID: {}, 금액: {}, 시간: {}, 사유: {}",
+            log.info(
+                    "PaymentEvent: 결제 취소 - 결제 ID: {}, 예매 ID: {}, 금액: {}, 시간: {}, 사유: {}",
                     payment.getId(),
                     payment.getReservationId(),
                     payment.getOriginAmount(),
@@ -138,18 +152,22 @@ public class LogstashAspect {
     @Around("couponLog()")
     public Object couponLogstash(ProceedingJoinPoint joinPoint) throws Throwable {
         Object result;
-        try{
+        try {
             result = joinPoint.proceed();
         } catch (Exception e) {
-            log.error("CouponEvent: 쿠폰 관련 실패 - 메서드: {}, 이유: {}", joinPoint.getSignature().getName(), e.getMessage());
+            log.error(
+                    "CouponEvent: 쿠폰 관련 실패 - 메서드: {}, 이유: {}",
+                    joinPoint.getSignature().getName(),
+                    e.getMessage());
             throw e;
         }
 
         // 쿠폰 생성
-        if("create".equals(joinPoint.getSignature().getName())) {
+        if ("create".equals(joinPoint.getSignature().getName())) {
             CreateCouponResponseDto responseDto = (CreateCouponResponseDto) result;
 
-            log.info("CouponEvent: 생성 완료 - 쿠폰 ID: {}, 수량: {}, 타입: {}, 할인금액: {}, 유효기간 : {} ~ {}",
+            log.info(
+                    "CouponEvent: 생성 완료 - 쿠폰 ID: {}, 수량: {}, 타입: {}, 할인금액: {}, 유효기간 : {} ~ {}",
                     responseDto.getId(),
                     responseDto.getCurrentQuantity(),
                     responseDto.getType(),
@@ -158,20 +176,23 @@ public class LogstashAspect {
                     responseDto.getEndDate());
         }
         // 쿠폰 삭제
-        else if("delete".equals(joinPoint.getSignature().getName())) {
+        else if ("delete".equals(joinPoint.getSignature().getName())) {
 
             Long couponId = (Long) joinPoint.getArgs()[1];
 
             log.info("CouponEvent: 삭제 완료 - 쿠폰 ID: {}", couponId);
         }
         // 쿠폰 사용
-        else if("useCoupon".equals(joinPoint.getSignature().getName())) {
+        else if ("useCoupon".equals(joinPoint.getSignature().getName())) {
             Long couponId = (Long) joinPoint.getArgs()[0];
             Long userId = (Long) joinPoint.getArgs()[2];
 
-            log.info("CouponEvent: 사용 완료 - 쿠폰 ID: {}, 유저 ID: {}, 사용일: {}", couponId, userId, LocalDateTime.now());
-        }
-        else {
+            log.info(
+                    "CouponEvent: 사용 완료 - 쿠폰 ID: {}, 유저 ID: {}, 사용일: {}",
+                    couponId,
+                    userId,
+                    LocalDateTime.now());
+        } else {
             log.warn("CouponEvent: 예상치 못한 메서드 - {}", result);
         }
 

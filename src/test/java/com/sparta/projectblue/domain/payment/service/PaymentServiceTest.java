@@ -1,5 +1,27 @@
 package com.sparta.projectblue.domain.payment.service;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
+
 import com.sparta.projectblue.domain.common.enums.PaymentStatus;
 import com.sparta.projectblue.domain.common.enums.ReservationStatus;
 import com.sparta.projectblue.domain.common.enums.UserRole;
@@ -15,29 +37,9 @@ import com.sparta.projectblue.domain.reservation.entity.Reservation;
 import com.sparta.projectblue.domain.reservation.repository.ReservationRepository;
 import com.sparta.projectblue.domain.user.entity.User;
 import com.sparta.projectblue.domain.user.repository.UserRepository;
+
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Spy;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.util.ReflectionTestUtils;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class PaymentServiceTest {
@@ -57,25 +59,16 @@ public class PaymentServiceTest {
     private static final String MAIL = "test@mail.com";
     private static final String TOTAL_AMOUNT = "totalAmount";
 
-    @Mock
-    private PaymentRepository paymentRepository;
-    @Mock
-    private ReservationRepository reservationRepository;
-    @Mock
-    private PerformanceRepository performanceRepository;
-    @Mock
-    private UserRepository userRepository;
-    @Mock
-    private CouponService couponService;
-    @Mock
-    private EmailCreateService emailCreateService;
+    @Mock private PaymentRepository paymentRepository;
+    @Mock private ReservationRepository reservationRepository;
+    @Mock private PerformanceRepository performanceRepository;
+    @Mock private UserRepository userRepository;
+    @Mock private CouponService couponService;
+    @Mock private EmailCreateService emailCreateService;
 
-    @InjectMocks
-    @Spy
-    private PaymentService paymentService;
+    @InjectMocks @Spy private PaymentService paymentService;
 
-    @Mock
-    private SavePaymentService savePaymentService;
+    @Mock private SavePaymentService savePaymentService;
 
     private MockWebServer mockWebServer;
 
@@ -85,7 +78,8 @@ public class PaymentServiceTest {
         mockWebServer.start();
 
         // 결제 서비스의 URL을 MockWebServer 주소로 변경
-        ReflectionTestUtils.setField(paymentService, "TOSS_BASIC_URL", mockWebServer.url("/v1/payments/").toString());
+        ReflectionTestUtils.setField(
+                paymentService, "TOSS_BASIC_URL", mockWebServer.url("/v1/payments/").toString());
     }
 
     @AfterEach
@@ -114,19 +108,24 @@ public class PaymentServiceTest {
 
             given(paymentRepository.findByOrderId(anyString())).willReturn(Optional.of(payment));
 
-            given(paymentRepository.findByReservationIdAndStatus(anyLong(), any(PaymentStatus.class))).willReturn(Optional.empty());
+            given(
+                            paymentRepository.findByReservationIdAndStatus(
+                                    anyLong(), any(PaymentStatus.class)))
+                    .willReturn(Optional.empty());
 
             JSONObject responseJson = new JSONObject();
             responseJson.put("approvedAt", "2024-11-06T15:23:01Z");
             responseJson.put(ORDER_ID_VALUE_NAME, orderId);
             responseJson.put(TOTAL_AMOUNT, 10000L);
 
-            mockWebServer.enqueue(new MockResponse()
-                    .setResponseCode(200)
-                    .setBody(responseJson.toString())
-                    .addHeader(CONTENT_TYPE, JSON));
+            mockWebServer.enqueue(
+                    new MockResponse()
+                            .setResponseCode(200)
+                            .setBody(responseJson.toString())
+                            .addHeader(CONTENT_TYPE, JSON));
 
-            Reservation reservation = new Reservation(1L, 1L, 1L, ReservationStatus.PENDING, 15000L);
+            Reservation reservation =
+                    new Reservation(1L, 1L, 1L, ReservationStatus.PENDING, 15000L);
 
             // when
             JSONObject response = paymentService.confirmPayment(jsonBody);
@@ -156,17 +155,21 @@ public class PaymentServiceTest {
 
             given(paymentRepository.findByOrderId(anyString())).willReturn(Optional.of(payment));
 
-            given(paymentRepository.findByReservationIdAndStatus(anyLong(), any(PaymentStatus.class))).willReturn(Optional.empty());
+            given(
+                            paymentRepository.findByReservationIdAndStatus(
+                                    anyLong(), any(PaymentStatus.class)))
+                    .willReturn(Optional.empty());
 
             JSONObject responseJson = new JSONObject();
             responseJson.put("approvedAt", "2024-11-06T15:23:01Z");
             responseJson.put(ORDER_ID_VALUE_NAME, orderId);
             responseJson.put(TOTAL_AMOUNT, 10000L);
 
-            mockWebServer.enqueue(new MockResponse()
-                    .setResponseCode(400)
-                    .setBody(responseJson.toString())
-                    .addHeader(CONTENT_TYPE, JSON));
+            mockWebServer.enqueue(
+                    new MockResponse()
+                            .setResponseCode(400)
+                            .setBody(responseJson.toString())
+                            .addHeader(CONTENT_TYPE, JSON));
 
             // when
             paymentService.confirmPayment(jsonBody);
@@ -182,8 +185,9 @@ public class PaymentServiceTest {
             String jsonBody = "{paymentKey: testPaymentKey";
 
             // when
-            RuntimeException exception = assertThrows(RuntimeException.class, () ->
-                    paymentService.confirmPayment(jsonBody));
+            RuntimeException exception =
+                    assertThrows(
+                            RuntimeException.class, () -> paymentService.confirmPayment(jsonBody));
 
             // then
             assertEquals(ParseException.class, exception.getCause().getClass());
@@ -207,11 +211,15 @@ public class PaymentServiceTest {
 
             given(paymentRepository.findByOrderId(anyString())).willReturn(Optional.of(payment));
 
-            given(paymentRepository.findByReservationIdAndStatus(anyLong(), any(PaymentStatus.class))).willReturn(Optional.of(payment));
+            given(
+                            paymentRepository.findByReservationIdAndStatus(
+                                    anyLong(), any(PaymentStatus.class)))
+                    .willReturn(Optional.of(payment));
 
             // when
-            PaymentException exception = assertThrows(PaymentException.class, () ->
-                    paymentService.confirmPayment(jsonBody));
+            PaymentException exception =
+                    assertThrows(
+                            PaymentException.class, () -> paymentService.confirmPayment(jsonBody));
 
             // then
             assertEquals("이미 결제 완료된 예매정보입니다", exception.getMessage());
@@ -235,12 +243,17 @@ public class PaymentServiceTest {
 
             given(paymentRepository.findByOrderId(anyString())).willReturn(Optional.of(payment));
 
-            given(paymentRepository.findByReservationIdAndStatus(anyLong(), eq(PaymentStatus.DONE))).willReturn(Optional.empty());
-            given(paymentRepository.findByReservationIdAndStatus(anyLong(), eq(PaymentStatus.CANCELED))).willReturn(Optional.of(payment));
+            given(paymentRepository.findByReservationIdAndStatus(anyLong(), eq(PaymentStatus.DONE)))
+                    .willReturn(Optional.empty());
+            given(
+                            paymentRepository.findByReservationIdAndStatus(
+                                    anyLong(), eq(PaymentStatus.CANCELED)))
+                    .willReturn(Optional.of(payment));
 
             // when
-            PaymentException exception = assertThrows(PaymentException.class, () ->
-                    paymentService.confirmPayment(jsonBody));
+            PaymentException exception =
+                    assertThrows(
+                            PaymentException.class, () -> paymentService.confirmPayment(jsonBody));
 
             // then
             assertEquals("이미 취소된 예매정보입니다", exception.getMessage());
@@ -264,11 +277,15 @@ public class PaymentServiceTest {
 
             given(paymentRepository.findByOrderId(anyString())).willReturn(Optional.of(payment));
 
-            given(paymentRepository.findByReservationIdAndStatus(anyLong(), any(PaymentStatus.class))).willReturn(Optional.empty());
+            given(
+                            paymentRepository.findByReservationIdAndStatus(
+                                    anyLong(), any(PaymentStatus.class)))
+                    .willReturn(Optional.empty());
 
             // when
-            PaymentException exception = assertThrows(PaymentException.class, () ->
-                    paymentService.confirmPayment(jsonBody));
+            PaymentException exception =
+                    assertThrows(
+                            PaymentException.class, () -> paymentService.confirmPayment(jsonBody));
 
             // then
             assertEquals("주문ID에 대한 가격이 상이합니다.", exception.getMessage());
@@ -290,10 +307,11 @@ public class PaymentServiceTest {
 
             given(paymentRepository.findByPaymentKey(anyString())).willReturn(Optional.of(payment));
 
-            mockWebServer.enqueue(new MockResponse()
-                    .setResponseCode(200)
-                    .setBody("{}")
-                    .addHeader(CONTENT_TYPE, JSON));
+            mockWebServer.enqueue(
+                    new MockResponse()
+                            .setResponseCode(200)
+                            .setBody("{}")
+                            .addHeader(CONTENT_TYPE, JSON));
 
             // when
             String response = paymentService.cancelPayment(paymentKey, cancelReason);
@@ -313,10 +331,11 @@ public class PaymentServiceTest {
             Payment payment = new Payment(1L, 1L, 1L, 10000L, 0L, ORDER_ID);
             ReflectionTestUtils.setField(payment, STATUS_VALUE_NAME, PaymentStatus.READY);
 
-            mockWebServer.enqueue(new MockResponse()
-                    .setResponseCode(400)
-                    .setBody("{}")
-                    .addHeader(CONTENT_TYPE, JSON));
+            mockWebServer.enqueue(
+                    new MockResponse()
+                            .setResponseCode(400)
+                            .setBody("{}")
+                            .addHeader(CONTENT_TYPE, JSON));
 
             // when
             paymentService.cancelPayment(paymentKey, cancelReason);
@@ -335,14 +354,17 @@ public class PaymentServiceTest {
 
             given(paymentRepository.findByPaymentKey(anyString())).willReturn(Optional.empty());
 
-            mockWebServer.enqueue(new MockResponse()
-                    .setResponseCode(200)
-                    .setBody("{}")
-                    .addHeader(CONTENT_TYPE, JSON));
+            mockWebServer.enqueue(
+                    new MockResponse()
+                            .setResponseCode(200)
+                            .setBody("{}")
+                            .addHeader(CONTENT_TYPE, JSON));
 
             // when
-            PaymentException exception = assertThrows(PaymentException.class, () ->
-                    paymentService.cancelPayment(paymentKey, cancelReason));
+            PaymentException exception =
+                    assertThrows(
+                            PaymentException.class,
+                            () -> paymentService.cancelPayment(paymentKey, cancelReason));
 
             // then
             assertEquals("결제 정보를 찾을 수 없습니다.", exception.getMessage());
@@ -354,16 +376,26 @@ public class PaymentServiceTest {
         @Test
         void 결제_정보_설정_정상_동작() {
 
-            //given
+            // given
             Long reservationId = 1L;
             Long couponId = 1L;
 
-            Reservation reservation = new Reservation(1L, 1L, 1L, ReservationStatus.PENDING, 10000L);
+            Reservation reservation =
+                    new Reservation(1L, 1L, 1L, ReservationStatus.PENDING, 10000L);
             ReflectionTestUtils.setField(reservation, "id", reservationId);
 
             given(reservationRepository.findById(anyLong())).willReturn(Optional.of(reservation));
 
-            Performance performance = new Performance(1L, PERFORMANCE_TITLE, LocalDateTime.now(), LocalDateTime.now().plusHours(2), 10000L, null, null, 500);
+            Performance performance =
+                    new Performance(
+                            1L,
+                            PERFORMANCE_TITLE,
+                            LocalDateTime.now(),
+                            LocalDateTime.now().plusHours(2),
+                            10000L,
+                            null,
+                            null,
+                            500);
 
             given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
 
@@ -371,7 +403,13 @@ public class PaymentServiceTest {
 
             given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
 
-            given(couponService.useCoupon(eq(couponId), eq(reservation.getPrice()), any(), eq(reservationId))).willReturn(2000L);
+            given(
+                            couponService.useCoupon(
+                                    eq(couponId),
+                                    eq(reservation.getPrice()),
+                                    any(),
+                                    eq(reservationId)))
+                    .willReturn(2000L);
 
             // when
             PaymentResponseDto response = paymentService.setValue(reservationId, couponId);
@@ -388,12 +426,22 @@ public class PaymentServiceTest {
             // given
             Long reservationId = 1L;
 
-            Reservation reservation = new Reservation(1L, 1L, 1L, ReservationStatus.PENDING, 10000L);
+            Reservation reservation =
+                    new Reservation(1L, 1L, 1L, ReservationStatus.PENDING, 10000L);
             ReflectionTestUtils.setField(reservation, "id", reservationId);
 
             given(reservationRepository.findById(anyLong())).willReturn(Optional.of(reservation));
 
-            Performance performance = new Performance(1L, PERFORMANCE_TITLE, LocalDateTime.now(), LocalDateTime.now().plusHours(2), 10000L, null, null, 500);
+            Performance performance =
+                    new Performance(
+                            1L,
+                            PERFORMANCE_TITLE,
+                            LocalDateTime.now(),
+                            LocalDateTime.now().plusHours(2),
+                            10000L,
+                            null,
+                            null,
+                            500);
 
             given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
 
@@ -414,16 +462,26 @@ public class PaymentServiceTest {
         @Test
         void 결제_금액_100원_미만_정상_동작() {
 
-            //given
+            // given
             Long reservationId = 1L;
             Long couponId = 1L;
 
-            Reservation reservation = new Reservation(1L, 1L, 1L, ReservationStatus.PENDING, 10030L);
+            Reservation reservation =
+                    new Reservation(1L, 1L, 1L, ReservationStatus.PENDING, 10030L);
             ReflectionTestUtils.setField(reservation, "id", reservationId);
 
             given(reservationRepository.findById(anyLong())).willReturn(Optional.of(reservation));
 
-            Performance performance = new Performance(1L, PERFORMANCE_TITLE, LocalDateTime.now(), LocalDateTime.now().plusHours(2), 10000L, null, null, 500);
+            Performance performance =
+                    new Performance(
+                            1L,
+                            PERFORMANCE_TITLE,
+                            LocalDateTime.now(),
+                            LocalDateTime.now().plusHours(2),
+                            10000L,
+                            null,
+                            null,
+                            500);
 
             given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
 
@@ -431,7 +489,13 @@ public class PaymentServiceTest {
 
             given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
 
-            given(couponService.useCoupon(eq(couponId), eq(reservation.getPrice()), any(), eq(reservationId))).willReturn(10000L);
+            given(
+                            couponService.useCoupon(
+                                    eq(couponId),
+                                    eq(reservation.getPrice()),
+                                    any(),
+                                    eq(reservationId)))
+                    .willReturn(10000L);
 
             // when
             PaymentResponseDto response = paymentService.setValue(reservationId, couponId);
@@ -445,16 +509,26 @@ public class PaymentServiceTest {
         @Test
         void 결제_금액_마이너스_정상_동작() {
 
-            //given
+            // given
             Long reservationId = 1L;
             Long couponId = 1L;
 
-            Reservation reservation = new Reservation(1L, 1L, 1L, ReservationStatus.PENDING, 10000L);
+            Reservation reservation =
+                    new Reservation(1L, 1L, 1L, ReservationStatus.PENDING, 10000L);
             ReflectionTestUtils.setField(reservation, "id", reservationId);
 
             given(reservationRepository.findById(anyLong())).willReturn(Optional.of(reservation));
 
-            Performance performance = new Performance(1L, PERFORMANCE_TITLE, LocalDateTime.now(), LocalDateTime.now().plusHours(2), 10000L, null, null, 500);
+            Performance performance =
+                    new Performance(
+                            1L,
+                            PERFORMANCE_TITLE,
+                            LocalDateTime.now(),
+                            LocalDateTime.now().plusHours(2),
+                            10000L,
+                            null,
+                            null,
+                            500);
 
             given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
 
@@ -462,7 +536,13 @@ public class PaymentServiceTest {
 
             given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
 
-            given(couponService.useCoupon(eq(couponId), eq(reservation.getPrice()), any(), eq(reservationId))).willReturn(20000L);
+            given(
+                            couponService.useCoupon(
+                                    eq(couponId),
+                                    eq(reservation.getPrice()),
+                                    any(),
+                                    eq(reservationId)))
+                    .willReturn(20000L);
 
             // when
             PaymentResponseDto response = paymentService.setValue(reservationId, couponId);
@@ -484,12 +564,29 @@ public class PaymentServiceTest {
             Long couponId = 1L;
 
             Reservation reservation = new Reservation(1L, 1L, 1L, ReservationStatus.PENDING, 0L);
-            Performance performance = new Performance(1L, PERFORMANCE_TITLE, LocalDateTime.now(), LocalDateTime.now().plusHours(2), 10000L, null, null, 500);
+            Performance performance =
+                    new Performance(
+                            1L,
+                            PERFORMANCE_TITLE,
+                            LocalDateTime.now(),
+                            LocalDateTime.now().plusHours(2),
+                            10000L,
+                            null,
+                            null,
+                            500);
             User user = new User(MAIL, "test", PASSWORD, UserRole.ROLE_USER);
-            given(reservationRepository.findById(reservationId)).willReturn(Optional.of(reservation));
-            given(performanceRepository.findById(reservation.getPerformanceId())).willReturn(Optional.of(performance));
+            given(reservationRepository.findById(reservationId))
+                    .willReturn(Optional.of(reservation));
+            given(performanceRepository.findById(reservation.getPerformanceId()))
+                    .willReturn(Optional.of(performance));
             given(userRepository.findById(reservation.getUserId())).willReturn(Optional.of(user));
-            given(couponService.useCoupon(eq(couponId), eq(reservation.getPrice()), any(), eq(reservationId))).willReturn(20000L);
+            given(
+                            couponService.useCoupon(
+                                    eq(couponId),
+                                    eq(reservation.getPrice()),
+                                    any(),
+                                    eq(reservationId)))
+                    .willReturn(20000L);
 
             // when
             Payment payment = paymentService.freePay(reservationId, couponId);

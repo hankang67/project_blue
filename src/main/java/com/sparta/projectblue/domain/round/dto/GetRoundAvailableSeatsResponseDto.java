@@ -1,10 +1,11 @@
 package com.sparta.projectblue.domain.round.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Getter;
-
 import java.time.LocalDateTime;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import lombok.Getter;
 
 @Getter
 public class GetRoundAvailableSeatsResponseDto {

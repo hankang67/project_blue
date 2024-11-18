@@ -1,5 +1,15 @@
 package com.sparta.projectblue.domain.round.service;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.common.enums.PerformanceStatus;
 import com.sparta.projectblue.domain.common.enums.UserRole;
@@ -12,17 +22,9 @@ import com.sparta.projectblue.domain.round.entity.Round;
 import com.sparta.projectblue.domain.round.repository.RoundRepository;
 import com.sparta.projectblue.domain.user.entity.User;
 import com.sparta.projectblue.domain.user.repository.UserRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -50,7 +52,8 @@ public class RoundAdminService {
     }
 
     @Transactional
-    public List<CreateRoundResponseDto> create(AuthUser authUser, Long id, CreateRoundRequestDto request) {
+    public List<CreateRoundResponseDto> create(
+            AuthUser authUser, Long id, CreateRoundRequestDto request) {
         // 권한 확인
         hasRole(authUser);
 
@@ -97,10 +100,9 @@ public class RoundAdminService {
         return responseDtos;
     }
 
-
-
     // 1시간 이상 차이 검증 메서드 (수정 중인 회차 제외)
-    private void validateTimeDifferenceForExistingRound(Long performanceId, LocalDateTime newDate, Long roundId) {
+    private void validateTimeDifferenceForExistingRound(
+            Long performanceId, LocalDateTime newDate, Long roundId) {
         List<Round> existingRounds = roundRepository.findByPerformanceId(performanceId);
 
         for (Round existingRound : existingRounds) {
@@ -119,16 +121,18 @@ public class RoundAdminService {
     }
 
     @Transactional
-    public UpdateRoundResponseDto update(AuthUser authUser, Long id, UpdateRoundRequestDto request) {
+    public UpdateRoundResponseDto update(
+            AuthUser authUser, Long id, UpdateRoundRequestDto request) {
         // 권한 확인
         hasRole(authUser);
 
         // 회차 가져오기
-        Round round = roundRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("회차를 찾을 수 없습니다."));
+        Round round =
+                roundRepository
+                        .findById(id)
+                        .orElseThrow(() -> new IllegalArgumentException("회차를 찾을 수 없습니다."));
 
         LocalDateTime now = LocalDateTime.now();
-
 
         if (request.getDate() != null) {
             if (request.getDate().isBefore(now)) {
@@ -137,7 +141,8 @@ public class RoundAdminService {
 
             // 기존 회차 시간과 다를 때만 1시간 이상 차이 검증
             if (!round.getDate().equals(request.getDate())) {
-                validateTimeDifferenceForExistingRound(round.getPerformanceId(), request.getDate(), round.getId());
+                validateTimeDifferenceForExistingRound(
+                        round.getPerformanceId(), request.getDate(), round.getId());
             }
 
             round.updateDate(request.getDate());
@@ -145,7 +150,8 @@ public class RoundAdminService {
             request = new UpdateRoundRequestDto(round.getDate(), request.getStatus());
         }
 
-        PerformanceStatus newStatus = request.getStatus() != null ? request.getStatus() : round.getStatus();
+        PerformanceStatus newStatus =
+                request.getStatus() != null ? request.getStatus() : round.getStatus();
         round.updateStatus(newStatus);
 
         roundRepository.save(round);
@@ -172,8 +178,10 @@ public class RoundAdminService {
             throw new IllegalArgumentException("관리자만 접근할 수 있습니다.");
         }
 
-        User user = userRepository.findById(authUser.getId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
+        User user =
+                userRepository
+                        .findById(authUser.getId())
+                        .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
 
         if (user.getUserRole() != UserRole.ROLE_ADMIN) {
             throw new IllegalArgumentException("관리자만 접근할 수 있습니다.");

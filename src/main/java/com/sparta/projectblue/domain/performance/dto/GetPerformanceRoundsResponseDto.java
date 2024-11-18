@@ -16,8 +16,7 @@ public class GetPerformanceRoundsResponseDto {
     private List<RoundInfo> rounds;
 
     // 캐싱을 위한 기본 생성자
-    public GetPerformanceRoundsResponseDto() {
-    }
+    public GetPerformanceRoundsResponseDto() {}
 
     public GetPerformanceRoundsResponseDto(List<RoundInfo> rounds) {
 
@@ -29,10 +28,10 @@ public class GetPerformanceRoundsResponseDto {
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime date;
+
         private PerformanceStatus status;
 
-        public RoundInfo() {
-        }
+        public RoundInfo() {}
 
         public RoundInfo(LocalDateTime date, PerformanceStatus status) {
 

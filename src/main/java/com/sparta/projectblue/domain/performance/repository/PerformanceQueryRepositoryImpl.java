@@ -29,8 +29,7 @@ public class PerformanceQueryRepositoryImpl implements PerformanceQueryRepositor
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<GetPerformancesResponseDto> findAllPerformance(
-            Pageable pageable) {
+    public Page<GetPerformancesResponseDto> findAllPerformance(Pageable pageable) {
 
         List<GetPerformancesResponseDto> query =
                 jpaQueryFactory
@@ -44,8 +43,7 @@ public class PerformanceQueryRepositoryImpl implements PerformanceQueryRepositor
                         .from(performance)
                         .leftJoin(hall)
                         .on(performance.hallId.eq(hall.id))
-                        .where(
-                                performanceBetweenIn(LocalDateTime.now()))
+                        .where(performanceBetweenIn(LocalDateTime.now()))
                         .orderBy(performance.startDate.asc())
                         .offset(pageable.getOffset())
                         .limit(pageable.getPageSize())
@@ -57,8 +55,7 @@ public class PerformanceQueryRepositoryImpl implements PerformanceQueryRepositor
                         .from(performance)
                         .leftJoin(hall)
                         .on(performance.hallId.eq(hall.id))
-                        .where(
-                                performanceBetweenIn(LocalDateTime.now()))
+                        .where(performanceBetweenIn(LocalDateTime.now()))
                         .fetchOne();
 
         if (total == null) total = 0L;

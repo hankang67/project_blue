@@ -1,15 +1,17 @@
 package com.sparta.projectblue.domain.search.repository;
 
-import com.sparta.projectblue.domain.search.document.UserBookingDocument;
-import com.sparta.projectblue.domain.search.dto.UserBookingDto;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.query.Criteria;
 import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import com.sparta.projectblue.domain.search.document.UserBookingDocument;
+import com.sparta.projectblue.domain.search.dto.UserBookingDto;
+
+import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
@@ -41,27 +43,36 @@ public class UserBookingEsRepositoryImpl implements UserBookingEsCustomRepositor
 
         // 예약 날짜 범위 조건 추가
         if (request.getBookingDateStart() != null && request.getBookingDateEnd() != null) {
-            criteria = criteria.and(FIELD_BOOKING_DATE)
-                    .between(request.getBookingDateStart(), request.getBookingDateEnd());
+            criteria =
+                    criteria.and(FIELD_BOOKING_DATE)
+                            .between(request.getBookingDateStart(), request.getBookingDateEnd());
         } else if (request.getBookingDateStart() != null) {
-            criteria = criteria.and(FIELD_BOOKING_DATE).greaterThanEqual(request.getBookingDateStart());
+            criteria =
+                    criteria.and(FIELD_BOOKING_DATE)
+                            .greaterThanEqual(request.getBookingDateStart());
         } else if (request.getBookingDateEnd() != null) {
             criteria = criteria.and(FIELD_BOOKING_DATE).lessThanEqual(request.getBookingDateEnd());
         }
 
         // 결제 금액 범위 조건 추가
         if (request.getMinPaymentAmount() != null && request.getMaxPaymentAmount() != null) {
-            criteria = criteria.and(FIELD_PAYMENT_AMOUNT)
-                    .between(request.getMinPaymentAmount(), request.getMaxPaymentAmount());
+            criteria =
+                    criteria.and(FIELD_PAYMENT_AMOUNT)
+                            .between(request.getMinPaymentAmount(), request.getMaxPaymentAmount());
         } else if (request.getMinPaymentAmount() != null) {
-            criteria = criteria.and(FIELD_PAYMENT_AMOUNT).greaterThanEqual(request.getMinPaymentAmount());
+            criteria =
+                    criteria.and(FIELD_PAYMENT_AMOUNT)
+                            .greaterThanEqual(request.getMinPaymentAmount());
         } else if (request.getMaxPaymentAmount() != null) {
-            criteria = criteria.and(FIELD_PAYMENT_AMOUNT).lessThanEqual(request.getMaxPaymentAmount());
+            criteria =
+                    criteria.and(FIELD_PAYMENT_AMOUNT).lessThanEqual(request.getMaxPaymentAmount());
         }
 
         // 예약 상태 조건 추가
-        if (request.getSearchReservationStatus() != null && !request.getSearchReservationStatus().isEmpty()) {
-            criteria = criteria.and(FIELD_RESERVATION_STATUS).is(request.getSearchReservationStatus());
+        if (request.getSearchReservationStatus() != null
+                && !request.getSearchReservationStatus().isEmpty()) {
+            criteria =
+                    criteria.and(FIELD_RESERVATION_STATUS).is(request.getSearchReservationStatus());
         }
 
         CriteriaQuery query = new CriteriaQuery(criteria);

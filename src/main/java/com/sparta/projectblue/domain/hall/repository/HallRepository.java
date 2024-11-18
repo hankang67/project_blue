@@ -1,9 +1,10 @@
 package com.sparta.projectblue.domain.hall.repository;
 
-import com.sparta.projectblue.domain.hall.entity.Hall;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.sparta.projectblue.domain.hall.entity.Hall;
 
 public interface HallRepository extends JpaRepository<Hall, Long> {
 

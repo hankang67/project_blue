@@ -1,11 +1,12 @@
 package com.sparta.projectblue.domain.search.repository;
 
-import com.sparta.projectblue.domain.search.document.SearchDocument;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
-import java.util.List;
+import com.sparta.projectblue.domain.search.document.SearchDocument;
 
 public interface ESRepository extends ElasticsearchRepository<SearchDocument, Long> {
 

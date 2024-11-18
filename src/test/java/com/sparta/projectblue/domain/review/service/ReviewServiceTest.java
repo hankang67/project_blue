@@ -1,5 +1,18 @@
 package com.sparta.projectblue.domain.review.service;
 
+import static com.sparta.projectblue.domain.common.enums.ReviewRate.FOUR;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.util.Optional;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
 import com.sparta.projectblue.domain.common.enums.ReservationStatus;
 import com.sparta.projectblue.domain.common.enums.ReviewRate;
 import com.sparta.projectblue.domain.reservation.entity.Reservation;
@@ -10,30 +23,15 @@ import com.sparta.projectblue.domain.review.dto.UpdateReviewRequestDto;
 import com.sparta.projectblue.domain.review.dto.UpdateReviewResponseDto;
 import com.sparta.projectblue.domain.review.entity.Review;
 import com.sparta.projectblue.domain.review.repository.ReviewRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.util.Optional;
-
-import static com.sparta.projectblue.domain.common.enums.ReviewRate.FOUR;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 public class ReviewServiceTest {
 
-    @Mock
-    private ReviewRepository reviewRepository;
+    @Mock private ReviewRepository reviewRepository;
 
-    @Mock
-    private ReservationRepository reservationRepository;
+    @Mock private ReservationRepository reservationRepository;
 
-    @InjectMocks
-    private ReviewService reviewService;
+    @InjectMocks private ReviewService reviewService;
 
     private Reservation reservation;
     private final Long userId = 1L;
@@ -43,10 +41,10 @@ public class ReviewServiceTest {
 
     @BeforeEach
     void setUp() {
-        reservation = new Reservation(userId, performanceId, 1L, ReservationStatus.COMPLETED, 10000L);
+        reservation =
+                new Reservation(userId, performanceId, 1L, ReservationStatus.COMPLETED, 10000L);
         when(reservationRepository.findById(reservationId)).thenReturn(Optional.of(reservation));
     }
-
 
     @Test
     void createReviewTest() {
@@ -56,7 +54,8 @@ public class ReviewServiceTest {
 
         // when
         when(reservationRepository.findById(reservationId)).thenReturn(Optional.of(reservation));
-        when(reviewRepository.existsByReservationIdAndPerformanceId(reservationId, performanceId)).thenReturn(false);
+        when(reviewRepository.existsByReservationIdAndPerformanceId(reservationId, performanceId))
+                .thenReturn(false);
 
         Review savedReview = new Review(performanceId, reservationId, ReviewRate.FOUR, "별로");
         when(reviewRepository.save(any(Review.class))).thenReturn(savedReview);
@@ -71,13 +70,15 @@ public class ReviewServiceTest {
 
         // verify: 각 메서드가 예상대로 호출되었는지 확인
         verify(reservationRepository, times(1)).findById(reservationId);
-        verify(reviewRepository, times(1)).existsByReservationIdAndPerformanceId(reservationId, performanceId);
+        verify(reviewRepository, times(1))
+                .existsByReservationIdAndPerformanceId(reservationId, performanceId);
         verify(reviewRepository, times(1)).save(any(Review.class));
     }
 
     @Test
     void createReviewFailsWhenNoReservation() {
-        CreateReviewRequestDto request = new CreateReviewRequestDto(reservationId, ReviewRate.FOUR, "별로");
+        CreateReviewRequestDto request =
+                new CreateReviewRequestDto(reservationId, ReviewRate.FOUR, "별로");
 
         // when
         when(reservationRepository.findById(reservationId)).thenReturn(Optional.empty());
@@ -87,8 +88,11 @@ public class ReviewServiceTest {
 
     @Test
     void createReviewFailsWhenNoUser() {
-        CreateReviewRequestDto request = new CreateReviewRequestDto(reservationId, ReviewRate.FOUR, "별로");
-        reservation = new Reservation(2L, performanceId, reservationId, ReservationStatus.COMPLETED, 10000L);
+        CreateReviewRequestDto request =
+                new CreateReviewRequestDto(reservationId, ReviewRate.FOUR, "별로");
+        reservation =
+                new Reservation(
+                        2L, performanceId, reservationId, ReservationStatus.COMPLETED, 10000L);
         when(reservationRepository.findById(reservationId)).thenReturn(Optional.of(reservation));
 
         // when & then
@@ -120,19 +124,25 @@ public class ReviewServiceTest {
     void updateReviewFailsWhenNoUser() {
         UpdateReviewRequestDto request = new UpdateReviewRequestDto(ReviewRate.FIVE, "별로인데 좀 괜찮아짐");
         Review review = new Review(performanceId, reservationId, ReviewRate.FIVE, "별로인데 좀 괜찮아짐");
-        Reservation reservation = new Reservation(2L, performanceId, reservationId, ReservationStatus.COMPLETED, 10000L);
+        Reservation reservation =
+                new Reservation(
+                        2L, performanceId, reservationId, ReservationStatus.COMPLETED, 10000L);
 
         when(reviewRepository.findById(reviewId)).thenReturn(Optional.of(review));
         when(reservationRepository.findById(reservationId)).thenReturn(Optional.of(reservation));
 
         // when & then
-        assertThrows(IllegalArgumentException.class, () -> reviewService.update(userId, reviewId, request));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> reviewService.update(userId, reviewId, request));
     }
 
     @Test
     void deleteReviewTest() {
         Review review = new Review(performanceId, reservationId, ReviewRate.FIVE, "별로인데 좀 괜찮아짐");
-        Reservation reservation = new Reservation(2L, performanceId, reservationId, ReservationStatus.COMPLETED, 10000L);
+        Reservation reservation =
+                new Reservation(
+                        2L, performanceId, reservationId, ReservationStatus.COMPLETED, 10000L);
 
         when(reviewRepository.findById(reviewId)).thenReturn(Optional.of(review));
         when(reservationRepository.findById(reservationId)).thenReturn(Optional.of(reservation));
@@ -165,7 +175,9 @@ public class ReviewServiceTest {
     void deleteReviewFailsWhenUserNotAuthorized() {
         // given
         Review review = new Review(performanceId, reservationId, ReviewRate.FOUR, "Good");
-        reservation = new Reservation(2L, performanceId, reservationId, ReservationStatus.COMPLETED, 10000L);
+        reservation =
+                new Reservation(
+                        2L, performanceId, reservationId, ReservationStatus.COMPLETED, 10000L);
 
         when(reviewRepository.findById(reviewId)).thenReturn(Optional.of(review));
         when(reservationRepository.findById(reservationId)).thenReturn(Optional.of(reservation));

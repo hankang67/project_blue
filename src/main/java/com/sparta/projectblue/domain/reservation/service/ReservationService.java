@@ -1,5 +1,17 @@
 package com.sparta.projectblue.domain.reservation.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.sparta.projectblue.aop.annotation.ReservationLogstash;
 import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.common.enums.PaymentStatus;
@@ -25,19 +37,9 @@ import com.sparta.projectblue.domain.round.repository.RoundRepository;
 import com.sparta.projectblue.domain.user.entity.User;
 import com.sparta.projectblue.domain.user.repository.UserRepository;
 import com.sparta.projectblue.sse.service.NotificationService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @Service
@@ -62,7 +64,7 @@ public class ReservationService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-//    @DistributedLock(key = "#reservationId")
+    //    @DistributedLock(key = "#reservationId")
     @ReservationLogstash
     public CreateReservationResponseDto create(Long id, CreateReservationRequestDto request) {
 
@@ -128,7 +130,6 @@ public class ReservationService {
 
         reservationRepository.save(newReservation);
 
-
         for (Integer i : request.getSeats()) {
             reservedSeatRepository.save(
                     new ReservedSeat(newReservation.getId(), newReservation.getRoundId(), i));
@@ -147,12 +148,17 @@ public class ReservationService {
 
         // 예매 성공 알림 (SSE 전송)
         String title = "[티켓 예매 완료]";
-        String message = String.format(
-                "%s 고객님, 예매가 완료되었습니다.\n" +
-                        "상품정보: %s 공연, %s 회차, %s 공연장, %s 좌석\n" +
-                        "일시: %s로 예약되었습니다.",
-                id, performance.getTitle(), request.getRoundId(), hall.getName(), request.getSeats(),
-                round.getDate());
+        String message =
+                String.format(
+                        "%s 고객님, 예매가 완료되었습니다.\n"
+                                + "상품정보: %s 공연, %s 회차, %s 공연장, %s 좌석\n"
+                                + "일시: %s로 예약되었습니다.",
+                        id,
+                        performance.getTitle(),
+                        request.getRoundId(),
+                        hall.getName(),
+                        request.getSeats(),
+                        round.getDate());
 
         notificationService.notify(String.valueOf(id), title, message);
 
@@ -163,12 +169,16 @@ public class ReservationService {
     @ReservationLogstash
     public void delete(Long id, DeleteReservationRequestDto request) throws Exception {
         // 예매내역 확인
-        Reservation reservation = reservationRepository.findById(request.getReservationId())
-                .orElseThrow(() -> new IllegalArgumentException("reservation not found"));
+        Reservation reservation =
+                reservationRepository
+                        .findById(request.getReservationId())
+                        .orElseThrow(() -> new IllegalArgumentException("reservation not found"));
 
         // 사용자 확인
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        User user =
+                userRepository
+                        .findById(id)
+                        .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         // 예매자 확인 및 상태 검사
         if (!reservation.getUserId().equals(user.getId())) {
@@ -199,7 +209,8 @@ public class ReservationService {
     // 비동기 좌석 삭제 메서드
     @Async("mailExecutor")
     public void deleteReservationSeats(Long reservationId) {
-        List<ReservedSeat> reservedSeats = reservedSeatRepository.findByReservationId(reservationId);
+        List<ReservedSeat> reservedSeats =
+                reservedSeatRepository.findByReservationId(reservationId);
 
         reservedSeatRepository.deleteAll(reservedSeats);
     }
@@ -223,7 +234,8 @@ public class ReservationService {
 
         if (Objects.nonNull(performance)) {
             String title = "[티켓_예매취소완료]";
-            String message = String.format("%s 고객님, %s 공연의 예약이 취소 되었습니다.", userName, performance.getTitle());
+            String message =
+                    String.format("%s 고객님, %s 공연의 예약이 취소 되었습니다.", userName, performance.getTitle());
             notificationService.notify(userName, title, message);
         }
     }
@@ -281,35 +293,43 @@ public class ReservationService {
         PageRequest pageRequest = PageRequest.of(page, size);
 
         // 예약 가져오기
-        Page<Reservation> reservationsPage = reservationRepository.findByUserId(userId, pageRequest);
+        Page<Reservation> reservationsPage =
+                reservationRepository.findByUserId(userId, pageRequest);
 
         // DTO 리스트 생성
         List<GetReservationsResponseDto> responseList = new ArrayList<>();
 
         for (Reservation reservation : reservationsPage) {
-            Performance performance = performanceRepository
-                    .findById(reservation.getPerformanceId())
-                    .orElseThrow(() -> new IllegalArgumentException("Performance not found for reservation"));
+            Performance performance =
+                    performanceRepository
+                            .findById(reservation.getPerformanceId())
+                            .orElseThrow(
+                                    () ->
+                                            new IllegalArgumentException(
+                                                    "Performance not found for reservation"));
 
-            List<ReservedSeat> seats = reservedSeatRepository.findByReservationId(reservation.getId());
+            List<ReservedSeat> seats =
+                    reservedSeatRepository.findByReservationId(reservation.getId());
 
-            Hall hall = hallRepository
-                    .findById(performance.getHallId())
-                    .orElseThrow(() -> new IllegalArgumentException("공연장을 찾을 수 없습니다"));
+            Hall hall =
+                    hallRepository
+                            .findById(performance.getHallId())
+                            .orElseThrow(() -> new IllegalArgumentException("공연장을 찾을 수 없습니다"));
 
-            Round round = roundRepository
-                    .findById(reservation.getRoundId())
-                    .orElseThrow(() -> new IllegalArgumentException("공연 회차를 찾을 수 없습니다"));
+            Round round =
+                    roundRepository
+                            .findById(reservation.getRoundId())
+                            .orElseThrow(() -> new IllegalArgumentException("공연 회차를 찾을 수 없습니다"));
 
-            responseList.add(new GetReservationsResponseDto(
-                    performance.getTitle(),
-                    seats.size(),
-                    reservation.getId(),
-                    reservation.getCreatedAt(),
-                    hall.getName(),
-                    round.getDate(),
-                    reservation.getStatus()
-            ));
+            responseList.add(
+                    new GetReservationsResponseDto(
+                            performance.getTitle(),
+                            seats.size(),
+                            reservation.getId(),
+                            reservation.getCreatedAt(),
+                            hall.getName(),
+                            round.getDate(),
+                            reservation.getStatus()));
         }
 
         // 페이지 변환 후 반환

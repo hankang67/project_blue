@@ -1,13 +1,15 @@
 package com.sparta.projectblue.sse.service;
 
-import com.sparta.projectblue.aop.SlackNotifier;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+
+import com.sparta.projectblue.aop.SlackNotifier;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -34,9 +36,10 @@ public class NotificationService {
         SseEmitter emitter = emitters.get(userId);
         if (emitter != null) {
             try {
-                emitter.send(SseEmitter.event()
-                        .name("notification") // 이벤트 이름
-                        .data(title + "\n" + message)); // 알림 메시지
+                emitter.send(
+                        SseEmitter.event()
+                                .name("notification") // 이벤트 이름
+                                .data(title + "\n" + message)); // 알림 메시지
             } catch (IOException e) {
                 emitters.remove(userId);
             }

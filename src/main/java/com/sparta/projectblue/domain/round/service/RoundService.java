@@ -1,5 +1,13 @@
 package com.sparta.projectblue.domain.round.service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.sparta.projectblue.domain.common.enums.PerformanceStatus;
 import com.sparta.projectblue.domain.hall.entity.Hall;
 import com.sparta.projectblue.domain.hall.repository.HallRepository;
@@ -10,15 +18,8 @@ import com.sparta.projectblue.domain.reservedSeat.repository.ReservedSeatReposit
 import com.sparta.projectblue.domain.round.dto.GetRoundAvailableSeatsResponseDto;
 import com.sparta.projectblue.domain.round.entity.Round;
 import com.sparta.projectblue.domain.round.repository.RoundRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -82,5 +83,4 @@ public class RoundService {
         return new GetRoundAvailableSeatsResponseDto(
                 performance.getTitle(), round.getDate(), availableSeats);
     }
-
 }

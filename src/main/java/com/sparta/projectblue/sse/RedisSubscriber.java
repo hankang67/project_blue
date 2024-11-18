@@ -1,8 +1,10 @@
 package com.sparta.projectblue.sse;
 
-import com.sparta.projectblue.sse.service.NotificationService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import com.sparta.projectblue.sse.service.NotificationService;
+
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor

@@ -1,15 +1,7 @@
 package com.sparta.projectblue.domain.coupon.service;
 
-import com.sparta.projectblue.domain.common.dto.AuthUser;
-import com.sparta.projectblue.domain.common.enums.CouponStatus;
-import com.sparta.projectblue.domain.common.enums.CouponType;
-import com.sparta.projectblue.domain.common.enums.UserRole;
-import com.sparta.projectblue.domain.coupon.entity.Coupon;
-import com.sparta.projectblue.domain.coupon.repository.CouponRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -19,17 +11,24 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import com.sparta.projectblue.domain.common.dto.AuthUser;
+import com.sparta.projectblue.domain.common.enums.CouponStatus;
+import com.sparta.projectblue.domain.common.enums.CouponType;
+import com.sparta.projectblue.domain.common.enums.UserRole;
+import com.sparta.projectblue.domain.coupon.entity.Coupon;
+import com.sparta.projectblue.domain.coupon.repository.CouponRepository;
 
 @SpringBootTest
 public class RedissonTest {
 
-    @Autowired
-    private CouponService couponService;
+    @Autowired private CouponService couponService;
 
-    @Autowired
-    private CouponRepository couponRepository;
+    @Autowired private CouponRepository couponRepository;
 
     private Long couponId;
 
@@ -68,12 +67,12 @@ public class RedissonTest {
                         try {
                             long userId = atomicUserId.getAndIncrement(); // userId 1씩 증가
                             // 각 스레드에서 고유한 AuthUser 생성
-                            AuthUser authUser = new AuthUser(
-                                    userId,
-                                    "test" + UUID.randomUUID().toString() + "@test.com",
-                                    "name" + UUID.randomUUID().toString().substring(0, 4),
-                                    UserRole.ROLE_USER
-                            );
+                            AuthUser authUser =
+                                    new AuthUser(
+                                            userId,
+                                            "test" + UUID.randomUUID().toString() + "@test.com",
+                                            "name" + UUID.randomUUID().toString().substring(0, 4),
+                                            UserRole.ROLE_USER);
 
                             // 쿠폰 발급 시도
                             couponService.firstCoupon(authUser, couponId);

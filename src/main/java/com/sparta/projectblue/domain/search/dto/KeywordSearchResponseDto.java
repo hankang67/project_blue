@@ -1,10 +1,12 @@
 package com.sparta.projectblue.domain.search.dto;
 
+import org.springframework.data.domain.Page;
+
 import com.sparta.projectblue.domain.hall.entity.Hall;
 import com.sparta.projectblue.domain.performer.entity.Performer;
 import com.sparta.projectblue.domain.search.document.SearchDocument;
+
 import lombok.Getter;
-import org.springframework.data.domain.Page;
 
 @Getter
 public class KeywordSearchResponseDto {

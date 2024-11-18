@@ -1,10 +1,12 @@
 package com.sparta.projectblue.domain.hall.Service;
 
-import com.sparta.projectblue.domain.hall.dto.GetHallResponseDto;
-import com.sparta.projectblue.domain.hall.dto.GetHallsResponseDto;
-import com.sparta.projectblue.domain.hall.entity.Hall;
-import com.sparta.projectblue.domain.hall.repository.HallRepository;
-import com.sparta.projectblue.domain.hall.service.HallService;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.any;
+
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,28 +17,26 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.any;
+import com.sparta.projectblue.domain.hall.dto.GetHallResponseDto;
+import com.sparta.projectblue.domain.hall.dto.GetHallsResponseDto;
+import com.sparta.projectblue.domain.hall.entity.Hall;
+import com.sparta.projectblue.domain.hall.repository.HallRepository;
+import com.sparta.projectblue.domain.hall.service.HallService;
 
 @ExtendWith(SpringExtension.class)
 public class HallServiceTest {
 
-    @Mock
-    private HallRepository hallRepository;
+    @Mock private HallRepository hallRepository;
 
-    @InjectMocks
-    private HallService hallService;
+    @InjectMocks private HallService hallService;
 
     @Test
     void 공연_페이징_조회성공() {
         // given
-        List<Hall> halls = List.of(
-                new Hall("hallName", "hallAddress", 100),
-                new Hall("hallName2", "hallAddress2", 200));
+        List<Hall> halls =
+                List.of(
+                        new Hall("hallName", "hallAddress", 100),
+                        new Hall("hallName2", "hallAddress2", 200));
 
         Page<Hall> hallPage = new PageImpl<>(halls);
         Pageable pageable = PageRequest.of(0, 10);
@@ -54,7 +54,7 @@ public class HallServiceTest {
     }
 
     @Test
-    void 공연장_단건조회_성공(){
+    void 공연장_단건조회_성공() {
         // given
         Hall hall = new Hall("hallName", "hallAddress", 100);
 

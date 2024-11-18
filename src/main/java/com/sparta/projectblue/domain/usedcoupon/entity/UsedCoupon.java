@@ -1,14 +1,16 @@
 package com.sparta.projectblue.domain.usedcoupon.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.sparta.projectblue.domain.common.entity.BaseEntity;
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sparta.projectblue.domain.common.entity.BaseEntity;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor

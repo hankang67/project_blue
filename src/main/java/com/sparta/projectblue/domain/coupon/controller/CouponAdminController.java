@@ -1,18 +1,20 @@
 package com.sparta.projectblue.domain.coupon.controller;
 
+import jakarta.validation.Valid;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+
 import com.sparta.projectblue.config.ApiResponse;
 import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.coupon.dto.CreateCouponRequestDto;
 import com.sparta.projectblue.domain.coupon.dto.CreateCouponResponseDto;
 import com.sparta.projectblue.domain.coupon.service.CouponAdminService;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
-
 
 @RestController
 @RequiredArgsConstructor

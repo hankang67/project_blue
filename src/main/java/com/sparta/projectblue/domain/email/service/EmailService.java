@@ -2,12 +2,14 @@ package com.sparta.projectblue.domain.email.service;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -15,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class EmailService {
 
     private final JavaMailSender javaMailSender;
-    private final static String SENDER_EMAIL = "${MAIL_USERNAME}";
+    private static final String SENDER_EMAIL = "${MAIL_USERNAME}";
 
     @Async("mailExecutor")
     public void sendMail(String email, String subject, String text) {
@@ -28,8 +30,7 @@ public class EmailService {
             helper.setTo(email); // 받는 사람
             helper.setSubject(subject); // 이메일 제목
             helper.setText(text, true);
-        } catch (
-                MessagingException e) {
+        } catch (MessagingException e) {
             log.error("메일 발송 실패 : {}", e.getMessage());
         }
 
