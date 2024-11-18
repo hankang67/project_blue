@@ -1,18 +1,15 @@
 package com.sparta.projectblue.domain.search.repository;
 
-import java.util.List;
-
-
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
-import org.springframework.data.elasticsearch.core.query.Criteria;
-import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
-import org.springframework.data.elasticsearch.core.SearchHit;
-import org.springframework.stereotype.Repository;
-
 import com.sparta.projectblue.domain.search.document.UserBookingDocument;
 import com.sparta.projectblue.domain.search.dto.UserBookingDto;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.SearchHit;
+import org.springframework.data.elasticsearch.core.query.Criteria;
+import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 @RequiredArgsConstructor

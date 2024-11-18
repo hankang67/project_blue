@@ -1,21 +1,17 @@
 package com.sparta.projectblue.domain.reservation.controller;
 
+import com.sparta.projectblue.config.ApiResponse;
+import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.reservation.dto.*;
+import com.sparta.projectblue.domain.reservation.service.ReservationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import com.sparta.projectblue.config.ApiResponse;
-import com.sparta.projectblue.domain.common.dto.AuthUser;
-import com.sparta.projectblue.domain.reservation.service.ReservationService;
-
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/reservations")
@@ -50,11 +46,12 @@ public class ReservationController {
 
     @GetMapping
     @Operation(summary = "예매 다건 조회", description = "authUser가 예매한 내역 다건")
-    public ResponseEntity<ApiResponse<List<GetReservationsResponseDto>>> getReservations(
-            @AuthenticationPrincipal AuthUser authUser) {
+    public ResponseEntity<ApiResponse<Page<GetReservationsResponseDto>>> getReservations(
+            @AuthenticationPrincipal AuthUser authUser,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size) {
 
-        return ResponseEntity.ok(
-                ApiResponse.success(reservationService.getReservations(authUser.getId())));
+        return ResponseEntity.ok(ApiResponse.success(reservationService.getReservations(authUser.getId(), page, size)));
     }
 
     @GetMapping("/{id}")

@@ -32,7 +32,7 @@ public class CouponAdminServiceTest {
     CouponAdminService couponAdminService;
 
     @Test
-    public void 쿠폰_생성_성공() {
+    void 쿠폰_생성_성공() {
         // given
         CreateCouponRequestDto createCouponRequestDto = new CreateCouponRequestDto(
                 "couponCode",
@@ -67,7 +67,7 @@ public class CouponAdminServiceTest {
     }
 
     @Test
-    public void 쿠폰유효_만료일_이후(){
+    void 쿠폰유효_만료일_이후(){
         // given
         CreateCouponRequestDto createCouponRequestDto = new CreateCouponRequestDto(
                 "couponCode",
@@ -89,7 +89,7 @@ public class CouponAdminServiceTest {
     }
 
     @Test
-    public void 쿠폰_삭제(){
+    void 쿠폰_삭제(){
         // given
         Coupon coupon = new Coupon("couponCode", CouponType.AMOUNT, CouponStatus.ACTIVE,
                 1, 0, 1000L, LocalDateTime.now(), LocalDateTime.now().plusDays(1));

@@ -1,16 +1,15 @@
 package com.sparta.projectblue.domain.performer.controller;
 
+import com.sparta.projectblue.config.ApiResponse;
 import com.sparta.projectblue.domain.performer.dto.GetPerformerResponseDto;
 import com.sparta.projectblue.domain.performer.dto.GetPerformersResponseDto;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.http.HttpHeaders;
-import com.sparta.projectblue.config.ApiResponse;
 import com.sparta.projectblue.domain.performer.service.PerformerService;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/performers")

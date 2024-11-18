@@ -1,17 +1,16 @@
 package com.sparta.projectblue.domain.search.controller;
 
-import com.sparta.projectblue.domain.performance.dto.GetPerformancesResponseDto;
-import com.sparta.projectblue.domain.search.dto.KeywordSearchResponseDto;
-import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import com.sparta.projectblue.config.ApiResponse;
+import com.sparta.projectblue.domain.performance.dto.GetPerformancesResponseDto;
+import com.sparta.projectblue.domain.search.dto.KeywordSearchJPAResponseDto;
+import com.sparta.projectblue.domain.search.dto.KeywordSearchResponseDto;
 import com.sparta.projectblue.domain.search.service.SearchService;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,8 +37,22 @@ public class SearchController {
 
     @GetMapping("/keyword")
     @Operation(summary = "키워드검색", description = "키워드를 검색하면 배우, 공연장, 공연에 대한 결과가 조회됩니다")
-    public ResponseEntity<ApiResponse<KeywordSearchResponseDto>> searchKeyword(@RequestParam(required = false) String keyword) {
-        return ResponseEntity.ok(ApiResponse.success(searchService.searchKeyword(keyword)));
+    public ResponseEntity<ApiResponse<KeywordSearchResponseDto>> searchKeyword(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size
+    ) {
+        return ResponseEntity.ok(ApiResponse.success(searchService.searchKeyword(keyword, page, size)));
+    }
+
+    @GetMapping("/keyword/jpa")
+    @Operation(summary = "키워드검색", description = "키워드를 검색하면 배우, 공연장, 공연에 대한 결과가 조회됩니다")
+    public ResponseEntity<ApiResponse<KeywordSearchJPAResponseDto>> searchKeywordJpa(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size
+    ) {
+        return ResponseEntity.ok(ApiResponse.success(searchService.searchKeywordJpa(keyword, page, size)));
     }
 
     @PostMapping("/sync")

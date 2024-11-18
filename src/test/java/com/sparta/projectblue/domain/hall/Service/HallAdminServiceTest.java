@@ -1,4 +1,4 @@
-package com.sparta.projectblue.domain.hall;
+package com.sparta.projectblue.domain.hall.Service;
 
 import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.common.enums.UserRole;
@@ -29,7 +29,7 @@ public class HallAdminServiceTest {
     private HallAdminService hallAdminService;
 
     @Test
-    public void 공연장_생성_성공(){
+    void 공연장_생성_성공(){
         // given
         CreateHallRequestDto requestDto = new CreateHallRequestDto(
                 "hallName",
@@ -55,7 +55,7 @@ public class HallAdminServiceTest {
     }
 
     @Test
-    public void 공연장_정보수정_성공(){
+    void 공연장_정보수정_성공(){
         // given
         UpdateHallRequestDto requestDto = new UpdateHallRequestDto(
                 "hall2",
@@ -86,7 +86,7 @@ public class HallAdminServiceTest {
     }
 
     @Test
-    public void 공연장_삭제_성공(){
+    void 공연장_삭제_성공(){
         // given
         Hall hall = new Hall("hallName", "hallAddress", 100);
 
@@ -107,7 +107,7 @@ public class HallAdminServiceTest {
     }
 
     @Test
-    public void 관리자_권한_없음(){
+    void 관리자_권한_없음(){
         // given
         CreateHallRequestDto requestDto = new CreateHallRequestDto(
                 "hallName",
@@ -124,7 +124,7 @@ public class HallAdminServiceTest {
     }
 
     @Test
-    public void 공연장_이름등록_예외(){
+    void 공연장_이름등록_예외(){
         // given
         CreateHallRequestDto requestDto = new CreateHallRequestDto(
                 "",
@@ -141,7 +141,7 @@ public class HallAdminServiceTest {
     }
 
     @Test
-    public void 좌석_0개이하_예외(){
+    void 좌석_0개이하_예외(){
         // given
         CreateHallRequestDto requestDto = new CreateHallRequestDto(
                 "hallName",
@@ -158,7 +158,7 @@ public class HallAdminServiceTest {
     }
 
     @Test
-    public void 공연장_주소등록_예외(){
+    void 공연장_주소등록_예외(){
         // given
         CreateHallRequestDto requestDto = new CreateHallRequestDto(
                 "hallName",

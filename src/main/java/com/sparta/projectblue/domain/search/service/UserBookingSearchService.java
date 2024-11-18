@@ -46,5 +46,4 @@ public class UserBookingSearchService {
     public List<UserBookingDocument> searchBookings(UserBookingDto searchCriteria) {
         return userBookingEsRepository.searchByCriteria(searchCriteria);
     }
-
 }

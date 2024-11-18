@@ -17,10 +17,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -47,7 +49,6 @@ public class RoundAdminService {
         }
     }
 
-
     @Transactional
     public List<CreateRoundResponseDto> create(AuthUser authUser, Long id, CreateRoundRequestDto request) {
         // 권한 확인
@@ -62,30 +63,40 @@ public class RoundAdminService {
 
         // 요청 날짜 내 중복 검증
         List<LocalDateTime> dates = request.getDates();
-        if (dates.size() != dates.stream().distinct().count()) {
+        Set<LocalDateTime> distinctDates = new HashSet<>(dates);
+        if (dates.size() != distinctDates.size()) {
             throw new IllegalArgumentException("요청 내 날짜들이 중복될 수 없습니다.");
         }
 
         // 요청된 각 날짜에 대해 검증 수행
-        dates.forEach(date -> {
-                    // 과거 날짜 확인
-                    if (date.isBefore(now)) {
-                        throw new IllegalArgumentException("과거의 날짜로 회차를 생성할 수 없습니다.");
-                    }
+        for (LocalDateTime date : dates) {
+            // 과거 날짜 확인
+            if (date.isBefore(now)) {
+                throw new IllegalArgumentException("과거의 날짜로 회차를 생성할 수 없습니다.");
+            }
 
-                    // 기존 회차와 1시간 이상 차이 검증
+            // 기존 회차와 1시간 이상 차이 검증
             validateTimeDifferenceForNewRound(id, date);
-        });
-        // Collectors.toList() -> toList()
-        List<Round> newRounds = dates.stream()
-                .map(date -> new Round(id, date, PerformanceStatus.BEFORE_OPEN))
-                .toList();
+        }
 
-        // Collectors.toList() -> toList()
+        // 새로운 회차 생성
+        List<Round> newRounds = new ArrayList<>();
+        for (LocalDateTime date : dates) {
+            newRounds.add(new Round(id, date, PerformanceStatus.BEFORE_OPEN));
+        }
+
+        // 저장된 회차 목록 반환
         List<Round> savedRounds = roundRepository.saveAll(newRounds);
 
-        return savedRounds.stream().map(CreateRoundResponseDto::new).collect(Collectors.toList());
+        // CreateRoundResponseDto로 매핑
+        List<CreateRoundResponseDto> responseDtos = new ArrayList<>();
+        for (Round savedRound : savedRounds) {
+            responseDtos.add(new CreateRoundResponseDto(savedRound));
+        }
+
+        return responseDtos;
     }
+
 
 
     // 1시간 이상 차이 검증 메서드 (수정 중인 회차 제외)

@@ -43,8 +43,4 @@ public class PerformerService {
 
         return new GetPerformersResponseDto(performerInfoList);
     }
-
-
-
-
 }

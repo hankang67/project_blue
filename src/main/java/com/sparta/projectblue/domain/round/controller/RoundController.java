@@ -1,14 +1,16 @@
 package com.sparta.projectblue.domain.round.controller;
 
-import com.sparta.projectblue.domain.round.dto.GetRoundAvailableSeatsResponseDto;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 import com.sparta.projectblue.config.ApiResponse;
+import com.sparta.projectblue.domain.round.dto.GetRoundAvailableSeatsResponseDto;
 import com.sparta.projectblue.domain.round.service.RoundService;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/rounds")

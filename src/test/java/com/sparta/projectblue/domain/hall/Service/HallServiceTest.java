@@ -1,4 +1,4 @@
-package com.sparta.projectblue.domain.hall;
+package com.sparta.projectblue.domain.hall.Service;
 
 import com.sparta.projectblue.domain.hall.dto.GetHallResponseDto;
 import com.sparta.projectblue.domain.hall.dto.GetHallsResponseDto;
@@ -32,7 +32,7 @@ public class HallServiceTest {
     private HallService hallService;
 
     @Test
-    public void 공연_페이징_조회성공() {
+    void 공연_페이징_조회성공() {
         // given
         List<Hall> halls = List.of(
                 new Hall("hallName", "hallAddress", 100),
@@ -54,7 +54,7 @@ public class HallServiceTest {
     }
 
     @Test
-    public void 공연장_단건조회_성공(){
+    void 공연장_단건조회_성공(){
         // given
         Hall hall = new Hall("hallName", "hallAddress", 100);
 

@@ -1,13 +1,11 @@
 package com.sparta.projectblue.config;
 
+import com.sparta.projectblue.domain.common.exception.PaymentException;
 import jakarta.security.auth.message.AuthException;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import com.sparta.projectblue.domain.common.exception.PaymentException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {

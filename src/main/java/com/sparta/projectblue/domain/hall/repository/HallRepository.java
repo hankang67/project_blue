@@ -1,10 +1,9 @@
 package com.sparta.projectblue.domain.hall.repository;
 
-import java.util.List;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import com.sparta.projectblue.domain.hall.entity.Hall;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface HallRepository extends JpaRepository<Hall, Long> {
 
@@ -15,5 +14,5 @@ public interface HallRepository extends JpaRepository<Hall, Long> {
         return findById(id).orElseThrow(() -> new IllegalArgumentException("공연장을 찾을 수 없습니다."));
     }
 
-    List<Hall> findByNameContaining(String name);
+    Page<Hall> findByNameContaining(String name, Pageable pageable);
 }

@@ -1,8 +1,8 @@
 package com.sparta.projectblue.domain.search.service;
 
+import com.sparta.projectblue.domain.common.enums.ReservationStatus;
 import com.sparta.projectblue.domain.reservation.repository.ReservationRepository;
 import com.sparta.projectblue.domain.search.document.UserBookingDocument;
-import com.sparta.projectblue.domain.common.enums.ReservationStatus;
 import com.sparta.projectblue.domain.search.dto.UserBookingDto;
 import com.sparta.projectblue.domain.search.repository.UserBookingEsRepository;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UserBookingSearchServiceTest {
