@@ -98,7 +98,7 @@ public class AuthServiceTest {
                     assertThrows(IllegalArgumentException.class, () -> authService.signup(request));
 
             // then
-            assertEquals(exception.getMessage(), "탈퇴한 유저의 이메일은 재사용할 수 없습니다.");
+            assertEquals("탈퇴한 유저의 이메일은 재사용할 수 없습니다.", exception.getMessage());
         }
 
         @Test
@@ -115,7 +115,7 @@ public class AuthServiceTest {
                     assertThrows(IllegalArgumentException.class, () -> authService.signup(request));
 
             // then
-            assertEquals(exception.getMessage(), "이미 존재하는 이메일입니다.");
+            assertEquals("이미 존재하는 이메일입니다.", exception.getMessage());
         }
 
         @Test
@@ -129,7 +129,7 @@ public class AuthServiceTest {
                     assertThrows(IllegalArgumentException.class, () -> authService.signup(request));
 
             // then
-            assertEquals(exception.getMessage(), "비밀번호는 최소 8자 이상이어야 합니다.");
+            assertEquals("비밀번호는 최소 8자 이상이어야 합니다.", exception.getMessage());
         }
 
         @Test
@@ -144,7 +144,7 @@ public class AuthServiceTest {
                     assertThrows(IllegalArgumentException.class, () -> authService.signup(request));
 
             // then
-            assertEquals(exception.getMessage(), "비밀번호는 대문자 또는 소문자를 포함해야 합니다.");
+            assertEquals("비밀번호는 대문자 또는 소문자를 포함해야 합니다.", exception.getMessage());
         }
 
         @Test
@@ -159,7 +159,7 @@ public class AuthServiceTest {
                     assertThrows(IllegalArgumentException.class, () -> authService.signup(request));
 
             // then
-            assertEquals(exception.getMessage(), "비밀번호는 숫자를 포함해야 합니다.");
+            assertEquals("비밀번호는 숫자를 포함해야 합니다.", exception.getMessage());
         }
 
         @Test
@@ -174,7 +174,7 @@ public class AuthServiceTest {
                     assertThrows(IllegalArgumentException.class, () -> authService.signup(request));
 
             // then
-            assertEquals(exception.getMessage(), "비밀번호는 특수문자를 포함해야 합니다.");
+            assertEquals("비밀번호는 특수문자를 포함해야 합니다.", exception.getMessage());
         }
     }
 
@@ -243,7 +243,7 @@ public class AuthServiceTest {
                     assertThrows(AuthException.class, () -> authService.signin(request));
 
             // then
-            assertEquals(exception.getMessage(), "잘못된 비밀번호입니다.");
+            assertEquals("잘못된 비밀번호입니다.", exception.getMessage());
         }
     }
 }

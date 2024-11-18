@@ -76,7 +76,7 @@ public class UserServiceTest {
                             () -> userService.delete(authUser, request));
 
             // then
-            assertEquals(exception.getMessage(), DELETE_USER_MESSAGE);
+            assertEquals(DELETE_USER_MESSAGE, exception.getMessage());
         }
 
         @Test
@@ -97,7 +97,7 @@ public class UserServiceTest {
                             () -> userService.delete(authUser, request));
 
             // then
-            assertEquals(exception.getMessage(), INCORRECT_PASSWORD_MESSAGE);
+            assertEquals(INCORRECT_PASSWORD_MESSAGE, exception.getMessage());
         }
     }
 }
