@@ -47,8 +47,7 @@ public class KakaoService {
                 .toString();
     }
 
-    public String callback(String code) throws Exception {
-
+    public String callback(String code) {
         if (code == null) {
             throw new AuthException("인증코드를 받지 못했습니다.");
         }
@@ -57,7 +56,6 @@ public class KakaoService {
 
         try {
             HttpHeaders headers = new HttpHeaders();
-
             headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
             MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -67,15 +65,13 @@ public class KakaoService {
             params.add("code", code);
 
             RestTemplate restTemplate = new RestTemplate();
-            HttpEntity<MultiValueMap<String, String>> httpEntity =
-                    new HttpEntity<>(params, headers);
+            HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(params, headers);
 
-            ResponseEntity<String> response =
-                    restTemplate.exchange(
-                            "https://kauth.kakao.com/oauth/token",
-                            HttpMethod.POST,
-                            httpEntity,
-                            String.class);
+            ResponseEntity<String> response = restTemplate.exchange(
+                    "https://kauth.kakao.com/oauth/token",
+                    HttpMethod.POST,
+                    httpEntity,
+                    String.class);
 
             JSONParser jsonParser = new JSONParser();
             JSONObject jsonObject = (JSONObject) jsonParser.parse(response.getBody());
@@ -88,56 +84,43 @@ public class KakaoService {
         return getUserInfo(accessToken);
     }
 
-    private String getUserInfo(String accessToken) throws Exception {
+    private String getUserInfo(String accessToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Authorization", "Bearer " + accessToken);
+            headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
-        // HttpHeader 생성
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + accessToken);
-        headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+            RestTemplate restTemplate = new RestTemplate();
+            HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(headers);
 
-        // HttpHeader 담기
-        RestTemplate restTemplate = new RestTemplate();
-        HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(headers);
+            ResponseEntity<String> response = restTemplate.exchange(
+                    "https://kapi.kakao.com/v2/user/me",
+                    HttpMethod.POST,
+                    httpEntity,
+                    String.class);
 
-        ResponseEntity<String> response =
-                restTemplate.exchange(
-                        "https://kapi.kakao.com/v2/user/me",
-                        HttpMethod.POST,
-                        httpEntity,
-                        String.class);
+            JSONParser jsonParser = new JSONParser();
+            JSONObject jsonObject = (JSONObject) jsonParser.parse(response.getBody());
+            JSONObject account = (JSONObject) jsonObject.get("kakao_account");
+            JSONObject profile = (JSONObject) account.get("profile");
 
-        // Response 데이터 파싱
-        JSONParser jsonParser = new JSONParser();
-        JSONObject jsonObject = (JSONObject) jsonParser.parse(response.getBody());
-        JSONObject account = (JSONObject) jsonObject.get("kakao_account");
-        JSONObject profile = (JSONObject) account.get("profile");
+            Long kakaoId = (Long) jsonObject.get("id");
+            String email = String.valueOf(account.get("email"));
+            String nickname = String.valueOf(profile.get("nickname"));
 
-        Long kakaoId = (Long) jsonObject.get("id");
-        String email = String.valueOf(account.get("email"));
-        String nickname = String.valueOf(profile.get("nickname"));
+            User kakaoUser = userRepository.findByEmail(email).orElseGet(() ->
+                    new User(email, nickname, "kakaoUser", UserRole.ROLE_USER, kakaoId));
 
-        User kakaoUser =
-                userRepository
-                        .findByEmail(email)
-                        .orElseGet(
-                                () ->
-                                        new User(
-                                                email,
-                                                nickname,
-                                                "kakaoUser",
-                                                UserRole.ROLE_USER,
-                                                kakaoId));
+            if (kakaoUser.getKakaoId() == null) {
+                kakaoUser.InsertKakaoId(kakaoId);
+            }
 
-        if (kakaoUser.getKakaoId() == null) {
-            kakaoUser.InsertKakaoId(kakaoId);
+            User savedUser = userRepository.save(kakaoUser);
+
+            return jwtUtil.createToken(savedUser.getId(), savedUser.getEmail(), savedUser.getName(), savedUser.getUserRole());
+
+        } catch (Exception e) {
+            throw new AuthException("사용자 정보 요청 실패");
         }
-
-        User savedUser = userRepository.save(kakaoUser);
-
-        return jwtUtil.createToken(
-                savedUser.getId(),
-                savedUser.getEmail(),
-                savedUser.getName(),
-                savedUser.getUserRole());
     }
 }
