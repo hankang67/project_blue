@@ -57,8 +57,6 @@ public class ReservationService {
 
     private final ReservationAsyncService reservationAsyncService;
 
-    private final PaymentService paymentService;
-
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
