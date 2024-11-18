@@ -52,7 +52,8 @@ public class LogstashAspect {
         // 예매 완료
         // 패턴 매칭을 적용한 코드
         if (result instanceof CreateReservationResponseDto reservation) {
-            log.info("ReservationEvent: 예매 완료 - 예매 ID: {}, 공연명: {}, 날짜: {}, 좌석: {}, 총 가격: {}, 예약상태: {}",
+            log.info(
+                    "ReservationEvent: 예매 완료 - 예매 ID: {}, 공연명: {}, 날짜: {}, 좌석: {}, 총 가격: {}, 예약상태: {}",
                     reservation.getId(),
                     reservation.getPerformanceTitle(),
                     reservation.getRoundDate(),
@@ -164,7 +165,8 @@ public class LogstashAspect {
 
         // 쿠폰 생성
         if (result instanceof CreateCouponResponseDto responseDto) {
-            log.info("CouponEvent: 생성 완료 - 쿠폰 ID: {}, 수량: {}, 타입: {}, 할인금액: {}, 유효기간 : {} ~ {}",
+            log.info(
+                    "CouponEvent: 생성 완료 - 쿠폰 ID: {}, 수량: {}, 타입: {}, 할인금액: {}, 유효기간 : {} ~ {}",
                     responseDto.getId(),
                     responseDto.getCurrentQuantity(),
                     responseDto.getType(),

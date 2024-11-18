@@ -1,5 +1,25 @@
 package com.sparta.projectblue.domain.reservation.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.util.ReflectionTestUtils;
+
 import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.common.enums.*;
 import com.sparta.projectblue.domain.email.service.EmailCreateService;
@@ -23,25 +43,6 @@ import com.sparta.projectblue.domain.round.repository.RoundRepository;
 import com.sparta.projectblue.domain.sse.service.NotificationService;
 import com.sparta.projectblue.domain.user.entity.User;
 import com.sparta.projectblue.domain.user.repository.UserRepository;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.util.ReflectionTestUtils;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class ReservationServiceTest {
@@ -54,36 +55,23 @@ class ReservationServiceTest {
     private static final String PASSWORD = "abc132?!";
     private static final String CONCERT_TITLE_1 = "Concert 1";
 
-    @Mock
-    private ReservationRepository reservationRepository;
+    @Mock private ReservationRepository reservationRepository;
 
-    @Mock
-    private HallRepository hallRepository;
-    @Mock
-    private PaymentRepository paymentRepository;
-    @Mock
-    private PerformanceRepository performanceRepository;
-    @Mock
-    private ReservedSeatRepository reservedSeatRepository;
-    @Mock
-    private ReviewRepository reviewRepository;
-    @Mock
-    private RoundRepository roundRepository;
-    @Mock
-    private UserRepository userRepository;
-    @Mock
-    private EmailCreateService emailCreateService;
-    @Mock
-    private NotificationService notificationService;
+    @Mock private HallRepository hallRepository;
+    @Mock private PaymentRepository paymentRepository;
+    @Mock private PerformanceRepository performanceRepository;
+    @Mock private ReservedSeatRepository reservedSeatRepository;
+    @Mock private ReviewRepository reviewRepository;
+    @Mock private RoundRepository roundRepository;
+    @Mock private UserRepository userRepository;
+    @Mock private EmailCreateService emailCreateService;
+    @Mock private NotificationService notificationService;
 
-    @Mock
-    private ReservationAsyncService reservationAsyncService;
+    @Mock private ReservationAsyncService reservationAsyncService;
 
-    @Mock
-    private PasswordEncoder passwordEncoder;
+    @Mock private PasswordEncoder passwordEncoder;
 
-    @InjectMocks
-    private ReservationService reservationService;
+    @InjectMocks private ReservationService reservationService;
 
     private final AuthUser authUser =
             new AuthUser(1L, "test@test.com", "testUser", UserRole.ROLE_USER);
@@ -148,30 +136,33 @@ class ReservationServiceTest {
             Round round = new Round(1L, LocalDateTime.now(), PerformanceStatus.BEFORE_OPEN);
             given(roundRepository.findById(anyLong())).willReturn(Optional.of(round));
 
-            Performance performance = new Performance(
-                    1L,
-                    PERFORMANCE_TITLE,
-                    LocalDateTime.now(),
-                    LocalDateTime.now(),
-                    156000L,
-                    Category.CONCERT,
-                    DESCRIPTION,
-                    150
-            );
+            Performance performance =
+                    new Performance(
+                            1L,
+                            PERFORMANCE_TITLE,
+                            LocalDateTime.now(),
+                            LocalDateTime.now(),
+                            156000L,
+                            Category.CONCERT,
+                            DESCRIPTION,
+                            150);
             given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
 
             // 예외 발생을 한 줄로 처리
-            CreateReservationRequestDto request = new CreateReservationRequestDto(1L, List.of(1, 2));
+            CreateReservationRequestDto request =
+                    new CreateReservationRequestDto(1L, List.of(1, 2));
 
             // when & then
-            IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-                reservationService.create(authUser.getId(), request);
-            });
+            IllegalArgumentException exception =
+                    assertThrows(
+                            IllegalArgumentException.class,
+                            () -> {
+                                reservationService.create(authUser.getId(), request);
+                            });
 
             // then
             assertEquals("Reservation not yet open.", exception.getMessage());
         }
-
 
         @Test
         void SOLD_OUT_상태의_회차_예매_오류() {
@@ -180,25 +171,26 @@ class ReservationServiceTest {
             Round round = new Round(1L, LocalDateTime.now(), PerformanceStatus.SOLD_OUT);
             given(roundRepository.findById(anyLong())).willReturn(Optional.of(round));
 
-            Performance performance = new Performance(
-                    1L,
-                    PERFORMANCE_TITLE,
-                    LocalDateTime.now(),
-                    LocalDateTime.now(),
-                    156000L,
-                    Category.CONCERT,
-                    DESCRIPTION,
-                    150
-            );
+            Performance performance =
+                    new Performance(
+                            1L,
+                            PERFORMANCE_TITLE,
+                            LocalDateTime.now(),
+                            LocalDateTime.now(),
+                            156000L,
+                            Category.CONCERT,
+                            DESCRIPTION,
+                            150);
             given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
 
-            CreateReservationRequestDto request = new CreateReservationRequestDto(1L, List.of(1, 2));
+            CreateReservationRequestDto request =
+                    new CreateReservationRequestDto(1L, List.of(1, 2));
 
             // when: 예매 생성 시도
-            IllegalArgumentException exception = assertThrows(
-                    IllegalArgumentException.class,
-                    () -> reservationService.create(authUser.getId(), request)
-            );
+            IllegalArgumentException exception =
+                    assertThrows(
+                            IllegalArgumentException.class,
+                            () -> reservationService.create(authUser.getId(), request));
 
             // then: 예외 메시지가 "Sold out"인지 확인
             assertEquals("Sold out", exception.getMessage());
@@ -211,29 +203,30 @@ class ReservationServiceTest {
             Round round = new Round(1L, LocalDateTime.now(), PerformanceStatus.AVAILABLE);
             given(roundRepository.findById(anyLong())).willReturn(Optional.of(round));
 
-            Performance performance = new Performance(
-                    1L,
-                    PERFORMANCE_TITLE,
-                    LocalDateTime.now(),
-                    LocalDateTime.now(),
-                    156000L,
-                    Category.CONCERT,
-                    DESCRIPTION,
-                    150
-            );
+            Performance performance =
+                    new Performance(
+                            1L,
+                            PERFORMANCE_TITLE,
+                            LocalDateTime.now(),
+                            LocalDateTime.now(),
+                            156000L,
+                            Category.CONCERT,
+                            DESCRIPTION,
+                            150);
             given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
 
             Hall hall = new Hall(HALL_NAME, ADDRESS, 35000);
             given(hallRepository.findById(anyLong())).willReturn(Optional.of(hall));
 
             // 좌석 수가 4개를 초과하는 예약 요청을 생성
-            CreateReservationRequestDto request = new CreateReservationRequestDto(1L, List.of(1, 2, 5, 6, 8));
+            CreateReservationRequestDto request =
+                    new CreateReservationRequestDto(1L, List.of(1, 2, 5, 6, 8));
 
             // when: 예매 생성 시도
-            IllegalArgumentException exception = assertThrows(
-                    IllegalArgumentException.class,
-                    () -> reservationService.create(authUser.getId(), request)
-            );
+            IllegalArgumentException exception =
+                    assertThrows(
+                            IllegalArgumentException.class,
+                            () -> reservationService.create(authUser.getId(), request));
 
             // then: 예외 메시지가 "Maximum seats 4"인지 확인
             assertEquals("Maximum seats 4", exception.getMessage());
@@ -246,16 +239,16 @@ class ReservationServiceTest {
             Round round = new Round(1L, LocalDateTime.now(), PerformanceStatus.AVAILABLE);
             given(roundRepository.findById(anyLong())).willReturn(Optional.of(round));
 
-            Performance performance = new Performance(
-                    1L,
-                    PERFORMANCE_TITLE,
-                    LocalDateTime.now(),
-                    LocalDateTime.now(),
-                    156000L,
-                    Category.CONCERT,
-                    DESCRIPTION,
-                    150
-            );
+            Performance performance =
+                    new Performance(
+                            1L,
+                            PERFORMANCE_TITLE,
+                            LocalDateTime.now(),
+                            LocalDateTime.now(),
+                            156000L,
+                            Category.CONCERT,
+                            DESCRIPTION,
+                            150);
             given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
 
             Hall hall = new Hall(HALL_NAME, ADDRESS, 10);
@@ -264,10 +257,10 @@ class ReservationServiceTest {
             CreateReservationRequestDto request = new CreateReservationRequestDto(1L, List.of(15));
 
             // when
-            IllegalArgumentException exception = assertThrows(
-                    IllegalArgumentException.class,
-                    () -> reservationService.create(authUser.getId(), request)
-            );
+            IllegalArgumentException exception =
+                    assertThrows(
+                            IllegalArgumentException.class,
+                            () -> reservationService.create(authUser.getId(), request));
 
             // then
             assertEquals("Invalid seat number", exception.getMessage());
@@ -280,16 +273,16 @@ class ReservationServiceTest {
             Round round = new Round(1L, LocalDateTime.now(), PerformanceStatus.AVAILABLE);
             given(roundRepository.findById(anyLong())).willReturn(Optional.of(round));
 
-            Performance performance = new Performance(
-                    1L,
-                    PERFORMANCE_TITLE,
-                    LocalDateTime.now(),
-                    LocalDateTime.now(),
-                    156000L,
-                    Category.CONCERT,
-                    DESCRIPTION,
-                    150
-            );
+            Performance performance =
+                    new Performance(
+                            1L,
+                            PERFORMANCE_TITLE,
+                            LocalDateTime.now(),
+                            LocalDateTime.now(),
+                            156000L,
+                            Category.CONCERT,
+                            DESCRIPTION,
+                            150);
             given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
 
             Hall hall = new Hall(HALL_NAME, ADDRESS, 150);
@@ -298,13 +291,14 @@ class ReservationServiceTest {
             given(reservedSeatRepository.findByRoundIdAndSeatNumber(anyLong(), eq(1)))
                     .willReturn(Optional.of(new ReservedSeat(1L, round.getId(), 1)));
 
-            CreateReservationRequestDto request = new CreateReservationRequestDto(1L, List.of(1, 2));
+            CreateReservationRequestDto request =
+                    new CreateReservationRequestDto(1L, List.of(1, 2));
 
             // when
-            IllegalArgumentException exception = assertThrows(
-                    IllegalArgumentException.class,
-                    () -> reservationService.create(authUser.getId(), request)
-            );
+            IllegalArgumentException exception =
+                    assertThrows(
+                            IllegalArgumentException.class,
+                            () -> reservationService.create(authUser.getId(), request));
 
             // then
             assertEquals("ReservedSeat already reserved", exception.getMessage());
@@ -317,13 +311,15 @@ class ReservationServiceTest {
         void 예매_취소_정상_동작() throws Exception {
 
             // given
-            Reservation reservation = new Reservation(authUser.getId(), 1L, 1L, ReservationStatus.COMPLETED, 15000L);
+            Reservation reservation =
+                    new Reservation(authUser.getId(), 1L, 1L, ReservationStatus.COMPLETED, 15000L);
             ReflectionTestUtils.setField(reservation, "id", 1L);
             ReflectionTestUtils.setField(reservation, PAYMENT_ID, 1L);
 
             given(reservationRepository.findById(anyLong())).willReturn(Optional.of(reservation));
 
-            User user = new User(authUser.getEmail(), authUser.getName(), PASSWORD, UserRole.ROLE_USER);
+            User user =
+                    new User(authUser.getEmail(), authUser.getName(), PASSWORD, UserRole.ROLE_USER);
             ReflectionTestUtils.setField(user, "id", authUser.getId());
             given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
 
@@ -336,7 +332,8 @@ class ReservationServiceTest {
             // then
             verify(reservationAsyncService, times(1)).deleteReservationSeats(anyLong());
             verify(reservationAsyncService, times(1)).deleteReservationPayment(anyLong());
-            verify(reservationAsyncService, times(1)).deleteReservationSlack(anyString(), anyLong());
+            verify(reservationAsyncService, times(1))
+                    .deleteReservationSlack(anyString(), anyLong());
             assertEquals(ReservationStatus.CANCELED, reservation.getStatus());
         }
     }
@@ -345,7 +342,8 @@ class ReservationServiceTest {
     void 예매자가_아닌_경우_오류() {
 
         // given
-        Reservation reservation = new Reservation(authUser.getId(), 1L, 1L, ReservationStatus.COMPLETED, 15000L);
+        Reservation reservation =
+                new Reservation(authUser.getId(), 1L, 1L, ReservationStatus.COMPLETED, 15000L);
         ReflectionTestUtils.setField(reservation, "id", 1L);
         ReflectionTestUtils.setField(reservation, PAYMENT_ID, 1L);
 
@@ -359,10 +357,10 @@ class ReservationServiceTest {
         // when
         DeleteReservationRequestDto request = new DeleteReservationRequestDto(1L, PASSWORD);
 
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> reservationService.delete(authUser.getId(), request)
-        );
+        IllegalArgumentException exception =
+                assertThrows(
+                        IllegalArgumentException.class,
+                        () -> reservationService.delete(authUser.getId(), request));
 
         // then
         assertEquals("예매자가 아닙니다", exception.getMessage());
@@ -372,13 +370,19 @@ class ReservationServiceTest {
     void 잘못된_비밀번호_오류() {
 
         // given
-        Reservation reservation = new Reservation(authUser.getId(), 1L, 1L, ReservationStatus.COMPLETED, 15000L);
+        Reservation reservation =
+                new Reservation(authUser.getId(), 1L, 1L, ReservationStatus.COMPLETED, 15000L);
         ReflectionTestUtils.setField(reservation, "id", 1L);
         ReflectionTestUtils.setField(reservation, PAYMENT_ID, 1L);
 
         given(reservationRepository.findById(anyLong())).willReturn(Optional.of(reservation));
 
-        User user = new User(authUser.getEmail(), authUser.getName(), "abc132?!+++++++++++++++++", UserRole.ROLE_USER);
+        User user =
+                new User(
+                        authUser.getEmail(),
+                        authUser.getName(),
+                        "abc132?!+++++++++++++++++",
+                        UserRole.ROLE_USER);
         ReflectionTestUtils.setField(user, "id", authUser.getId());
 
         given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
@@ -386,10 +390,10 @@ class ReservationServiceTest {
         // when
         DeleteReservationRequestDto request = new DeleteReservationRequestDto(1L, PASSWORD);
 
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> reservationService.delete(authUser.getId(), request)
-        );
+        IllegalArgumentException exception =
+                assertThrows(
+                        IllegalArgumentException.class,
+                        () -> reservationService.delete(authUser.getId(), request));
 
         // then
         assertEquals("Incorrect password", exception.getMessage());
@@ -407,14 +411,12 @@ class ReservationServiceTest {
             LocalDateTime reservationDate = LocalDateTime.now();
 
             Reservation reservation =
-                    new Reservation(
-                            authUser.getId(), 1L, 1L, ReservationStatus.COMPLETED, 15000L);
+                    new Reservation(authUser.getId(), 1L, 1L, ReservationStatus.COMPLETED, 15000L);
             ReflectionTestUtils.setField(reservation, "id", 1L);
             ReflectionTestUtils.setField(reservation, PAYMENT_ID, 1L);
             ReflectionTestUtils.setField(reservation, "createdAt", reservationDate);
 
-            given(reservationRepository.findById(anyLong()))
-                    .willReturn(Optional.of(reservation));
+            given(reservationRepository.findById(anyLong())).willReturn(Optional.of(reservation));
 
             Performance performance =
                     new Performance(
@@ -426,20 +428,17 @@ class ReservationServiceTest {
                             category,
                             DESCRIPTION,
                             150);
-            given(performanceRepository.findById(anyLong()))
-                    .willReturn(Optional.of(performance));
+            given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
 
             Round round = new Round(1L, LocalDateTime.now(), PerformanceStatus.AVAILABLE);
             given(roundRepository.findById(anyLong())).willReturn(Optional.of(round));
 
             List<ReservedSeat> reservedSeats =
                     List.of(new ReservedSeat(1L, 1L, 1), new ReservedSeat(1L, 1L, 2));
-            given(reservedSeatRepository.findByReservationId(anyLong()))
-                    .willReturn(reservedSeats);
+            given(reservedSeatRepository.findByReservationId(anyLong())).willReturn(reservedSeats);
 
             Payment payment =
-                    new Payment(
-                            authUser.getId(), reservation.getId(), 1L, 15000L, 0L, "orderId");
+                    new Payment(authUser.getId(), reservation.getId(), 1L, 15000L, 0L, "orderId");
             ReflectionTestUtils.setField(payment, "status", PaymentStatus.DONE);
             given(paymentRepository.findById(anyLong())).willReturn(Optional.of(payment));
 
@@ -461,18 +460,18 @@ class ReservationServiceTest {
         void 예매자가_아님_오류() {
 
             // given
-            Reservation reservation = new Reservation(
-                    authUser.getId() + 1, 1L, 1L, ReservationStatus.COMPLETED, 15000L);
+            Reservation reservation =
+                    new Reservation(
+                            authUser.getId() + 1, 1L, 1L, ReservationStatus.COMPLETED, 15000L);
             ReflectionTestUtils.setField(reservation, "id", 1L);
 
-            given(reservationRepository.findById(anyLong()))
-                    .willReturn(Optional.of(reservation));
+            given(reservationRepository.findById(anyLong())).willReturn(Optional.of(reservation));
 
             // when
-            IllegalArgumentException exception = assertThrows(
-                    IllegalArgumentException.class,
-                    () -> reservationService.getReservation(authUser, reservation.getId())
-            );
+            IllegalArgumentException exception =
+                    assertThrows(
+                            IllegalArgumentException.class,
+                            () -> reservationService.getReservation(authUser, reservation.getId()));
 
             // then
             assertEquals("예매자가 아닙니다", exception.getMessage());
@@ -483,12 +482,10 @@ class ReservationServiceTest {
 
             // given
             Reservation reservation =
-                    new Reservation(
-                            authUser.getId(), 1L, 1L, ReservationStatus.COMPLETED, 15000L);
+                    new Reservation(authUser.getId(), 1L, 1L, ReservationStatus.COMPLETED, 15000L);
             ReflectionTestUtils.setField(reservation, "id", 1L);
 
-            given(reservationRepository.findById(anyLong()))
-                    .willReturn(Optional.of(reservation));
+            given(reservationRepository.findById(anyLong())).willReturn(Optional.of(reservation));
 
             Performance performance =
                     new Performance(
@@ -500,8 +497,7 @@ class ReservationServiceTest {
                             Category.CONCERT,
                             DESCRIPTION,
                             150);
-            given(performanceRepository.findById(anyLong()))
-                    .willReturn(Optional.of(performance));
+            given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
 
             Round round = new Round(1L, LocalDateTime.now(), PerformanceStatus.AVAILABLE);
             given(roundRepository.findById(anyLong())).willReturn(Optional.of(round));
@@ -512,9 +508,7 @@ class ReservationServiceTest {
             IllegalArgumentException exception =
                     assertThrows(
                             IllegalArgumentException.class,
-                            () ->
-                                    reservationService.getReservation(
-                                            authUser, reservation.getId()));
+                            () -> reservationService.getReservation(authUser, reservation.getId()));
 
             // then
             assertEquals("ReservedSeat does not exist", exception.getMessage());
@@ -525,13 +519,11 @@ class ReservationServiceTest {
 
             // given
             Reservation reservation =
-                    new Reservation(
-                            authUser.getId(), 1L, 1L, ReservationStatus.COMPLETED, 15000L);
+                    new Reservation(authUser.getId(), 1L, 1L, ReservationStatus.COMPLETED, 15000L);
             ReflectionTestUtils.setField(reservation, "id", 1L);
             ReflectionTestUtils.setField(reservation, PAYMENT_ID, 1L);
 
-            given(reservationRepository.findById(anyLong()))
-                    .willReturn(Optional.of(reservation));
+            given(reservationRepository.findById(anyLong())).willReturn(Optional.of(reservation));
 
             Performance performance =
                     new Performance(
@@ -543,16 +535,14 @@ class ReservationServiceTest {
                             Category.CONCERT,
                             DESCRIPTION,
                             150);
-            given(performanceRepository.findById(anyLong()))
-                    .willReturn(Optional.of(performance));
+            given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
 
             Round round = new Round(1L, LocalDateTime.now(), PerformanceStatus.AVAILABLE);
             given(roundRepository.findById(anyLong())).willReturn(Optional.of(round));
 
             List<ReservedSeat> reservedSeats =
                     List.of(new ReservedSeat(1L, 1L, 1), new ReservedSeat(1L, 1L, 2));
-            given(reservedSeatRepository.findByReservationId(anyLong()))
-                    .willReturn(reservedSeats);
+            given(reservedSeatRepository.findByReservationId(anyLong())).willReturn(reservedSeats);
 
             given(paymentRepository.findById(anyLong())).willReturn(Optional.empty());
 
@@ -560,9 +550,7 @@ class ReservationServiceTest {
             IllegalArgumentException exception =
                     assertThrows(
                             IllegalArgumentException.class,
-                            () ->
-                                    reservationService.getReservation(
-                                            authUser, reservation.getId()));
+                            () -> reservationService.getReservation(authUser, reservation.getId()));
 
             // then
             assertEquals("결제 정보를 찾을 수 없습니다", exception.getMessage());

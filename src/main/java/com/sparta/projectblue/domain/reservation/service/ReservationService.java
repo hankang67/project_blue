@@ -1,5 +1,16 @@
 package com.sparta.projectblue.domain.reservation.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.sparta.projectblue.aop.annotation.ReservationLogstash;
 import com.sparta.projectblue.domain.common.dto.AuthUser;
 import com.sparta.projectblue.domain.common.enums.PerformanceStatus;
@@ -9,7 +20,6 @@ import com.sparta.projectblue.domain.hall.entity.Hall;
 import com.sparta.projectblue.domain.hall.repository.HallRepository;
 import com.sparta.projectblue.domain.payment.entity.Payment;
 import com.sparta.projectblue.domain.payment.repository.PaymentRepository;
-import com.sparta.projectblue.domain.payment.service.PaymentService;
 import com.sparta.projectblue.domain.performance.entity.Performance;
 import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
 import com.sparta.projectblue.domain.reservation.dto.*;
@@ -24,18 +34,9 @@ import com.sparta.projectblue.domain.round.repository.RoundRepository;
 import com.sparta.projectblue.domain.sse.service.NotificationService;
 import com.sparta.projectblue.domain.user.entity.User;
 import com.sparta.projectblue.domain.user.repository.UserRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @Service
@@ -144,18 +145,19 @@ public class ReservationService {
 
         // 예매 성공 알림 (SSE 전송)
         String title = "[티켓 예매 완료]";
-        String message = String.format("""
+        String message =
+                String.format(
+                        """
                         %s 고객님, 예매가 완료되었습니다.
                         상품정보: %s 공연, %s 회차, %s 공연장, %s 좌석
                         일시: %s로 예약되었습니다.
                         """,
-                id,
-                performance.getTitle(),
-                request.getRoundId(),
-                hall.getName(),
-                request.getSeats(),
-                round.getDate());
-
+                        id,
+                        performance.getTitle(),
+                        request.getRoundId(),
+                        hall.getName(),
+                        request.getSeats(),
+                        round.getDate());
 
         notificationService.notify(String.valueOf(id), title, message);
 
@@ -165,9 +167,14 @@ public class ReservationService {
     @Transactional
     @ReservationLogstash
     public void delete(Long id, DeleteReservationRequestDto request) throws Exception {
-        Reservation reservation = reservationRepository.findById(request.getReservationId())
-                .orElseThrow(() -> new IllegalArgumentException("reservation not found"));
-        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("User not found"));
+        Reservation reservation =
+                reservationRepository
+                        .findById(request.getReservationId())
+                        .orElseThrow(() -> new IllegalArgumentException("reservation not found"));
+        User user =
+                userRepository
+                        .findById(id)
+                        .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         if (!reservation.getUserId().equals(user.getId())) {
             throw new IllegalArgumentException("예매자가 아닙니다");
@@ -184,7 +191,8 @@ public class ReservationService {
         }
 
         reservation.resCanceled();
-        reservationAsyncService.deleteReservationSlack(user.getName(), reservation.getPerformanceId());
+        reservationAsyncService.deleteReservationSlack(
+                user.getName(), reservation.getPerformanceId());
     }
 
     public GetReservationResponseDto getReservation(AuthUser user, Long reservationId) {

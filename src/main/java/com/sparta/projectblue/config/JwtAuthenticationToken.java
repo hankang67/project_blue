@@ -1,10 +1,11 @@
 package com.sparta.projectblue.config;
 
-import org.springframework.security.authentication.AbstractAuthenticationToken;
-import com.sparta.projectblue.domain.common.dto.AuthUser;
-
 import java.io.Serializable;
 import java.util.Objects;
+
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+
+import com.sparta.projectblue.domain.common.dto.AuthUser;
 
 public class JwtAuthenticationToken extends AbstractAuthenticationToken implements Serializable {
 

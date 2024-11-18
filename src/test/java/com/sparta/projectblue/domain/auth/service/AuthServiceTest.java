@@ -32,20 +32,15 @@ import com.sparta.projectblue.domain.user.repository.UserRepository;
 @ExtendWith(MockitoExtension.class)
 public class AuthServiceTest {
 
-    @Mock
-    private UserRepository userRepository;
+    @Mock private UserRepository userRepository;
 
-    @Mock
-    private CouponRepository couponRepository;
+    @Mock private CouponRepository couponRepository;
 
-    @Mock
-    private PasswordEncoder passwordEncoder;
+    @Mock private PasswordEncoder passwordEncoder;
 
-    @Mock
-    private JwtUtil jwtUtil;
+    @Mock private JwtUtil jwtUtil;
 
-    @InjectMocks
-    private AuthService authService;
+    @InjectMocks private AuthService authService;
 
     @Nested
     class SignupTest {
@@ -131,10 +126,10 @@ public class AuthServiceTest {
 
         @ParameterizedTest
         @CsvSource({
-                "'a', '비밀번호는 최소 8자 이상이어야 합니다.'",
-                "'1111????', '비밀번호는 대문자 또는 소문자를 포함해야 합니다.'",
-                "'abc?????', '비밀번호는 숫자를 포함해야 합니다.'",
-                "'abc12345', '비밀번호는 특수문자를 포함해야 합니다.'"
+            "'a', '비밀번호는 최소 8자 이상이어야 합니다.'",
+            "'1111????', '비밀번호는 대문자 또는 소문자를 포함해야 합니다.'",
+            "'abc?????', '비밀번호는 숫자를 포함해야 합니다.'",
+            "'abc12345', '비밀번호는 특수문자를 포함해야 합니다.'"
         })
         void errorWithInvalidPassword(String password, String expectedMessage) {
 

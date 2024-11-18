@@ -65,13 +65,15 @@ public class KakaoService {
             params.add("code", code);
 
             RestTemplate restTemplate = new RestTemplate();
-            HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(params, headers);
+            HttpEntity<MultiValueMap<String, String>> httpEntity =
+                    new HttpEntity<>(params, headers);
 
-            ResponseEntity<String> response = restTemplate.exchange(
-                    "https://kauth.kakao.com/oauth/token",
-                    HttpMethod.POST,
-                    httpEntity,
-                    String.class);
+            ResponseEntity<String> response =
+                    restTemplate.exchange(
+                            "https://kauth.kakao.com/oauth/token",
+                            HttpMethod.POST,
+                            httpEntity,
+                            String.class);
 
             JSONParser jsonParser = new JSONParser();
             JSONObject jsonObject = (JSONObject) jsonParser.parse(response.getBody());
@@ -93,11 +95,12 @@ public class KakaoService {
             RestTemplate restTemplate = new RestTemplate();
             HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(headers);
 
-            ResponseEntity<String> response = restTemplate.exchange(
-                    "https://kapi.kakao.com/v2/user/me",
-                    HttpMethod.POST,
-                    httpEntity,
-                    String.class);
+            ResponseEntity<String> response =
+                    restTemplate.exchange(
+                            "https://kapi.kakao.com/v2/user/me",
+                            HttpMethod.POST,
+                            httpEntity,
+                            String.class);
 
             JSONParser jsonParser = new JSONParser();
             JSONObject jsonObject = (JSONObject) jsonParser.parse(response.getBody());
@@ -108,8 +111,17 @@ public class KakaoService {
             String email = String.valueOf(account.get("email"));
             String nickname = String.valueOf(profile.get("nickname"));
 
-            User kakaoUser = userRepository.findByEmail(email).orElseGet(() ->
-                    new User(email, nickname, "kakaoUser", UserRole.ROLE_USER, kakaoId));
+            User kakaoUser =
+                    userRepository
+                            .findByEmail(email)
+                            .orElseGet(
+                                    () ->
+                                            new User(
+                                                    email,
+                                                    nickname,
+                                                    "kakaoUser",
+                                                    UserRole.ROLE_USER,
+                                                    kakaoId));
 
             if (kakaoUser.getKakaoId() == null) {
                 kakaoUser.InsertKakaoId(kakaoId);
@@ -117,7 +129,11 @@ public class KakaoService {
 
             User savedUser = userRepository.save(kakaoUser);
 
-            return jwtUtil.createToken(savedUser.getId(), savedUser.getEmail(), savedUser.getName(), savedUser.getUserRole());
+            return jwtUtil.createToken(
+                    savedUser.getId(),
+                    savedUser.getEmail(),
+                    savedUser.getName(),
+                    savedUser.getUserRole());
 
         } catch (Exception e) {
             throw new AuthException("사용자 정보 요청 실패");

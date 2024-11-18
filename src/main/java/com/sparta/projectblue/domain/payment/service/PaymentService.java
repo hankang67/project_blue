@@ -53,7 +53,8 @@ public class PaymentService {
     private String widgetSecretKey;
 
     @Transactional
-    public JSONObject confirmPayment(String jsonBody) throws PaymentException, IOException, ParseException {
+    public JSONObject confirmPayment(String jsonBody)
+            throws PaymentException, IOException, ParseException {
 
         JSONParser parser = new JSONParser();
         String orderId;
@@ -112,7 +113,8 @@ public class PaymentService {
 
     @Transactional
     @PaymentLogstash
-    public String cancelPayment(String paymentKey, String cancelReason) throws PaymentException, IOException {
+    public String cancelPayment(String paymentKey, String cancelReason)
+            throws PaymentException, IOException {
 
         // 취소 API 호출
         URL url = new URL(tossBasicUrl + paymentKey + "/cancel");

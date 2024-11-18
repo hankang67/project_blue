@@ -1,5 +1,11 @@
 package com.sparta.projectblue.domain.reservation.service;
 
+import java.util.List;
+import java.util.Objects;
+
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+
 import com.sparta.projectblue.domain.common.enums.PaymentStatus;
 import com.sparta.projectblue.domain.payment.entity.Payment;
 import com.sparta.projectblue.domain.payment.repository.PaymentRepository;
@@ -9,11 +15,6 @@ import com.sparta.projectblue.domain.performance.repository.PerformanceRepositor
 import com.sparta.projectblue.domain.reservedseat.entity.ReservedSeat;
 import com.sparta.projectblue.domain.reservedseat.repository.ReservedSeatRepository;
 import com.sparta.projectblue.domain.sse.service.NotificationService;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Objects;
 
 @Service
 public class ReservationAsyncService {
@@ -39,7 +40,8 @@ public class ReservationAsyncService {
 
     @Async("mailExecutor")
     public void deleteReservationSeats(Long reservationId) {
-        List<ReservedSeat> reservedSeats = reservedSeatRepository.findByReservationId(reservationId);
+        List<ReservedSeat> reservedSeats =
+                reservedSeatRepository.findByReservationId(reservationId);
         reservedSeatRepository.deleteAll(reservedSeats);
     }
 
@@ -56,9 +58,9 @@ public class ReservationAsyncService {
         Performance performance = performanceRepository.findById(performanceId).orElse(null);
         if (Objects.nonNull(performance)) {
             String title = "[티켓_예매취소완료]";
-            String message = String.format("%s 고객님, %s 공연의 예약이 취소 되었습니다.", userName, performance.getTitle());
+            String message =
+                    String.format("%s 고객님, %s 공연의 예약이 취소 되었습니다.", userName, performance.getTitle());
             notificationService.notify(userName, title, message);
         }
     }
 }
-
