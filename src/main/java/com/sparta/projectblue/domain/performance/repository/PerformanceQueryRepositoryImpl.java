@@ -29,6 +29,44 @@ public class PerformanceQueryRepositoryImpl implements PerformanceQueryRepositor
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
+    public Page<GetPerformancesResponseDto> findAllPerformance(
+            Pageable pageable) {
+
+        List<GetPerformancesResponseDto> query =
+                jpaQueryFactory
+                        .select(
+                                Projections.fields(
+                                        GetPerformancesResponseDto.class,
+                                        performance.title.as("title"),
+                                        hall.name.as("hallNm"),
+                                        performance.startDate.as("startDate"),
+                                        performance.endDate.as("endDate")))
+                        .from(performance)
+                        .leftJoin(hall)
+                        .on(performance.hallId.eq(hall.id))
+                        .where(
+                                performanceBetweenIn(LocalDateTime.now()))
+                        .orderBy(performance.startDate.asc())
+                        .offset(pageable.getOffset())
+                        .limit(pageable.getPageSize())
+                        .fetch();
+
+        Long total =
+                jpaQueryFactory
+                        .select(performance.count())
+                        .from(performance)
+                        .leftJoin(hall)
+                        .on(performance.hallId.eq(hall.id))
+                        .where(
+                                performanceBetweenIn(LocalDateTime.now()))
+                        .fetchOne();
+
+        if (total == null) total = 0L;
+
+        return new PageImpl<>(query, pageable, total);
+    }
+
+    @Override
     public Page<GetPerformancesResponseDto> findByCondition(
             Pageable pageable,
             String performanceNm,

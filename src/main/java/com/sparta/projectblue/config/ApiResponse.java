@@ -1,6 +1,7 @@
 package com.sparta.projectblue.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.Getter;
 
 @Getter
