@@ -9,6 +9,8 @@ import java.util.Optional;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -30,21 +32,26 @@ import com.sparta.projectblue.domain.user.repository.UserRepository;
 @ExtendWith(MockitoExtension.class)
 public class AuthServiceTest {
 
-    @Mock private UserRepository userRepository;
+    @Mock
+    private UserRepository userRepository;
 
-    @Mock private CouponRepository couponRepository;
+    @Mock
+    private CouponRepository couponRepository;
 
-    @Mock private PasswordEncoder passwordEncoder;
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
-    @Mock private JwtUtil jwtUtil;
+    @Mock
+    private JwtUtil jwtUtil;
 
-    @InjectMocks private AuthService authService;
+    @InjectMocks
+    private AuthService authService;
 
     @Nested
     class SignupTest {
 
         @Test
-        void 회원가입_정상_동작() {
+        void successfulSignup() {
 
             // given
             User user =
@@ -85,7 +92,7 @@ public class AuthServiceTest {
         }
 
         @Test
-        void 탈퇴한_이메일_오류() {
+        void errorWithDeletedEmail() {
 
             // given
             given(userRepository.existsByEmailAndIsDeletedTrue(anyString())).willReturn(true);
@@ -102,7 +109,7 @@ public class AuthServiceTest {
         }
 
         @Test
-        void 중복_이메일_오류() {
+        void errorWithDuplicateEmail() {
 
             // given
             given(userRepository.existsByEmail(anyString())).willReturn(true);
@@ -117,64 +124,29 @@ public class AuthServiceTest {
             // then
             assertEquals("이미 존재하는 이메일입니다.", exception.getMessage());
         }
+    }
 
-        @Test
-        void 비밀번호_길이_오류() {
+    @Nested
+    class SignupPasswordTest {
+
+        @ParameterizedTest
+        @CsvSource({
+                "'a', '비밀번호는 최소 8자 이상이어야 합니다.'",
+                "'1111????', '비밀번호는 대문자 또는 소문자를 포함해야 합니다.'",
+                "'abc?????', '비밀번호는 숫자를 포함해야 합니다.'",
+                "'abc12345', '비밀번호는 특수문자를 포함해야 합니다.'"
+        })
+        void errorWithInvalidPassword(String password, String expectedMessage) {
 
             // given
-            SignupRequestDto request = new SignupRequestDto("email", "a", "pwd", "ROLE_USER");
+            SignupRequestDto request = new SignupRequestDto("email", password, "pwd", "ROLE_USER");
 
             // when
             IllegalArgumentException exception =
                     assertThrows(IllegalArgumentException.class, () -> authService.signup(request));
 
             // then
-            assertEquals("비밀번호는 최소 8자 이상이어야 합니다.", exception.getMessage());
-        }
-
-        @Test
-        void 비밀번호_대소문자_오류() {
-
-            // given
-            SignupRequestDto request =
-                    new SignupRequestDto("email", "1111????", "pwd", "ROLE_USER");
-
-            // when
-            IllegalArgumentException exception =
-                    assertThrows(IllegalArgumentException.class, () -> authService.signup(request));
-
-            // then
-            assertEquals("비밀번호는 대문자 또는 소문자를 포함해야 합니다.", exception.getMessage());
-        }
-
-        @Test
-        void 비밀번호_숫자_오류() {
-
-            // given
-            SignupRequestDto request =
-                    new SignupRequestDto("email", "abc?????", "pwd", "ROLE_USER");
-
-            // when
-            IllegalArgumentException exception =
-                    assertThrows(IllegalArgumentException.class, () -> authService.signup(request));
-
-            // then
-            assertEquals("비밀번호는 숫자를 포함해야 합니다.", exception.getMessage());
-        }
-
-        @Test
-        void 비밀번호_특수문자_오류() {
-
-            // given
-            SignupRequestDto request =
-                    new SignupRequestDto("email", "abc12345", "pwd", "ROLE_USER");
-
-            // when
-            IllegalArgumentException exception =
-                    assertThrows(IllegalArgumentException.class, () -> authService.signup(request));
-
-            // then
-            assertEquals("비밀번호는 특수문자를 포함해야 합니다.", exception.getMessage());
+            assertEquals(expectedMessage, exception.getMessage());
         }
     }
 
@@ -182,7 +154,7 @@ public class AuthServiceTest {
     class SigninTest {
 
         @Test
-        void 로그인_정상_동작() {
+        void successfulSignin() {
 
             // given
             SigninRequestDto request = new SigninRequestDto("email", "pwd");
@@ -218,7 +190,7 @@ public class AuthServiceTest {
         }
 
         @Test
-        void 잘못된_비밀번호_오류() {
+        void errorWithIncorrectPassword() {
 
             // given
             SigninRequestDto request = new SigninRequestDto("email", "pwd");
