@@ -54,13 +54,13 @@ public class PaymentController {
     }
 
     @GetMapping("/payments/success")
-    public String paymentRequest(HttpServletRequest request, Model model) throws Exception {
+    public String paymentRequest(HttpServletRequest request, Model model) {
 
         return "/success";
     }
 
     @GetMapping("/fail")
-    public String failPayment(HttpServletRequest request, Model model) throws Exception {
+    public String failPayment(HttpServletRequest request, Model model) {
 
         String failCode = request.getParameter("code");
         String failMessage = request.getParameter("message");

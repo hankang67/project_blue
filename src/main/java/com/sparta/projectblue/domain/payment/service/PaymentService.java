@@ -1,9 +1,6 @@
 package com.sparta.projectblue.domain.payment.service;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.Reader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -50,13 +47,13 @@ public class PaymentService {
     private final SavePaymentService savePaymentService;
 
     @Value("${toss.basic.url}")
-    private String TOSS_BASIC_URL;
+    private String tossBasicUrl;
 
     @Value("${toss.widget.secret.key}")
-    private String WIDGET_SECRET_KEY;
+    private String widgetSecretKey;
 
     @Transactional
-    public JSONObject confirmPayment(String jsonBody) throws Exception {
+    public JSONObject confirmPayment(String jsonBody) throws PaymentException, IOException, ParseException {
 
         JSONParser parser = new JSONParser();
         String orderId;
@@ -69,7 +66,7 @@ public class PaymentService {
             orderId = (String) requestData.get("orderId");
             amount = (String) requestData.get("amount");
         } catch (ParseException e) {
-            throw new RuntimeException(e);
+            throw new PaymentException("잘못된 JSON request body");
         }
 
         if (!verifyPayment(orderId, Long.parseLong(amount))) {
@@ -85,7 +82,7 @@ public class PaymentService {
 
         // 결제 승인 API 호출
         // @docs https://docs.tosspayments.com/guides/v2/payment-widget/integration#3-결제-승인하기
-        URL url = new URL(TOSS_BASIC_URL + "confirm");
+        URL url = new URL(tossBasicUrl + "confirm");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestProperty("Authorization", authorizations);
         connection.setRequestProperty("Content-Type", "application/json");
@@ -115,10 +112,10 @@ public class PaymentService {
 
     @Transactional
     @PaymentLogstash
-    public String cancelPayment(String paymentKey, String cancelReason) throws Exception {
+    public String cancelPayment(String paymentKey, String cancelReason) throws PaymentException, IOException {
 
         // 취소 API 호출
-        URL url = new URL(TOSS_BASIC_URL + paymentKey + "/cancel");
+        URL url = new URL(tossBasicUrl + paymentKey + "/cancel");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestProperty("Authorization", secretKeyEncoder());
         connection.setRequestProperty("Content-Type", "application/json");
@@ -261,7 +258,7 @@ public class PaymentService {
         // @docs https://docs.tosspayments.com/reference/using-api/authorization#%EC%9D%B8%EC%A6%9D
         Base64.Encoder encoder = Base64.getEncoder();
         byte[] encodedBytes =
-                encoder.encode((WIDGET_SECRET_KEY + ":").getBytes(StandardCharsets.UTF_8));
+                encoder.encode((widgetSecretKey + ":").getBytes(StandardCharsets.UTF_8));
         return "Basic " + new String(encodedBytes);
     }
 
