@@ -1,4 +1,4 @@
-package com.sparta.projectblue.sse;
+package com.sparta.projectblue.domain.sse;
 
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;

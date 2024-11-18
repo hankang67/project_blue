@@ -1,12 +1,12 @@
-package com.sparta.projectblue.sse.controller;
+package com.sparta.projectblue.domain.sse.controller;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import com.sparta.projectblue.sse.RedisPublisher;
-import com.sparta.projectblue.sse.service.NotificationService;
+import com.sparta.projectblue.domain.sse.RedisPublisher;
+import com.sparta.projectblue.domain.sse.service.NotificationService;
 
 import lombok.RequiredArgsConstructor;
 

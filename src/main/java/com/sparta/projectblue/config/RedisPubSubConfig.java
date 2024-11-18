@@ -7,7 +7,7 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 
-import com.sparta.projectblue.sse.RedisSubscriber;
+import com.sparta.projectblue.domain.sse.RedisSubscriber;
 
 @Configuration
 public class RedisPubSubConfig {

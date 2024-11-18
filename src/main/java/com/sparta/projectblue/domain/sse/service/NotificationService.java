@@ -1,4 +1,4 @@
-package com.sparta.projectblue.sse.service;
+package com.sparta.projectblue.domain.sse.service;
 
 import java.io.IOException;
 import java.util.Map;
