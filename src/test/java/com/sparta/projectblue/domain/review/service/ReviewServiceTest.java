@@ -25,7 +25,7 @@ import com.sparta.projectblue.domain.review.entity.Review;
 import com.sparta.projectblue.domain.review.repository.ReviewRepository;
 
 @ExtendWith(SpringExtension.class)
-public class ReviewServiceTest {
+class ReviewServiceTest {
 
     @Mock private ReviewRepository reviewRepository;
 
@@ -36,7 +36,7 @@ public class ReviewServiceTest {
     private Reservation reservation;
     private final Long userId = 1L;
     private final Long performanceId = 1L;
-    private final Long reservationId = 1L;
+    private Long reservationId = 1L;
     private final Long reviewId = 1L;
 
     @BeforeEach
@@ -50,7 +50,7 @@ public class ReviewServiceTest {
     void createReviewTest() {
         CreateReviewRequestDto request = new CreateReviewRequestDto(reservationId, FOUR, "별로");
 
-        Long reservationId = request.getReservationId();
+        reservationId = request.getReservationId();
 
         // when
         when(reservationRepository.findById(reservationId)).thenReturn(Optional.of(reservation));
@@ -124,7 +124,7 @@ public class ReviewServiceTest {
     void updateReviewFailsWhenNoUser() {
         UpdateReviewRequestDto request = new UpdateReviewRequestDto(ReviewRate.FIVE, "별로인데 좀 괜찮아짐");
         Review review = new Review(performanceId, reservationId, ReviewRate.FIVE, "별로인데 좀 괜찮아짐");
-        Reservation reservation =
+        reservation =
                 new Reservation(
                         2L, performanceId, reservationId, ReservationStatus.COMPLETED, 10000L);
 
@@ -140,7 +140,7 @@ public class ReviewServiceTest {
     @Test
     void deleteReviewTest() {
         Review review = new Review(performanceId, reservationId, ReviewRate.FIVE, "별로인데 좀 괜찮아짐");
-        Reservation reservation =
+        reservation =
                 new Reservation(
                         2L, performanceId, reservationId, ReservationStatus.COMPLETED, 10000L);
 

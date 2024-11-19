@@ -27,6 +27,9 @@ import lombok.RequiredArgsConstructor;
 public class PerformanceQueryRepositoryImpl implements PerformanceQueryRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
+    
+    private static final String START = "startDate";
+    private static final String END = "endDate";
 
     @Override
     public Page<GetPerformancesResponseDto> findAllPerformance(Pageable pageable) {
@@ -38,8 +41,8 @@ public class PerformanceQueryRepositoryImpl implements PerformanceQueryRepositor
                                         GetPerformancesResponseDto.class,
                                         performance.title.as("title"),
                                         hall.name.as("hallNm"),
-                                        performance.startDate.as("startDate"),
-                                        performance.endDate.as("endDate")))
+                                        performance.startDate.as(START),
+                                        performance.endDate.as(END)))
                         .from(performance)
                         .leftJoin(hall)
                         .on(performance.hallId.eq(hall.id))
@@ -77,8 +80,8 @@ public class PerformanceQueryRepositoryImpl implements PerformanceQueryRepositor
                                         GetPerformancesResponseDto.class,
                                         performance.title.as("title"),
                                         hall.name.as("hallNm"),
-                                        performance.startDate.as("startDate"),
-                                        performance.endDate.as("endDate")))
+                                        performance.startDate.as(START),
+                                        performance.endDate.as(END)))
                         .from(performance)
                         .leftJoin(hall)
                         .on(performance.hallId.eq(hall.id))
@@ -168,8 +171,8 @@ public class PerformanceQueryRepositoryImpl implements PerformanceQueryRepositor
                                         performance.id.as("performanceId"),
                                         hall.id.as("hallId"),
                                         performance.title.as("performanceTitle"),
-                                        performance.startDate.as("startDate"),
-                                        performance.endDate.as("endDate"),
+                                        performance.startDate.as(START),
+                                        performance.endDate.as(END),
                                         performance.price.as("price"),
                                         performance.category.stringValue().as("category"),
                                         performance.description.as("description"),

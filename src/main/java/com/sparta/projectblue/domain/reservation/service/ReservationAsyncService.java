@@ -1,5 +1,6 @@
 package com.sparta.projectblue.domain.reservation.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -46,7 +47,7 @@ public class ReservationAsyncService {
     }
 
     @Async("mailExecutor")
-    public void deleteReservationPayment(Long paymentId) throws Exception {
+    public void deleteReservationPayment(Long paymentId) throws IOException {
         Payment payment = paymentRepository.findById(paymentId).orElse(null);
         if (Objects.nonNull(payment) && !payment.getStatus().equals(PaymentStatus.CANCELED)) {
             paymentService.cancelPayment(payment.getPaymentKey(), "예매를 취소합니다");

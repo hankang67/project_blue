@@ -1,27 +1,5 @@
 package com.sparta.projectblue.domain.payment.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
-
-import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Spy;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.util.ReflectionTestUtils;
-
 import com.sparta.projectblue.domain.common.enums.PaymentStatus;
 import com.sparta.projectblue.domain.common.enums.ReservationStatus;
 import com.sparta.projectblue.domain.common.enums.UserRole;
@@ -37,9 +15,28 @@ import com.sparta.projectblue.domain.reservation.entity.Reservation;
 import com.sparta.projectblue.domain.reservation.repository.ReservationRepository;
 import com.sparta.projectblue.domain.user.entity.User;
 import com.sparta.projectblue.domain.user.repository.UserRepository;
-
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
+import org.json.simple.JSONObject;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class PaymentServiceTest {
@@ -79,7 +76,7 @@ public class PaymentServiceTest {
 
         // 결제 서비스의 URL을 MockWebServer 주소로 변경
         ReflectionTestUtils.setField(
-                paymentService, "TOSS_BASIC_URL", mockWebServer.url("/v1/payments/").toString());
+                paymentService, "tossBasicUrl", mockWebServer.url("/v1/payments/").toString());
     }
 
     @AfterEach
@@ -131,10 +128,10 @@ public class PaymentServiceTest {
             JSONObject response = paymentService.confirmPayment(jsonBody);
 
             // then
-            assertEquals(response.get(ORDER_ID_VALUE_NAME), orderId);
-            assertEquals(response.get(TOTAL_AMOUNT), 10000L);
+            assertEquals(orderId, response.get(ORDER_ID_VALUE_NAME));
+            assertEquals(10000L, response.get(TOTAL_AMOUNT));
 
-            assertEquals(reservation.getStatus(), ReservationStatus.PENDING);
+            assertEquals(ReservationStatus.PENDING, reservation.getStatus());
         }
 
         @Test
@@ -179,19 +176,18 @@ public class PaymentServiceTest {
         }
 
         @Test
-        void 잘못된_요청_데이터_오류() throws Exception {
+        void 잘못된_요청_데이터_오류() {
 
             // given
             String jsonBody = "{paymentKey: testPaymentKey";
 
             // when
-            RuntimeException exception =
+            PaymentException exception =
                     assertThrows(
-                            RuntimeException.class, () -> paymentService.confirmPayment(jsonBody));
+                            PaymentException.class, () -> paymentService.confirmPayment(jsonBody));
 
             // then
-            assertEquals(ParseException.class, exception.getCause().getClass());
-        }
+            assertEquals("잘못된 JSON request body", exception.getMessage());        }
 
         @Test
         void 이미_결제된_예매_오류() {
@@ -455,8 +451,8 @@ public class PaymentServiceTest {
             // then
             assertNotNull(response);
 
-            assertEquals(response.getAmount(), 10000L);
-            assertEquals(response.getDiscountAmount(), 0L);
+            assertEquals(10000L, response.getAmount());
+            assertEquals(0L, response.getDiscountAmount());
         }
 
         @Test

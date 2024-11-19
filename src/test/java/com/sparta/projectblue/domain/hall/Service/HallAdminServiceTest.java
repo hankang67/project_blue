@@ -21,7 +21,7 @@ import com.sparta.projectblue.domain.hall.repository.HallRepository;
 import com.sparta.projectblue.domain.hall.service.HallAdminService;
 
 @ExtendWith(SpringExtension.class)
-public class HallAdminServiceTest {
+class HallAdminServiceTest {
 
     @Mock private HallRepository hallRepository;
 

@@ -27,7 +27,7 @@ import com.sparta.projectblue.domain.coupon.repository.CouponRepository;
 import com.sparta.projectblue.domain.usedcoupon.repository.UsedCouponRepository;
 
 @ExtendWith(SpringExtension.class)
-public class CouponServiceTest {
+class CouponServiceTest {
 
     @Mock private CouponRepository couponRepository;
 
@@ -179,10 +179,9 @@ public class CouponServiceTest {
 
         given(couponRepository.findAll(pageable)).willReturn(couponPage);
 
-        AuthUser authUser = new AuthUser(1L, "test@test.com", "testUser", UserRole.ROLE_USER);
         // when
         Page<GetCouponResponseDto> getCouponResponseDto =
-                couponService.getUserCoupon(authUser, 1, 10);
+                couponService.getUserCoupon(1, 10);
 
         // then
         assertNotNull(getCouponResponseDto);

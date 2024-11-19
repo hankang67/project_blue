@@ -1,30 +1,28 @@
 package com.sparta.projectblue.domain.hall.Service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.any;
-
-import java.util.List;
-
+import com.sparta.projectblue.domain.hall.dto.GetHallResponseDto;
+import com.sparta.projectblue.domain.hall.dto.GetHallsResponseDto;
+import com.sparta.projectblue.domain.hall.entity.Hall;
+import com.sparta.projectblue.domain.hall.repository.HallRepository;
+import com.sparta.projectblue.domain.hall.service.HallService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.sparta.projectblue.domain.hall.dto.GetHallResponseDto;
-import com.sparta.projectblue.domain.hall.dto.GetHallsResponseDto;
-import com.sparta.projectblue.domain.hall.entity.Hall;
-import com.sparta.projectblue.domain.hall.repository.HallRepository;
-import com.sparta.projectblue.domain.hall.service.HallService;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.any;
 
 @ExtendWith(SpringExtension.class)
-public class HallServiceTest {
+class HallServiceTest {
 
     @Mock private HallRepository hallRepository;
 
@@ -39,7 +37,6 @@ public class HallServiceTest {
                         new Hall("hallName2", "hallAddress2", 200));
 
         Page<Hall> hallPage = new PageImpl<>(halls);
-        Pageable pageable = PageRequest.of(0, 10);
 
         given(hallRepository.findAll(any(Pageable.class))).willReturn(hallPage);
 

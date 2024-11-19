@@ -43,11 +43,10 @@ public class CouponController {
     @GetMapping
     @Operation(summary = "쿠폰 다건 조회")
     public ResponseEntity<ApiResponse<Page<GetCouponResponseDto>>> getUserCoupons(
-            @AuthenticationPrincipal AuthUser authUser,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
 
         return ResponseEntity.ok(
-                ApiResponse.success(couponService.getUserCoupon(authUser, page, size)));
+                ApiResponse.success(couponService.getUserCoupon(page, size)));
     }
 }

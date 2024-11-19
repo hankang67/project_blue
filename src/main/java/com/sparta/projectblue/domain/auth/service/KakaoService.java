@@ -124,7 +124,7 @@ public class KakaoService {
                                                     kakaoId));
 
             if (kakaoUser.getKakaoId() == null) {
-                kakaoUser.InsertKakaoId(kakaoId);
+                kakaoUser.insertKakaoId(kakaoId);
             }
 
             User savedUser = userRepository.save(kakaoUser);

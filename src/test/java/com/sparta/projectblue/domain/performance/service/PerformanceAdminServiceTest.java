@@ -43,28 +43,37 @@ import com.sparta.projectblue.domain.user.entity.User;
 import com.sparta.projectblue.domain.user.repository.UserRepository;
 
 @ExtendWith(SpringExtension.class)
-public class PerformanceAdminServiceTest {
+class PerformanceAdminServiceTest {
 
-    @InjectMocks private PerformanceAdminService performanceAdminService;
+    @InjectMocks
+    private PerformanceAdminService performanceAdminService;
 
-    @Mock private HallRepository hallRepository;
+    @Mock
+    private HallRepository hallRepository;
 
-    @Mock private PerformerRepository performerRepository;
+    @Mock
+    private PerformerRepository performerRepository;
 
-    @Mock private PerformanceRepository performanceRepository;
+    @Mock
+    private PerformanceRepository performanceRepository;
 
-    @Mock private UserRepository userRepository;
+    @Mock
+    private UserRepository userRepository;
 
-    @Mock private PerformerPerformanceRepository performerPerformanceRepository;
+    @Mock
+    private PerformerPerformanceRepository performerPerformanceRepository;
 
-    @Mock private PosterRepository posterRepository;
+    @Mock
+    private PosterRepository posterRepository;
 
-    @Mock private RoundRepository roundRepository;
+    @Mock
+    private RoundRepository roundRepository;
 
-    @Mock private AmazonS3 amazonS3;
+    @Mock
+    private AmazonS3 amazonS3;
 
     @Test
-    public void 공연_생성_성공_테스트() throws Exception {
+    void 공연_생성_성공_테스트() throws Exception {
         // Given
         AuthUser authUser = new AuthUser(1L, "a@a.a", "aaaaaa1!", UserRole.ROLE_ADMIN);
         User user = new User();
@@ -78,7 +87,7 @@ public class PerformanceAdminServiceTest {
                         "공연 생성 테스트",
                         1L,
                         100,
-                        new Long[] {1L, 2L});
+                        new Long[]{1L, 2L});
 
         MockMultipartFile posterFile =
                 new MockMultipartFile("poster_name", "poster.png", "image/png", new byte[1024]);
@@ -120,7 +129,7 @@ public class PerformanceAdminServiceTest {
     }
 
     @Test
-    public void 파일_업로드_실패로_예외가_발생() throws IOException {
+    void 파일_업로드_실패로_예외가_발생() throws IOException {
         // Given
         AuthUser authUser = new AuthUser(1L, "a@a.a", "aaaaaa1!", UserRole.ROLE_ADMIN);
         User user = new User();
@@ -134,7 +143,7 @@ public class PerformanceAdminServiceTest {
                         "공연 생성 테스트",
                         1L,
                         100,
-                        new Long[] {1L, 2L});
+                        new Long[]{1L, 2L});
 
         MultipartFile posterFile = mock(MultipartFile.class);
 
@@ -175,7 +184,7 @@ public class PerformanceAdminServiceTest {
     }
 
     @Test
-    public void DB에서의_관리자_권한이_없어서_예외가_발생() {
+    void DB에서의_관리자_권한이_없어서_예외가_발생() {
         // Given
         AuthUser authUser = new AuthUser(1L, "a@a.a", "aaaaaa1!", UserRole.ROLE_ADMIN);
         CreatePerformanceRequestDto requestDto = new CreatePerformanceRequestDto();
@@ -183,8 +192,6 @@ public class PerformanceAdminServiceTest {
         ReflectionTestUtils.setField(user, "id", 1L);
 
         // When
-        // when(userRepository.findById(any())).thenReturn(Optional.of(user));
-        // given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
         given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
 
         IllegalArgumentException exception =
@@ -199,7 +206,7 @@ public class PerformanceAdminServiceTest {
     }
 
     @Test
-    public void 공연장이_없어서_예외가_발생() {
+    void 공연장이_없어서_예외가_발생() {
         // Given
         AuthUser authUser = new AuthUser(1L, "a@a.a", "aaaaaa1!", UserRole.ROLE_ADMIN);
         User user = new User();
@@ -223,7 +230,7 @@ public class PerformanceAdminServiceTest {
     }
 
     @Test
-    public void 시작일이_현재보다_이전이라_예외가_발생() {
+    void 시작일이_현재보다_이전이라_예외가_발생() {
         // Given
         AuthUser authUser = new AuthUser(1L, "a@a.a", "aaaaaa1!", UserRole.ROLE_ADMIN);
         User user = new User();
@@ -247,7 +254,7 @@ public class PerformanceAdminServiceTest {
     }
 
     @Test
-    public void 종료일이_현재보다_이전이라_예외가_발생() {
+    void 종료일이_현재보다_이전이라_예외가_발생() {
         // Given
         AuthUser authUser = new AuthUser(1L, "a@a.a", "aaaaaa1!", UserRole.ROLE_ADMIN);
         User user = new User();
@@ -271,7 +278,7 @@ public class PerformanceAdminServiceTest {
     }
 
     @Test
-    public void 종료일이_시작일보다_이전이라_예외가_발생() {
+    void 종료일이_시작일보다_이전이라_예외가_발생() {
         // Given
         AuthUser authUser = new AuthUser(1L, "a@a.a", "aaaaaa1!", UserRole.ROLE_ADMIN);
         User user = new User();
@@ -296,7 +303,7 @@ public class PerformanceAdminServiceTest {
     }
 
     @Test
-    public void 공연시간이_0이라서_예외가_발생() {
+    void 공연시간이_0이라서_예외가_발생() {
         // Given
         AuthUser authUser = new AuthUser(1L, "a@a.a", "aaaaaa1!", UserRole.ROLE_ADMIN);
         User user = new User();
@@ -321,7 +328,7 @@ public class PerformanceAdminServiceTest {
     }
 
     @Test
-    public void 잘못된_형식의_파일_이름으로_예외발생() {
+    void 잘못된_형식의_파일_이름으로_예외발생() {
 
         ResponseStatusException exception =
                 assertThrows(
@@ -335,7 +342,7 @@ public class PerformanceAdminServiceTest {
     }
 
     @Test
-    public void 등록하려는_출연자가_존재하지_않아_예외가_발생() {
+    void 등록하려는_출연자가_존재하지_않아_예외가_발생() {
         AuthUser authUser = new AuthUser(1L, "a@a.a", "aaaaaa1!", UserRole.ROLE_ADMIN);
         User user = new User();
         CreatePerformanceRequestDto requestDto =
@@ -348,7 +355,7 @@ public class PerformanceAdminServiceTest {
                         "공연 생성 테스트",
                         1L,
                         100,
-                        new Long[] {1L, 2L});
+                        new Long[]{1L, 2L});
 
         MultipartFile posterFile = mock(MultipartFile.class);
 
@@ -375,7 +382,7 @@ public class PerformanceAdminServiceTest {
     }
 
     @Test
-    public void 수정하려는_공연이_존재하지_않아_예외가_발생() {
+    void 수정하려는_공연이_존재하지_않아_예외가_발생() {
         AuthUser authUser = new AuthUser(1L, "a@a.a", "aaaaaa1!", UserRole.ROLE_ADMIN);
         Long performanceId = 1L;
         UpdatePerformanceRequestDto requestDto = new UpdatePerformanceRequestDto();
@@ -397,7 +404,7 @@ public class PerformanceAdminServiceTest {
     }
 
     @Test
-    public void 유저가_존재하지_않아_예외가_발생() {
+    void 유저가_존재하지_않아_예외가_발생() {
         AuthUser authUser = new AuthUser(1L, "a@a.a", "aaaaaa1!", UserRole.ROLE_ADMIN);
         Long performanceId = 1L;
         UpdatePerformanceRequestDto requestDto = new UpdatePerformanceRequestDto();
@@ -416,7 +423,7 @@ public class PerformanceAdminServiceTest {
     }
 
     @Test
-    public void 삭제하려는_출연자가_없어서_예외가_발생() {
+    void 삭제하려는_출연자가_없어서_예외가_발생() {
         AuthUser authUser = new AuthUser(1L, "a@a.a", "aaaaaa1!", UserRole.ROLE_ADMIN);
         Long performanceId = 1L;
         UpdatePerformanceRequestDto requestDto =
@@ -429,7 +436,7 @@ public class PerformanceAdminServiceTest {
                         "수정 테스트코드",
                         1L,
                         200,
-                        new Long[] {1L, 2L});
+                        new Long[]{1L, 2L});
         User user = new User();
         ReflectionTestUtils.setField(user, "userRole", UserRole.ROLE_ADMIN);
 
@@ -446,7 +453,7 @@ public class PerformanceAdminServiceTest {
     }
 
     @Test
-    public void 삭제하려는_출연자가_List가_비어있어서_예외가_발생() {
+    void 삭제하려는_출연자가_List가_비어있어서_예외가_발생() {
         AuthUser authUser = new AuthUser(1L, "a@a.a", "aaaaaa1!", UserRole.ROLE_ADMIN);
         Long performanceId = 1L;
         UpdatePerformanceRequestDto requestDto =
@@ -459,17 +466,17 @@ public class PerformanceAdminServiceTest {
                         "수정 테스트코드",
                         1L,
                         200,
-                        new Long[] {1L, 2L});
+                        new Long[]{1L, 2L});
         User user = new User();
         ReflectionTestUtils.setField(user, "userRole", UserRole.ROLE_ADMIN);
 
-        List<PerformerPerformance> PerformerPerformances = List.of();
+        List<PerformerPerformance> performerPerformanceList = List.of();
 
         // When
         when(performanceRepository.findById(anyLong())).thenReturn(Optional.of(new Performance()));
         when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(user));
         when(performerPerformanceRepository.findAllByPerformanceId(any()))
-                .thenReturn(PerformerPerformances);
+                .thenReturn(performerPerformanceList);
 
         IllegalArgumentException exception =
                 assertThrows(
@@ -482,7 +489,7 @@ public class PerformanceAdminServiceTest {
     }
 
     @Test
-    public void 공연_정보_수정_성공() {
+    void 공연_정보_수정_성공() {
         AuthUser authUser = new AuthUser(1L, "a@a.a", "aaaaaa1!", UserRole.ROLE_ADMIN);
         Long performanceId = 1L;
         UpdatePerformanceRequestDto requestDto =
@@ -495,7 +502,7 @@ public class PerformanceAdminServiceTest {
                         "수정 테스트코드",
                         1L,
                         200,
-                        new Long[] {1L, 2L});
+                        new Long[]{1L, 2L});
         User user = new User();
         ReflectionTestUtils.setField(user, "userRole", UserRole.ROLE_ADMIN);
         List<PerformerPerformance> performerPerformances =
@@ -528,7 +535,7 @@ public class PerformanceAdminServiceTest {
     }
 
     @Test
-    public void 공연_수정_내용이_비어서_예외_발생() {
+    void 공연_수정_내용이_비어서_예외_발생() {
         AuthUser authUser = new AuthUser(1L, "a@a.a", "aaaaaa1!", UserRole.ROLE_ADMIN);
         Long performanceId = 1L;
         UpdatePerformanceRequestDto requestDto = new UpdatePerformanceRequestDto();
@@ -546,7 +553,7 @@ public class PerformanceAdminServiceTest {
     }
 
     @Test
-    public void 공연_정보_수정_중_추가하려는_출연자가_없어서_예외발생() {
+    void 공연_정보_수정_중_추가하려는_출연자가_없어서_예외발생() {
         AuthUser authUser = new AuthUser(1L, "a@a.a", "aaaaaa1!", UserRole.ROLE_ADMIN);
         Long performanceId = 1L;
         UpdatePerformanceRequestDto requestDto =
@@ -559,7 +566,7 @@ public class PerformanceAdminServiceTest {
                         "수정 테스트코드",
                         1L,
                         200,
-                        new Long[] {1L, 2L});
+                        new Long[]{1L, 2L});
         User user = new User();
         ReflectionTestUtils.setField(user, "userRole", UserRole.ROLE_ADMIN);
         List<PerformerPerformance> performerPerformances =
@@ -583,7 +590,7 @@ public class PerformanceAdminServiceTest {
     }
 
     @Test
-    public void 공연_삭제_성공() {
+    void 공연_삭제_성공() {
         AuthUser authUser = new AuthUser(1L, "a@a.a", "aaaaaa1!", UserRole.ROLE_ADMIN);
         Long performanceId = 1L;
         User user = new User();
@@ -601,10 +608,15 @@ public class PerformanceAdminServiceTest {
                 .thenReturn(Optional.of(new Poster()));
 
         performanceAdminService.delete(authUser, performanceId);
+
+        // then
+        verify(performanceRepository, times(1)).deleteAll(anyList());
+        verify(roundRepository, times(1)).deleteByPerformanceId(anyLong());
+        verify(posterRepository, times(1)).delete(any(Poster.class));
     }
 
     @Test
-    public void 공연_삭제_시_공연이_없어서_예외발생() {
+    void 공연_삭제_시_공연이_없어서_예외발생() {
         AuthUser authUser = new AuthUser(1L, "a@a.a", "aaaaaa1!", UserRole.ROLE_ADMIN);
         Long performanceId = 1L;
         User user = new User();
@@ -625,7 +637,7 @@ public class PerformanceAdminServiceTest {
     }
 
     @Test
-    public void 배우_등록_성공() {
+    void 배우_등록_성공() {
         Long performanceId = 1L;
         Long performerId = 1L;
 
@@ -635,10 +647,12 @@ public class PerformanceAdminServiceTest {
                 .thenReturn(false);
 
         performanceAdminService.addPerformer(performanceId, performerId);
+
+        verify(performerPerformanceRepository, times(1)).save(any(PerformerPerformance.class));
     }
 
     @Test
-    public void 배우_등록_시_공연을_찾을_수_없어_예외발생() {
+    void 배우_등록_시_공연을_찾을_수_없어_예외발생() {
         Long performanceId = 1L;
         Long performerId = 1L;
 
@@ -655,7 +669,7 @@ public class PerformanceAdminServiceTest {
     }
 
     @Test
-    public void 배우_등록_시_배우를_찾을_수_없어_예외발생() {
+    void 배우_등록_시_배우를_찾을_수_없어_예외발생() {
         Long performanceId = 1L;
         Long performerId = 1L;
 
@@ -673,7 +687,7 @@ public class PerformanceAdminServiceTest {
     }
 
     @Test
-    public void 배우_등록_시_이미_등록된_공연이라_예외발생() {
+    void 배우_등록_시_이미_등록된_공연이라_예외발생() {
         Long performanceId = 1L;
         Long performerId = 1L;
 
@@ -693,7 +707,7 @@ public class PerformanceAdminServiceTest {
     }
 
     @Test
-    public void 배우_삭제_성공() {
+    void 배우_삭제_성공() {
         Long performanceId = 1L;
         Long performerId = 1L;
 
@@ -703,10 +717,12 @@ public class PerformanceAdminServiceTest {
                 .thenReturn(Optional.of(new PerformerPerformance()));
 
         performanceAdminService.removePerformer(performanceId, performerId);
+
+        verify(performerPerformanceRepository, times(1)).save(any(PerformerPerformance.class));
     }
 
     @Test
-    public void 배우_삭제_시_배우가_공연에_등록되어_있지않아서_예외발생() {
+    void 배우_삭제_시_배우가_공연에_등록되어_있지않아서_예외발생() {
         Long performanceId = 1L;
         Long performerId = 1L;
 
@@ -726,7 +742,7 @@ public class PerformanceAdminServiceTest {
     }
 
     @Test
-    public void 배우_삭제_시_공연을_찾을_수_없어서_예외발생() {
+    void 배우_삭제_시_공연을_찾을_수_없어서_예외발생() {
         Long performanceId = 1L;
         Long performerId = 1L;
 
@@ -743,7 +759,7 @@ public class PerformanceAdminServiceTest {
     }
 
     @Test
-    public void 배우_삭제_시_배우를_찾지_못해서_예외발생() {
+    void 배우_삭제_시_배우를_찾지_못해서_예외발생() {
         Long performanceId = 1L;
         Long performerId = 1L;
 

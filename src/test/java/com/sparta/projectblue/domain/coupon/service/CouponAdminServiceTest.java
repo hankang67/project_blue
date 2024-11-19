@@ -25,7 +25,7 @@ import com.sparta.projectblue.domain.coupon.entity.Coupon;
 import com.sparta.projectblue.domain.coupon.repository.CouponRepository;
 
 @ExtendWith(SpringExtension.class)
-public class CouponAdminServiceTest {
+class CouponAdminServiceTest {
 
     @Mock CouponRepository couponRepository;
 

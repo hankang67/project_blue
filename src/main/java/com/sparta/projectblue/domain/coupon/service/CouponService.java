@@ -58,7 +58,7 @@ public class CouponService {
         return new GetCouponResponseDto(coupon);
     }
 
-    public Page<GetCouponResponseDto> getUserCoupon(AuthUser authUser, int page, int size) {
+    public Page<GetCouponResponseDto> getUserCoupon(int page, int size) {
 
         Pageable pageable = PageRequest.of(page - 1, size);
 
@@ -106,13 +106,12 @@ public class CouponService {
 
     public void saveUsedCoupon(Long couponId, AuthUser authUser) {
         // 발급된 쿠폰 기록 저장
-        UsedCoupon usedCoupon =
-                new UsedCoupon(
-                        couponId,
-                        authUser.getId(),
-                        null,
-                        LocalDateTime.now(),
-                        getCoupon(couponId).getDiscountValue(),
-                        LocalDateTime.now());
+        new UsedCoupon(
+                couponId,
+                authUser.getId(),
+                null,
+                LocalDateTime.now(),
+                getCoupon(couponId).getDiscountValue(),
+                LocalDateTime.now());
     }
 }

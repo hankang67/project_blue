@@ -3,6 +3,7 @@ package com.sparta.projectblue.domain.payment.controller;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +17,8 @@ import com.sparta.projectblue.domain.payment.service.PaymentService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
+import java.io.IOException;
+
 @Controller
 @RequiredArgsConstructor
 @Tag(name = "Payment", description = "결제 API (프론트에서 테스트 가능)")
@@ -24,8 +27,7 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     @PostMapping("/confirm")
-    public ResponseEntity<JSONObject> confirmPayment(@RequestBody String jsonBody)
-            throws Exception {
+    public ResponseEntity<JSONObject> confirmPayment(@RequestBody String jsonBody) throws IOException, ParseException {
 
         return ResponseEntity.ok(paymentService.confirmPayment(jsonBody));
     }

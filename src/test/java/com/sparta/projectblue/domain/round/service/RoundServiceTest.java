@@ -174,8 +174,6 @@ class RoundServiceTest {
                         120);
         ReflectionTestUtils.setField(performance, "id", 1L);
 
-        Hall hall = new Hall("Test Hall", "123 Test St", 10);
-
         when(roundRepository.findById(roundId)).thenReturn(Optional.of(round));
         when(performanceRepository.findById(anyLong())).thenReturn(Optional.of(performance));
         when(hallRepository.findById(anyLong())).thenReturn(Optional.empty());

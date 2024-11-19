@@ -74,7 +74,7 @@ public class ReviewService {
         Reservation reservation =
                 reservationRepository
                         .findById(review.getReservationId())
-                        .orElseThrow(() -> new IllegalArgumentException("해당 예매를 찾을 수 없습니다."));
+                        .orElseThrow(() -> new IllegalArgumentException(RESERVATION_NOT_FOUND));
 
         if (!reservation.getUserId().equals(userId)) {
             throw new IllegalArgumentException("리뷰 작성자가 아닙니다");
@@ -96,7 +96,7 @@ public class ReviewService {
         Reservation reservation =
                 reservationRepository
                         .findById(review.getReservationId())
-                        .orElseThrow(() -> new IllegalArgumentException("해당 예매를 찾을 수 없습니다."));
+                        .orElseThrow(() -> new IllegalArgumentException(RESERVATION_NOT_FOUND));
 
         if (!reservation.getUserId().equals(userId)) {
             throw new IllegalArgumentException("리뷰 작성자가 아닙니다");

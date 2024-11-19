@@ -24,7 +24,7 @@ import com.sparta.projectblue.domain.coupon.entity.Coupon;
 import com.sparta.projectblue.domain.coupon.repository.CouponRepository;
 
 @SpringBootTest
-public class RedissonTest {
+class RedissonTest {
 
     @Autowired private CouponService couponService;
 
@@ -59,8 +59,6 @@ public class RedissonTest {
         AtomicInteger atomicexception = new AtomicInteger(0);
         AtomicLong atomicUserId = new AtomicLong(1);
 
-        long startTime = System.currentTimeMillis(); // 테스트 시작시간
-
         for (int i = 0; i < testCount; i++) {
             executorService.submit(
                     () -> {
@@ -87,10 +85,6 @@ public class RedissonTest {
 
         countDownLatch.await(); // 모든 쓰레드 작업 완료 대기
         executorService.shutdown(); // 쓰레드 풀 종료
-
-        long endTime = System.currentTimeMillis(); // 테스트 종료 시간
-        long durationInMillis = endTime - startTime; // 테스트 시간 계간
-        double durationInSeconds = durationInMillis / 1000.0;
 
         Coupon coupon = couponRepository.findByIdOrElseThrow(couponId);
 

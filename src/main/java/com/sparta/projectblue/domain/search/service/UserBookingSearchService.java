@@ -1,17 +1,14 @@
 package com.sparta.projectblue.domain.search.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.sparta.projectblue.domain.reservation.repository.ReservationRepository;
 import com.sparta.projectblue.domain.search.document.UserBookingDocument;
 import com.sparta.projectblue.domain.search.dto.UserBookingDto;
 import com.sparta.projectblue.domain.search.repository.UserBookingEsRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +22,7 @@ public class UserBookingSearchService {
         List<UserBookingDocument> documents =
                 reservationRepository.findUserBookingData().stream()
                         .map(this::convertToDocument)
-                        .collect(Collectors.toList());
+                        .toList();
 
         // Elasticsearch 인덱스에 동기화
         userBookingEsRepository.saveAll(documents);

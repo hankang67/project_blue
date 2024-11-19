@@ -1,15 +1,11 @@
 package com.sparta.projectblue.domain.common.service;
 
-import java.time.LocalDateTime;
-import java.util.stream.IntStream;
-
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
-import com.sparta.projectblue.domain.common.enums.*;
+import com.sparta.projectblue.domain.common.enums.Category;
+import com.sparta.projectblue.domain.common.enums.PerformanceStatus;
+import com.sparta.projectblue.domain.common.enums.ReservationStatus;
+import com.sparta.projectblue.domain.common.enums.ReviewRate;
 import com.sparta.projectblue.domain.hall.entity.Hall;
 import com.sparta.projectblue.domain.hall.repository.HallRepository;
-import com.sparta.projectblue.domain.payment.repository.PaymentRepository;
 import com.sparta.projectblue.domain.performance.entity.Performance;
 import com.sparta.projectblue.domain.performance.repository.PerformanceRepository;
 import com.sparta.projectblue.domain.performer.entity.Performer;
@@ -26,17 +22,17 @@ import com.sparta.projectblue.domain.review.entity.Review;
 import com.sparta.projectblue.domain.review.repository.ReviewRepository;
 import com.sparta.projectblue.domain.round.entity.Round;
 import com.sparta.projectblue.domain.round.repository.RoundRepository;
-import com.sparta.projectblue.domain.user.entity.User;
-import com.sparta.projectblue.domain.user.repository.UserRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
 public class TestService {
 
     private final HallRepository hallRepository;
-    private final PaymentRepository paymentRepository;
     private final PerformanceRepository performanceRepository;
     private final PerformerRepository performerRepository;
     private final PerformerPerformanceRepository performerPerformanceRepository;
@@ -45,24 +41,8 @@ public class TestService {
     private final ReservedSeatRepository reservedSeatRepository;
     private final ReviewRepository reviewRepository;
     private final RoundRepository roundRepository;
-    private final UserRepository userRepository;
-
-    private final PasswordEncoder passwordEncoder;
 
     public void test() {
-
-        // 사용자
-        IntStream.range(0, 10)
-                .forEach(
-                        i -> {
-                            User user =
-                                    new User(
-                                            "user" + i + "@example.com",
-                                            "User" + i,
-                                            passwordEncoder.encode("abc123?!"),
-                                            UserRole.ROLE_USER);
-                            userRepository.save(user);
-                        });
 
         // 공연장
         IntStream.range(0, 10)

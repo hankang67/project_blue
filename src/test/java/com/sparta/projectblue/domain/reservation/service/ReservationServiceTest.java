@@ -148,17 +148,15 @@ class ReservationServiceTest {
                             150);
             given(performanceRepository.findById(anyLong())).willReturn(Optional.of(performance));
 
-            // 예외 발생을 한 줄로 처리
-            CreateReservationRequestDto request =
-                    new CreateReservationRequestDto(1L, List.of(1, 2));
+            CreateReservationRequestDto request = new CreateReservationRequestDto(1L, List.of(1, 2));
 
-            // when & then
-            IllegalArgumentException exception =
-                    assertThrows(
-                            IllegalArgumentException.class,
-                            () -> {
-                                reservationService.create(authUser.getId(), request);
-                            });
+            Long id = authUser.getId();
+
+            // when
+            IllegalArgumentException exception = assertThrows(
+                    IllegalArgumentException.class,
+                    () -> reservationService.create(id, request)
+            );
 
             // then
             assertEquals("Reservation not yet open.", exception.getMessage());
@@ -186,11 +184,13 @@ class ReservationServiceTest {
             CreateReservationRequestDto request =
                     new CreateReservationRequestDto(1L, List.of(1, 2));
 
+            Long id = authUser.getId();
+
             // when: 예매 생성 시도
             IllegalArgumentException exception =
                     assertThrows(
                             IllegalArgumentException.class,
-                            () -> reservationService.create(authUser.getId(), request));
+                            () -> reservationService.create(id, request));
 
             // then: 예외 메시지가 "Sold out"인지 확인
             assertEquals("Sold out", exception.getMessage());
@@ -222,11 +222,13 @@ class ReservationServiceTest {
             CreateReservationRequestDto request =
                     new CreateReservationRequestDto(1L, List.of(1, 2, 5, 6, 8));
 
+            Long id = authUser.getId();
+
             // when: 예매 생성 시도
             IllegalArgumentException exception =
                     assertThrows(
                             IllegalArgumentException.class,
-                            () -> reservationService.create(authUser.getId(), request));
+                            () -> reservationService.create(id, request));
 
             // then: 예외 메시지가 "Maximum seats 4"인지 확인
             assertEquals("Maximum seats 4", exception.getMessage());
@@ -256,11 +258,13 @@ class ReservationServiceTest {
 
             CreateReservationRequestDto request = new CreateReservationRequestDto(1L, List.of(15));
 
+            Long id = authUser.getId();
+
             // when
             IllegalArgumentException exception =
                     assertThrows(
                             IllegalArgumentException.class,
-                            () -> reservationService.create(authUser.getId(), request));
+                            () -> reservationService.create(id, request));
 
             // then
             assertEquals("Invalid seat number", exception.getMessage());
@@ -294,11 +298,13 @@ class ReservationServiceTest {
             CreateReservationRequestDto request =
                     new CreateReservationRequestDto(1L, List.of(1, 2));
 
+            Long id = authUser.getId();
+
             // when
             IllegalArgumentException exception =
                     assertThrows(
                             IllegalArgumentException.class,
-                            () -> reservationService.create(authUser.getId(), request));
+                            () -> reservationService.create(id, request));
 
             // then
             assertEquals("ReservedSeat already reserved", exception.getMessage());
@@ -357,10 +363,12 @@ class ReservationServiceTest {
         // when
         DeleteReservationRequestDto request = new DeleteReservationRequestDto(1L, PASSWORD);
 
+        Long id = authUser.getId();
+
         IllegalArgumentException exception =
                 assertThrows(
                         IllegalArgumentException.class,
-                        () -> reservationService.delete(authUser.getId(), request));
+                        () -> reservationService.delete(id, request));
 
         // then
         assertEquals("예매자가 아닙니다", exception.getMessage());
@@ -390,10 +398,12 @@ class ReservationServiceTest {
         // when
         DeleteReservationRequestDto request = new DeleteReservationRequestDto(1L, PASSWORD);
 
+        Long id = authUser.getId();
+
         IllegalArgumentException exception =
                 assertThrows(
                         IllegalArgumentException.class,
-                        () -> reservationService.delete(authUser.getId(), request));
+                        () -> reservationService.delete(id, request));
 
         // then
         assertEquals("Incorrect password", exception.getMessage());
@@ -467,11 +477,13 @@ class ReservationServiceTest {
 
             given(reservationRepository.findById(anyLong())).willReturn(Optional.of(reservation));
 
+            Long id = reservation.getId();
+
             // when
             IllegalArgumentException exception =
                     assertThrows(
                             IllegalArgumentException.class,
-                            () -> reservationService.getReservation(authUser, reservation.getId()));
+                            () -> reservationService.getReservation(authUser, id));
 
             // then
             assertEquals("예매자가 아닙니다", exception.getMessage());
@@ -504,11 +516,13 @@ class ReservationServiceTest {
 
             given(reservedSeatRepository.findByReservationId(anyLong())).willReturn(List.of());
 
+            Long id = reservation.getId();
+
             // when
             IllegalArgumentException exception =
                     assertThrows(
                             IllegalArgumentException.class,
-                            () -> reservationService.getReservation(authUser, reservation.getId()));
+                            () -> reservationService.getReservation(authUser, id));
 
             // then
             assertEquals("ReservedSeat does not exist", exception.getMessage());
@@ -546,11 +560,13 @@ class ReservationServiceTest {
 
             given(paymentRepository.findById(anyLong())).willReturn(Optional.empty());
 
+            Long id = reservation.getId();
+
             // when
             IllegalArgumentException exception =
                     assertThrows(
                             IllegalArgumentException.class,
-                            () -> reservationService.getReservation(authUser, reservation.getId()));
+                            () -> reservationService.getReservation(authUser, id));
 
             // then
             assertEquals("결제 정보를 찾을 수 없습니다", exception.getMessage());
