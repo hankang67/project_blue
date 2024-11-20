@@ -27,7 +27,6 @@ Development & Communication
 
 ![IntelliJ](https://img.shields.io/badge/IntelliJ_IDEA-222326.svg?style=for-the-badge&logo=intellij-idea&logoColor=white)
 ![Gradle](https://img.shields.io/badge/Gradle-02303a?style=for-the-badge&logo=gradle&logoColor=white)
-
 ![GIT](https://img.shields.io/badge/GIT-E44C30?style=for-the-badge&logo=git&logoColor=white)
 ![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)
 ![gitignore](https://img.shields.io/badge/gitignore.io-204ECF?style=for-the-badge&logo=gitignore.io&logoColor=white)
@@ -47,7 +46,6 @@ Data & Monitoring
 
 ![MySQL](https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
 ![Redis](https://img.shields.io/badge/redis-FF4438?style=for-the-badge&logo=redis&logoColor=white)
-
 ![Elasticsearch](https://img.shields.io/badge/Elasticsearch-005571?style=for-the-badge&logo=Elasticsearch&logoColor=white)
 ![prometheus](https://img.shields.io/badge/prometheus-E6522C?style=for-the-badge&logo=prometheus&logoColor=white)
 ![grafana](https://img.shields.io/badge/grafana-F46800?style=for-the-badge&logo=grafana&logoColor=white)
@@ -56,7 +54,6 @@ Deployment & Operations
 
 ![AWS](https://img.shields.io/badge/aws-232F3E?style=for-the-badge&logo=amazonwebservices&logoColor=white)
 ![docker](https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
-
 ![jenkins](https://img.shields.io/badge/jenkins-D24939?style=for-the-badge&logo=jenkins&logoColor=white)
 ![logstash](https://img.shields.io/badge/logstash-005571?style=for-the-badge&logo=logstash&logoColor=white)
 ![kibana](https://img.shields.io/badge/kibana-005571?style=for-the-badge&logo=kibana&logoColor=white)
@@ -224,6 +221,8 @@ _기술적 고도화_
 
 # 💻 Contributors
 
+<details> <summary>강은총</summary>
+
 ### [강은총](https://github.com/eunchongkang)
 
 - CRUD
@@ -241,6 +240,10 @@ _기술적 고도화_
 - TEST
   - Jmeter 활용하여 쿠폰, 공연장 관련 성능 테스트 및 응답속도 확인
 
+</details>
+
+<details> <summary>김태주 (LEADER)</summary>
+
 ### [김태주 (LEADER)](https://github.com/mylotto0626)
 
 - CRUD
@@ -254,6 +257,10 @@ _기술적 고도화_
   - Redis의 Redisson 라이브러리 사용하여 분산 락 적용
 - TEST
   - Junit 테스트 코드 작성
+
+</details>
+
+<details> <summary>이봄</summary>
 
 ### [이봄](https://github.com/everydayspring)
 
@@ -289,6 +296,10 @@ _기술적 고도화_
   - code convention 점검 및 수정
   - Spotless 활용
 
+</details>
+
+<details> <summary>이봉원 (SUB-LEADER)</summary>
+
 ### [이봉원 (SUB-LEADER)](https://github.com/LeeBongwon94)
 
 - 공연 관리 시스템
@@ -312,6 +323,10 @@ _기술적 고도화_
   - Jmeter를 활용하여 성능테스트 및 응답속도 감소를
     위한 코드 리팩토링
 
+</details>
+
+<details> <summary>한강</summary>
+
 ### [한강](https://github.com/hankang67)
 
 - CRUD
@@ -325,5 +340,7 @@ _기술적 고도화_
 - Logstash
   - 서비스 로그 수집, 백업로그파일 통합
   - kibana로 수집한 로그에 대한 모니터링
+
+</details>
 
 ![team guide](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F66hIe%2FbtsKPBHmjH7%2FaI4x4kDG4Dzey5u1BTglpK%2Fimg.png)
