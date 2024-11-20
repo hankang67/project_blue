@@ -107,8 +107,11 @@ _기술적 고도화_
 
 <details> <summary>AWS S3 File Upload</summary>
 
-위아래를 띄우고 여기에 내용을 작성하세요
-마크다운 문법으로 작성하시면 됩니다
+- 공연 등록 시 공연 포스터 S3에 업로드 기능
+- 공연 삭제 시 포스터 동시 삭제
+- 포스터 수정 시 S3에 있던 기존 이미지가 삭제된 후 새로운 이미지로 교체 기능
+- S3 이미지 첨부파일 올라간 모습
+![S3버킷](img.png)
 
 </details>
 
@@ -153,8 +156,17 @@ _기술적 고도화_
 
 <details> <summary>Redis - Caching</summary>
 
-위아래를 띄우고 여기에 내용을 작성하세요
-마크다운 문법으로 작성하시면 됩니다
+- 배우 단건 조회 : 캐싱 전 Average 32, Error 0% → 캐싱 후 Average 7, Error 0%
+
+- 공연 단건 조회 : 캐싱 전 Average 30, Error 0% → 캐싱 후 Average 14, Error 0%
+
+- 공연 회차 조회 : 캐싱 전 Average 25, Error 0% → 캐싱 후 Average 12, Error 0%
+
+- 공연 관람평 조회 : 캐싱 전 Average 17369, Error 0% → 캐싱 후 Average 19, Error 0%
+
+- 공연 출연자 조회 : 캐싱 전 Average 26, Error 1.04% → 캐싱 후 Average 19, Error 0%
+
+- 공연장 단건 조회 : 캐싱 전 Average 148, Error 9.55% → 캐싱 후 Average 12, Error 0%
 
 </details>
 
