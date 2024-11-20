@@ -1,4 +1,4 @@
-![image](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F5Ki7f%2FbtsKOKZlNKD%2FkG8QAQwWBnEToKrhFVRrvK%2Fimg.png)
+![image](https://github.com/user-attachments/assets/8900cbf0-d876-4bdb-a4e9-951223a96470)![image](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F5Ki7f%2FbtsKOKZlNKD%2FkG8QAQwWBnEToKrhFVRrvK%2Fimg.png)
 
 # 🎫 TICKET BLUE
 _프로젝트 개요_
@@ -177,7 +177,16 @@ _기술적 고도화_
 - https://velog.io/@uara67/Spring-ELK-Docker-Elastic-Search-Kibana를-설치해서-springboot와-연결하자-1
 - https://velog.io/@uara67/Spring-ELK-Docker-Elastic-Search-Kibana를-설치해서-springboot와-연결하자-2
 - https://velog.io/@uara67/Spring-ELK-es로-구현한-예매검색-api
-
+### elastic api 성능체크 및 grafna 이용한 모니터링
+- https://velog.io/@uara67/Elastic-성능-체크를-promethus와-grafna로-해보자
+- https://velog.io/@uara67/Elasticsearch-성능-테스트-보고서-1
+- https://velog.io/@uara67/elastic-모니터링과-속도측정테스트-2
+- ![image](https://github.com/user-attachments/assets/fab66816-51b3-4293-a785-e2d8fc4158c6)
+  [성능테스트 결과 요약]
+  - https://velog.io/@uara67/Elasticsearch-vs-MySQL-왜-MySQL이-더-빠를까
+  - ![image](https://github.com/user-attachments/assets/244d4bcd-e97d-4fa3-ad7a-5f8841e3cb92)
+  
+  
 </details>
 
 <details> <summary>Alert - AOP</summary>
@@ -212,8 +221,16 @@ _기술적 고도화_
 
 <details> <summary>Logstash</summary>
 
-위아래를 띄우고 여기에 내용을 작성하세요
-마크다운 문법으로 작성하시면 됩니다
+### Logstash 환경설정
+- https://velog.io/@uara67/Logstash-springboot-환경-구현하기로그수집하기-1일차
+- https://velog.io/@uara67/logstash-AOP로-로그-수집하기
+#### Logstash 이미지
+- logstash 로그 수집화면
+- ![image](https://github.com/user-attachments/assets/5ec8ba74-3397-49e4-8aea-6ff67cf41ae2)
+- 매일 채워지는 로그
+- ![image](https://github.com/user-attachments/assets/2a7c2061-856d-46dc-a85b-409ceae39a94)
+- 매일 백업되는 로그
+- ![image](https://github.com/user-attachments/assets/7089d337-2896-4b9f-8c1e-96a9273e362c)
 
 </details>
 
