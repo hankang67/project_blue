@@ -1,7 +1,15 @@
 package com.sparta.projectblue.domain.coupon.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import com.sparta.projectblue.domain.common.dto.AuthUser;
+import com.sparta.projectblue.domain.common.enums.CouponStatus;
+import com.sparta.projectblue.domain.common.enums.CouponType;
+import com.sparta.projectblue.domain.common.enums.UserRole;
+import com.sparta.projectblue.domain.coupon.entity.Coupon;
+import com.sparta.projectblue.domain.coupon.repository.CouponRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -11,17 +19,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-
-import com.sparta.projectblue.domain.common.dto.AuthUser;
-import com.sparta.projectblue.domain.common.enums.CouponStatus;
-import com.sparta.projectblue.domain.common.enums.CouponType;
-import com.sparta.projectblue.domain.common.enums.UserRole;
-import com.sparta.projectblue.domain.coupon.entity.Coupon;
-import com.sparta.projectblue.domain.coupon.repository.CouponRepository;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 class RedissonTest {
@@ -53,7 +52,7 @@ class RedissonTest {
     void 쿠폰발급_분산락_테스트() throws InterruptedException {
         int testCount = 1;
 
-        ExecutorService executorService = Executors.newFixedThreadPool(7);
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
         CountDownLatch countDownLatch = new CountDownLatch(testCount);
         AtomicInteger atomicInteger = new AtomicInteger(0);
         AtomicInteger atomicexception = new AtomicInteger(0);
