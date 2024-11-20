@@ -81,17 +81,35 @@ _주요 기능_
 Admin
     
     - 관리자 전용 계정으로 가입할 수 있습니다.
-    - 포스터 파일을 첨부하여 공연을 등록하고 수정 삭제가 가능합니다. - 이미지는 AWS S3에 저장됩니다.
+    - 포스터 파일을 첨부하여 공연을 등록하고 수정 삭제가 가능합니다. (이미지는 AWS S3에 저장됩니다.)
     - 공연장, 출연자, 공연에 대한 회차등을 등록하고 관리할 수 있습니다.
-    - 
+    - 쿠폰을 등록하고 관리할 수 있습니다.
+    - 공연에 출연하는 출연자를 등록하고 관리할 수 있습니다.
+    - 사용자 예매내역을 조건에 따라 검색할 수 있습니다 (특정 공연에 대한 예매 내역 등) - Elasticsearch
+
+Admin - Spring Batch 
+
+[Spring Batch Application GitHub 바로가기](https://github.com/everydayspring/project-blue-batch)
+
+    - OldUsers - 휴먼계정 처리
+    - OldUsersAlert - 휴먼계정 대상자 알림
+    - OldPerformances - 오래된 공연 정보 삭제
+    - TimeoutReservation - 기간 만료 예매 취소처리
+    - UpcomingReservationAlert - 관람일 알림
+    - ReservationReviewAlert - 관람평 작성 유도 알림
 
 Search
 
-    작성중
+    - 키워드를 입력하여 한번의 검색으로 공연장, 출연자, 공연을 모두 조회할 수 있습니다. Elasticsearch로 구현되어 빠른 응답속도를 제공합니다.
+    - 사용가능한 쿠폰, 전체 공연, 배우, 공연장 등을 조회할 수 있습니다. Redis Caching 기능을 적용하여 재검색시 빠른 응답속도를 제공합니다.
+    - 원하는 공연회차의 잔여좌석을 조회할 수 있습니다.
 
 Reservation
 
-    작성중
+    - 원하는 공연회차의 좌석을 지정하여 예매할 수 있습니다.
+    - 예매에 대한 결제, 결제취소가 가능합니다 (토스페이먼츠 API)
+    - 예매, 결제 시 Slack 알림과 Mailing 서비스를 제공합니다 (SSE, Async)
+
 
 # 🔥 Technical Enhancements
 _기술적 고도화_
