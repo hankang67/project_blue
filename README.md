@@ -510,4 +510,4 @@ _기술적 고도화_
 
 # 🤝 Development Guide
 
-![team guide](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F66hIe%2FbtsKPBHmjH7%2FaI4x4kDG4Dzey5u1BTglpK%2Fimg.png)
+![team guide](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcOdXdA%2FbtsKR3QWsg0%2Fk46EZZvQcx6O09QeozDJhk%2Fimg.png)
