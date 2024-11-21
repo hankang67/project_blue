@@ -21,17 +21,7 @@ _핵심 목표_
 # 🌟 Key Summary
 _핵심 요약_
 
-<details> <summary>JPA → Elasticsearch 검색 속도 개선</summary>
-
-![JPA → Elasticsearch 검색 속도 개선](https://g-cbox.pstatic.net/MjAyNDExMjFfMjcy/MDAxNzMyMTgxMDUwOTMx.zxp_80lyUXBhQ4HtpmH1IuUy8KufT7mDp13AV6-nE-cg.H-tE1kGBVGwYljZyPPF_72y_VLPMhCATGPoSE239AZEg.PNG/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-11-21_182400.png)
-
-</details>
-
-<details> <summary>Spring Batch JPA -> JDBC</summary>
-
-![Spring Batch JPA -> JDBC](https://g-cbox.pstatic.net/MjAyNDExMjFfMTY1/MDAxNzMyMTgxMzY5NDcy.ZXmAOCF-RE96nS7jVHG1bQZWMiGmkqgtJaffG147czAg.oXRkXiMuO3YdVA2T1jeVpRECwQFEJafadrYBHFqzm3kg.PNG/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-11-21_182916.png)
-
-</details>
+작성중
 
 # 🚀 Infra Architecture & STACK
 _인프라 아키텍처 & 적용기술_
@@ -96,7 +86,7 @@ Admin
     - 공연에 출연하는 출연자를 등록하고 관리할 수 있습니다.
     - 사용자 예매내역을 조건에 따라 검색할 수 있습니다 (특정 공연에 대한 예매 내역 등) - Elasticsearch
 
-Admin - Spring Batch 
+Admin - Spring Batch
 
 [Spring Batch Application GitHub 바로가기](https://github.com/everydayspring/project-blue-batch)
 
@@ -194,7 +184,7 @@ Toss에서 제공해주는 템플릿을 열면 이렇게 html들과 Controller�
 ![widget 이미지](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FHn59g%2FbtsKQBt54nU%2FbDokeAO17rEuZVXT9SQVjk%2Fimg.png)
 
 Toss에서는 중간에 결제 가격을 조정하여 악의적으로 이용할 수 있다고 하여 요청을 보낼 당시의 orderId, amount와
-Return으로 받은 orderId, amount를 비교하여 일치여부를 확인하는 것을 권장하기 때문에 
+Return으로 받은 orderId, amount를 비교하여 일치여부를 확인하는 것을 권장하기 때문에
 결제 승인 절차에 진입하기 전에 가격을 검증하였다.
 아까 Payment 테이블에 저장해놓은 orderId, amount를 불러와 Return으로 받은 값과 비교를 진행한다.<br>
 ![검증 이미지](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fbb0jdw%2FbtsKQGITmS0%2FN6v40uHIMOa4U6YW40XXwK%2Fimg.png)
@@ -292,7 +282,7 @@ Jenkins CI/CD 블로그
 
 - 데이터의 수정이 일어날 가능성이 높다고 가정하여 레코드를 수정할 때 즉시 락을 걸어 다른 트랜잭션이 접근하지 못하도록 하는 방식.
 - 장점으로는 데이터 충돌이 발생할 가능성이 있는 경우에 유용하며 트랜잭션의 안전성을 보장.
-- JPA의 @Lock 애너테이션을 사용하여 레퍼지토리에서 쿠폰 엔티티를 조회할 때 비관적 락 모드를 적용.
+- PA의 @Lock 애너테이션을 사용하여 레퍼지토리에서 쿠폰 엔티티를 조회할 때 비관적 락 모드를 적용.
 
 
 3. 분산 락 :
@@ -307,51 +297,47 @@ Jenkins CI/CD 블로그
 
 ![테스트 폼](https://blog.kakaocdn.net/dn/z0TQK/btsKydNb8MY/4AJvi7Tk2wEVjCvoKvZhb0/img.png)
 1) 테스트 준비:
-testCount는 총 1000개의 동시 요청을 의미
-ExecutorService는 10개의 스레드를 사용하여 동시 요청을 테스트
-CountDownLatch는 모든 스레드가 작업을 완료할 때까지 메인 스레드가 대기하도록 설정.
-AtomicInteger를 사용하여 발급 성공 카운트(atomicInteger)와 예외 발생 카운트(atomicexception)를 기록
+   testCount는 총 1000개의 동시 요청을 의미
+   ExecutorService는 10개의 스레드를 사용하여 동시 요청을 테스트
+   CountDownLatch는 모든 스레드가 작업을 완료할 때까지 메인 스레드가 대기하도록 설정.
+   AtomicInteger를 사용하여 발급 성공 카운트(atomicInteger)와 예외 발생 카운트(atomicexception)를 기록
 
 
 2) 동시 요청 생성:
-각 스레드는 couponService.firstCoupon(authUser, couponId)를 호출하여 쿠폰 발급 요청을 수행
-요청이 성공하면 atomicInteger의 값을 증가,
-예외가 발생하면 atomicexception의 값을 증가시키며 예외 메시지를 출력
-finally 블록에서 countDownLatch.countDown()을 호출하여 해당 스레드의 작업 완료를 알린다.
+   각 스레드는 couponService.firstCoupon(authUser, couponId)를 호출하여 쿠폰 발급 요청을 수행
+   요청이 성공하면 atomicInteger의 값을 증가,
+   예외가 발생하면 atomicexception의 값을 증가시키며 예외 메시지를 출력
+   finally 블록에서 countDownLatch.countDown()을 호출하여 해당 스레드의 작업 완료를 알린다.
 
 
 3) 결과 검증:
-countDownLatch.await()로 모든 스레드의 작업이 완료될 때까지 대기
-executorService.shutdown()을 호출하여 스레드 풀을 종료
-데이터베이스에서 최종 쿠폰 발급 수량을 가져와서 atomicInteger와 비교
-성공한 발급 수량이 실제 쿠폰의 currentQuantity와 다른지 확인하여, 동시성 문제로 인한 데이터 불일치를 검증
-
-
+   countDownLatch.await()로 모든 스레드의 작업이 완료될 때까지 대기
+   executorService.shutdown()을 호출하여 스레드 풀을 종료
+   데이터베이스에서 최종 쿠폰 발급 수량을 가져와서 atomicInteger와 비교
+   성공한 발급 수량이 실제 쿠폰의 currentQuantity와 다른지 확인하여, 동시성 문제로 인한 데이터 불일치를 검증
    ![일반결과](https://blog.kakaocdn.net/dn/bKUwCE/btsKIScgQVl/FLiWoaWX0ZJ4M6hIkYDRQK/img.png)
 
-- 일반 테스트 결과 
-  -  테스트의 결과는 최종 발급된 쿠폰의 수량 111개, 성공한 발급 수량은 1000개로 목표는 1000개의 쿠폰 발급이었지만 실질적으로 111건 밖에 유저들에게 
-쿠폰이 발급 되지 않았다. 이유로는 쿠폰 발급 로직이 많은 사용자의 동시 요청을 처리하는 과정에서 동시성 제어가 제대로 이루어지지 않아, 
-일부 요청이 충돌하여 실패했을 가능성이 높다. 락이 걸리지 않은 상태에서 여러 트랜잭션이 동시에 같은 쿠폰 데이터를 수정하려고 할 때 데이터 일관성이 
-보장되지 않아 발급 실패가 발생할 수 있으며 그 결과로 111건 만이 발급되지 못하였다.
+- 일반 테스트 결과 :
+    -  테스트의 결과는 최종 발급된 쿠폰의 수량 111개, 성공한 발급 수량은 1000개로 목표는 1000개의 쿠폰 발급이었지만 실질적으로 111건 밖에 유저들에게
+       쿠폰이 발급 되지 않았다. 이유로는 쿠폰 발급 로직이 많은 사용자의 동시 요청을 처리하는 과정에서 동시성 제어가 제대로 이루어지지 않아,
+       일부 요청이 충돌하여 실패했을 가능성이 높다. 락이 걸리지 않은 상태에서 여러 트랜잭션이 동시에 같은 쿠폰 데이터를 수정하려고 할 때 데이터 일관성이
+       보장되지 않아 발급 실패가 발생할 수 있으며 그 결과로 111건 만이 발급되지 못하였다.
 
 #### 낙관적 락 적용
- - 데이터가 충돌하지 않을 것이라는 가정 하에 동작 -> 즉, 여러 스레드가 동시에 데이터를 수정할 가능성이 낮다고 가정하고 수정할 때까지 락을 
-사용하지 않는다.
-
-
-![낙관적락](https://blog.kakaocdn.net/dn/UKoVz/btsKxRjoKwK/fQxgieyiAIkdElwkcnooSk/img.png) ![결과](https://blog.kakaocdn.net/dn/oDOBh/btsKxQEOBsS/BsV3JbZSHb75z7tGTpIAj1/img.png)
+- 데이터가 충돌하지 않을 것이라는 가정 하에 동작 -> 즉, 여러 스레드가 동시에 데이터를 수정할 가능성이 낮다고 가정하고 수정할 때까지 락을
+  사용하지 않는다.
+  ![낙관적락](https://blog.kakaocdn.net/dn/UKoVz/btsKxRjoKwK/fQxgieyiAIkdElwkcnooSk/img.png) ![결과](https://blog.kakaocdn.net/dn/oDOBh/btsKxQEOBsS/BsV3JbZSHb75z7tGTpIAj1/img.png)
 1) 버전 관리 : 엔티티에 @Version 어노테이션을 사용하여 쿠폰 엔티티에 Version필드를 추가 ->  DB에서 엔티티를 수정할 때, 현재 버전과 데이터베이스의 버전이 일치하는지 확인
- 
+
 
 2) 충돌 감지 : 다른 스레드가 동시에 해당 데이터를 수정하여 버전이 변경되었다면, 예외가 발생 -> 충돌을 감지한 스레드는 재시도하거나 오류 처리
 
 
-3) 결과 : 서비스에서 발급된 쿠폰 수량과 고객이 요청한 쿠폰의 수량은 일치 하지만, 867개의 쿠폰이 예외 발생으로 인해 지급되지 못하였다.  
+3) 결과 : 서비스에서 발급된 쿠폰 수량과 고객이 요청한 쿠폰의 수량은 일치 하지만, 867개의 쿠폰이 예외 발생으로 인해 지급되지 못하였다.
 
 
 #### 비관적 락 적용
- - 데이터 충돌이 자주 발생한다고 가정하고 동시성을 관리하는 방법으로 락은 트랜잭션이 완료될 때까지 유지되며, 이를 통해 데이터의 일관성을 보장한다.
+- 데이터 충돌이 자주 발생한다고 가정하고 동시성을 관리하는 방법으로 락은 트랜잭션이 완료될 때까지 유지되며, 이를 통해 데이터의 일관성을 보장한다.
 
 ![비관적 락](https://blog.kakaocdn.net/dn/ALmJx/btsKKhvjSML/XPPme4stjbn5KcIZ2vjw4K/img.png)
 
@@ -365,21 +351,21 @@ executorService.shutdown()을 호출하여 스레드 풀을 종료
 
 
 4) 데드락 : 여러 트랜잭션이 서로의 락을 기다리는 데드락 상황발생(대기시간 초과-PessimisticLockException) ->
-적절한 타임아웃 설정 및 재시도 로직 을 통해 해결 가능
+   적절한 타임아웃 설정 및 재시도 로직 을 통해 해결 가능
 
 
-5) 결과 : 여러 스레드가 동시에 쿠폰 발급을 시도하면 트랜잭션이 순차적으로 처리되기 때문에 성능 저하가 발생할 수 있으며 특히 1000개의 요청이 한꺼번에 들어올 경우 
-락으로 인해 데드락 상황이 발생할 수 있으며 그 결과 많은 요청이 충돌하면서 일부는 대기 중 타임아웃되거나 실패하고  최종 발급 수량과 요청된 수량 간 차이가 아래와 같이 발생 할 수 있다.
+5) 결과 : 여러 스레드가 동시에 쿠폰 발급을 시도하면 트랜잭션이 순차적으로 처리되기 때문에 성능 저하가 발생할 수 있으며 특히 1000개의 요청이 한꺼번에 들어올 경우
+   락으로 인해 데드락 상황이 발생할 수 있으며 그 결과 많은 요청이 충돌하면서 일부는 대기 중 타임아웃되거나 실패하고  최종 발급 수량과 요청된 수량 간 차이가 아래와 같이 발생 할 수 있다.
 
 ![비관적 락 결과](https://blog.kakaocdn.net/dn/dl5NL1/btsKJAJbRPG/LKNqypLVcFNXXXY5kWZk6K/img.png)
 
 
 #### 분산 락 적용
- - 여러 인스턴스에서 동시성 제어를 목적으로 사용되며 분산 환경에서 데이터 일관성을 보장하기 위해 Redis와 같은 외부 시스템을 이용해 락을 관리하는 방식.
+- 여러 인스턴스에서 동시성 제어를 목적으로 사용되며 분산 환경에서 데이터 일관성을 보장하기 위해 Redis와 같은 외부 시스템을 이용해 락을 관리하는 방식.
 
 ![분산 락 aop](https://blog.kakaocdn.net/dn/T8q99/btsKJCGTTd5/Ip42602YYOaRn3oP9mkk8k/img.png)
 
- -  aop를 적용한 락 로직 (어노테이션)
+-  aop를 적용한 락 로직 (어노테이션)
 1) Redis 기반 락 구현:
 
 Redis에 락 키를 저장하여 동시성 제어를 수행하며 락의 키는 lock:<key> 형식으로 생성하고 RedissonClient를 사용해 관리
@@ -396,12 +382,12 @@ lock.tryLock() 메서드를 통해 지정된 대기 시간(waitTime)과 임대 �
 
 3) 락 해제 및 자동 해제 :
 
-락 해제는 lock.unlock()를 호출하며 leaseTime 이 초과되면 자동으로 해제되며, 락이 해제가 되지 않는다면 다른 트랜잭션에서 접근할 수 없으므로 
+락 해제는 lock.unlock()를 호출하며 leaseTime 이 초과되면 자동으로 해제되며, 락이 해제가 되지 않는다면 다른 트랜잭션에서 접근할 수 없으므로
 finally 를 통해 항상 락을 해제 할 수 있도록 지정함.
 
-#### 분산 락 적용 : 
+#### 분산 락 적용 :
 ![분산 락적용 이미지](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fb02Q9C%2FbtsKKrdsWrv%2FwAkpGmB6wFKDYVvFdVkq21%2Fimg.png)
-AOP를 통해 지정한 어노테이션 포인트를 통해 특정 서비스 메서드 위에 락 어노테이션과 Key 값을 명시하여 동시성 제어를 수행 할 수 있도록 한다. 
+AOP를 통해 지정한 어노테이션 포인트를 통해 특정 서비스 메서드 위에 락 어노테이션과 Key 값을 명시하여 동시성 제어를 수행 할 수 있도록 한다.
 이때의 Key 값은 락의 고유 식별자로 사용되며 이를 통하여 Redis와 같은 외부 시스템에서 분산 락을 관리한다.
 
 -> 락을 필요한 메서드에만 간단한 방법으로 적용할 수 있어 코드 중복을 줄이며 설정된 Key를 통해 각 리소스에 대한 락을 독립적으로 관리가 가능하다.
@@ -414,10 +400,10 @@ AOP를 통해 지정한 어노테이션 포인트를 통해 특정 서비스 메
 - 각각의 스레드는 고유한 AuthUser 객체를 생성하여 요청 간 충돌 방지.
 
 2) 테스트 데이터 :
-발급 가능한 쿠폰의 총 수량 
-10,000개.
+   발급 가능한 쿠폰의 총 수량
+   10,000개.
 
-#### 결과 
+#### 결과
 ![분산 락 결과](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F9jeuM%2FbtsKIQy0ksH%2FdSgxPB9sRMagK1AA36K2iK%2Fimg.png)
 1) 발급 수량 일치 :
 
@@ -567,40 +553,40 @@ ElasticSearch는 빠르고 정확한 검색이 필요한 다양한 서비스에�
 
 - 사용한 기술: Criteria API를 이용한 정적 쿼리 생성.
 - 구현 방식:
-예약 정보 필터링.
-데이터 동기화 기능 구현.
+  예약 정보 필터링.
+  데이터 동기화 기능 구현.
 
 - api
-![image](https://github.com/user-attachments/assets/223ffbba-7c80-4622-b044-19d49159017d)
-![image](https://github.com/user-attachments/assets/d1ba2880-ee51-49f6-aedd-2c5d1102c666)
+  ![image](https://github.com/user-attachments/assets/223ffbba-7c80-4622-b044-19d49159017d)
+  ![image](https://github.com/user-attachments/assets/d1ba2880-ee51-49f6-aedd-2c5d1102c666)
 
 - index
-![image](https://github.com/user-attachments/assets/059969de-6a28-4397-ba2e-380ca11beedb)
-![image](https://github.com/user-attachments/assets/5631fd1e-7a10-4cbf-91f4-ca0a20efb5c0)
+  ![image](https://github.com/user-attachments/assets/059969de-6a28-4397-ba2e-380ca11beedb)
+  ![image](https://github.com/user-attachments/assets/5631fd1e-7a10-4cbf-91f4-ca0a20efb5c0)
 
 - data
-![image](https://github.com/user-attachments/assets/a4163210-e8d3-4330-818f-ba7fb2d5846c)
+  ![image](https://github.com/user-attachments/assets/a4163210-e8d3-4330-818f-ba7fb2d5846c)
 
 #### 성능 테스트 및 개선 방향
 Elasticsearch를 도입한 뒤, 실제 환경에서의 성능을 점검했습니다.
 다양한 조건으로 쿼리를 실행하며 MySQL과 속도를 비교했고, 성능 병목 현상을 식별해 최적화했습니다.
 
 - 성능 이슈 및 대응
-    이슈: MySQL보다 Elasticsearch의 속도가 느린 문제 발견.
-    원인:
-인덱스 설정 최적화 부족.
-데이터가 분산되지 않은 단일 노드 구성.
-대응 방안:
-역색인 최적화.
-샤드 분산 구성 및 클러스터 확장.
+  이슈: MySQL보다 Elasticsearch의 속도가 느린 문제 발견.
+  원인:
+  인덱스 설정 최적화 부족.
+  데이터가 분산되지 않은 단일 노드 구성.
+  대응 방안:
+  역색인 최적화.
+  샤드 분산 구성 및 클러스터 확장.
 - admin/search 성능
-![image](https://github.com/user-attachments/assets/ef56629d-5ed4-4132-aab1-a8f4b428e038)
+  ![image](https://github.com/user-attachments/assets/ef56629d-5ed4-4132-aab1-a8f4b428e038)
 - search/keyword 성능
-![image](https://github.com/user-attachments/assets/bc54aea2-6600-4737-9525-efc4077bb30c)
+  ![image](https://github.com/user-attachments/assets/bc54aea2-6600-4737-9525-efc4077bb30c)
 
 
 ### elastic api 성능비교 및 grafna 이용한 모니터링
-Elasticsearch(ES) 기반 API와 MySQL 기반 API의 성능을 비교하고, 높은 부하 조건에서의 안정성을 평가하기 위해 진행했습니다. 
+Elasticsearch(ES) 기반 API와 MySQL 기반 API의 성능을 비교하고, 높은 부하 조건에서의 안정성을 평가하기 위해 진행했습니다.
 성능 평가는 아래 지표를 기준으로 이루어졌습니다:
 - 평균 응답 시간: 각 API의 요청 처리 속도 비교.
 - 초당 처리량(QPS): 부하 증가 시 API가 처리 가능한 요청 수.
@@ -613,18 +599,18 @@ Elasticsearch(ES) 기반 API와 MySQL 기반 API의 성능을 비교하고, 높�
 
 #### 테스트 결과 분석
 - 평균 응답 시간
-API별 평균 응답 시간을 비교한 결과, 아래와 같은 차이가 나타났습니다:
+  API별 평균 응답 시간을 비교한 결과, 아래와 같은 차이가 나타났습니다:
 
 /search/filter와 같은 단순 쿼리는 MySQL 기반 API가 더 빠른 응답 시간을 기록.
 /admin/search와 같은 복합 쿼리에서는 Elasticsearch의 성능이 더 우수할 것으로 기대했지만, 테스트 데이터의 영향으로 차이가 크지 않았음.
 - 초당 처리량(Throughput)
-동시 사용자가 증가했을 때 QPS는 일정 수준 유지되었으나, Elasticsearch는 특정 시점에서 약간의 성능 저하가 발생.
-MySQL은 데이터 크기가 작을 경우 Elasticsearch보다 높은 QPS를 기록.
+  동시 사용자가 증가했을 때 QPS는 일정 수준 유지되었으나, Elasticsearch는 특정 시점에서 약간의 성능 저하가 발생.
+  MySQL은 데이터 크기가 작을 경우 Elasticsearch보다 높은 QPS를 기록.
 - 호출 트래픽 분포
-단순 쿼리(/search/filter, /search/reservations)와 복합 쿼리(/admin/search)의 호출 비율을 분석한 결과, 복합 쿼리 API에서 부하가 더 집중되는 경향이 나타남.
+  단순 쿼리(/search/filter, /search/reservations)와 복합 쿼리(/admin/search)의 호출 비율을 분석한 결과, 복합 쿼리 API에서 부하가 더 집중되는 경향이 나타남.
 - CPU 사용량
-Elasticsearch는 복합 쿼리를 처리할 때 CPU 자원을 더 많이 사용.
-네트워크 오버헤드와 데이터 직렬화/역직렬화로 인한 자원 사용량 증가 가능성 확인.
+  Elasticsearch는 복합 쿼리를 처리할 때 CPU 자원을 더 많이 사용.
+  네트워크 오버헤드와 데이터 직렬화/역직렬화로 인한 자원 사용량 증가 가능성 확인.
 
 #### Elasticsearch 속도 저하 원인 분석
 1. 데이터 크기
@@ -638,7 +624,7 @@ Elasticsearch는 복합 쿼리를 처리할 때 CPU 자원을 더 많이 사용.
    Docker 기반 로컬 환경에서도 이로 인한 지연 발생 가능.
 4. Elasticsearch 인덱스 설정
    refresh_interval, number_of_shards, number_of_replicas 등의 설정이 기본값으로 되어 있어 최적화되지 않았을 가능성.
-   
+
 #### 개선 방향 및 추가 테스트 계획
 1. 데이터셋 확장
    운영 환경과 유사한 대규모 데이터셋으로 테스트하여 실제 성능을 확인.
@@ -651,144 +637,28 @@ Elasticsearch는 복합 쿼리를 처리할 때 CPU 자원을 더 많이 사용.
 4. 네트워크 환경 개선
    로컬 테스트 환경을 벗어나 실제 운영 서버 환경에서 성능 테스트.
    결론
-   테스트 결과, MySQL은 작은 데이터셋에서 더 나은 성능을 보였지만, 
-Elasticsearch는 대규모 데이터 환경에서의 장점을 살릴 가능성이 높습니다. 
-향후 쿼리와 인덱스 설정을 최적화하고, 대규모 데이터셋으로 추가 테스트를 진행할 예정입니다.
+   테스트 결과, MySQL은 작은 데이터셋에서 더 나은 성능을 보였지만,
+   Elasticsearch는 대규모 데이터 환경에서의 장점을 살릴 가능성이 높습니다.
+   향후 쿼리와 인덱스 설정을 최적화하고, 대규모 데이터셋으로 추가 테스트를 진행할 예정입니다.
 
 </details>
+
+
+<details> <summary>Alert - AOP</summary>
+
+### AOP 를 사용하여 알림설정
+
+- [ (1) spring 과 slack 알림 연동 - 1](https://k-chongchong.tistory.com/40)
+- [ (2) AOP를 사용한 알림 연동 - 2 ](https://k-chongchong.tistory.com/41)
+- [ (3) 이벤트 기반 아키텍처(EDA)와 AOP의 비교 -3 ](https://k-chongchong.tistory.com/42)
+
+</details>
+
 
 <details> <summary>Alert - SSE</summary>
 
-## 알림 시스템
-
-<details> <summary> Slack 알림 - Aop </summary>
-
-- slack 에서 발급 받을 수 있는  Incoming Webhooks의 Url을 발급받아 다음과 같이 환경변수로 설정한다.
-![환경변수](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcfmtAV%2FbtsKhLwHsb5%2FvREQSndPJxE6DBFq7hZAu0%2Fimg.png)
-
-#### SlackNotifier
-
-
-![SlackNotifier](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FdRGyoH%2FbtsKQIgf6bR%2Fkv5BYsYoPt7QaKDPgwAU30%2Fimg.png)
-
-1. 주요 기능 
-   - slack 웹훅 URL을 이용하여 특정 채널로 메시지를 전송하는 역할.
-   - RestTemplate을 활용해 slack API에 HTTP POST 요청.
-   - 제목과 메시지를 받아 slack 메시지 형식에 맞게 전달.
-
-
-2. 메시지 전송 로직
-   - payload에 메시지와 봇 이름(username)을 포함한 정보를 저장.
-   - RestTemplate.postForObject()로 슬랙 웹훅 URL에 POST 요청을 전송.
-
-3. 결과 
-   - SlackNotifier는 다양한 이벤트에서 슬랙 알림을 통해 정보를 실시간으로 전달하는 데 유용.
-   - 예약확인메시지, 시스템 알림 등
-
-![SlackNotificationAspect](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FqUlzf%2FbtsKQKrLnGZ%2FWRz4T0C7xXG1dyOeKkSHjk%2Fimg.png)
-
-1. 주요 기능
-   -  AOP를 활용하여 특정 서비스 로직 실행 후 Slack 알림을 자동으로 발송하는 역할.
-   - 예약 메서드(create) 실행 후 예약 정보, 공연 정보, 공연장 정보 등을 수집하여 알림 메시지를 작성하고 Slack으로 전송.
-
-2. Slack 알림 로직
-   - 예약이 성공할 경우 예약 정보 및 관련 데이터를 바탕으로 Slack 알림 메시지 작성.
-   - 예약 ID를 기준으로 예약, 공연, 공연장 데이터를 각각의 레포지토리에서 조회.
-   - 예약 상태가 PENDING인 경우 slackNotifier.sendMessage()를 호출하여 알림 전송.
-
-3. 결과 
-   - 성공적으로 예약이 완료된 경우 Slack 알림을 통해 사용자에게 상세 정보를 제공.
-   - 공연 및 예약 시스템의 상태를 실시간으로 파악하고 관리자가 Slack 알림을 통해 모니터링 가능.
-
-</details>
-
-<details> <summary> SSE(Server-Sent-Events) </summary>
-
-1. 실시간 알림 요구 사항 
-   - SSE는 실시간 알림에 적합하며 서버에서 클라이언트로의 즉각적인 데이터 전송이 가능하므로 예매 완료 시 사용자에게 바로 알림을 제공이 가능하다.
-
-
-2. 구현 및 유지보수
-   - SSE는 상대적으로 구현이 간단하며 서버가 클라이언트 연결을 유지하면서 알림을 보낼 수 있기 때문에 특정 시점에 발생하는 이벤트를 바로 전송하는 데 적합.
-
-
-3. 용도 차이
-   - SSE는 단방향 통신으로 서버에서 클라이언트로 실시간으로 데이터를 전송하는 데 적합하며  티켓 예매, 선착순 쿠폰 발급과 같은 실시간 피드백이 중요한 시나리오에서 잘 동작한다.
-
-
-4. 장점과 단점
- - SSE의 장점:
-   - 실시간 알림을 구현하기 간단하며 브라우저 지원이 기본적으로 제공된다.
-   - 자동 재연결 기능이 있어 클라이언트 연결이 끊어지면 자동으로 재시도 할 수 있다.
-
-
- - SSE의 단점:
-   - 단방향 통신만 가능하며, 다수의 동시 연결 시 서버 리소스 관리가 필요하다.
-   - 브라우저 기반이 아닌 환경에서는 별도 설정이 필요할 수 있다.
-
-
-
-5. SSE의 흐름
- - SSE의 로직 흐름은 다음과 같은 순서로 진행된다.
-
-   - 클라이언트에서 SSE 연결 요청을 보낸다.
-   - 서버에서 클라이언트와 매핑되는 SSE 통신 객체(SseEmitter)를 만든다.
-   - 서버에서 이벤트가 발생하면 해당 객체를 통해 클라이언트로 데이터를 전송한다.
-![SSE흐름](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcS2oMU%2FbtsKPbI8mjS%2F1BbAaLushqQbZmCczkTgx0%2Fimg.png)
-</details>
-
-<details> <summary> SSE 알림 </summary>
-
-#### NotificationController
-
-![Controller](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbFDqbF%2FbtsKRfREcZX%2ForeglknZ6xyYk01gjYoDbk%2Fimg.png)
-
-
-1. 클라이언트 구독 엔드포인트 제공
-
-   - 클라이언트가 notifications/subscribe/{userId}에
-  요청을 보내면 SseEmitter 객체를 반환하여 실시간 알림을 구독.
-
-
-2. 알림 발송 요청 처리 
-
-   - 클라이언트에서 알림 요청 데이터를 전송하면 Redis의 notification-channel을 통해 메시지를 발행.
-
-   - 데이터 형식: userId / title / message.
-   
-
-
-#### NotificationService
-![Service](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F6Jrx3%2FbtsKPHaVvD3%2FKLzk7Dv0JJ7j4yMdKLeAIK%2Fimg.png)
-
-- 서버에서 SSE(Send Server-Sent Events) 방식으로 실시간 알림을 클라이언트에 보내기 위해 사용
-
-1. 클라이언트 구독 관리 
-
-   - 클라이언트가 구독 요청을 보내면 SseEmitter를 생성하고 HashMap에 저장.
-
-   - 클라이언트 연결이 완료되거나 타임아웃될 경우, 해당 SseEmitter를 Map에서 제거.
-
-
-2. 알림 전송 로직 
-
-   - SSE 알림: 사용자의 SseEmitter를 통해 알림 데이터를 전송.
-
-   - Slack 알림: CompletableFuture.runAsync를 적용해 Slack 알림 비동기로 활성.
-
-
-3. 알림 처리 흐름 
-- 구독: 
-  - 클라이언트는 /notifications/subscribe/{userId}를 호출해 구독을 시작.
-- Redis 발행
-   - 서버는 /notifications/send를 호출해 Redis 채널에 알림 메시지를 발행.
-- 알림 전송
-   - Redis 구독자가 데이터를 수신하고 이를 클라이언트의 SseEmitter로 전송과 동시에 Slack에도 비동기 알림을 전송.
-
-4. 결과  
-- 구독 및 알림발송 확인
-![sse 포스트맨](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fb3lQAT%2FbtsKRQDVGBu%2FvM3SLiNkeA9emKuuPkTFzk%2Fimg.png)
-![sse 웹](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbfFaWD%2FbtsKRi1Q3QP%2FJkb97qW8hK0VTRGzgknkk1%2Fimg.png)
+위아래를 띄우고 여기에 내용을 작성하세요
+마크다운 문법으로 작성하시면 됩니다
 
 </details>
 
@@ -1176,7 +1046,7 @@ output {
 }
 ```
 
-우리는 5000번 포트를 통해 json 형식으로 logstash로 데이터를 전달받기로 했다. 
+우리는 5000번 포트를 통해 json 형식으로 logstash로 데이터를 전달받기로 했다.
 
 log메시지 중 특정 단어가 포함되어 있을 때 태그를 추가하여
 해당 index로 로그를 전송하고, "select"가 포함된 쿼리는 전송되지 않도록 필터를 설정했다.
@@ -1196,84 +1066,8 @@ log메시지 중 특정 단어가 포함되어 있을 때 태그를 추가하여
 
 <details> <summary>Monitoring - Prometheus, Grafana</summary>
 
-### Prometheus 설치 및 설정
-
-1. **Prometheus 다운로드**
-  - [Prometheus 다운로드](https://prometheus.io/download/) 링크에서 설치 파일을 다운로드합니다.
-
-2. **Prometheus 설정 (`prometheus.yml` 수정)**
-   ```yaml
-   # Global 설정
-   global:
-     scrape_interval: 1s
-     evaluation_interval: 1s 
-
-   # Alertmanager 설정 (선택적으로 설정)
-   alerting:
-     alertmanagers:
-       - static_configs:
-           - targets:
-             # - alertmanager:9093
-
-   # Rule 파일 (필요시 활성화)
-   rule_files:
-     # - "first_rules.yml"
-     # - "second_rules.yml"
-
-   # Scrape 설정 (Prometheus 자체 또는 외부 서비스의 메트릭 수집)
-   scrape_configs:
-     - job_name: "prometheus"
-       metrics_path: "/actuator/prometheus"
-       static_configs:
-         - targets: ["localhost:9090"]
-   
-- 프로메테우스 화면
-- ![image](https://github.com/user-attachments/assets/a5f386fa-11da-4560-831d-a652a0c176bc)
-
-### Grafana 설치 및 설정
-1. Grafana 다운로드
-   - Grafana 다운로드 링크에서 설치 파일을 다운로드하고 실행합니다. 
-
-2. 설치 후 아래 명령어 실행:
-cd C:\Program Files\GrafanaLabs\grafana\bin ./grafana-server.exe
-
-3. 브라우저에서 http://localhost:3000 접속.
-
-4. 초기 계정 정보:
-ID: admin
-Password: admin (로그인 후 비밀번호 변경 권장)
-
-- 그라파나 초기화면
-![image](https://github.com/user-attachments/assets/28fd1410-a5c3-4270-93f0-c17b4c3ec47f)
-
-### 모니터링 구성 요약
-- Prometheus는 애플리케이션의 메트릭 데이터를 수집하여 시계열 데이터로 저장.
-- Grafana는 Prometheus 데이터를 시각화하여 대시보드 형태로 보여줌.
-- prometheus.yml의 scrape_configs에 원하는 애플리케이션의 메트릭 엔드포인트 추가 가능.
-- Grafana에서 Prometheus를 데이터 소스로 추가하여 대시보드 생성 가능.
-
-### Grafana로 ElasticSearch 모니터링하기
-
-위 이미지는 Grafana를 활용해 Elasticsearch API의 성능 및 자원 사용을 모니터링한 대시보드 결과입니다. 주요 내용은 다음과 같습니다:
-![image](https://github.com/user-attachments/assets/5a824330-e01a-4a8b-bbca-644098888135)
-
-- 평균 응답 시간
-각 API 요청에 대한 평균 응답 시간을 표시했습니다.
-/search/filter, /search/keyword, /search/reservations, /admin/search 등의 주요 API의 성능을 실시간으로 모니터링할 수 있습니다.
-
-- 시스템 CPU 사용량 (system_cpu_usage)
-서버의 CPU 사용량을 확인하며, API 호출에 따른 시스템 부하를 파악할 수 있습니다.
-
-- 호출 횟수 그래프
-API별 호출 빈도를 시간대별로 시각화하여 특정 API의 요청이 몰리는 시점을 확인할 수 있습니다.
-
-- 초당 처리량
-초당 API 요청 수를 보여주며, 시스템의 처리 성능을 점검할 수 있습니다.
-
-- API별 트래픽 및 로그 수집
-API별 요청 패턴과 로그 데이터를 통해 트래픽 흐름과 발생 로그를 비교하며 분석할 수 있습니다.
-
-</details>
+위아래를 띄우고 여기에 내용을 작성하세요
+마크다운 문법으로 작성하시면 됩니다
 
 </details>
 
