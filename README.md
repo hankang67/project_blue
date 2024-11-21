@@ -353,13 +353,7 @@ API & Testing
 - 데드락 발생 없이 요청이 안전하게 처리됨
 ```
 
-![일반결과](https://blog.kakaocdn.net/dn/bKUwCE/btsKIScgQVl/FLiWoaWX0ZJ4M6hIkYDRQK/img.png)
-
-![결과](https://blog.kakaocdn.net/dn/oDOBh/btsKxQEOBsS/BsV3JbZSHb75z7tGTpIAj1/img.png)
-
-![비관적 락 결과](https://blog.kakaocdn.net/dn/dl5NL1/btsKJAJbRPG/LKNqypLVcFNXXXY5kWZk6K/img.png)
-
-![분산 락 결과](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F9jeuM%2FbtsKIQy0ksH%2FdSgxPB9sRMagK1AA36K2iK%2Fimg.png)
+![동시성제어](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FRVN8q%2FbtsKQBWiNVN%2FdzKhkei6uj3F7y7vIEql3K%2Fimg.png)
 
 </details>
 
@@ -421,7 +415,48 @@ API & Testing
 
 <details> <summary>상세보기</summary>  
 
+```java
+[내가 구현한 기능]
 
+- Elasticsearch를 활용한 고성능 검색 시스템 구현
+- 데이터베이스 대신 Elasticsearch를 사용하여 대량 데이터에 대해 빠른 검색 및 분석 기능 제공
+- 사용자 쿼리 요청에 대해 정확하고 빠른 검색 결과를 반환
+
+[주요 로직]
+
+- 도슈먼트를 생성하여 데이터베이스의 데이터를 Elasicsearch로 sync
+- 공연 제목 등의 부분 검색이 필요한 필드는 Keyword로 설정하여 index를 구성
+
+[배경]
+
+- 데이터베이스를 이용한 기존 검색 로직은 대량의 데이터 처리 및 복잡한 쿼리 실행에서 성능 저하가 발생
+- 사용자 검색 요청에 대해 빠르고 정교한 결과를 제공하기 위해 전문 검색 엔진 도입 필요
+- Elasticsearch는 텍스트 검색, 정렬, 필터링 등 다양한 고급 기능과 높은 확장성을 제공
+
+[요구사항]
+
+- 대량의 데이터에 대해 빠른 검색 결과를 제공
+- 키워드 검색으로 공연, 공연장, 출연자를 모두 조회
+
+[선택지]
+
+- Elasticsearch
+- Apache Solr
+- JPA
+
+[의사결정/사유]
+
+- 대량 데이터 처리와 고급 검색 쿼리에 적합
+- 동적 스케일링 및 분산 환경 지원으로 향후 트래픽 증가에도 대응 가능
+- Spring Data Elasticsearch와의 통합으로 개발 편의성이 높음
+
+[회고]
+
+- 데이터 싱크를 savaAll메소드로 스케쥴링하여 새로운 데이터 반영이 안됨
+- 데이터를 모두 삭제하고 업로드 하거나 새로운 방법을 도입해야함
+```
+
+![ES검색_성능개선_결과](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbnSILn%2FbtsKRlMd1X4%2FkU3QYMh6SduJVjmUN0bjQK%2Fimg.png)
 
 </details>
 
