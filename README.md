@@ -853,7 +853,30 @@ API & Testing
 
 <details> <summary>상세보기</summary>  
 
+```java
+[성능 개선 / 코드 개선 요약]
 
+- 다양한 툴을 활용한 코드 리팩토링
+
+[문제 정의]
+
+- 온라인 협업 프로젝트 방식으로 진행하여 코드의 일관성을 맞추는데 한계가 있음
+
+[해결 방안]
+
+- SonarQube, SonarLint : 정적 코드 분석 도구를 활용하여 코드를 개선함
+- Spotless plugin을 사용하여 GooleJavaFormat을 반영함
+- 버전별 개발이 완료될 때마다 전체 코드를 확인하고 직접 수정함
+
+[회고]
+
+- 개발 타임라인에 영향을 주지 않는 선에서 리팩토링을 진행하기 위해 주말에 진행함
+- 여러명이서 작성한 코드기 때문에 코드를 이해하는데도 오랜시간이 소요됨
+- 개발 시작시 설계의 중요성에 대해 한번더 생각하게됨
+- Spotless 툴은 활용도가 좋았으나 merge 충돌이 많이 생기고 배포시에 꼭 제외해야함
+```
+
+![Code Convention](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FdDjpcb%2FbtsKR95x5wT%2FQTsHkgvatn9hIkU1M8kiv1%2Fimg.png)
 
 </details>
 
