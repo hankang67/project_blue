@@ -785,6 +785,7 @@ API & Testing
 - JPA와 JDBC 간 성능 차이 외에도 메모리 누수가 성능 문제의 주요 원인으로 작용할 수 있음을 알게 됨
 ```
 
+![jpa jdbc](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FVzpCN%2FbtsKSnbpdx1%2FGK9Sh9tS5ZDAHTD62JcEm0%2Fimg.png)
 
 </details>
 
