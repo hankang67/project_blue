@@ -699,6 +699,8 @@ Elasticsearch(ES) 기반 API와 MySQL 기반 API의 성능을 비교하고, 높�
 
 </details>
 
+![](https://g-cbox.pstatic.net/MjAyNDExMjFfNTQg/MDAxNzMyMTgyMzU5OTcx.pAouV9NQskIMumD0t3U-RubFCdA3rIL7XyFR-6tsRYIg.ggluDlQlVq26WxMM0OjQWKzo0DK5iz3P_KXfDDJzJhAg.PNG/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-11-21_105838.png)
+
 <details> <summary> SSE(Server-Sent-Events) </summary>
 
 1. 실시간 알림 요구 사항
@@ -789,6 +791,8 @@ Elasticsearch(ES) 기반 API와 MySQL 기반 API의 성능을 비교하고, 높�
 ![sse 포스트맨](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fb3lQAT%2FbtsKRQDVGBu%2FvM3SLiNkeA9emKuuPkTFzk%2Fimg.png)
 ![sse 웹](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbfFaWD%2FbtsKRi1Q3QP%2FJkb97qW8hK0VTRGzgknkk1%2Fimg.png)
 </details>
+
+![](https://g-cbox.pstatic.net/MjAyNDExMjFfMjM3/MDAxNzMyMTgyMjg1OTgx.fxImcKWa7MfknA9JmIBabZEplsfoFBXm5FhLyGXbpUcg.RBhMeQ8CZUmrg16YTUv9WplrE592DISjLxUSdT4P6fUg.PNG/%EC%9B%B9_%EC%98%88%EB%A7%A4_%EC%84%B1%EA%B3%B5_%EC%95%8C%EB%A6%BC%28sse%29.png)
 
 </details>
 
