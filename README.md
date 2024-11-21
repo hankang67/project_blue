@@ -303,6 +303,7 @@ Jenkins CI/CD 블로그
 - Redis와 같은 분산 시스템에서 락을 관리하기 위해 Redisson 라이브러리를 사용하여 쿠폰 발급 시 분산 락을 적용.
 
 #### 쿠폰 발급 테스트
+<details> <summary>  쿠폰 발급 테스트 </summary>
 특정 쿠폰 발급 시 동시 요청이 발생할 때 발생할 수 있는 문제를 확인하고, 성공적으로 발급된 수량과 실제 최종적으로 반영된 발급 수량의 차이를 점검 하기 위해 테스트를 진행
 
 ![테스트 폼](https://blog.kakaocdn.net/dn/z0TQK/btsKydNb8MY/4AJvi7Tk2wEVjCvoKvZhb0/img.png)
@@ -332,8 +333,10 @@ Jenkins CI/CD 블로그
        쿠폰이 발급 되지 않았다. 이유로는 쿠폰 발급 로직이 많은 사용자의 동시 요청을 처리하는 과정에서 동시성 제어가 제대로 이루어지지 않아,
        일부 요청이 충돌하여 실패했을 가능성이 높다. 락이 걸리지 않은 상태에서 여러 트랜잭션이 동시에 같은 쿠폰 데이터를 수정하려고 할 때 데이터 일관성이
        보장되지 않아 발급 실패가 발생할 수 있으며 그 결과로 111건 만이 발급되지 못하였다.
+</details>
 
 #### 낙관적 락 적용
+<details> <summary>  낙관적 락 적용 </summary>
 - 데이터가 충돌하지 않을 것이라는 가정 하에 동작 -> 즉, 여러 스레드가 동시에 데이터를 수정할 가능성이 낮다고 가정하고 수정할 때까지 락을
   사용하지 않는다.
   ![낙관적락](https://blog.kakaocdn.net/dn/UKoVz/btsKxRjoKwK/fQxgieyiAIkdElwkcnooSk/img.png) ![결과](https://blog.kakaocdn.net/dn/oDOBh/btsKxQEOBsS/BsV3JbZSHb75z7tGTpIAj1/img.png)
@@ -344,9 +347,10 @@ Jenkins CI/CD 블로그
 
 
 3) 결과 : 서비스에서 발급된 쿠폰 수량과 고객이 요청한 쿠폰의 수량은 일치 하지만, 867개의 쿠폰이 예외 발생으로 인해 지급되지 못하였다.
-
+</details>
 
 #### 비관적 락 적용
+<details> <summary>  비관적 락 적용 </summary>
 - 데이터 충돌이 자주 발생한다고 가정하고 동시성을 관리하는 방법으로 락은 트랜잭션이 완료될 때까지 유지되며, 이를 통해 데이터의 일관성을 보장한다.
 
 ![비관적 락](https://blog.kakaocdn.net/dn/ALmJx/btsKKhvjSML/XPPme4stjbn5KcIZ2vjw4K/img.png)
@@ -368,9 +372,10 @@ Jenkins CI/CD 블로그
    락으로 인해 데드락 상황이 발생할 수 있으며 그 결과 많은 요청이 충돌하면서 일부는 대기 중 타임아웃되거나 실패하고  최종 발급 수량과 요청된 수량 간 차이가 아래와 같이 발생 할 수 있다.
 
 ![비관적 락 결과](https://blog.kakaocdn.net/dn/dl5NL1/btsKJAJbRPG/LKNqypLVcFNXXXY5kWZk6K/img.png)
-
+</details>
 
 #### 분산 락 적용
+<details> <summary>  분산 락 적용 </summary>
 - 여러 인스턴스에서 동시성 제어를 목적으로 사용되며 분산 환경에서 데이터 일관성을 보장하기 위해 Redis와 같은 외부 시스템을 이용해 락을 관리하는 방식.
 
 ![분산 락 aop](https://blog.kakaocdn.net/dn/T8q99/btsKJCGTTd5/Ip42602YYOaRn3oP9mkk8k/img.png)
@@ -395,7 +400,7 @@ lock.tryLock() 메서드를 통해 지정된 대기 시간(waitTime)과 임대 �
 락 해제는 lock.unlock()를 호출하며 leaseTime 이 초과되면 자동으로 해제되며, 락이 해제가 되지 않는다면 다른 트랜잭션에서 접근할 수 없으므로
 finally 를 통해 항상 락을 해제 할 수 있도록 지정함.
 
-#### 분산 락 적용 :
+#### 분산 락 :
 ![분산 락적용 이미지](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fb02Q9C%2FbtsKKrdsWrv%2FwAkpGmB6wFKDYVvFdVkq21%2Fimg.png)
 AOP를 통해 지정한 어노테이션 포인트를 통해 특정 서비스 메서드 위에 락 어노테이션과 Key 값을 명시하여 동시성 제어를 수행 할 수 있도록 한다.
 이때의 Key 값은 락의 고유 식별자로 사용되며 이를 통하여 Redis와 같은 외부 시스템에서 분산 락을 관리한다.
@@ -428,7 +433,8 @@ AOP를 통해 지정한 어노테이션 포인트를 통해 특정 서비스 메
 
 - 분산 락 적용으로 인해 예상치 못한 쿠폰 발급 초과 문제 해결
 - 각 스레드는 순차적으로 락을 획득하여 동시성 문제 없이 안정적으로 요청 처리
-
+ </details>
+ 
 </details>
 
 
@@ -659,14 +665,12 @@ Elasticsearch(ES) 기반 API와 MySQL 기반 API의 성능을 비교하고, 높�
 ## 알림 시스템
 
 ### Slack 알림 - Aop
-
 <details> <summary> Slack 알림 - Aop </summary>
 
 - slack 에서 발급 받을 수 있는  Incoming Webhooks의 Url을 발급받아 다음과 같이 환경변수로 설정한다.
-  ![환경변수](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcfmtAV%2FbtsKhLwHsb5%2FvREQSndPJxE6DBFq7hZAu0%2Fimg.png)
+![환경변수](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcfmtAV%2FbtsKhLwHsb5%2FvREQSndPJxE6DBFq7hZAu0%2Fimg.png)
 
 #### SlackNotifier
-
 
 ![SlackNotifier](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FdRGyoH%2FbtsKQIgf6bR%2Fkv5BYsYoPt7QaKDPgwAU30%2Fimg.png)
 
@@ -699,9 +703,9 @@ Elasticsearch(ES) 기반 API와 MySQL 기반 API의 성능을 비교하고, 높�
     - 성공적으로 예약이 완료된 경우 Slack 알림을 통해 사용자에게 상세 정보를 제공.
     - 공연 및 예약 시스템의 상태를 실시간으로 파악하고 관리자가 Slack 알림을 통해 모니터링 가능.
 
-</details>
-
 ![](https://g-cbox.pstatic.net/MjAyNDExMjFfNTQg/MDAxNzMyMTgyMzU5OTcx.pAouV9NQskIMumD0t3U-RubFCdA3rIL7XyFR-6tsRYIg.ggluDlQlVq26WxMM0OjQWKzo0DK5iz3P_KXfDDJzJhAg.PNG/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-11-21_105838.png)
+
+</details>
 
 ### SSE(Server-Sent-Events)
 
@@ -738,6 +742,7 @@ Elasticsearch(ES) 기반 API와 MySQL 기반 API의 성능을 비교하고, 높�
     - 서버에서 클라이언트와 매핑되는 SSE 통신 객체(SseEmitter)를 만든다.
     - 서버에서 이벤트가 발생하면 해당 객체를 통해 클라이언트로 데이터를 전송한다.
       ![SSE흐름](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcS2oMU%2FbtsKPbI8mjS%2F1BbAaLushqQbZmCczkTgx0%2Fimg.png)
+      
 </details>
 
 ### SSE 알림
@@ -796,9 +801,8 @@ Elasticsearch(ES) 기반 API와 MySQL 기반 API의 성능을 비교하고, 높�
 
 ![sse 포스트맨](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fb3lQAT%2FbtsKRQDVGBu%2FvM3SLiNkeA9emKuuPkTFzk%2Fimg.png)
 ![sse 웹](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbfFaWD%2FbtsKRi1Q3QP%2FJkb97qW8hK0VTRGzgknkk1%2Fimg.png)
-</details>
 
-![](https://g-cbox.pstatic.net/MjAyNDExMjFfMjM3/MDAxNzMyMTgyMjg1OTgx.fxImcKWa7MfknA9JmIBabZEplsfoFBXm5FhLyGXbpUcg.RBhMeQ8CZUmrg16YTUv9WplrE592DISjLxUSdT4P6fUg.PNG/%EC%9B%B9_%EC%98%88%EB%A7%A4_%EC%84%B1%EA%B3%B5_%EC%95%8C%EB%A6%BC%28sse%29.png)
+</details>
 
 </details>
 
