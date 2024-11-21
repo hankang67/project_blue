@@ -598,7 +598,7 @@ API & Testing
 - 다중 서버 환경을 구성하지 못하여 redis 활용의 장점을 얻지 못함
 ```
 
-~[slack에서 sse로 알림변경](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fr4qd6%2FbtsKS5Vq4Dn%2FanqdG4oECXjavSZn5Yxtx1%2Fimg.png)
+![slack에서 sse로 알림변경](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fr4qd6%2FbtsKS5Vq4Dn%2FanqdG4oECXjavSZn5Yxtx1%2Fimg.png)
 
 </details>
 
