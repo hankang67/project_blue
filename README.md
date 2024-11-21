@@ -1028,8 +1028,6 @@ log메시지 중 특정 단어가 포함되어 있을 때 태그를 추가하여
 
 <details> <summary>Monitoring - Prometheus, Grafana</summary>
 
-<details> <summary>Monitoring - Prometheus, Grafana</summary>
-
 ### Prometheus 설치 및 설정
 
 1. **Prometheus 다운로드**
@@ -1060,8 +1058,9 @@ log메시지 중 특정 단어가 포함되어 있을 때 태그를 추가하여
        metrics_path: "/actuator/prometheus"
        static_configs:
          - targets: ["localhost:9090"]
+   
 - 프로메테우스 화면
-![image](https://github.com/user-attachments/assets/a5f386fa-11da-4560-831d-a652a0c176bc)
+- ![image](https://github.com/user-attachments/assets/a5f386fa-11da-4560-831d-a652a0c176bc)
 
 ### Grafana 설치 및 설정
 1. Grafana 다운로드
