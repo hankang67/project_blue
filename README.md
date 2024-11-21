@@ -10,7 +10,17 @@ _프로젝트 개요_
 
 _핵심 목표_
 
-작성중
+## 사용자 편의기능 최적화
+- Elasticsearch 도입으로 검색 속도 50% 이상 향상
+- Redis caching 도입으로 검색 속도 50% 이상 향상
+
+## Spring Batch
+- Spring Batch로 대용량 데이터 처리
+- JDBC Bulk Insert 방식으로 70% 속도 개선
+
+## 이중화 DB
+- DB 이중화로 부하 방지 및 데이터 안정성 보장
+- 에러율 0%를 목표로 이중화 환경 구성
 
 # 🌟 Key Summary
 
@@ -66,6 +76,8 @@ API & Testing
 
 ![swagger](https://img.shields.io/badge/swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=white)
 ![Postman](https://img.shields.io/badge/Postman-ff6c37?style=for-the-badge&logo=postman&logoColor=white)
+![sonarqube](https://img.shields.io/badge/sonarqube-4E9BCD?style=for-the-badge&logo=sonarqube&logoColor=white)
+![sonarLint](https://img.shields.io/badge/sonarlint-CB2029?style=for-the-badge&logo=sonarlint&logoColor=white)
 
 # 🔍 Main Features
 
@@ -74,17 +86,35 @@ _주요 기능_
 Admin
 
     - 관리자 전용 계정으로 가입할 수 있습니다.
-    - 포스터 파일을 첨부하여 공연을 등록하고 수정 삭제가 가능합니다. - 이미지는 AWS S3에 저장됩니다.
+    - 포스터 파일을 첨부하여 공연을 등록하고 수정 삭제가 가능합니다. (이미지는 AWS S3에 저장됩니다.)
     - 공연장, 출연자, 공연에 대한 회차등을 등록하고 관리할 수 있습니다.
-    - 
+    - 쿠폰을 등록하고 관리할 수 있습니다.
+    - 공연에 출연하는 출연자를 등록하고 관리할 수 있습니다.
+    - 사용자 예매내역을 조건에 따라 검색할 수 있습니다 (특정 공연에 대한 예매 내역 등) - Elasticsearch
+
+Admin - Spring Batch 
+
+[Spring Batch Application GitHub 바로가기](https://github.com/everydayspring/project-blue-batch)
+
+    - OldUsers - 휴먼계정 처리
+    - OldUsersAlert - 휴먼계정 대상자 알림
+    - OldPerformances - 오래된 공연 정보 삭제
+    - TimeoutReservation - 기간 만료 예매 취소처리
+    - UpcomingReservationAlert - 관람일 알림
+    - ReservationReviewAlert - 관람평 작성 유도 알림
 
 Search
 
-    작성중
+    - 키워드를 입력하여 한번의 검색으로 공연장, 출연자, 공연을 모두 조회할 수 있습니다. Elasticsearch로 구현되어 빠른 응답속도를 제공합니다.
+    - 사용가능한 쿠폰, 전체 공연, 배우, 공연장 등을 조회할 수 있습니다. Redis Caching 기능을 적용하여 재검색시 빠른 응답속도를 제공합니다.
+    - 원하는 공연회차의 잔여좌석을 조회할 수 있습니다.
 
 Reservation
 
-    작성중
+    - 원하는 공연회차의 좌석을 지정하여 예매할 수 있습니다.
+    - 예매에 대한 결제, 결제취소가 가능합니다 (토스페이먼츠 API)
+    - 예매, 결제 시 Slack 알림과 Mailing 서비스를 제공합니다 (SSE, Async)
+
 
 # 🔥 Technical Enhancements
 
@@ -282,7 +312,16 @@ _기술적 고도화_
 - https://velog.io/@uara67/Spring-ELK-Docker-Elastic-Search-Kibana를-설치해서-springboot와-연결하자-1
 - https://velog.io/@uara67/Spring-ELK-Docker-Elastic-Search-Kibana를-설치해서-springboot와-연결하자-2
 - https://velog.io/@uara67/Spring-ELK-es로-구현한-예매검색-api
-
+### elastic api 성능체크 및 grafna 이용한 모니터링
+- https://velog.io/@uara67/Elastic-성능-체크를-promethus와-grafna로-해보자
+- https://velog.io/@uara67/Elasticsearch-성능-테스트-보고서-1
+- https://velog.io/@uara67/elastic-모니터링과-속도측정테스트-2
+- ![image](https://github.com/user-attachments/assets/fab66816-51b3-4293-a785-e2d8fc4158c6)
+  [성능테스트 결과 요약]
+  - https://velog.io/@uara67/Elasticsearch-vs-MySQL-왜-MySQL이-더-빠를까
+  - ![image](https://github.com/user-attachments/assets/244d4bcd-e97d-4fa3-ad7a-5f8841e3cb92)
+  
+  
 </details>
 
 <details> <summary>Alert - AOP</summary>
@@ -318,8 +357,16 @@ _기술적 고도화_
 
 <details> <summary>Logstash</summary>
 
-위아래를 띄우고 여기에 내용을 작성하세요
-마크다운 문법으로 작성하시면 됩니다
+### Logstash 환경설정
+- https://velog.io/@uara67/Logstash-springboot-환경-구현하기로그수집하기-1일차
+- https://velog.io/@uara67/logstash-AOP로-로그-수집하기
+#### Logstash 이미지
+- logstash 로그 수집화면
+- ![image](https://github.com/user-attachments/assets/5ec8ba74-3397-49e4-8aea-6ff67cf41ae2)
+- 매일 채워지는 로그
+- ![image](https://github.com/user-attachments/assets/2a7c2061-856d-46dc-a85b-409ceae39a94)
+- 매일 백업되는 로그
+- ![image](https://github.com/user-attachments/assets/7089d337-2896-4b9f-8c1e-96a9273e362c)
 
 </details>
 
