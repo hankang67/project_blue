@@ -658,6 +658,8 @@ Elasticsearch(ES) 기반 API와 MySQL 기반 API의 성능을 비교하고, 높�
 
 ## 알림 시스템
 
+### Slack 알림 - Aop
+
 <details> <summary> Slack 알림 - Aop </summary>
 
 - slack 에서 발급 받을 수 있는  Incoming Webhooks의 Url을 발급받아 다음과 같이 환경변수로 설정한다.
@@ -701,6 +703,8 @@ Elasticsearch(ES) 기반 API와 MySQL 기반 API의 성능을 비교하고, 높�
 
 ![](https://g-cbox.pstatic.net/MjAyNDExMjFfNTQg/MDAxNzMyMTgyMzU5OTcx.pAouV9NQskIMumD0t3U-RubFCdA3rIL7XyFR-6tsRYIg.ggluDlQlVq26WxMM0OjQWKzo0DK5iz3P_KXfDDJzJhAg.PNG/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-11-21_105838.png)
 
+### SSE(Server-Sent-Events)
+
 <details> <summary> SSE(Server-Sent-Events) </summary>
 
 1. 실시간 알림 요구 사항
@@ -735,6 +739,8 @@ Elasticsearch(ES) 기반 API와 MySQL 기반 API의 성능을 비교하고, 높�
     - 서버에서 이벤트가 발생하면 해당 객체를 통해 클라이언트로 데이터를 전송한다.
       ![SSE흐름](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcS2oMU%2FbtsKPbI8mjS%2F1BbAaLushqQbZmCczkTgx0%2Fimg.png)
 </details>
+
+### SSE 알림
 
 <details> <summary> SSE 알림 </summary>
 
