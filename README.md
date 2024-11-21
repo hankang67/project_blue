@@ -154,29 +154,29 @@ _기술적 고도화_
 <details> <summary>toss payments 결제 API 연동</summary>
 
 Toss Payments에서 제공하는 API가 사용하기 쉽게 되어있다.<br>
-토스페이의 절차는 아래 사진과 같이 이루어져있다.
+토스페이의 절차는 아래 사진과 같이 이루어져있다.<br>
 ![토스 결제 절차](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcNmDms%2FbtsKhpnqeWa%2FcurhwWKSLpzzy4ilgqln21%2Fimg.png)
 
 Toss에서 제공해주는 템플릿을 열면 이렇게 html들과 Controller를 제공해준다.<br>
 ![템플릿](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcFJhZx%2FbtsKgaEY4Gr%2FdNA3GfsXLbFMCBQM1Xhi10%2Fimg.png)
 
 처음에 결제위젯으로 진입하기 전 전달할 데이터를 세팅해서 Payment 테이블에 기본적인 값들을 저장해주고
-결제위젯에 필요한 값들을 Return 값으로 전달해줬다.
+결제위젯에 필요한 값들을 Return 값으로 전달해줬다.<br>
 ![리턴 값 이미지](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FGv9D9%2FbtsKQ6N9VPv%2FeJNmer56J5Zo44QOORu6vK%2Fimg.png)
 
-그리고 Return 값은 Model에 넣은후 Spring의 **Thymleaf**를 이용하여 html에서 값을 불러왔다.
+그리고 Return 값은 Model에 넣은후 Spring의 **Thymleaf**를 이용하여 html에서 값을 불러왔다.<br>
 ![model로 값 전달](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FG5bSg%2FbtsKQDL7XgY%2F71tYBCz3KUtSZhDSj1W1Yk%2Fimg.png)
 
-아래와 같이 쓰면 Model에 있는 값을 불러올 수 있다.
+아래와 같이 쓰면 Model에 있는 값을 불러올 수 있다.<br>
 ![Thymleaf로 값 불러오기](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbyVEV8%2FbtsKh01Bu0c%2FDUEoPuX0CAOBUwKBj9Utj0%2Fimg.png)
 
-결제위젯의 **결제하기**를 누르면 checkout.html의 'widgets.requestPayment'를 통해 결제창을 요청한다.
+결제위젯의 **결제하기**를 누르면 checkout.html의 'widgets.requestPayment'를 통해 결제창을 요청한다.<br>
 ![widget 이미지](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FHn59g%2FbtsKQBt54nU%2FbDokeAO17rEuZVXT9SQVjk%2Fimg.png)
 
 Toss에서는 중간에 결제 가격을 조정하여 악의적으로 이용할 수 있다고 하여 요청을 보낼 당시의 orderId, amount와
 Return으로 받은 orderId, amount를 비교하여 일치여부를 확인하는 것을 권장하기 때문에 
 결제 승인 절차에 진입하기 전에 가격을 검증하였다.
-아까 Payment 테이블에 저장해놓은 orderId, amount를 불러와 Return으로 받은 값과 비교를 진행한다.
+아까 Payment 테이블에 저장해놓은 orderId, amount를 불러와 Return으로 받은 값과 비교를 진행한다.<br>
 ![검증 이미지](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fbb0jdw%2FbtsKQGITmS0%2FN6v40uHIMOa4U6YW40XXwK%2Fimg.png)
 
 그렇게 최종적으로 승인되면 아래와 같이 Json 형식으로 값들을 Return해준다.<br>
@@ -549,7 +549,7 @@ AOP를 통해 지정한 어노테이션 포인트를 통해 특정 서비스 메
 implementation 'org.springframework.boot:spring-boot-starter-mail'
 
 ## 2. MailConfig
-환경변수를 설정했으면 아래와 같이 Config 파일을 작성해준다.
+환경변수를 설정했으면 아래와 같이 Config 파일을 작성해준다.<br>
 ![Config](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FIqsAp%2FbtsKQ7GkwLn%2FSFXQkrpTuC2ADXi0cdCzl0%2Fimg.png)
 
 ## 3. AsyncConfig
@@ -562,7 +562,7 @@ implementation 'org.springframework.boot:spring-boot-starter-mail'
 그리고 동기식으로 처리하게 되면 메일 전송이 완료될 때까지 메인 쓰레드는 대기를 하게 되는데,
 그렇게 되면 메인 쓰레드는 다른 작업을 할 수 없기에 메일 발송에서 비동기처리는 사실상 **필수**인 기능인 셈이다.
 
-메일 발송을 비동기식으로 처리하기 위해 Config 파일을 작성 후 사용하고 싶은 메서드에 **@Asnyc** 어노테이션을 달아주면 된다.
+메일 발송을 비동기식으로 처리하기 위해 Config 파일을 작성 후 사용하고 싶은 메서드에 **@Asnyc** 어노테이션을 달아주면 된다.<br>
 ![AsyncConfig](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FeuTxOp%2FbtsKRDEIPk7%2F5GlYX1XzmrFxxTkhKcOAM1%2Fimg.png)
 
 처음에는 쓰레드 갯수와 Queue 용량을 작게 설정했었는데 Jmeter로 테스트를 하다보니
@@ -573,16 +573,16 @@ Queue 용량이 크면 응답 지연이 발생하게 되지만, 지연이 발생
 
 결과적으론 에러율이 15%정도가 되었는데 이것도 로직에 대한 문제보단 컴퓨터 사양, 인터넷 문제로 판단된다.
 
-### **쓰레드 수정 전**
+### **쓰레드 수정 전**<br>
 ![쓰레드 수정 전](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fdh8FU0%2FbtsKRbWjpKa%2FnMksePGOTN1xHwj33hutlk%2Fimg.webp)
 
-### **쓰레드 수정 후**
+### **쓰레드 수정 후**<br>
 ![쓰레드 수정 후](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FRMRYs%2FbtsKPFj0Z2Z%2F48sbDJPHJIJkklnLuywK61%2Fimg.webp)
 
 ## 4. EmailService
 3번에서 설정한 비동기는 아래 이미지와 같이 사용하려는 메서드에 @Async와 Bean에서 설정한 이름을 넣어주면 된다.
 
-JavaMailSender를 이용해 간편하게 메일을 전송할 수 있다.
+JavaMailSender를 이용해 간편하게 메일을 전송할 수 있다.<br>
 ![EmailService](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fc009Zg%2FbtsKQajpUwi%2FQaPQvDs4kFumbI8DNnMw81%2Fimg.png)
 
 메일에 관련된 예외처리는 구현하려고 했었으나 실패로직을 구현하는 방법을 몰라서 시도하다가
@@ -602,13 +602,7 @@ JavaMailSender를 이용해 간편하게 메일을 전송할 수 있다.
 ### Logstash 환경설정
 - https://velog.io/@uara67/Logstash-springboot-환경-구현하기로그수집하기-1일차
 - https://velog.io/@uara67/logstash-AOP로-로그-수집하기
-#### Logstash 이미지
-- logstash 로그 수집화면
-- ![image](https://github.com/user-attachments/assets/5ec8ba74-3397-49e4-8aea-6ff67cf41ae2)
-- 매일 채워지는 로그
-- ![image](https://github.com/user-attachments/assets/2a7c2061-856d-46dc-a85b-409ceae39a94)
-- 매일 백업되는 로그
-- ![image](https://github.com/user-attachments/assets/7089d337-2896-4b9f-8c1e-96a9273e362c)
+
 
 ## 1. build.gradle
 logback을 이용하여 logstash에 로그를 전달할 것이기에 의존성을 추가해준다. <br>
@@ -927,10 +921,13 @@ log메시지 중 특정 단어가 포함되어 있을 때 태그를 추가하여
 
 </details>
 
-kibana에 들어가서 index pattern을 등록해주면 Discover에서 index 별 로그를 확인할 수 있다.
-
-![index pattern](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FnKLYp%2FbtsKQ44xlyW%2FKlNQ9rR0Bw2XxdUOSuULwk%2Fimg.png)
-![logs](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fbn9C6c%2FbtsKSDLkLLW%2FuIoSEGStk6vtMaKW9wEf4k%2Fimg.png)
+#### Logstash 이미지
+- logstash 로그 수집화면<br>
+  ![image](https://github.com/user-attachments/assets/5ec8ba74-3397-49e4-8aea-6ff67cf41ae2)
+- 매일 채워지는 로그<br>
+  ![image](https://github.com/user-attachments/assets/2a7c2061-856d-46dc-a85b-409ceae39a94)
+- 매일 백업되는 로그<br>
+  ![image](https://github.com/user-attachments/assets/7089d337-2896-4b9f-8c1e-96a9273e362c)
 
 </details>
 
