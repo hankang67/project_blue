@@ -132,7 +132,7 @@ API & Testing
 
 <details> <summary>상세보기</summary>  
 
-```markdown
+```java
 [내가 구현한 기능]
 
 - API 테스트 도구 Swagger
@@ -176,7 +176,7 @@ API & Testing
 
 <details> <summary>상세보기</summary>  
 
-```markdown
+```java
 [내가 구현한 기능]
 
 - 공연 등록 시 포스터 파일을 입력받아 S3 Bucket에 업로드
