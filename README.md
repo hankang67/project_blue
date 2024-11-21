@@ -21,7 +21,17 @@ _핵심 목표_
 # 🌟 Key Summary
 _핵심 요약_
 
-작성중
+<details> <summary>JPA → Elasticsearch 검색 속도 개선</summary>
+
+![JPA → Elasticsearch 검색 속도 개선](https://g-cbox.pstatic.net/MjAyNDExMjFfMjcy/MDAxNzMyMTgxMDUwOTMx.zxp_80lyUXBhQ4HtpmH1IuUy8KufT7mDp13AV6-nE-cg.H-tE1kGBVGwYljZyPPF_72y_VLPMhCATGPoSE239AZEg.PNG/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-11-21_182400.png)
+
+</details>
+
+<details> <summary>Spring Batch JPA -> JDBC</summary>
+
+![Spring Batch JPA -> JDBC](https://g-cbox.pstatic.net/MjAyNDExMjFfMTY1/MDAxNzMyMTgxMzY5NDcy.ZXmAOCF-RE96nS7jVHG1bQZWMiGmkqgtJaffG147czAg.oXRkXiMuO3YdVA2T1jeVpRECwQFEJafadrYBHFqzm3kg.PNG/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-11-21_182916.png)
+
+</details>
 
 # 🚀 Infra Architecture & STACK
 _인프라 아키텍처 & 적용기술_
