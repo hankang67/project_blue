@@ -126,21 +126,30 @@ API & Testing
 
 </details>
 
-## 🔥 Technical Enhancements  
-
-### [ Jira ]
-
-<details> <summary>상세보기</summary>  
-
-
-
-</details>
+## 🔥 Technical Enhancements
 
 ### [ Swagger ]
 
 <details> <summary>상세보기</summary>  
 
+```java
+**[내가 구현한 기능]**
 
+
+
+[주요 로직]
+
+[배경]
+
+[요구사항]
+
+[선택지]
+
+[의사결정/사유]
+
+[회고]
+
+```
 
 </details>
 
