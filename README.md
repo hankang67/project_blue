@@ -1,35 +1,21 @@
 ![image](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F5Ki7f%2FbtsKOKZlNKD%2FkG8QAQwWBnEToKrhFVRrvK%2Fimg.png)
 
 # 🎫 TICKET BLUE
-
 _프로젝트 개요_
 
 공연 등 다양한 문화 및 엔터테이먼트 이벤트의 티켓을 온라인으로 예매할 수 있는 서비스
 
 # ⚽ Goals
-
 _핵심 목표_
 
-## 사용자 편의기능 최적화
-- Elasticsearch 도입으로 검색 속도 50% 이상 향상
-- Redis caching 도입으로 검색 속도 50% 이상 향상
-
-## Spring Batch
-- Spring Batch로 대용량 데이터 처리
-- JDBC Bulk Insert 방식으로 70% 속도 개선
-
-## 이중화 DB
-- DB 이중화로 부하 방지 및 데이터 안정성 보장
-- 에러율 0%를 목표로 이중화 환경 구성
+작성중
 
 # 🌟 Key Summary
-
 _핵심 요약_
 
 작성중
 
 # 🚀 Infra Architecture & STACK
-
 _인프라 아키텍처 & 적용기술_
 
 ![Infra](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FctMT0I%2FbtsKO6172by%2FCfn9epQ080RRD8gKUKFShk%2Fimg.png)
@@ -167,8 +153,36 @@ _기술적 고도화_
 
 <details> <summary>toss payments 결제 API 연동</summary>
 
-위아래를 띄우고 여기에 내용을 작성하세요
-마크다운 문법으로 작성하시면 됩니다
+Toss Payments에서 제공하는 API가 사용하기 쉽게 되어있다.<br>
+토스페이의 절차는 아래 사진과 같이 이루어져있다.
+![토스 결제 절차](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcNmDms%2FbtsKhpnqeWa%2FcurhwWKSLpzzy4ilgqln21%2Fimg.png)
+
+Toss에서 제공해주는 템플릿을 열면 이렇게 html들과 Controller를 제공해준다.<br>
+![템플릿](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcFJhZx%2FbtsKgaEY4Gr%2FdNA3GfsXLbFMCBQM1Xhi10%2Fimg.png)
+
+처음에 결제위젯으로 진입하기 전 전달할 데이터를 세팅해서 Payment 테이블에 기본적인 값들을 저장해주고
+결제위젯에 필요한 값들을 Return 값으로 전달해줬다.
+![리턴 값 이미지](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FGv9D9%2FbtsKQ6N9VPv%2FeJNmer56J5Zo44QOORu6vK%2Fimg.png)
+
+그리고 Return 값은 Model에 넣은후 Spring의 **Thymleaf**를 이용하여 html에서 값을 불러왔다.
+![model로 값 전달](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FG5bSg%2FbtsKQDL7XgY%2F71tYBCz3KUtSZhDSj1W1Yk%2Fimg.png)
+
+아래와 같이 쓰면 Model에 있는 값을 불러올 수 있다.
+![Thymleaf로 값 불러오기](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbyVEV8%2FbtsKh01Bu0c%2FDUEoPuX0CAOBUwKBj9Utj0%2Fimg.png)
+
+결제위젯의 **결제하기**를 누르면 checkout.html의 'widgets.requestPayment'를 통해 결제창을 요청한다.
+![widget 이미지](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FHn59g%2FbtsKQBt54nU%2FbDokeAO17rEuZVXT9SQVjk%2Fimg.png)
+
+Toss에서는 중간에 결제 가격을 조정하여 악의적으로 이용할 수 있다고 하여 요청을 보낼 당시의 orderId, amount와
+Return으로 받은 orderId, amount를 비교하여 일치여부를 확인하는 것을 권장하기 때문에 
+결제 승인 절차에 진입하기 전에 가격을 검증하였다.
+아까 Payment 테이블에 저장해놓은 orderId, amount를 불러와 Return으로 받은 값과 비교를 진행한다.
+![검증 이미지](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fbb0jdw%2FbtsKQGITmS0%2FN6v40uHIMOa4U6YW40XXwK%2Fimg.png)
+
+그렇게 최종적으로 승인되면 아래와 같이 Json 형식으로 값들을 Return해준다.<br>
+![결제 승인 이미지](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FceC3y3%2FbtsKgef7pyp%2F4rX8Uwyctvkr96bb8lSjq0%2Fimg.png)
+
+
 
 </details>
 
@@ -521,8 +535,58 @@ AOP를 통해 지정한 어노테이션 포인트를 통해 특정 서비스 메
 
 <details> <summary>Alert - Mail</summary>
 
-위아래를 띄우고 여기에 내용을 작성하세요
-마크다운 문법으로 작성하시면 됩니다
+메일 서버가 여러가지 있지만 네이버와 구글을 고민하던 중<br>
+글로벌 시장을 겨냥한(?) 구글 서버를 사용했다.
+
+우선 Config를 작성하기 전에 해야할 것.
+1. Google 로그인 > 보안 > 2단계 인증
+2. 앱 비밀번호 생성
+3. 앱 비밀번호 16자리 저장하기
+
+![환경변수](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fby1TXS%2FbtsKQaqhrCs%2FCVKr9JshJ6QKHuAaHUk7Q0%2Fimg.png)
+
+## 1. build.gradle
+implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+## 2. MailConfig
+환경변수를 설정했으면 아래와 같이 Config 파일을 작성해준다.
+![Config](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FIqsAp%2FbtsKQ7GkwLn%2FSFXQkrpTuC2ADXi0cdCzl0%2Fimg.png)
+
+## 3. AsyncConfig
+예매나 결제에 대한 결과를 메일로 알려주려하는데, 이 메일은 사실 부가적인 요소이기 때문에
+메일 발송이 실패하더라도 예매나 결제 결과에 영향을 끼쳐선 안된다.
+
+비동기처리를 하게되면 메인 쓰레드가 아닌 별도 쓰레드에서 동작하는데,
+일반적으로 Spring에서는 트랜잭션이 쓰레드간 전파를 하지 않기 때문에 메일에서 롤백이 일어나도 메인 쓰레드에는 영향이 없다.
+
+그리고 동기식으로 처리하게 되면 메일 전송이 완료될 때까지 메인 쓰레드는 대기를 하게 되는데,
+그렇게 되면 메인 쓰레드는 다른 작업을 할 수 없기에 메일 발송에서 비동기처리는 사실상 **필수**인 기능인 셈이다.
+
+메일 발송을 비동기식으로 처리하기 위해 Config 파일을 작성 후 사용하고 싶은 메서드에 **@Asnyc** 어노테이션을 달아주면 된다.
+![AsyncConfig](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FeuTxOp%2FbtsKRDEIPk7%2F5GlYX1XzmrFxxTkhKcOAM1%2Fimg.png)
+
+처음에는 쓰레드 갯수와 Queue 용량을 작게 설정했었는데 Jmeter로 테스트를 하다보니
+쓰레드도 작고 용량도 작아서 에러율이 98% 가량 됐었다.
+
+Queue 용량이 크면 응답 지연이 발생하게 되지만, 지연이 발생하더라도 에러를 잡는게 우선이라고 생각해서
+용량을 크게 잡았다.
+
+결과적으론 에러율이 15%정도가 되었는데 이것도 로직에 대한 문제보단 컴퓨터 사양, 인터넷 문제로 판단된다.
+
+### **쓰레드 수정 전**
+![쓰레드 수정 전](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fdh8FU0%2FbtsKRbWjpKa%2FnMksePGOTN1xHwj33hutlk%2Fimg.webp)
+
+### **쓰레드 수정 후**
+![쓰레드 수정 후](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FRMRYs%2FbtsKPFj0Z2Z%2F48sbDJPHJIJkklnLuywK61%2Fimg.webp)
+
+## 4. EmailService
+3번에서 설정한 비동기는 아래 이미지와 같이 사용하려는 메서드에 @Async와 Bean에서 설정한 이름을 넣어주면 된다.
+
+JavaMailSender를 이용해 간편하게 메일을 전송할 수 있다.
+![EmailService](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fc009Zg%2FbtsKQajpUwi%2FQaPQvDs4kFumbI8DNnMw81%2Fimg.png)
+
+메일에 관련된 예외처리는 구현하려고 했었으나 실패로직을 구현하는 방법을 몰라서 시도하다가
+마감 시간 이슈로인해 적용하지 못해서 시간 여유가 생기면 따로 구현해보려 한다.
 
 </details>
 
@@ -545,6 +609,328 @@ AOP를 통해 지정한 어노테이션 포인트를 통해 특정 서비스 메
 - ![image](https://github.com/user-attachments/assets/2a7c2061-856d-46dc-a85b-409ceae39a94)
 - 매일 백업되는 로그
 - ![image](https://github.com/user-attachments/assets/7089d337-2896-4b9f-8c1e-96a9273e362c)
+
+## 1. build.gradle
+logback을 이용하여 logstash에 로그를 전달할 것이기에 의존성을 추가해준다. <br>
+
+implementation 'net.logstash.logback:logstash-logback-encoder:7.4'
+
+## 2. logback-spring.xml
+### 로그 관련 고려한 점
+1. 예매, 쿠폰, 결제 관련 내역의 로그를 남길 것
+2. ELK 서버 외의 LOCAL에도 로그를 남길 것
+3. 쿼리문도 로그로 남길 것
+
+xml 파일을 보면 local파일을 생성하여 저장하는 부분과 쿼리문 전송하는 부분,
+aop를 사용해서 해당 클래스에 logstash로 로그를 전송하는 부분이 있다.
+
+<details> <summary> logback-spring.xml </summary>
+
+``` Java
+<configuration scan="true" scanPeriod="30 seconds">
+    <property resource="application.properties"/>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 로컬 파일에 로그 저장 설정 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern> ${LOGSTASH_FILE_PATH} </fileNamePattern>
+            <maxHistory>14</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%date %level [%thread] %logger{10} [%file:%line] %msg%n%xThrowable{5}</pattern>
+        </encoder>
+    </appender>
+
+    <!--  logstash setting  -->
+    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination> ${LOGSTASH_DESTINATION} </destination>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
+    </appender>
+
+    <logger name="com.sparta.projectblue.aop.LogstashAspect" level="DEBUG">
+        <appender-ref ref="LOGSTASH" />
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
+    <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
+        <appender-ref ref="LOGSTASH" />
+    </logger>
+
+    <!-- 전체 애플리케이션 로깅 설정 -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />  <!-- INFO레벨 이상 로그를 CONSOLE에 출력 -->
+        <appender-ref ref="FILE" />  <!-- INFO레벨 이상 로그를 File에 기록 -->
+    </root>
+```
+</details>
+
+## 3. LogstashAspect
+AOP방식을 사용하였고, 어노테이션 방식의 포인트컷을 사용해
+로그를 남기고자 하는 메서드에 어노테이션을 달아주었다.
+
+logstash.conf 파일을 보면 알겠지만, "ReservationEvent" 이라는 글자를 필터해서
+해당 index에 로그를 저장한다.
+
+<details> <summary> LogstashAspect.java </summary>
+
+```Java
+    @Pointcut("@annotation(com.sparta.projectblue.aop.annotation.ReservationLogstash)")
+    private void reservationLog() {}
+
+    @Around("reservationLog()")
+    public Object reservationLogstash(ProceedingJoinPoint joinPoint) throws Throwable {
+        Object result;
+        try {
+            result = joinPoint.proceed();
+        } catch (Exception e) {
+            log.error(
+                    "ReservationEvent: 예매 실패 - 메서드: {}, 이유: {}",
+                    joinPoint.getSignature().getName(),
+                    e.getMessage());
+            throw e;
+        }
+
+        // 예매 완료
+        // 패턴 매칭을 적용한 코드
+        if (result instanceof CreateReservationResponseDto reservation) {
+            log.info(
+                    "ReservationEvent: 예매 완료 - 예매 ID: {}, 공연명: {}, 날짜: {}, 좌석: {}, 총 가격: {}, 예약상태: {}",
+                    reservation.getId(),
+                    reservation.getPerformanceTitle(),
+                    reservation.getRoundDate(),
+                    reservation.getSeats(),
+                    reservation.getPrice(),
+                    reservation.getStatus());
+        }
+
+        // 예매 취소
+        else if ("delete".equals(joinPoint.getSignature().getName())) {
+            Object[] args = joinPoint.getArgs();
+            Long reservationId = (Long) args[0];
+            log.info("ReservationEvent: 예매 취소 - 유저 ID: {}", reservationId);
+        } else {
+            log.warn("ReservationEvent: 예상치 못한 결과 형식 - {}", result);
+        }
+
+        return result;
+    }
+```
+</details>
+
+## 4. docekr-compose.yml
+프로젝트 세팅은 끝났고 docker에 elk를 쉽게 설치하는 방법으로 docker-compose.yml 파일을 세팅했다.
+
+docker에 설치하는 방법은 간단하다. 나는 window를 사용하기 때문에
+1. PowerShell을 관리자 모드로 실행
+2. docker-compose.yml 파일이 있는 경로로 이동
+3. "docker compose up -d" 명령어를 입력해서 image를 다운받고 container를 실행
+
+<details> <summary> docekr-compose.yml </summary>
+
+```yaml
+services:
+  es01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.3
+    container_name: es01
+    environment:
+      - node.name=es01
+      - cluster.name=search-cluster
+      - discovery.seed_hosts=es02,es03
+      - cluster.initial_master_nodes=es01,es02,es03
+      - xpack.security.enabled=false
+      - xpack.security.http.ssl.enabled=false
+      - xpack.security.transport.ssl.enabled=false
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+    ports:
+      - "9200:9200" # https
+      - "9300:9300" #tcp
+    networks:
+      - es-bridge
+  es02:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.3
+    container_name: es02
+    environment:
+      - node.name=es02
+      - cluster.name=search-cluster
+      - discovery.seed_hosts=es01,es03
+      - cluster.initial_master_nodes=es01,es02,es03
+      - xpack.security.enabled=false
+      - xpack.security.http.ssl.enabled=false
+      - xpack.security.transport.ssl.enabled=false
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+    ports:
+      - "9201:9200" # https
+      - "9301:9300" #tcp
+    networks:
+      - es-bridge
+  es03:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.3
+    container_name: es03
+    environment:
+      - node.name=es03
+      - cluster.name=search-cluster
+      - discovery.seed_hosts=es01,es02
+      - cluster.initial_master_nodes=es01,es02,es03
+      - xpack.security.enabled=false
+      - xpack.security.http.ssl.enabled=false
+      - xpack.security.transport.ssl.enabled=false
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+    ports:
+      - "9202:9200" # https
+      - "9302:9300" #tcp
+    networks:
+      - es-bridge
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.17.3
+    container_name: logstash
+    environment:
+      - xpack.monitoring.enabled=false
+    ports:
+      - 5000:5000
+      - 9600:9600
+    volumes:
+      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf # local file mapping
+    depends_on:
+      - es01
+      - es02
+      - es03
+    networks:
+      - es-bridge
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.17.3
+    container_name: kibana
+    environment:
+      SERVER_NAME: kibana
+      ELASTICSEARCH_HOSTS: http://es01:9200
+    ports:
+      - 5601:5601
+    # Elasticsearch Start Dependency
+    depends_on:
+      - es01
+    networks:
+      - es-bridge
+networks:
+  es-bridge:
+    driver: bridge
+```
+
+</details>
+
+ElasticSearch 노드는 3개 이상, 홀수 단위로 설정해놓는 것이 장애 발생 시
+후보 마스터노드를 선출할 때 좋다고 해서 3개로 구성했다.
+
+사용하는 메모리는 AWS 4GB 짜리 medium 서버를 이용하기 때문에 256MB로 설정해주었다.
+
+logstash의 volumes를 통해 현재 경로에 있는 logstash.conf 와 docker 서버에 있는 logstash.conf를 매핑시켰다.
+이러면 logstash 내용들을 굳이 docker 서버에 접속하지 않고 window에서 파일을 수정할 수 있어서 간편하다.
+
+## 5. logstash.conf
+logstash로 수집되는 로그들을 filter도 해주고 로그 형식 변환 등을 해서 es로 보내주는 설정파일이다.
+
+<details> <summary> logstash.conf </summary>
+
+```
+input {
+  tcp {
+    port => 5000	// 5000번 포트로 log를 받겠다.
+    codec => json	// json 형식으로
+  }
+}
+
+filter {
+ grok {	// timestamp는 ISO8601 형식으로.... loglevel도... 나머지데이터는 message에~
+  match => { "message" => "%{TIMESTAMP_ISO8601:timestamp} %{LOGLEVEL:loglevel} %{GREEDYDATA:message}" }
+ }
+
+ date {
+  match => [ "timestamp", "ISO8601" ]
+ }
+
+ # 이벤트별 태그 추가
+ # ReservationEvent 가 포함되어 있으면 reservation_event 태그 추가
+ if [message] =~ "ReservationEvent" {
+  mutate { add_tag => ["reservation_event"] }
+ }
+
+ if [message] =~ "PaymentEvent" {
+  mutate { add_tag => ["payment_event"] }
+ }
+ 
+ if [message] =~ "CouponEvent" {
+  mutate { add_tag => ["coupon_event"] }
+ }
+
+ # SQL 관련 테이블 이름으로 쿼리 태그 추가
+ # select가 포함된 쿼리는 제외한다.
+ if [logger_name] == "org.hibernate.SQL" {
+  if [message] =~ /select/ {
+   drop {}
+  }
+  if [message] =~ /(reservations|reserved_seats|rounds)/ {
+    mutate { add_tag => ["reservation_query"] }
+  } else if [message] =~ /payments/ {
+    mutate { add_tag => ["payment_query"] }
+  } else if [message] =~ /coupon/ {
+    mutate { add_tag => ["coupon_query"] }
+  }
+ }
+}
+
+output {
+ # 전체 이벤트 로그 전송
+ if "reservation_event" in [tags] or "payment_event" in [tags] or "coupon_event" in [tags]
+   or "reservation_query" in [tags] or "payment_query" in [tags] or "coupon_query" in [tags] {
+  elasticsearch {
+   hosts => ["http://es01:9200", "http://es02:9200", "http://es03:9200"]
+   index => "logstash-%{+YYYY.MM.dd}"
+  }
+  stdout { codec => rubydebug }
+ }
+ # Reservation 관련 이벤트와 쿼리를 Elasticsearch로 전송
+ if "reservation_event" in [tags] or "reservation_query" in [tags] {
+   elasticsearch {
+     hosts => ["http://es01:9200", "http://es02:9200", "http://es03:9200"]
+     index => "reservation-logs-%{+YYYY.MM.dd}"
+   }
+   stdout { codec => rubydebug }
+ }
+
+ # Payment 관련 이벤트와 쿼리를 Elasticsearch로 전송
+ if "payment_event" in [tags] or "payment_query" in [tags] {
+   elasticsearch {
+     hosts => ["http://es01:9200", "http://es02:9200", "http://es03:9200"]
+     index => "payment-logs-%{+YYYY.MM.dd}"
+   }
+   stdout { codec => rubydebug }
+ }
+
+ # Coupon 관련 이벤트와 쿼리를 Elasticsearch로 전송
+ if "coupon_event" in [tags] or "coupon_query" in [tags] {
+   elasticsearch {
+     hosts => ["http://es01:9200", "http://es02:9200", "http://es03:9200"]
+     index => "coupon-logs-%{+YYYY.MM.dd}"
+   }
+   stdout { codec => rubydebug }
+ }
+}
+```
+
+우리는 5000번 포트를 통해 json 형식으로 logstash로 데이터를 전달받기로 했다. 
+
+log메시지 중 특정 단어가 포함되어 있을 때 태그를 추가하여
+해당 index로 로그를 전송하고, "select"가 포함된 쿼리는 전송되지 않도록 필터를 설정했다.
+
+</details>
+
+kibana에 들어가서 index pattern을 등록해주면 Discover에서 index 별 로그를 확인할 수 있다.
+
+![index pattern](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FnKLYp%2FbtsKQ44xlyW%2FKlNQ9rR0Bw2XxdUOSuULwk%2Fimg.png)
+![logs](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fbn9C6c%2FbtsKSDLkLLW%2FuIoSEGStk6vtMaKW9wEf4k%2Fimg.png)
 
 </details>
 
