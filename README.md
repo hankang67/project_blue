@@ -57,3 +57,30 @@ API & Testing
 ### Infra
 
 ![Infra](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FctMT0I%2FbtsKO6172by%2FCfn9epQ080RRD8gKUKFShk%2Fimg.png)
+
+## ⚽ Goals
+
+### 사용자 편의기능 최적화
+
+- Elasticsearch 도입으로 검색 속도 50% 이상 향상
+- Redis caching 도입으로 검색 속도 50% 이상 향상
+
+### Spring Batch
+
+- Spring Batch로 대용량 데이터 처리
+- JDBC Bulk Insert 방식으로 70% 속도 개선
+
+### 이중화 DB
+
+- DB 이중화로 부하 방지 및 데이터 안정성 보장
+- 에러율 0%를 목표로 이중화 환경 구성
+
+## 🌟 Key Summary
+
+### JPA → Elasticsearch 검색 속도 개선
+
+![JPA → Elasticsearch 검색 속도 개선](https://g-cbox.pstatic.net/MjAyNDExMjFfMjcy/MDAxNzMyMTgxMDUwOTMx.zxp_80lyUXBhQ4HtpmH1IuUy8KufT7mDp13AV6-nE-cg.H-tE1kGBVGwYljZyPPF_72y_VLPMhCATGPoSE239AZEg.PNG/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-11-21_182400.png)
+
+### Spring Batch JPA -> JDBC
+
+![Spring Batch JPA -> JDBC](https://g-cbox.pstatic.net/MjAyNDExMjFfMTY1/MDAxNzMyMTgxMzY5NDcy.ZXmAOCF-RE96nS7jVHG1bQZWMiGmkqgtJaffG147czAg.oXRkXiMuO3YdVA2T1jeVpRECwQFEJafadrYBHFqzm3kg.PNG/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-11-21_182916.png)
