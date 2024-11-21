@@ -125,3 +125,117 @@ API & Testing
 ![Spring Batch JPA -> JDBC](https://g-cbox.pstatic.net/MjAyNDExMjFfMTMg/MDAxNzMyMTk3NzQ1MDcx.3252H7VpHviRhwflcKeYfxhbKH7YErquClWXSAp_gi0g.0H0iEmfUFMGblwvAiqwdBUsJuh42dPeH2RWn0uV-f2kg.PNG/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-11-21_182916.png)
 
 </details>
+
+## 🔥 Technical Enhancements  
+
+### [ Jira ]
+
+<details> <summary>상세보기</summary>  
+
+
+
+</details>
+
+### [ Swagger ]
+
+<details> <summary>상세보기</summary>  
+
+
+
+</details>
+
+### [ AWS S3 File Upload ]
+
+<details> <summary>상세보기</summary>  
+
+
+
+</details>
+
+### [ Toss payments 결제 API 연동 ]
+
+<details> <summary>상세보기</summary>  
+
+
+
+</details>
+
+### [ Jenkins CI/CD ]
+
+<details> <summary>상세보기</summary>  
+
+
+
+</details>
+
+### [ Redis - 동시성 제어 ]
+
+<details> <summary>상세보기</summary>  
+
+
+
+</details>
+
+### [ Redis - Caching ]
+
+<details> <summary>상세보기</summary>  
+
+
+
+</details>
+
+### [ Elasticsearch ]
+
+<details> <summary>상세보기</summary>  
+
+
+
+</details>
+
+### [ Logstash ]
+
+<details> <summary>상세보기</summary>  
+
+
+
+</details>
+
+### [ Alert - SSE ]
+
+<details> <summary>상세보기</summary>  
+
+
+
+</details>
+
+### [ Alert - Mail ]
+
+<details> <summary>상세보기</summary>  
+
+
+
+</details>
+
+### [ Spring Batch ]
+
+<details> <summary>상세보기</summary>  
+
+
+
+</details>
+
+### [ Monitoring - Prometheus, Grafana ]
+
+<details> <summary>상세보기</summary>  
+
+
+
+</details>
+
+### [ Code Convention ]
+
+<details> <summary>상세보기</summary>  
+
+
+
+</details>
