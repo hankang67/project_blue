@@ -112,11 +112,11 @@ _기술적 고도화_
 
 - Jira 플랫폼을 활용하여 프로젝트 관리를 진행하였습니다
 
-![](https://g-cbox.pstatic.net/MjAyNDExMjFfMzAw/MDAxNzMyMTYyNTQzODMx.xZDLpCMsB_vk-ReOs_fb2pckQWKXCWDOJhmYmN27W_Eg.YxNraajudnB_nkRHdVToJtELcEThTK424gE-Loj6ocAg.PNG/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-11-21_131417.png)
+![Jira_Timeline](https://g-cbox.pstatic.net/MjAyNDExMjFfMzAw/MDAxNzMyMTYyNTQzODMx.xZDLpCMsB_vk-ReOs_fb2pckQWKXCWDOJhmYmN27W_Eg.YxNraajudnB_nkRHdVToJtELcEThTK424gE-Loj6ocAg.PNG/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-11-21_131417.png)
 
 - GitHub 연동으로 이슈와 관련된 커밋 기록을 확인할 수 있습니다
 
-![](https://g-cbox.pstatic.net/MjAyNDExMjFfODQg/MDAxNzMyMTYyNjg5NTYy.vl0DYUQdx9ercb8V801IwkQcT3JaHCzwaDSiXTWT43Qg.3cU_sfoN8RgRsDWqh9XCc4aeOAW_R90e9CbrjDal5Ncg.PNG/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-11-21_131737.png)
+![Jira_Github_connection](https://g-cbox.pstatic.net/MjAyNDExMjFfODQg/MDAxNzMyMTYyNjg5NTYy.vl0DYUQdx9ercb8V801IwkQcT3JaHCzwaDSiXTWT43Qg.3cU_sfoN8RgRsDWqh9XCc4aeOAW_R90e9CbrjDal5Ncg.PNG/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-11-21_131737.png)
 
 
 [Jira로 프로젝트 관리하기 Blog](https://everyday-spring.com/626)
@@ -130,11 +130,11 @@ _기술적 고도화_
 - 좀더 편안한 API 테스트를 위해 Swagger를 도입하였습니다
 - API 목록이 알파벳 오름차순으로 정렬되도록 추가 설정을 하였습니다
 
-![](https://g-cbox.pstatic.net/MjAyNDExMjFfODYg/MDAxNzMyMTYyODk2ODEw.ENov1JgrjEIMPxkHeYmBpxBVUs9VrZIvttgMTybO0qUg.ghIwmCI8tVSUwNZMreYjq9XtPDOfgCdBFVz_6Zl-hwIg.PNG/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-11-21_132055.png)
+![Swagger_API](https://g-cbox.pstatic.net/MjAyNDExMjFfODYg/MDAxNzMyMTYyODk2ODEw.ENov1JgrjEIMPxkHeYmBpxBVUs9VrZIvttgMTybO0qUg.ghIwmCI8tVSUwNZMreYjq9XtPDOfgCdBFVz_6Zl-hwIg.PNG/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-11-21_132055.png)
 
 - DTO의 inner class 구조를 삭제하고 Sample data를 설정했습니다.
 
-![](https://g-cbox.pstatic.net/MjAyNDExMjFfMjU2/MDAxNzMyMTYyOTA1Njg3.HSlfdyH4pgD0olN5ixaUY1iFWwvKNPZdkQOnH5kNqyUg.kSxjxT3-X-34iF68FZ6O5Nq0IoW_Wd9sd25p2uTSBwAg.PNG/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-11-21_132118.png)
+![Swagger_sample_data](https://g-cbox.pstatic.net/MjAyNDExMjFfMjU2/MDAxNzMyMTYyOTA1Njg3.HSlfdyH4pgD0olN5ixaUY1iFWwvKNPZdkQOnH5kNqyUg.kSxjxT3-X-34iF68FZ6O5Nq0IoW_Wd9sd25p2uTSBwAg.PNG/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-11-21_132118.png)
 
 [Java SpringBoot Swagger Blog](https://everyday-spring.com/625)
 
@@ -192,23 +192,23 @@ Return으로 받은 orderId, amount를 비교하여 일치여부를 확인하는
 
 - window 환경에서 Jenkins 환경을 구성하여 배포 테스트를 진행했습니다
 
-![](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbC3EdK%2FbtsKnFXc1Xl%2FYuAtZ1hBEkKRxcb5km3H10%2Fimg.png)
-![](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbjfzW8%2FbtsKl6BKLBs%2FmWzKjOkrxfUEp8lc7jpyr0%2Fimg.png)
+![터미널에서 도커 컨테이너 실행](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbC3EdK%2FbtsKnFXc1Xl%2FYuAtZ1hBEkKRxcb5km3H10%2Fimg.png)
+![정상적으로 연결된 젠킨스](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbjfzW8%2FbtsKl6BKLBs%2FmWzKjOkrxfUEp8lc7jpyr0%2Fimg.png)
 
 ### AWS EC2에 Docker Jenkins 설치, Github Spring Boot application CI/CD
 
 - EC2에서 Jenkins CI/CD 환경을 구성하였습니다
 - Docker - Jenkins 구조의 최소 요구 성능을 반영하여 t3.small 인스턴스를 생성했습니다
 - Docker not found
-  - Docker 명령어를 찾지 못해 발생하는 문제
-  - Jenkins 내에 Docker를 추가 설치하여 Docker in Docker 구조를 사용했습니다
+    - Docker 명령어를 찾지 못해 발생하는 문제
+    - Jenkins 내에 Docker를 추가 설치하여 Docker in Docker 구조를 사용했습니다
 - 추가적인 리소스를 사용 할 수 있도록 메모리 스왑 설정도 진행하였습니다.
 
-![](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FQUUa3%2FbtsKtNvFdDM%2FKCnGUwP01CkzMfyB7P5Me0%2Fimg.jpg)
+![ec2_instance_type](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FQUUa3%2FbtsKtNvFdDM%2FKCnGUwP01CkzMfyB7P5Me0%2Fimg.jpg)
 
-![](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FrXrF9%2FbtsKtJ70cSY%2FpSMCHvEQ48aUVNAtOgRz71%2Fimg.png)
+![jenkins_pipeline_setting](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FrXrF9%2FbtsKtJ70cSY%2FpSMCHvEQ48aUVNAtOgRz71%2Fimg.png)
 
-![](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbtzsIf%2FbtsKtFET9jR%2FNlcHtt8PZICWdbmyDmKJj1%2Fimg.png)
+![jenkins_deploy](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbtzsIf%2FbtsKtFET9jR%2FNlcHtt8PZICWdbmyDmKJj1%2Fimg.png)
 
 Jenkins CI/CD 블로그
 
