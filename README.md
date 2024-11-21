@@ -135,40 +135,39 @@ API & Testing
 ```java
 [내가 구현한 기능]
 
-- Controller를 자동으로 인식하여 
+- API 테스트 도구 Swagger
 
 [주요 로직]
 
+- SwaggerConfig에서 기본 정보, 보안 스키마 등을 구성
+- @Schema 사용하여 Sample Date Setting
+- ResponseDto를 자동으로 인식할 수 있도록 inner Class 제거
+
 [배경]
+
+- 기존 사용하던 Postman은 HTTP Method, URL, port 등을 모두 직접 입력하여 테스트 하는 방식으로 사용자의 오류로 인한 에러가 발생할 수 있음
 
 [요구사항]
 
+- API 자동 문서화 기능 구현
+- Swagger UI를 통해 API를 테스트할 수 있는 환경 제공
+-API 명세 업데이트 시, 코드 변경 사항에 따라 문서 자동 갱신
+
 [선택지]
+
+- Swagger
+- PostMan
 
 [의사결정/사유]
 
+- Controller에 작성한 RESTful API 자동 문서화
+- API 요청에 필요한 파라미터 및 요청 형식을 명확히 표기
+
 [회고]
 
+- PostMan에서 사용했던 API Document를 생성할 수는 없음
+- 개발 과정에서 훨씬 더 효율적인 방식으로 API 테스트 가능
 ```
-
-
-> **[내가 구현한 기능]**
-> 
-> - Controller를 자동으로 인식하여 
-> 
-> [주요 로직]
->
-> [배경]
->
-> [요구사항]
->
-> [선택지]
->
-> [의사결정/사유]
->
-> [회고]
-
-
 
 </details>
 
