@@ -353,6 +353,14 @@ API & Testing
 - 데드락 발생 없이 요청이 안전하게 처리됨
 ```
 
+![일반결과](https://blog.kakaocdn.net/dn/bKUwCE/btsKIScgQVl/FLiWoaWX0ZJ4M6hIkYDRQK/img.png)
+
+![결과](https://blog.kakaocdn.net/dn/oDOBh/btsKxQEOBsS/BsV3JbZSHb75z7tGTpIAj1/img.png)
+
+![비관적 락 결과](https://blog.kakaocdn.net/dn/dl5NL1/btsKJAJbRPG/LKNqypLVcFNXXXY5kWZk6K/img.png)
+
+![분산 락 결과](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F9jeuM%2FbtsKIQy0ksH%2FdSgxPB9sRMagK1AA36K2iK%2Fimg.png)
+
 </details>
 
 ### [ Redis - Caching ]
