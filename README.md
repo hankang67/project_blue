@@ -8,7 +8,15 @@ _프로젝트 개요_
 # ⚽ Goals
 _핵심 목표_
 
-작성중
+## 사용자 편의기능 최적화
+- Elasticsearch 도입으로 검색 속도 50% 이상 향상
+- Redis caching 도입으로 검색 속도 50% 이상 향상
+## Spring Batch
+- Spring Batch로 대용량 데이터 처리
+- JDBC Bulk Insert 방식으로 70% 속도 개선
+## 이중화 DB
+- DB 이중화로 부하 방지 및 데이터 안정성 보장
+- 에러율 0%를 목표로 이중화 환경 구성
 
 # 🌟 Key Summary
 _핵심 요약_
