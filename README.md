@@ -205,8 +205,7 @@ API & Testing
 - AWS S3
 - 로컬 파일 시스템
 - AWS S3 Presigned URL
-
-
+        
 [의사결정/사유]
 
 - 로컬 저장 방식에 비해 확장성과 데이터 보존성이 뛰어남
@@ -232,7 +231,83 @@ API & Testing
 
 <details> <summary>상세보기</summary>  
 
+```java
+[내가 구현한 기능]
 
+- Jenkins를 활용한 CI/CD 파이프라인 구축
+- GitHub에서 소스 코드 변경사항을 감지하여 자동으로 빌드, 테스트, 배포를 수행하도록 Jenkins 설정
+- Docker를 활용하여 Application 컨테이너를 생성하고, EC2 서버에 자동 배포
+
+[주요 로직]
+
+- Jenkins Pipeline 구성 : Clone, Build, Bulid Docker, Push Docker, Deploy to EC2
+- Jenkins의 Git Plugin을 사용해 GitHub에서 푸시 이벤트를 감지하도록 Webhook 설정
+- Application을 Docker 컨테이너로 빌드 및 배포
+
+
+[배경]
+
+- 지속적 통합(CI)과 지속적 배포(CD): 팀원들이 동시에 개발하는 환경에서 코드 충돌을 줄이고, 안정적인 배포 프로세스를 구축하기 위함
+
+[요구사항]
+
+- GitHub에서 변경사항 발생 시 자동으로 빌드 및 테스트 수행
+- Jenkins를 통해 EC2 서버로 Docker 이미지를 배포
+- 배포 실패 시 롤백 가능
+- Jenkins Pipeline으로 CI/CD 단계를 시각적으로 확인 가능
+
+[선택지]
+
+- GitHub Actions
+- Jenkins
+- AWS
+
+
+[의사결정/사유]
+
+- 플러그인 생태계가 풍부하여 참고 레퍼런스 자료가 다양함
+
+[회고]
+
+- CI/CD 자동화로 개발부터 배포까지의 시간이 크게 단축됨
+- 초기 환경 설정(SSH 연결, Docker 설치 등)에 많은 시간이 소요됨
+- Docker 이미지 저장소(ECR)와 통합하여 이미지 관리 최적화를 추후 도입함
+- 추후 병렬 처리로 배포 성능 최적화가 목표
+```
+
+```java
+[성능 개선 / 코드 개선 요약]
+
+- 빌드 및 테스트 단계에서 메모리 부족으로 인한 비정상 종료 빈도 증가
+
+[문제 정의]
+
+- Jenkins CI/CD 파이프라인 실행 중, EC2 인스턴스의 메모리 용량 부족으로 인해 빌드가 중단되고 작업 실패 발생
+- 사용 중인 EC2 인스턴스: t2-micro (메모리 1GB)
+
+[가설] 
+
+- Jenkins 빌드 작업에서 Gradle 빌드, 테스트, Docker 이미지 빌드 등 메모리를 과도하게 사용
+- t2-micro 인스턴스의 1GB 메모리가 Jenkins의 동시 처리 요구를 충족하지 못함
+
+[해결 방안]
+
+- EC2 인스턴스 업그레이드 : 인스턴스를 t3-small (메모리 2GB)로 업그레이드
+- 스왑 메모리 추가 설정 : 인스턴스의 메모리 부족 문제를 보완하기 위해 스왑 공간을 생성
+- 리소스를 많이 소모하는 정렬 플러그인 제거
+
+[해결 완료]
+
+- EC2 인스턴스를 t3-small로 업그레이드하여 2GB 메모리 확보
+- 스왑 공간 추가로 Jenkins가 빌드 작업 중 메모리 부족 문제를 겪지 않도록 설정
+- Jenkins와 빌드 도구(Gradle)의 메모리 사용량 최적화를 통해 안정적인 파이프라인 실행 환경 마련
+- 문제 발생 후 실행한 파이프라인 모두 정상 작동 확인
+
+[회고]
+
+- 현재와 같은 Docker in Docker 구조가 아닌 Jenkins를 단독 설치하여 리소스 효율성을 높일 수 있음
+- 하나의 인스턴스가 아닌 여러개의 인스턴스로 Application을 분리해야 함
+```
 
 </details>
 
