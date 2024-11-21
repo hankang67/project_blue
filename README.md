@@ -79,8 +79,16 @@ API & Testing
 
 ### JPA → Elasticsearch 검색 속도 개선
 
+<details> <summary>상세보기</summary>  
+
 ![JPA → Elasticsearch 검색 속도 개선](https://g-cbox.pstatic.net/MjAyNDExMjFfMjcy/MDAxNzMyMTgxMDUwOTMx.zxp_80lyUXBhQ4HtpmH1IuUy8KufT7mDp13AV6-nE-cg.H-tE1kGBVGwYljZyPPF_72y_VLPMhCATGPoSE239AZEg.PNG/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-11-21_182400.png)
+
+</details>
 
 ### Spring Batch JPA -> JDBC
 
+<details> <summary>상세보기</summary>  
+
 ![Spring Batch JPA -> JDBC](https://g-cbox.pstatic.net/MjAyNDExMjFfMTY1/MDAxNzMyMTgxMzY5NDcy.ZXmAOCF-RE96nS7jVHG1bQZWMiGmkqgtJaffG147czAg.oXRkXiMuO3YdVA2T1jeVpRECwQFEJafadrYBHFqzm3kg.PNG/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-11-21_182916.png)
+
+</details>
