@@ -505,6 +505,43 @@ API & Testing
 
 </details>
 
+### [ Query 최적화 ]
+
+<details> <summary>상세보기</summary>  
+
+```java
+[성능 개선 / 코드 개선 요약]
+
+[문제 정의]
+
+- 공연 전체 조회 시 페이징 처리를 하지만 평균 응답시간이 늦고 에러가 발생하는 현상
+
+[가설]
+
+- 공연 조회 시 전체 조회, 키워드 조회 모두 같은 쿼리를 사용
+- 불필요한 테이블 조인, 조건 처리로 인한 성능 저하
+
+[해결 방안]
+
+- 키워드/전체 조회 쿼리문 분리
+  - 전체 조회 시 불필요한 테이블과 조건 처리 제외
+
+[해결 완료]
+
+- 10000건, 30초 성능테스트
+  - 평균 응답 시간 23881ms → 211ms, 성능 99% 개선
+  - 에러율 13.91% → 0%
+
+[회고]
+
+- 하나의 쿼리를 사용해 재사용하면 깔끔해보이고 좋다고 생각했으나
+  성능적으로 큰 문제가 발생할 수 있다는 것을 깨달음
+```
+
+![쿼리최적화](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FmilGR%2FbtsKSuBqcG9%2FzBH2OT03xzGxZutoPKLVu1%2Fimg.png)
+
+</details>
+
 ### [ Alert - SSE ]
 
 <details> <summary>상세보기</summary>  
@@ -715,6 +752,38 @@ API & Testing
 
 <details> <summary>상세보기</summary>  
 
+```java
+[성능 개선 / 코드 개선 요약]
+
+- Spring Batch에서 JPA를 JDBC로 변경했음에도 성능 차이가 없었던 문제를 해결함
+- batchList.clear()를 추가하여 메모리 점유 문제를 해결한 후, 확연한 성능 개선을 확인
+
+[문제 정의]
+
+- Spring Batch 처리에서 JPA에서 JDBC로 전환했지만, 성능 차이가 나타나지 않음
+- JDBC `batchUpdate`를 사용했음에도 불구하고 처리 속도가 기대만큼 개선되지 않음
+
+[가설]
+
+- JPA와 JDBC 간 성능 차이가 미비한 이유로는 JDBC 코드 내에서 잘못된 메모리 관리가 의심됨
+- 반복문에서 batchList를 subList로 분리해 사용하면서 이전 batchList의 데이터가 clear되지 않아 메모리를 지속적으로 점유했을 가능성이 있음
+
+[해결 방안]
+
+- 메모리 누수 원인 파악
+  - batchList를 subList로 사용한 후 clear되지 않아 메모리 증가를 유발한 것으로 판단
+  - `batchList.clear();`를 명시적으로 추가하여 batchList를 반복 처리 후 즉시 비우도록 수정
+
+[해결 완료]
+
+- batchList.clear() 추가 후 성능 차이가 확연히 개선
+
+[회고]
+
+- 메모리 관리의 중요성을 다시 한번 확인
+- 배치 처리 시 데이터 누수를 방지하기 위해 사용된 리스트를 명시적으로 정리하는 습관 필요
+- JPA와 JDBC 간 성능 차이 외에도 메모리 누수가 성능 문제의 주요 원인으로 작용할 수 있음을 알게 됨
+```
 
 
 </details>
