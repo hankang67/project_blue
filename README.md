@@ -167,6 +167,7 @@ API & Testing
 
 - PostMan에서 사용했던 API Document를 생성할 수는 없음
 - 개발 과정에서 훨씬 더 효율적인 방식으로 API 테스트 가능
+- https://everyday-spring.com/625
 ```
 
 </details>
