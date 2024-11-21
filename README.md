@@ -6,7 +6,7 @@
 
 ## 🚀 Infra Architecture & STACK
 
-### STACK
+### [ STACK ]
 
 Development & Communication
 
@@ -50,34 +50,34 @@ API & Testing
 ![sonarqube](https://img.shields.io/badge/sonarqube-4E9BCD?style=for-the-badge&logo=sonarqube&logoColor=white)
 ![sonarLint](https://img.shields.io/badge/sonarlint-CB2029?style=for-the-badge&logo=sonarlint&logoColor=white)
 
-### ERD
+### [ ERD ]
 
 ![ERD](https://github.com/user-attachments/assets/c8931c5d-13ba-4120-9876-4e0b613e9af6)
 
-### Infra
+### [ Infra ]
 
 ![Infra](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FctMT0I%2FbtsKO6172by%2FCfn9epQ080RRD8gKUKFShk%2Fimg.png)
 
 ## ⚽ Goals
 
-### 사용자 편의기능 최적화
+### [ 사용자 편의기능 최적화 ]
 
 - Elasticsearch 도입으로 검색 속도 50% 이상 향상
 - Redis caching 도입으로 검색 속도 50% 이상 향상
 
-### Spring Batch
+### [ Spring Batch ]
 
 - Spring Batch로 대용량 데이터 처리
 - JDBC Bulk Insert 방식으로 70% 속도 개선
 
-### 이중화 DB
+### [ 이중화 DB ]
 
 - DB 이중화로 부하 방지 및 데이터 안정성 보장
 - 에러율 0%를 목표로 이중화 환경 구성
 
 ## 🌟 Key Summary
 
-### JPA → Elasticsearch 검색 속도 개선
+### [ JPA → Elasticsearch 검색 속도 개선 ]
 
 <details> <summary>상세보기</summary>  
 
@@ -85,7 +85,7 @@ API & Testing
 
 </details>
 
-### Spring Batch JPA -> JDBC
+### [ Spring Batch JPA -> JDBC ]
 
 <details> <summary>상세보기</summary>  
 
