@@ -512,6 +512,8 @@ API & Testing
 ```java
 [내가 구현한 기능]
 
+- Slack 알림 AOP
+
 [주요 로직]
 
 - SlackNotifier : Slack 웹훅 URL을 이용해 메시지를 Slack 채널에 전송
@@ -544,6 +546,59 @@ API & Testing
 - Slack 알림 기능을 AOP로 자동화하여 시스템 상태를 실시간으로 모니터링할 수 있게 되었고, 관리자의 수동 작업을 줄일 수 있었다
 - SlackNotifier와 AOP를 결합한 방식이 효과적이었고, 알림 전송에 필요한 데이터를 서비스 메서드에서 AOP로 잘 전달하여 실제 알림 메시지가 실시간으로 발송됐다
 ```
+
+```java
+[내가 구현한 기능]
+
+- SSE 기반 실시간 알림 시스템
+  - 클라이언트가 SSE를 통해 알림을 구독하고, 서버는 Redis를 통해 데이터를 전송하며 실시간 알림을 제공
+  - Redis 채널을 활용하여 다중 서버 환경에서도 알림 전송 가능
+  - Slack 알림과 함께 실시간 알림을 SSE로 처리
+
+[주요 로직]
+
+- 클라이언트 구독
+  - /notifications/subscribe/{userId} 엔드포인트를 통해 클라이언트가 SseEmitter 객체를 구독
+  - SseEmitter 객체를 사용자별로 HashMap에 저장하고 연결 관리
+- Redis를 통한 메시지 발행
+  - /notifications/send 요청을 통해 Redis의 notification-channel에 알림 데이터를 발행
+  - 데이터 형식: userId, title, message
+- 알림 데이터 전송
+  - Redis 구독자가 데이터를 수신하면 해당 사용자의 SseEmitter로 실시간 전송
+  - 동시에 Slack 알림 비동기 전송
+
+[배경]
+
+- 실시간 피드백이 중요한 티켓 예매, 선착순 쿠폰 발급과 같은 시나리오에서 실시간 알림 제공 필요
+- 서버-클라이언트 간 즉각적인 데이터 전송을 지원하는 SSE가 알림 시스템에 적합하다고 판단
+
+[요구사항]
+
+- 클라이언트가 특정 엔드포인트를 통해 실시간 알림을 구독할 수 있어야 함
+- Redis를 활용하여 서버 간 메시지 전달 및 확장성 있는 실시간 알림 시스템 구축
+- 알림은 클라이언트의 SseEmitter와 Slack 알림으로 각각 전송
+
+[선택지]
+
+- SSE(Server-Sent Events)
+- WebSocket
+
+[의사결정/사유]
+
+- SSE   - 알림은 서버에서 클라이언트로의 단방향 전송이므로 SSE로 충분히 구현 가능.
+  - 브라우저 지원이 기본 제공되며, 구현이 간단하여 빠른 적용이 가능.
+  - Redis를 활용하여 다중 서버에서도 확장 가능.
+- Redis 
+  - 메시지 발행-구독 구조를 통해 다중 서버 환경에서도 데이터를 일관되게 전송.
+
+[회고]
+
+- SSE와 Redis를 결합하여 실시간 알림 시스템을 간단하면서도 효과적으로 구현할 수 있었다
+- Slack과 SSE 알림을 병행 처리하면서 사용자 경험을 개선
+- 다중 서버 환경을 구성하지 못하여 redis 활용의 장점을 얻지 못함
+```
+
+~[slack에서 sse로 알림변경](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fr4qd6%2FbtsKS5Vq4Dn%2FanqdG4oECXjavSZn5Yxtx1%2Fimg.png)
 
 </details>
 
