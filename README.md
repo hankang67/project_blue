@@ -131,6 +131,7 @@ _기술적 고도화_
 
 </details>
 
+
 <details> <summary>SWAGGER</summary>
 
 ### Swagger
@@ -158,6 +159,7 @@ _기술적 고도화_
   ![S3버킷](img.png)
 
 </details>
+
 
 <details> <summary>toss payments 결제 API 연동</summary>
 
@@ -190,9 +192,8 @@ Return으로 받은 orderId, amount를 비교하여 일치여부를 확인하는
 그렇게 최종적으로 승인되면 아래와 같이 Json 형식으로 값들을 Return해준다.<br>
 ![결제 승인 이미지](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FceC3y3%2FbtsKgef7pyp%2F4rX8Uwyctvkr96bb8lSjq0%2Fimg.png)
 
-
-
 </details>
+
 
 <details> <summary>Jenkins CI/CD</summary>
 
@@ -218,6 +219,36 @@ Return으로 받은 orderId, amount를 비교하여 일치여부를 확인하는
 
 ![jenkins_deploy](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbtzsIf%2FbtsKtFET9jR%2FNlcHtt8PZICWdbmyDmKJj1%2Fimg.png)
 
+### CI/CD 트러블슈팅
+
+#### *Jenkins Spring Boot build 무한로딩*
+
+EC2 Instance에 설치된 Jenkins에서 빌드를 하게 되면 중간에 로딩이 길어지면서 서버 자체가 먹총이 되는 문제가 발생했습니다
+
+Console Output을 살펴보면 GitHub에서 대상 branch를 clone해오는 것 까지는 작동 했으나
+
+application을 build해서 jar 파일을 만들때 무한로딩에 걸리는 현상이었습니다
+
+로딩에 걸려버리면 Jenkins 페이지도 접속이 안되고 터미널로 서버에 연결조차 되지 않았고,
+
+30분이상 기다려도 무한 로딩상태여서 결국 EC2 Instance 자체를 중지하고 재시작 해야했습니다
+
+계속해서 시도를 해봤지만 build 과정에서 계속 먹통이 됐고 Instance를 중지하는 것도 길게는 10분정도 시간이 지체되었습니다
+
+문제는 *리소스 부족으로 인한 빌드실패*로 최소 2v CPU, 2~4 GiB Memory가 필요한 상황이었습니다
+
+*결국 Instance를 t3.small로 새로 만들어 해결했습니다*
+
+#### *Spring Boot Spotless Plugin build resource*
+
+EC2 사양을 올렸는데도 build 과정에서 먹통이 되는 문제가 발생했습니다
+
+build 과정에서 리소스를 많이 잡아먹는 *Spotless 플러그인*이 문제 원인이었습니다
+
+컴파일 시마다 동작하면서 전체 파일을 점검하기 때문에 많은 리소스를 잡아먹는 상황으로,
+
+*플러그인을 사용할 때에만 주석을 해제하는 방식으로 해결하였습니다
+
 Jenkins CI/CD 블로그
 
 [ (1) ](https://everyday-spring.com/628)
@@ -226,7 +257,7 @@ Jenkins CI/CD 블로그
 [ (4) ](https://everyday-spring.com/631)
 [ (5) ](https://subin0522.tistory.com/632)
 [ (6) ](https://subin0522.tistory.com/633)
-[Jenkins CI/CD 트러블 슈팅](https://everyday-spring.com/634)
+[ (7) ](https://everyday-spring.com/634)
 
 </details>
 
@@ -390,6 +421,7 @@ AOP를 통해 지정한 어노테이션 포인트를 통해 특정 서비스 메
 
 </details>
 
+
 <details>
   <summary>Redis - Caching</summary>
 
@@ -501,8 +533,8 @@ AOP를 통해 지정한 어노테이션 포인트를 통해 특정 서비스 메
   ![캐싱 후 그래프](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fcs9Hb0%2FbtsKPBaU7ow%2FtO0Qx4RqO0OoPjqckRQvHk%2Fimg.png)
   </details>
 
-
 </details>
+
 
 <details> <summary>Elasticsearch</summary>
 
@@ -611,6 +643,7 @@ Elasticsearch는 대규모 데이터 환경에서의 장점을 살릴 가능성�
 
 </details>
 
+
 <details> <summary>Alert - AOP</summary>
 
 ### AOP 를 사용하여 알림설정
@@ -621,12 +654,14 @@ Elasticsearch는 대규모 데이터 환경에서의 장점을 살릴 가능성�
 
 </details>
 
+
 <details> <summary>Alert - SSE</summary>
 
 위아래를 띄우고 여기에 내용을 작성하세요
 마크다운 문법으로 작성하시면 됩니다
 
 </details>
+
 
 <details> <summary>Alert - Mail</summary>
 
@@ -685,12 +720,14 @@ JavaMailSender를 이용해 간편하게 메일을 전송할 수 있다.<br>
 
 </details>
 
+
 <details> <summary>Spring Batch</summary>
 
 위아래를 띄우고 여기에 내용을 작성하세요
 마크다운 문법으로 작성하시면 됩니다
 
 </details>
+
 
 <details> <summary>Logstash</summary>
 
@@ -1026,12 +1063,14 @@ log메시지 중 특정 단어가 포함되어 있을 때 태그를 추가하여
 
 </details>
 
+
 <details> <summary>Monitoring - Prometheus, Grafana</summary>
 
 위아래를 띄우고 여기에 내용을 작성하세요
 마크다운 문법으로 작성하시면 됩니다
 
 </details>
+
 
 <details> <summary>Code Convention</summary>
 
