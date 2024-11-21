@@ -499,21 +499,108 @@ AOP를 통해 지정한 어노테이션 포인트를 통해 특정 서비스 메
 <details> <summary>Elasticsearch</summary>
 
 ### elastic 환경설정 및 검색 api구현과정
+#### elastic 도입 배경
+ElasticSearch는 빠르고 정확한 검색이 필요한 다양한 서비스에서 사용됩니다.
+저희 프로젝트에서는 검색 속도와 정확성을 최적화하기 위해 도입했으며, 주요 도입 이유는 다음과 같습니다:
 
-- https://velog.io/@uara67/Spring-ELK-1-엘라스틱-서치-그게-뭔데
-- https://velog.io/@uara67/Spring-ELK-Docker-Elastic-Search-Kibana를-설치해서-springboot와-연결하자-1
-- https://velog.io/@uara67/Spring-ELK-Docker-Elastic-Search-Kibana를-설치해서-springboot와-연결하자-2
-- https://velog.io/@uara67/Spring-ELK-es로-구현한-예매검색-api
-### elastic api 성능체크 및 grafna 이용한 모니터링
-- https://velog.io/@uara67/Elastic-성능-체크를-promethus와-grafna로-해보자
-- https://velog.io/@uara67/Elasticsearch-성능-테스트-보고서-1
-- https://velog.io/@uara67/elastic-모니터링과-속도측정테스트-2
-- ![image](https://github.com/user-attachments/assets/fab66816-51b3-4293-a785-e2d8fc4158c6)
-  [성능테스트 결과 요약]
-  - https://velog.io/@uara67/Elasticsearch-vs-MySQL-왜-MySQL이-더-빠를까
-  - ![image](https://github.com/user-attachments/assets/244d4bcd-e97d-4fa3-ad7a-5f8841e3cb92)
-  
-  
+- 예약 검색 최적화: 사용자 예약 정보를 효율적으로 검색하기 위한 전용 검색 엔진 필요.
+- 데이터 분석 확장성: 단순 검색뿐만 아니라, 예약 데이터의 다양한 분석이 가능하도록 설계.
+- 확장 가능성: 프로젝트가 확장되더라도 서버를 손쉽게 추가하고 데이터를 효과적으로 분산 처리할 수 있는 구조..
+
+#### elasticsearch API 구현
+검색 API
+예약 검색 API를 구현해 사용자 이름, 공연 제목, 날짜, 상태 등 다양한 조건으로 검색 가능하도록 개발.
+
+- 사용한 기술: Criteria API를 이용한 정적 쿼리 생성.
+- 구현 방식:
+예약 정보 필터링.
+데이터 동기화 기능 구현.
+
+- api
+![image](https://github.com/user-attachments/assets/223ffbba-7c80-4622-b044-19d49159017d)
+![image](https://github.com/user-attachments/assets/d1ba2880-ee51-49f6-aedd-2c5d1102c666)
+
+- index
+![image](https://github.com/user-attachments/assets/059969de-6a28-4397-ba2e-380ca11beedb)
+![image](https://github.com/user-attachments/assets/5631fd1e-7a10-4cbf-91f4-ca0a20efb5c0)
+
+- data
+![image](https://github.com/user-attachments/assets/a4163210-e8d3-4330-818f-ba7fb2d5846c)
+
+#### 성능 테스트 및 개선 방향
+Elasticsearch를 도입한 뒤, 실제 환경에서의 성능을 점검했습니다.
+다양한 조건으로 쿼리를 실행하며 MySQL과 속도를 비교했고, 성능 병목 현상을 식별해 최적화했습니다.
+
+- 성능 이슈 및 대응
+    이슈: MySQL보다 Elasticsearch의 속도가 느린 문제 발견.
+    원인:
+인덱스 설정 최적화 부족.
+데이터가 분산되지 않은 단일 노드 구성.
+대응 방안:
+역색인 최적화.
+샤드 분산 구성 및 클러스터 확장.
+- admin/search 성능
+![image](https://github.com/user-attachments/assets/ef56629d-5ed4-4132-aab1-a8f4b428e038)
+- search/keyword 성능
+![image](https://github.com/user-attachments/assets/bc54aea2-6600-4737-9525-efc4077bb30c)
+
+
+### elastic api 성능비교 및 grafna 이용한 모니터링
+Elasticsearch(ES) 기반 API와 MySQL 기반 API의 성능을 비교하고, 높은 부하 조건에서의 안정성을 평가하기 위해 진행했습니다. 
+성능 평가는 아래 지표를 기준으로 이루어졌습니다:
+- 평균 응답 시간: 각 API의 요청 처리 속도 비교.
+- 초당 처리량(QPS): 부하 증가 시 API가 처리 가능한 요청 수.
+- CPU 사용량: 자원 효율성을 평가.
+- 안정성 평가: 동시 사용자가 많아질수록 성능 변화 확인.
+#### 테스트 결과
+![image](https://github.com/user-attachments/assets/4c01bad4-1aa6-4c6f-af22-6346b02366c9)
+![image](https://github.com/user-attachments/assets/13cd51c3-246c-42e1-9b90-07d791d9c815)
+![image](https://github.com/user-attachments/assets/1e72e000-158d-4eee-a6fc-6978d9e5dc4d)
+
+#### 테스트 결과 분석
+- 평균 응답 시간
+API별 평균 응답 시간을 비교한 결과, 아래와 같은 차이가 나타났습니다:
+
+/search/filter와 같은 단순 쿼리는 MySQL 기반 API가 더 빠른 응답 시간을 기록.
+/admin/search와 같은 복합 쿼리에서는 Elasticsearch의 성능이 더 우수할 것으로 기대했지만, 테스트 데이터의 영향으로 차이가 크지 않았음.
+- 초당 처리량(Throughput)
+동시 사용자가 증가했을 때 QPS는 일정 수준 유지되었으나, Elasticsearch는 특정 시점에서 약간의 성능 저하가 발생.
+MySQL은 데이터 크기가 작을 경우 Elasticsearch보다 높은 QPS를 기록.
+- 호출 트래픽 분포
+단순 쿼리(/search/filter, /search/reservations)와 복합 쿼리(/admin/search)의 호출 비율을 분석한 결과, 복합 쿼리 API에서 부하가 더 집중되는 경향이 나타남.
+- CPU 사용량
+Elasticsearch는 복합 쿼리를 처리할 때 CPU 자원을 더 많이 사용.
+네트워크 오버헤드와 데이터 직렬화/역직렬화로 인한 자원 사용량 증가 가능성 확인.
+
+#### Elasticsearch 속도 저하 원인 분석
+1. 데이터 크기
+   테스트 데이터 크기: 작은 데이터셋에서는 MySQL이 Elasticsearch보다 효율적.
+   실제 운영 데이터: 대규모 데이터에서는 Elasticsearch의 장점이 발휘될 가능성이 높음.
+2. Elasticsearch 쿼리 복잡도
+   복잡한 조합의 쿼리(예: filter, match, sort, aggregation)에서 성능 저하가 발생 가능.
+   쿼리 최적화가 미흡했을 가능성 존재.
+3. 네트워크 오버헤드
+   Elasticsearch는 HTTP 통신을 사용하므로, 네트워크 지연이 발생.
+   Docker 기반 로컬 환경에서도 이로 인한 지연 발생 가능.
+4. Elasticsearch 인덱스 설정
+   refresh_interval, number_of_shards, number_of_replicas 등의 설정이 기본값으로 되어 있어 최적화되지 않았을 가능성.
+   
+#### 개선 방향 및 추가 테스트 계획
+1. 데이터셋 확장
+   운영 환경과 유사한 대규모 데이터셋으로 테스트하여 실제 성능을 확인.
+2. 쿼리 최적화
+   불필요한 aggregation과 sorting 제거.
+   필터링 위주의 쿼리 구조로 변경하여 성능 향상.
+3. Elasticsearch 인덱스 설정 최적화
+   number_of_shards와 number_of_replicas를 환경에 맞게 재설정.
+   refresh_interval을 조정해 인덱싱 성능 개선.
+4. 네트워크 환경 개선
+   로컬 테스트 환경을 벗어나 실제 운영 서버 환경에서 성능 테스트.
+   결론
+   테스트 결과, MySQL은 작은 데이터셋에서 더 나은 성능을 보였지만, 
+Elasticsearch는 대규모 데이터 환경에서의 장점을 살릴 가능성이 높습니다. 
+향후 쿼리와 인덱스 설정을 최적화하고, 대규모 데이터셋으로 추가 테스트를 진행할 예정입니다.
+
 </details>
 
 <details> <summary>Alert - AOP</summary>
