@@ -512,6 +512,8 @@ API & Testing
 - 간단한 설정으로 비동기 처리를 구현 가능
 ```
 
+![async 성능](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbT1Tig%2FbtsKSh99oIh%2FWaYpHeLy5cCDPxrppqKUNk%2Fimg.png)
+
 ```java
 [성능 개선 / 코드 개선 요약]
 
