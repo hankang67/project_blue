@@ -1066,8 +1066,84 @@ log메시지 중 특정 단어가 포함되어 있을 때 태그를 추가하여
 
 <details> <summary>Monitoring - Prometheus, Grafana</summary>
 
-위아래를 띄우고 여기에 내용을 작성하세요
-마크다운 문법으로 작성하시면 됩니다
+### Prometheus 설치 및 설정
+
+1. **Prometheus 다운로드**
+  - [Prometheus 다운로드](https://prometheus.io/download/) 링크에서 설치 파일을 다운로드합니다.
+
+2. **Prometheus 설정 (`prometheus.yml` 수정)**
+   ```yaml
+   # Global 설정
+   global:
+     scrape_interval: 1s
+     evaluation_interval: 1s 
+
+   # Alertmanager 설정 (선택적으로 설정)
+   alerting:
+     alertmanagers:
+       - static_configs:
+           - targets:
+             # - alertmanager:9093
+
+   # Rule 파일 (필요시 활성화)
+   rule_files:
+     # - "first_rules.yml"
+     # - "second_rules.yml"
+
+   # Scrape 설정 (Prometheus 자체 또는 외부 서비스의 메트릭 수집)
+   scrape_configs:
+     - job_name: "prometheus"
+       metrics_path: "/actuator/prometheus"
+       static_configs:
+         - targets: ["localhost:9090"]
+   
+- 프로메테우스 화면
+- ![image](https://github.com/user-attachments/assets/a5f386fa-11da-4560-831d-a652a0c176bc)
+
+### Grafana 설치 및 설정
+1. Grafana 다운로드
+   - Grafana 다운로드 링크에서 설치 파일을 다운로드하고 실행합니다. 
+
+2. 설치 후 아래 명령어 실행:
+cd C:\Program Files\GrafanaLabs\grafana\bin ./grafana-server.exe
+
+3. 브라우저에서 http://localhost:3000 접속.
+
+4. 초기 계정 정보:
+ID: admin
+Password: admin (로그인 후 비밀번호 변경 권장)
+
+- 그라파나 초기화면
+![image](https://github.com/user-attachments/assets/28fd1410-a5c3-4270-93f0-c17b4c3ec47f)
+
+### 모니터링 구성 요약
+- Prometheus는 애플리케이션의 메트릭 데이터를 수집하여 시계열 데이터로 저장.
+- Grafana는 Prometheus 데이터를 시각화하여 대시보드 형태로 보여줌.
+- prometheus.yml의 scrape_configs에 원하는 애플리케이션의 메트릭 엔드포인트 추가 가능.
+- Grafana에서 Prometheus를 데이터 소스로 추가하여 대시보드 생성 가능.
+
+### Grafana로 ElasticSearch 모니터링하기
+
+위 이미지는 Grafana를 활용해 Elasticsearch API의 성능 및 자원 사용을 모니터링한 대시보드 결과입니다. 주요 내용은 다음과 같습니다:
+![image](https://github.com/user-attachments/assets/5a824330-e01a-4a8b-bbca-644098888135)
+
+- 평균 응답 시간
+각 API 요청에 대한 평균 응답 시간을 표시했습니다.
+/search/filter, /search/keyword, /search/reservations, /admin/search 등의 주요 API의 성능을 실시간으로 모니터링할 수 있습니다.
+
+- 시스템 CPU 사용량 (system_cpu_usage)
+서버의 CPU 사용량을 확인하며, API 호출에 따른 시스템 부하를 파악할 수 있습니다.
+
+- 호출 횟수 그래프
+API별 호출 빈도를 시간대별로 시각화하여 특정 API의 요청이 몰리는 시점을 확인할 수 있습니다.
+
+- 초당 처리량
+초당 API 요청 수를 보여주며, 시스템의 처리 성능을 점검할 수 있습니다.
+
+- API별 트래픽 및 로그 수집
+API별 요청 패턴과 로그 데이터를 통해 트래픽 흐름과 발생 로그를 비교하며 분석할 수 있습니다.
+
+</details>
 
 </details>
 
