@@ -1025,11 +1025,41 @@ log메시지 중 특정 단어가 포함되어 있을 때 태그를 추가하여
 
 </details>
 
-<details> <summary>SonarQube, SonarLint</summary>
+<details> <summary>Code Convention</summary>
 
-위아래를 띄우고 여기에 내용을 작성하세요
-마크다운 문법으로 작성하시면 됩니다
+프로젝트에서 Code Convention은 이력서를 작성할때의 맞춤법 만큼 중요하다고 생각합니다
 
+온라인 협업 프로젝트에서 일관성있는 Code를 작성하는 것은 쉽지 않았지만 최대한 정돈된 Code를 배포할 수 있도록 다양한 시도를 했습니다
+
+### SonarQube
+
+서버 기반의 정적 코드 분석 도구입니다
+
+Docker 컨테이너로 실행하였고 프로젝트 경로등의 옵션을 넣어 실행할 수 있습니다
+
+Bugs와 Code Smells를 최소화 하였습니다
+
+![SonarQube_before](https://g-cbox.pstatic.net/MjAyNDExMjFfMjY4/MDAxNzMyMTc4NjcwOTA4.YhTuUHPhH6Pri2N91rY_hxS60A5UyJwNU7ptVh-eJ5Yg.ZVC0BMyrgVBXZWPEfF1QO-3TKoh459SX22L7Ct8IZEkg.PNG/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-11-21_174356.png)
+![SonarQube_after](https://g-cbox.pstatic.net/MjAyNDExMjFfMTA0/MDAxNzMyMTc4OTM5Mzcz.HJ0-D8V9USEmpheqTFImuSe_uILdfmlKoVhzFoqjOO4g.hZ-T6wrUC8tq9YAMvS3iV5bFu7MRGxSodyOyZ1jUTiMg.PNG/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-11-17_200758.png)
+
+### SonarLint
+
+IDE에서 Plugin 형태로 사용할 수 있는 정적 코드 분석 도구입니다
+
+![SonarLint_155_issues](https://g-cbox.pstatic.net/MjAyNDExMjFfMjAw/MDAxNzMyMTc5MTQwNjM4.5GpMaVU1aU-zaQo8ZZTCz5CRKL2CW4bM-2HivrjIAbIg.Dh2334UZroiQZmYnL-ZAgGwHkWEhSs3K7diHPJkM2iUg.PNG/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-11-18_234428.png)
+![SonarLint_15_issues](https://g-cbox.pstatic.net/MjAyNDExMjFfMTk1/MDAxNzMyMTc5MDc1NDkx.KcNLJ245GOcrR57C5fh6jUgqkc1NstZBXXlLmzbptbcg.qnMXJ3hMx66W_IpSetFGjIndLTLEWdCoLOW7KI5amAEg.PNG/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-11-19_100950.png)
+
+### Spotless
+
+IDE에서 Plugin 형태로 사용할 수 있는 자동정렬 도구 입니다.
+
+build.gradle에 추가하면 컴파일 과정에서 전체 코드를 설정에 맞게 정렬해줍니다
+
+다만, 전체 코드를 처리하기 때문에 배포 성능을 저하시키는 원인이 될 수 있습니다
+
+본 프로젝트에서는 주석처리를 하여 필요할때만 한번씩 전체 코드에 적용하는 방식으로 사용했습니다
+
+![](https://g-cbox.pstatic.net/MjAyNDExMjFfMyAg/MDAxNzMyMTc5ODQzODky._s-wo4smBn4FRxzDa3_pkY8MVrEOxkgnzLwCOnMyb5cg.5o3fPHUPCvVwTmF7hBclvFiZMIaA4vHwwGqNbyLvdGUg.PNG/carbon_%2816%29.png)
 </details>
 
 # 💻 Contributors
