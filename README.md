@@ -89,6 +89,6 @@ API & Testing
 
 <details> <summary>상세보기</summary>  
 
-![Spring Batch JPA -> JDBC](https://g-cbox.pstatic.net/MjAyNDExMjFfMTY1/MDAxNzMyMTgxMzY5NDcy.ZXmAOCF-RE96nS7jVHG1bQZWMiGmkqgtJaffG147czAg.oXRkXiMuO3YdVA2T1jeVpRECwQFEJafadrYBHFqzm3kg.PNG/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-11-21_182916.png)
+![Spring Batch JPA -> JDBC](https://g-cbox.pstatic.net/MjAyNDExMjFfMTMg/MDAxNzMyMTk3NzQ1MDcx.3252H7VpHviRhwflcKeYfxhbKH7YErquClWXSAp_gi0g.0H0iEmfUFMGblwvAiqwdBUsJuh42dPeH2RWn0uV-f2kg.PNG/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7_2024-11-21_182916.png)
 
 </details>
