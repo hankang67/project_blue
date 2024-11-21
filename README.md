@@ -77,7 +77,7 @@ API & Testing
 
 ## 🔍 Main Features
 
-[ Admin ]
+### [ Admin ]
 
 - 관리자 전용 계정으로 가입
 - 포스터 파일을 첨부하여 공연을 등록하고 관리 (이미지는 AWS S3에 저장)
@@ -85,7 +85,7 @@ API & Testing
 - 공연에 출연하는 출연자 등록 및 관리
 - 조건에 따라 사용자 예매내역을 검색 (특정 공연에 대한 예매 내역 등) - Elasticsearch
 
-[ Admin - Spring Batch ]
+### [ Admin - Spring Batch ]
 
 - OldUsers - 휴먼계정 처리
 - OldUsersAlert - 휴먼계정 대상자 알림
@@ -95,14 +95,14 @@ API & Testing
 - ReservationReviewAlert - 관람평 작성 유도 알림
 - [Spring Batch Application GitHub 바로가기](https://github.com/everydayspring/project-blue-batch)
 
-[ Search ]
+### [ Search ]
 
 - 키워드를 입력하여 한번의 검색으로 공연장, 출연자, 공연 모두 조회 가능 - Elasticsearch
 - 사용가능한 쿠폰, 전체 공연, 배우, 공연장 등 조회
 - Redis Caching 기능을 적용하여 재검색시 빠른 응답속도를 제공
 - 원하는 공연회차의 잔여좌석을 조회
 
-[ Reservation ]
+### [ Reservation ]
 
 - 원하는 공연회차의 좌석을 지정하여 예매
 - 예매에 대한 결제, 결제취소 기능 (토스페이먼츠 API)
