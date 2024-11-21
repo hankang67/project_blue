@@ -656,8 +656,139 @@ Elasticsearch(ES) 기반 API와 MySQL 기반 API의 성능을 비교하고, 높�
 
 <details> <summary>Alert - SSE</summary>
 
-위아래를 띄우고 여기에 내용을 작성하세요
-마크다운 문법으로 작성하시면 됩니다
+## 알림 시스템
+
+<details> <summary> Slack 알림 - Aop </summary>
+
+- slack 에서 발급 받을 수 있는  Incoming Webhooks의 Url을 발급받아 다음과 같이 환경변수로 설정한다.
+  ![환경변수](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcfmtAV%2FbtsKhLwHsb5%2FvREQSndPJxE6DBFq7hZAu0%2Fimg.png)
+
+#### SlackNotifier
+
+
+![SlackNotifier](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FdRGyoH%2FbtsKQIgf6bR%2Fkv5BYsYoPt7QaKDPgwAU30%2Fimg.png)
+
+1. 주요 기능
+    - slack 웹훅 URL을 이용하여 특정 채널로 메시지를 전송하는 역할.
+    - RestTemplate을 활용해 slack API에 HTTP POST 요청.
+    - 제목과 메시지를 받아 slack 메시지 형식에 맞게 전달.
+
+
+2. 메시지 전송 로직
+    - payload에 메시지와 봇 이름(username)을 포함한 정보를 저장.
+    - RestTemplate.postForObject()로 슬랙 웹훅 URL에 POST 요청을 전송.
+
+3. 결과
+    - SlackNotifier는 다양한 이벤트에서 슬랙 알림을 통해 정보를 실시간으로 전달하는 데 유용.
+    - 예약확인메시지, 시스템 알림 등
+
+![SlackNotificationAspect](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FqUlzf%2FbtsKQKrLnGZ%2FWRz4T0C7xXG1dyOeKkSHjk%2Fimg.png)
+
+1. 주요 기능
+    -  AOP를 활용하여 특정 서비스 로직 실행 후 Slack 알림을 자동으로 발송하는 역할.
+    - 예약 메서드(create) 실행 후 예약 정보, 공연 정보, 공연장 정보 등을 수집하여 알림 메시지를 작성하고 Slack으로 전송.
+
+2. Slack 알림 로직
+    - 예약이 성공할 경우 예약 정보 및 관련 데이터를 바탕으로 Slack 알림 메시지 작성.
+    - 예약 ID를 기준으로 예약, 공연, 공연장 데이터를 각각의 레포지토리에서 조회.
+    - 예약 상태가 PENDING인 경우 slackNotifier.sendMessage()를 호출하여 알림 전송.
+
+3. 결과
+    - 성공적으로 예약이 완료된 경우 Slack 알림을 통해 사용자에게 상세 정보를 제공.
+    - 공연 및 예약 시스템의 상태를 실시간으로 파악하고 관리자가 Slack 알림을 통해 모니터링 가능.
+
+</details>
+
+<details> <summary> SSE(Server-Sent-Events) </summary>
+
+1. 실시간 알림 요구 사항
+    - SSE는 실시간 알림에 적합하며 서버에서 클라이언트로의 즉각적인 데이터 전송이 가능하므로 예매 완료 시 사용자에게 바로 알림을 제공이 가능하다.
+
+
+2. 구현 및 유지보수
+    - SSE는 상대적으로 구현이 간단하며 서버가 클라이언트 연결을 유지하면서 알림을 보낼 수 있기 때문에 특정 시점에 발생하는 이벤트를 바로 전송하는 데 적합.
+
+
+3. 용도 차이
+    - SSE는 단방향 통신으로 서버에서 클라이언트로 실시간으로 데이터를 전송하는 데 적합하며  티켓 예매, 선착순 쿠폰 발급과 같은 실시간 피드백이 중요한 시나리오에서 잘 동작한다.
+
+
+4. 장점과 단점
+- SSE의 장점:
+    - 실시간 알림을 구현하기 간단하며 브라우저 지원이 기본적으로 제공된다.
+    - 자동 재연결 기능이 있어 클라이언트 연결이 끊어지면 자동으로 재시도 할 수 있다.
+
+
+- SSE의 단점:
+    - 단방향 통신만 가능하며, 다수의 동시 연결 시 서버 리소스 관리가 필요하다.
+    - 브라우저 기반이 아닌 환경에서는 별도 설정이 필요할 수 있다.
+
+
+
+5. SSE의 흐름
+- SSE의 로직 흐름은 다음과 같은 순서로 진행된다.
+
+    - 클라이언트에서 SSE 연결 요청을 보낸다.
+    - 서버에서 클라이언트와 매핑되는 SSE 통신 객체(SseEmitter)를 만든다.
+    - 서버에서 이벤트가 발생하면 해당 객체를 통해 클라이언트로 데이터를 전송한다.
+      ![SSE흐름](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcS2oMU%2FbtsKPbI8mjS%2F1BbAaLushqQbZmCczkTgx0%2Fimg.png)
+</details>
+
+<details> <summary> SSE 알림 </summary>
+
+#### NotificationController
+
+![Controller](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbFDqbF%2FbtsKRfREcZX%2ForeglknZ6xyYk01gjYoDbk%2Fimg.png)
+
+
+1. 클라이언트 구독 엔드포인트 제공
+
+    - 클라이언트가 notifications/subscribe/{userId}에
+      요청을 보내면 SseEmitter 객체를 반환하여 실시간 알림을 구독.
+
+
+2. 알림 발송 요청 처리
+
+    - 클라이언트에서 알림 요청 데이터를 전송하면 Redis의 notification-channel을 통해 메시지를 발행.
+
+    - 데이터 형식: userId / title / message.
+
+
+
+#### NotificationService
+![Service](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F6Jrx3%2FbtsKPHaVvD3%2FKLzk7Dv0JJ7j4yMdKLeAIK%2Fimg.png)
+
+- 서버에서 SSE(Send Server-Sent Events) 방식으로 실시간 알림을 클라이언트에 보내기 위해 사용
+
+1. 클라이언트 구독 관리
+
+    - 클라이언트가 구독 요청을 보내면 SseEmitter를 생성하고 HashMap에 저장.
+
+    - 클라이언트 연결이 완료되거나 타임아웃될 경우, 해당 SseEmitter를 Map에서 제거.
+
+
+2. 알림 전송 로직
+
+    - SSE 알림: 사용자의 SseEmitter를 통해 알림 데이터를 전송.
+
+    - Slack 알림: CompletableFuture.runAsync를 적용해 Slack 알림 비동기로 활성.
+
+
+3. 알림 처리 흐름
+- 구독:
+    - 클라이언트는 /notifications/subscribe/{userId}를 호출해 구독을 시작.
+- Redis 발행
+    - 서버는 /notifications/send를 호출해 Redis 채널에 알림 메시지를 발행.
+- 알림 전송
+    - Redis 구독자가 데이터를 수신하고 이를 클라이언트의 SseEmitter로 전송과 동시에 Slack에도 비동기 알림을 전송.
+
+4. 결과
+- 구독 및 알림발송 확인
+
+
+![sse 포스트맨](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fb3lQAT%2FbtsKRQDVGBu%2FvM3SLiNkeA9emKuuPkTFzk%2Fimg.png)
+![sse 웹](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbfFaWD%2FbtsKRi1Q3QP%2FJkb97qW8hK0VTRGzgknkk1%2Fimg.png)
+</details>
 
 </details>
 
