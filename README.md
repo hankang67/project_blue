@@ -567,15 +567,15 @@ ElasticSearch는 빠르고 정확한 검색이 필요한 다양한 서비스에�
   데이터 동기화 기능 구현.
 
 - api
-![image](https://github.com/user-attachments/assets/223ffbba-7c80-4622-b044-19d49159017d)
-![image](https://github.com/user-attachments/assets/d1ba2880-ee51-49f6-aedd-2c5d1102c666)
+- ![image](https://github.com/user-attachments/assets/223ffbba-7c80-4622-b044-19d49159017d)
+- ![image](https://github.com/user-attachments/assets/d1ba2880-ee51-49f6-aedd-2c5d1102c666)
 
 - index
-![image](https://github.com/user-attachments/assets/059969de-6a28-4397-ba2e-380ca11beedb)
-![image](https://github.com/user-attachments/assets/5631fd1e-7a10-4cbf-91f4-ca0a20efb5c0)
+- ![image](https://github.com/user-attachments/assets/059969de-6a28-4397-ba2e-380ca11beedb)
+- ![image](https://github.com/user-attachments/assets/5631fd1e-7a10-4cbf-91f4-ca0a20efb5c0)
 
 - data
-![image](https://github.com/user-attachments/assets/a4163210-e8d3-4330-818f-ba7fb2d5846c)
+- ![image](https://github.com/user-attachments/assets/a4163210-e8d3-4330-818f-ba7fb2d5846c)
 
 #### 성능 테스트 및 개선 방향
 Elasticsearch를 도입한 뒤, 실제 환경에서의 성능을 점검했습니다.
