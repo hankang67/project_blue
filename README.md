@@ -793,7 +793,59 @@ API & Testing
 
 <details> <summary>상세보기</summary>  
 
+```java
+[내가 구현한 기능]
 
+- Prometheus와 Grafana를 활용한 시스템 모니터링 기능을 구현
+- 애플리케이션 및 인프라 상태를 실시간으로 수집하고, Grafana 대시보드에서 시각화
+
+[주요 로직]
+
+- Prometheus:
+  - 애플리케이션의 JVM 및 애플리케이션 메트릭을 수집하기 위해 Spring Boot Actuator와 Prometheus Exporter 통합
+  - Prometheus 서버가 주기적으로 애플리케이션에서 메트릭 데이터를 스크래핑
+
+- Grafana:
+  - Prometheus를 데이터 소스로 사용하여 시각화 대시보드 구성
+  - 주요 지표: CPU, 메모리 사용량, JVM 스레드 상태, 애플리케이션 응답 시간, 요청 처리량 등
+
+[배경]
+
+- 시스템 상태를 실시간으로 모니터링하고 이슈를 빠르게 식별하기 위한 요구사항
+- 특히 배치 작업 중 리소스 사용량을 모니터링하고 병목 현상이나 비정상적인 동작을 탐지하기 위해 Prometheus와 Grafana를 도입
+
+[요구사항]
+
+- Spring Boot 애플리케이션에서 주요 메트릭 데이터를 수집하여 Prometheus에 전달
+- Prometheus에 수집된 데이터를 Grafana 대시보드에서 시각적으로 표현
+- 알림 규칙(Alert Rules)을 설정하여 특정 임계값을 초과하면 알림을 전송
+
+[선택지]
+
+- Prometheus & Grafana
+   - 장점: 오픈소스 기반으로 비용 부담이 적고, 커스터마이징 가능
+   - 단점: 초기 설정 및 데이터 소스 구성에 대한 학습 곡선이 존재
+- 대체 모니터링 솔루션 (예: Datadog, New Relic)
+   - 장점: 간단한 설정과 풍부한 기능.
+   - 단점: 높은 비용과 벤더 종속성.
+
+[의사결정/사유]
+
+- Prometheus와 Grafana를 선택한 이유
+  - 오픈소스 기반으로 높은 확장성과 커스터마이징 가능성
+  - Spring Boot Actuator와의 자연스러운 통합
+  - 기존 인프라와의 적합성 및 사용 비용 절감
+
+[회고]
+
+- Prometheus와 Grafana를 활용하여 시스템 모니터링을 효과적으로 구현
+- JVM 메트릭 수집 및 대시보드 시각화로 애플리케이션 성능을 실시간으로 추적 가능
+- 실제 테스트시 Jmeter를 주로 사용하여 많이 활용하지 못한 부분이 아쉬움
+- 초기 설정과 대시보드 구성에는 다소 시간이 소요됨
+- 향후 시스템 확장에 따라 메트릭 지표를 세분화하고 알림 임계값을 조정할 계획
+```
+
+![prometheus,grafana](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcoCMtp%2FbtsKRD6WaqE%2F8Nomi6yccRWakboJcqDYzK%2Fimg.png)
 
 </details>
 
