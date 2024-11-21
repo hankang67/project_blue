@@ -231,7 +231,7 @@ Return으로 받은 orderId, amount를 비교하여 일치여부를 확인하는
 
 ### CI/CD 트러블슈팅
 
-#### *Jenkins Spring Boot build 무한로딩*
+#### **Jenkins Spring Boot build 무한로딩**
 
 EC2 Instance에 설치된 Jenkins에서 빌드를 하게 되면 중간에 로딩이 길어지면서 서버 자체가 먹총이 되는 문제가 발생했습니다
 
@@ -245,15 +245,15 @@ application을 build해서 jar 파일을 만들때 무한로딩에 걸리는 현
 
 계속해서 시도를 해봤지만 build 과정에서 계속 먹통이 됐고 Instance를 중지하는 것도 길게는 10분정도 시간이 지체되었습니다
 
-문제는 *리소스 부족으로 인한 빌드실패*로 최소 2v CPU, 2~4 GiB Memory가 필요한 상황이었습니다
+문제는 **리소스 부족으로 인한 빌드실패**로 최소 2v CPU, 2~4 GiB Memory가 필요한 상황이었습니다
 
-*결국 Instance를 t3.small로 새로 만들어 해결했습니다*
+**결국 Instance를 t3.small로 새로 만들어 해결했습니다**
 
-#### *Spring Boot Spotless Plugin build resource*
+#### **Spring Boot Spotless Plugin build resource**
 
 EC2 사양을 올렸는데도 build 과정에서 먹통이 되는 문제가 발생했습니다
 
-build 과정에서 리소스를 많이 잡아먹는 *Spotless 플러그인*이 문제 원인이었습니다
+build 과정에서 리소스를 많이 잡아먹는 **Spotless 플러그인** 이 문제 원인이었습니다
 
 컴파일 시마다 동작하면서 전체 파일을 점검하기 때문에 많은 리소스를 잡아먹는 상황으로,
 
