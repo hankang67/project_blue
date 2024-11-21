@@ -231,7 +231,7 @@ Return으로 받은 orderId, amount를 비교하여 일치여부를 확인하는
 
 ### CI/CD 트러블슈팅
 
-#### **Jenkins Spring Boot build 무한로딩**
+### **Jenkins Spring Boot build 무한로딩**
 
 EC2 Instance에 설치된 Jenkins에서 빌드를 하게 되면 중간에 로딩이 길어지면서 서버 자체가 먹총이 되는 문제가 발생했습니다
 
@@ -249,7 +249,7 @@ application을 build해서 jar 파일을 만들때 무한로딩에 걸리는 현
 
 **결국 Instance를 t3.small로 새로 만들어 해결했습니다**
 
-#### **Spring Boot Spotless Plugin build resource**
+### **Spring Boot Spotless Plugin build resource**
 
 EC2 사양을 올렸는데도 build 과정에서 먹통이 되는 문제가 발생했습니다
 
