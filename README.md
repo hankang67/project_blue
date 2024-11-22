@@ -927,6 +927,8 @@ API & Testing
 
 ## 💻 Contributors
 
+📅 프로젝트 기간 : 2024.10.21 ~ 2024.11.22 📅
+
 ### [ 강은총 ] - [GitHub](https://github.com/eunchongkang)
 
 <details> <summary>상세보기</summary>
