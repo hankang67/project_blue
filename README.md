@@ -1051,4 +1051,4 @@ API & Testing
 
 ## 🤝 Development Guide
 
-![team guide](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F66hIe%2FbtsKPBHmjH7%2FaI4x4kDG4Dzey5u1BTglpK%2Fimg.png)
+![team guide](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcrGMK7%2FbtsKS8EG3KD%2Fs2KAUVKAuox8oRsKMlslxk%2Fimg.png)
