@@ -1,0 +1,124 @@
+server:
+  port: 9090
+  servlet:
+    context-path: /
+    encoding:
+      charset : UTF-8
+      enabled: true
+      force: true
+
+spring:
+  cache:
+    type: redis
+  datasource:
+    master:
+      hikari:
+        jdbc-url: ${PROD_MASTER_JDBC_URL}
+        username: ${PROD_MASTER_USERNAME}
+        password: ${PROD_MASTER_PASSWORD}
+        driver-class-name: com.mysql.cj.jdbc.Driver
+    slave:
+      hikari:
+        jdbc-url: ${PROD_SLAVE_JDBC_URL}
+        username: ${PROD_SLAVE_USERNAME}
+        password: ${PROD_SLAVE_PASSWORD}
+        driver-class-name: com.mysql.cj.jdbc.Driver
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        use_sql_comments: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: ${KAKAO_CLIENT_ID}
+            redirect-uri: ${KAKAO_REDIRECT_URI}
+            client-authentication-method: client_secret_post
+            authorization-grant-type: authorization_code
+            client-name: Kakao
+            scope:
+              - account_email
+              - profile_nickname
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id # 유저정보 조회 시 반환되는 최상위 필드명으로 해야 한다.
+  elasticsearch:
+    repositories:
+      enabled: true
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+
+springdoc.swagger-ui.path: /api-test
+
+jwt:
+  secret:
+    key: ${SECRET_KEY}
+
+slack:
+  webhook:
+    url: ${SLACK_WEBHOOK_URL}
+
+cloud:
+  aws:
+    s3:
+      bucket: project-blue-s3
+    stack.auto: false
+    region.static: ap-northeast-2
+    credentials:
+      accessKey: ${AWS_ACCESS_KEY}
+      secretKey: ${AWS_SECRET_KEY}
+
+elastic:
+  host: ${ES_URI}
+
+logging:
+  level:
+    org.springframework.data.redis: DEBUG
+    org.springframework.cache: DEBUG
+    root: INFO # 기본 로그 레벨
+
+management:
+  endpoint:
+    health:
+      enabled: true
+      show-details: always # 헬스 정보 상세히 표시
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+    jvm:
+      enabled: true # JVM 모니터링 활성화
+    loggers:
+      enabled: true # 로거 모니터링 활성화
+
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus, jvm, loggers # 필요한 엔드포인트 노출
+
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+toss:
+  basic:
+    url: https://api.tosspayments.com/v1/payments/
+  widget:
+    secret:
+      key: test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6
